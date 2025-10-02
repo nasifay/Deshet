@@ -1,0 +1,127 @@
+import Image from "next/image";
+import Button from "~/components/ui/Button";
+import Section from "~/components/ui/Section";
+import Container from "~/components/ui/Container";
+import Stat from "~/components/ui/Stat";
+import Card from "~/components/ui/Card";
+import LogoCloud from "~/components/ui/LogoCloud";
+import NewsCard from "~/components/ui/NewsCard";
+
+export default function Home() {
+  return (
+    <>
+      {/* About Section */}
+      <Section id="about" className="bg-muted/60">
+        <Container className="grid lg:grid-cols-2 gap-8 items-center">
+          <div className="space-y-4">
+            <p className="text-xs uppercase tracking-wider text-primary">About us</p>
+            <h2 className="text-3xl md:text-4xl font-bold">Tamra for Social Development</h2>
+            <p className="text-balance text-gray-600 dark:text-gray-300">
+              Tamra for social development organization (tsd) is an Ethiopian NGO legally registered since 1998. We
+              empower young people through holistic development in health, education, livelihoods, and civic engagement.
+            </p>
+            <Button intent="primary" size="lg">Read More</Button>
+          </div>
+          <Card className="overflow-hidden">
+            <Image src="/images/about.jpg" alt="About us" width={800} height={520} className="w-full h-64 md:h-[320px] object-cover" />
+          </Card>
+        </Container>
+      </Section>
+
+      {/* Stats Row */}
+      <Section className="py-8">
+        <Container className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <Stat value="58" label="Staffs" />
+          <Stat value="5" label={<><span>Offices in</span> <span className="text-primary font-semibold">4</span> Regions</>} />
+          <Stat value="250+" label="Volunteers" />
+          <Stat value="15" label="Protocols" />
+        </Container>
+      </Section>
+
+      {/* Empowerment Hero */}
+      <Section padding="none">
+        <Container>
+          <div className="relative rounded-xl overflow-hidden">
+            <Image src="/images/empowerment.jpg" alt="Youth empowerment" width={1600} height={900} className="w-full h-[320px] md:h-[520px] object-cover" />
+            <div className="absolute inset-0 overlay-gradient" />
+            <div className="absolute inset-x-6 md:inset-x-10 bottom-10 text-white max-w-3xl">
+              <h3 className="text-3xl md:text-5xl font-extrabold leading-tight">Youth Empowerment &amp; Peacebuilding</h3>
+            </div>
+          </div>
+        </Container>
+      </Section>
+
+      {/* Partners */}
+      <Section>
+        <Container>
+          <LogoCloud />
+        </Container>
+      </Section>
+
+      {/* Since 1998 */}
+      <Section className="bg-muted/60">
+        <Container>
+          <h3 className="text-2xl md:text-3xl font-bold mb-6">Since 1998</h3>
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card className="p-6">
+              <p className="text-sm text-gray-500">Empowering Young People through Holistic Development in Health, Education, Livelihoods, and Civic Engagement.</p>
+              <div className="grid grid-cols-2 gap-4 mt-6">
+                <Card className="p-5 text-center">
+                  <div className="text-primary text-2xl font-bold">120+</div>
+                  <div className="text-sm text-gray-600">Recognitions & Awards</div>
+                </Card>
+                <Card className="p-5 text-center">
+                  <div className="text-primary text-2xl font-bold">11+ Years</div>
+                  <div className="text-sm text-gray-600">Youth Radio “Zerene Halifo”</div>
+                </Card>
+                <Card className="p-5 text-center col-span-2 md:col-span-1">
+                  <div className="text-primary text-2xl font-bold">27 Years</div>
+                  <div className="text-sm text-gray-600">Of Service</div>
+                </Card>
+                <Card className="p-5 text-center col-span-2 md:col-span-1">
+                  <div className="text-primary text-2xl font-bold">4+ Regions</div>
+                  <div className="text-sm text-gray-600">Active incl. Addis Ababa</div>
+                </Card>
+              </div>
+            </Card>
+            <Card className="overflow-hidden">
+              <Image src="/images/since.jpg" alt="Since 1998" width={800} height={600} className="w-full h-[300px] md:h-full object-cover" />
+            </Card>
+          </div>
+        </Container>
+      </Section>
+
+      {/* News and Events */}
+      <Section>
+        <Container>
+          <div className="flex items-end justify-between mb-4">
+            <h3 className="text-2xl md:text-3xl font-bold">News and Events</h3>
+            <Button variant="ghost" href="#">See More</Button>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <NewsCard key={i} />
+            ))}
+          </div>
+        </Container>
+      </Section>
+
+      {/* CTA Banner */}
+      <Section padding="none">
+        <Container>
+          <div className="relative rounded-xl overflow-hidden">
+            <Image src="/images/cta.jpg" alt="Call to action" width={1600} height={600} className="w-full h-[280px] md:h-[360px] object-cover" />
+            <div className="absolute inset-0 overlay-gradient" />
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-white p-6">
+              <h4 className="text-2xl md:text-3xl font-bold mb-4">You can contribute to provide a place for children with special needs!</h4>
+              <div className="flex gap-3 flex-col sm:flex-row">
+                <Button intent="accent">Join as a Volunteer</Button>
+                <Button intent="primary" variant="solid">Donate</Button>
+              </div>
+            </div>
+          </div>
+        </Container>
+      </Section>
+    </>
+  );
+}
