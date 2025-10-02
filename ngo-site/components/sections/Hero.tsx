@@ -2,14 +2,20 @@ import Image from "next/image";
 import Section from "~/components/ui/Section";
 import Container from "~/components/ui/Container";
 import Button from "~/components/ui/Button";
+import type { CSSProperties } from "react";
 
 export default function Hero() {
+  const overlayVars = {
+    "--mid-left": "clamp(80px, 28vw, 545px)",
+    "--mid-width": "clamp(140px, 34vw, 541px)",
+  } as Record<string, string> as CSSProperties;
+
   return (
     <Section padding="lg">
       <Container>
         <div className="relative rounded-xl overflow-hidden">
           {/* Background image */}
-          <div className="relative w-full h-[320px] md:h-[520px]">
+          <div className="relative w-full h-[360px] md:h-[520px]">
             <Image
               src="/images/hero.jpg"
               alt="Serving Ethiopian Youth"
@@ -18,11 +24,24 @@ export default function Hero() {
               className="object-cover"
             />
 
-            {/* Three overlays with animated entrance */}
-            <div className="pointer-events-none absolute inset-0 flex">
-              <div className="w-1/3 h-full bg-primary/50 mix-blend-multiply animate-hero-panel [animation-delay:100ms]" />
-              <div className="w-1/3 h-full bg-[#FF9700]/50 mix-blend-multiply animate-hero-panel [animation-delay:250ms]" />
-              <div className="w-1/3 h-full bg-primary/50 mix-blend-multiply animate-hero-panel [animation-delay:400ms]" />
+            {/* Three overlays positioned to match Figma */}
+            <div className="absolute inset-0" style={overlayVars}>
+              {/* Left green overlay */}
+              <div className="absolute inset-y-0 left-0 bg-[rgba(30,142,62,0.5)] animate-hero-left" style={{ right: `calc(100% - var(--mid-left))` }} aria-hidden />
+
+              {/* Middle orange overlay */}
+              <div
+                className="absolute inset-y-0 bg-[rgba(255,151,0,0.5)] animate-hero-mid"
+                style={{ left: "var(--mid-left)", width: "var(--mid-width)" }}
+                aria-hidden
+              />
+
+              {/* Right green overlay */}
+              <div
+                className="absolute inset-y-0 right-0 bg-[rgba(30,142,62,0.5)] animate-hero-right" 
+                style={{ left: `calc(var(--mid-left) + var(--mid-width))` }}
+                aria-hidden
+              />
             </div>
 
             {/* Text content */}

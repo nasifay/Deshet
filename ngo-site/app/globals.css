@@ -80,14 +80,22 @@ body {
 }
 
 /* Hero animations */
-@keyframes heroPanelIn {
-  0% { transform: translateY(20%); opacity: 0; }
-  100% { transform: translateY(0); opacity: 1; }
+@keyframes heroPanelInL {
+  0% { transform: translateX(-6%); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+@keyframes heroPanelInM {
+  0% { transform: scaleY(0.9); opacity: 0; }
+  100% { transform: scaleY(1); opacity: 1; }
+}
+@keyframes heroPanelInR {
+  0% { transform: translateX(6%); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
 }
 
-.animate-hero-panel {
-  animation: heroPanelIn 700ms ease-out both;
-}
+.animate-hero-left { animation: heroPanelInL 700ms 50ms ease-out both; }
+.animate-hero-mid { animation: heroPanelInM 800ms 150ms ease-out both; }
+.animate-hero-right { animation: heroPanelInR 700ms 250ms ease-out both; }
 
 @keyframes heroTextIn {
   0% { transform: translateY(12px); opacity: 0; }
