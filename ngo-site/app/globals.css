@@ -78,3 +78,22 @@ body {
 .overlay-gradient {
   background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.65) 100%);
 }
+
+/* Hero animations */
+@keyframes heroPanelIn {
+  0% { transform: translateY(20%); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+.animate-hero-panel {
+  animation: heroPanelIn 700ms ease-out both;
+}
+
+@keyframes heroTextIn {
+  0% { transform: translateY(12px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+.animate-hero-text {
+  animation: heroTextIn 800ms 200ms ease-out both;
+}

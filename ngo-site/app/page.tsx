@@ -6,10 +6,13 @@ import Stat from "~/components/ui/Stat";
 import Card from "~/components/ui/Card";
 import LogoCloud from "~/components/ui/LogoCloud";
 import NewsCard from "~/components/ui/NewsCard";
+import Hero from "~/components/sections/Hero";
 
 export default function Home() {
   return (
     <>
+      <Hero />
+
       {/* About Section */}
       <Section id="about" className="bg-muted/60">
         <Container className="grid lg:grid-cols-2 gap-8 items-center">
