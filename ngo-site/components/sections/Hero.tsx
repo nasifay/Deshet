@@ -5,16 +5,16 @@ import type { CSSProperties } from "react";
 
 export default function Hero() {
   const overlayVars = {
-    "--mid-left": "clamp(80px, 28vw, 545px)",
-    "--mid-width": "clamp(140px, 34vw, 541px)",
+    "--mid-left": "clamp(60px, 28vw, 545px)",
+    "--mid-width": "clamp(120px, 34vw, 541px)",
   } as Record<string, string> as CSSProperties;
 
   return (
-    <Section padding="lg">
+    <Section padding="none">
       <div className="mx-auto w-full max-w-[1595px] px-4 md:px-6">
         <div className="relative rounded-[46px] overflow-hidden">
           {/* Background image */}
-          <div className="relative w-full h-[420px] md:h-[720px] lg:h-[900px] xl:h-[1028px]">
+          <div className="relative w-full h-[320px] sm:h-[380px] md:h-[520px]">
             <Image
               src="/images/hero.jpg"
               alt="Serving Ethiopian Youth"
@@ -44,12 +44,12 @@ export default function Hero() {
             </div>
 
             {/* Text content */}
-            <div className="absolute inset-0 px-6 md:px-10 flex items-center">
+            <div className="absolute inset-0 px-5 sm:px-6 md:px-10 flex items-center">
               <div className="max-w-4xl text-white animate-hero-text">
-                <h1 className="font-black uppercase leading-[1.01] tracking-[0] text-[36px] sm:text-[48px] md:text-[64px] lg:text-[80px] xl:text-[100px]">
+                <h1 className="font-black uppercase leading-[1.01] tracking-[0] text-[32px] sm:text-[44px] md:text-[64px] lg:text-[80px] xl:text-[100px]">
                   Serving Ethiopian Youth
                 </h1>
-                <div className="mt-5">
+                <div className="mt-4 sm:mt-5">
                   <Button intent="primary" rounded="full" size="lg">
                     Read More
                   </Button>
