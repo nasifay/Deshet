@@ -26,10 +26,10 @@ export default function AboutNew() {
               <Button
                 intent="primary"
                 rounded="full"
-                className="w-[196px] h-[56px] rounded-[21px] px-[78px]"
+                className="w-[196px] h-[56px] rounded-[21px] px-[40px]"
                 href="/who-we-are"
               >
-                <span className="text-[24px] leading-[100%] font-normal">Read More</span>
+                <span className="block w-[116px] h-[28px] text-[24px] leading-[1] font-normal text-center">Read More</span>
               </Button>
             </div>
           </div>
