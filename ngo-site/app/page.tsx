@@ -9,6 +9,7 @@ import Hero from "~/components/sections/Hero";
 import AboutNew from "~/components/sections/AboutNew";
 import StatsBar from "~/components/sections/StatsBar";
 import ImageHeadlineCard from "~/components/sections/ImageHeadlineCard";
+import MissionScroller from "~/components/sections/MissionScroller";
 
 export default function Home() {
   return (
@@ -37,6 +38,8 @@ export default function Home() {
           </>}
         />
       </Section>
+
+      <MissionScroller />
 
       {/* Partners */}
       <Section>
