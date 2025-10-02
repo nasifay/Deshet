@@ -7,11 +7,14 @@ import Card from "~/components/ui/Card";
 import LogoCloud from "~/components/ui/LogoCloud";
 import NewsCard from "~/components/ui/NewsCard";
 import Hero from "~/components/sections/Hero";
+import AboutNew from "~/components/sections/AboutNew";
 
 export default function Home() {
   return (
     <>
       <Hero />
+
+      <AboutNew />
 
       {/* Stats Row */}
       <Section className="py-8">
