@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Section from "~/components/ui/Section";
-import Container from "~/components/ui/Container";
 import Button from "~/components/ui/Button";
 import type { CSSProperties } from "react";
 
@@ -12,10 +11,10 @@ export default function Hero() {
 
   return (
     <Section padding="lg">
-      <Container>
-        <div className="relative rounded-xl overflow-hidden">
+      <div className="mx-auto w-full max-w-[1595px] px-4 md:px-6">
+        <div className="relative rounded-[46px] overflow-hidden">
           {/* Background image */}
-          <div className="relative w-full h-[360px] md:h-[520px]">
+          <div className="relative w-full h-[420px] md:h-[720px] lg:h-[900px] xl:h-[1028px]">
             <Image
               src="/images/hero.jpg"
               alt="Serving Ethiopian Youth"
@@ -59,7 +58,7 @@ export default function Hero() {
             </div>
           </div>
         </div>
-      </Container>
+      </div>
     </Section>
   );
 }
