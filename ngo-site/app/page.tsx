@@ -2,12 +2,13 @@ import Image from "next/image";
 import Button from "~/components/ui/Button";
 import Section from "~/components/ui/Section";
 import Container from "~/components/ui/Container";
-import Stat from "~/components/ui/Stat";
 import Card from "~/components/ui/Card";
 import LogoCloud from "~/components/ui/LogoCloud";
 import NewsCard from "~/components/ui/NewsCard";
 import Hero from "~/components/sections/Hero";
 import AboutNew from "~/components/sections/AboutNew";
+import StatsBar from "~/components/sections/StatsBar";
+import ImageHeadlineCard from "~/components/sections/ImageHeadlineCard";
 
 export default function Home() {
   return (
@@ -16,27 +17,25 @@ export default function Home() {
 
       <AboutNew />
 
-      {/* Stats Row */}
       <Section className="py-8">
-        <Container className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          <Stat value="58" label="Staffs" />
-          <Stat value="5" label={<><span>Offices in</span> <span className="text-primary font-semibold">4</span> Regions</>} />
-          <Stat value="250+" label="Volunteers" />
-          <Stat value="15" label="Protocols" />
-        </Container>
+        <StatsBar
+          items={[
+            { value: "58", label: "Staffs" },
+            { value: "5", label: <>Offices in <span className="text-primary font-semibold">4</span> Regions</> },
+            { value: "250+", label: "Volunteers" },
+            { value: "15", label: "Protocols" },
+          ]}
+        />
       </Section>
 
-      {/* Empowerment Hero */}
       <Section padding="none">
-        <Container>
-          <div className="relative rounded-xl overflow-hidden">
-            <Image src="/images/empowerment.jpg" alt="Youth empowerment" width={1600} height={900} className="w-full h-[320px] md:h-[520px] object-cover" />
-            <div className="absolute inset-0 overlay-gradient" />
-            <div className="absolute inset-x-6 md:inset-x-10 bottom-10 text-white max-w-3xl">
-              <h3 className="text-3xl md:text-5xl font-extrabold leading-tight">Youth Empowerment &amp; Peacebuilding</h3>
-            </div>
-          </div>
-        </Container>
+        <ImageHeadlineCard
+          src="/images/empowerment.jpg"
+          alt="Youth empowerment"
+          headline={<>
+            Youth<br />Empowerment &<br />Peacebuilding
+          </>}
+        />
       </Section>
 
       {/* Partners */}
