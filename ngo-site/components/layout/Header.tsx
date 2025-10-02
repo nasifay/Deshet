@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "~/components/ui/Button";
 import Container from "~/components/ui/Container";
 
@@ -17,8 +17,19 @@ const nav = [
 export default function Header() {
   const [open, setOpen] = useState(false);
 
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (open) {
+      const original = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = original;
+      };
+    }
+  }, [open]);
+
   return (
-    <header className="sticky top-0 z-40 bg-white/90 backdrop-blur border-b border-border">
+    <header className="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-border">
       <Container className="flex items-center justify-between h-20">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3">
@@ -43,7 +54,7 @@ export default function Header() {
           ))}
         </nav>
 
-        {/* Donate */}
+        {/* Donate (desktop) */}
         <div className="hidden md:block">
           <Button intent="primary" rounded="full" size="lg" href="/donate">
             Donate
@@ -51,28 +62,61 @@ export default function Header() {
         </div>
 
         {/* Mobile burger */}
-        <button className="md:hidden p-2" onClick={() => setOpen((v) => !v)} aria-label="Menu">
+        <button
+          className="md:hidden p-2"
+          onClick={() => setOpen((v) => !v)}
+          aria-label="Open menu"
+          aria-expanded={open}
+          aria-controls="mobile-nav"
+        >
           <span className="block w-6 h-0.5 bg-gray-800 mb-1" />
           <span className="block w-6 h-0.5 bg-gray-800 mb-1" />
           <span className="block w-6 h-0.5 bg-gray-800" />
         </button>
       </Container>
 
-      {/* Mobile panel */}
-      {open && (
-        <div className="md:hidden border-t border-border bg-white">
-          <Container className="py-4 flex flex-col gap-4">
+      {/* Mobile overlay + panel */}
+      <div className={`md:hidden fixed inset-0 ${open ? "pointer-events-auto" : "pointer-events-none"}`}>
+        {/* Dim background */}
+        <div
+          className={`absolute inset-0 bg-black/40 transition-opacity ${open ? "opacity-100" : "opacity-0"}`}
+          onClick={() => setOpen(false)}
+        />
+        {/* Slide-down panel */}
+        <div
+          id="mobile-nav"
+          role="dialog"
+          aria-modal="true"
+          className={`absolute left-0 right-0 top-20 bottom-0 bg-white rounded-t-2xl shadow-xl transform transition-transform duration-300 ease-out ${open ? "translate-y-0" : "-translate-y-4"}`}
+          onKeyDown={(e) => {
+            if (e.key === "Escape") setOpen(false);
+          }}
+        >
+          <div className="px-6 pt-6 pb-24 overflow-y-auto h-full flex flex-col gap-4">
             {nav.map((n) => (
-              <Link key={n.href} href={n.href} onClick={() => setOpen(false)} className="py-1">
-                {n.label}
+              <Link
+                key={n.href}
+                href={n.href}
+                onClick={() => setOpen(false)}
+                className="py-3 text-lg text-gray-800 border-b border-border/60 flex items-center justify-between"
+              >
+                <span>{n.label}</span>
+                {n.chevron && (
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-gray-400">
+                    <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                )}
               </Link>
             ))}
-            <Button intent="primary" rounded="full" href="/donate">
-              Donate
-            </Button>
-          </Container>
+
+            <div className="mt-auto pt-4">
+              <Button intent="primary" rounded="full" size="lg" href="/donate" className="w-full">
+                Donate
+              </Button>
+            </div>
+          </div>
         </div>
-      )}
+      </div>
     </header>
   );
 }
