@@ -7,29 +7,14 @@ import Card from "~/components/ui/Card";
 import LogoCloud from "~/components/ui/LogoCloud";
 import NewsCard from "~/components/ui/NewsCard";
 import Hero from "~/components/sections/Hero";
+import AboutSection from "~/components/sections/About";
 
 export default function Home() {
   return (
     <>
       <Hero />
 
-      {/* About Section */}
-      <Section id="about" className="bg-muted/60">
-        <Container className="grid lg:grid-cols-2 gap-8 items-center">
-          <div className="space-y-4">
-            <p className="text-xs uppercase tracking-wider text-primary">About us</p>
-            <h2 className="text-3xl md:text-4xl font-bold">Tamra for Social Development</h2>
-            <p className="text-balance text-gray-600 dark:text-gray-300">
-              Tamra for social development organization (tsd) is an Ethiopian NGO legally registered since 1998. We
-              empower young people through holistic development in health, education, livelihoods, and civic engagement.
-            </p>
-            <Button intent="primary" size="lg">Read More</Button>
-          </div>
-          <Card className="overflow-hidden">
-            <Image src="/images/about.jpg" alt="About us" width={800} height={520} className="w-full h-64 md:h-[320px] object-cover" />
-          </Card>
-        </Container>
-      </Section>
+      <AboutSection />
 
       {/* Stats Row */}
       <Section className="py-8">
