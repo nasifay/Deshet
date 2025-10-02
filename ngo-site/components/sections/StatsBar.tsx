@@ -11,8 +11,18 @@ export default function StatsBar({ items }: { items: StatItem[] }) {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-10">
         {items.map((it, i) => (
           <div key={i} className="flex flex-col">
-            <div className="text-[32px] md:text-[36px] font-extrabold text-accent leading-none">{it.value}</div>
-            <div className="text-[22px] md:text-[26px] text-gray-800">{it.label}</div>
+            <div
+              className="text-[48px] font-semibold text-accent"
+              style={{ lineHeight: "38px", letterSpacing: 0, verticalAlign: "middle" as const }}
+            >
+              {it.value}
+            </div>
+            <div
+              className="text-[48px] text-[#020202]"
+              style={{ fontWeight: 300, lineHeight: "38px", letterSpacing: 0, verticalAlign: "middle" as const }}
+            >
+              {it.label}
+            </div>
           </div>
         ))}
       </div>
