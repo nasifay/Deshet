@@ -14,7 +14,7 @@ export default function Hero() {
       <div className="mx-auto w-full max-w-[1595px] px-4 md:px-6">
         <div className="relative rounded-[46px] overflow-hidden">
           {/* Background image */}
-          <div className="relative w-full h-[320px] sm:h-[380px] md:h-[520px]">
+          <div className="relative w-full h-[320px] sm:h-[380px] md:h-[520px] lg:h-[900px] xl:h-[1036px]">
             <Image
               src="/images/hero.jpg"
               alt="Serving Ethiopian Youth"
