@@ -21,7 +21,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={roboto.variable}>
       <body className="antialiased bg-background text-foreground">
         <Header />
-        <main className="min-h-dvh pt-20 md:pt-24 lg:pt-[154px] space-y-[72px]">
+        <main className="min-h-dvh pt-4 sm:pt-6 md:pt-10 lg:pt-[154px] space-y-10 md:space-y-16 lg:space-y-[72px]">
           {children}
         </main>
         <Footer />

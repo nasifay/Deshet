@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import Button from "~/components/ui/Button";
 import Container from "~/components/ui/Container";
+import { usePathname } from "next/navigation";
 
 const nav = [
   { href: "/", label: "Home" },
@@ -16,19 +17,27 @@ const nav = [
 
 export default function Header() {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+
+  useEffect(() => {
+    // Close menu on route change
+    setOpen(false);
+  }, [pathname]);
 
   useEffect(() => {
     if (open) {
       const original = document.body.style.overflow;
       document.body.style.overflow = "hidden";
-      return () => { document.body.style.overflow = original; };
+      const onEsc = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(false); };
+      window.addEventListener("keydown", onEsc);
+      return () => { document.body.style.overflow = original; window.removeEventListener("keydown", onEsc); };
     }
   }, [open]);
 
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-border">
       <Container className="flex items-center justify-between h-16 md:h-20">
-        <Link href="/" className="flex items-center gap-3">
+        <Link href="/" className="flex items-center gap-3" aria-label="Go to homepage">
           <Image src="/logo.svg" width={36} height={36} alt="TSD logo" className="rounded-full" />
         </Link>
 
@@ -58,7 +67,7 @@ export default function Header() {
         <button
           className="md:hidden p-2 -mr-1"
           onClick={() => setOpen((v) => !v)}
-          aria-label="Open menu"
+          aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
           aria-controls="mobile-nav"
         >
@@ -73,20 +82,19 @@ export default function Header() {
         <div
           className={`absolute inset-0 bg-black/40 transition-opacity ${open ? "opacity-100" : "opacity-0"}`}
           onClick={() => setOpen(false)}
+          aria-hidden
         />
         <div
           id="mobile-nav"
           role="dialog"
           aria-modal="true"
           className={`absolute left-0 right-0 top-16 md:top-20 bottom-0 bg-white rounded-t-2xl shadow-xl transform transition-transform duration-300 ease-out ${open ? "translate-y-0" : "-translate-y-4"}`}
-          onKeyDown={(e) => { if (e.key === "Escape") setOpen(false); }}
         >
           <div className="px-6 pt-6 pb-24 overflow-y-auto h-full flex flex-col gap-1">
             {nav.map((n) => (
               <Link
                 key={n.href}
                 href={n.href}
-                onClick={() => setOpen(false)}
                 className="py-4 text-[17px] text-gray-800 border-b border-border/60 flex items-center justify-between"
               >
                 <span>{n.label}</span>
