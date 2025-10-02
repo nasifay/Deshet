@@ -18,7 +18,7 @@ export default function AboutNew() {
             {/* Body copy per spec */}
             <div className="text-gray-700 text-justify lowercase" style={{ fontWeight: 300, fontSize: 24, lineHeight: "125%", letterSpacing: 0.5 }}>
               <p>
-                Tamra for Social Development Organization (TSD) is an Ethiopian NGO legally registered since 1998. Founded as an Anti-AIDS club in Shashemene, it now operates across Oromia, Sidama, South & Central Ethiopia, and Addis Ababa. TSD works in youth empowerment, peacebuilding, SRH & gender equality, and climate justice & livelihoods. With 25+ years of impact, we drive change through grassroots engagement, advocacy, and community-driven solutions.
+                tamra for social development organization (tsd) is an ethiopian ngo legally registered <span className="text-accent">since 1998.</span> founded as an <span className="text-accent">anti-aids club in shashemene</span>, it now operates across oromia, sidama, south & central ethiopia, and addis ababa. tsd works in youth empowerment, peacebuilding, srh & gender equality, and climate justice & livelihoods. with <span className="text-accent">25+ years</span> of impact, we drive change through grassroots engagement, advocacy, and community-driven solutions.
               </p>
             </div>
 
