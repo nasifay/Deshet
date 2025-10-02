@@ -1,6 +1,5 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { useState } from "react";
 import Button from "~/components/ui/Button";
@@ -17,7 +16,6 @@ const nav = [
 
 export default function Header() {
   const [open, setOpen] = useState(false);
-  const pathname = usePathname();
 
   return (
     <header className="sticky top-0 z-40 bg-white/90 backdrop-blur border-b border-border">
