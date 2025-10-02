@@ -46,8 +46,8 @@ export default function Hero() {
 
             {/* Text content */}
             <div className="absolute inset-0 px-6 md:px-10 flex items-center">
-              <div className="max-w-2xl text-white animate-hero-text">
-                <h1 className="text-3xl md:text-5xl font-extrabold leading-tight uppercase tracking-tight">
+              <div className="max-w-4xl text-white animate-hero-text">
+                <h1 className="font-black uppercase leading-[1.01] tracking-[0] text-[36px] sm:text-[48px] md:text-[64px] lg:text-[80px] xl:text-[100px]">
                   Serving Ethiopian Youth
                 </h1>
                 <div className="mt-5">
