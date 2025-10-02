@@ -29,23 +29,20 @@ export default function Header() {
 
         {/* Nav (desktop) */}
         <nav className="hidden md:flex items-center gap-10 text-[17px]">
-          {nav.map((n) => {
-            const isActive = n.href === "/" ? pathname === "/" : pathname.startsWith(n.href);
-            return (
-              <Link
-                key={n.href}
-                href={n.href}
-                className={`${isActive ? "text-accent font-semibold" : "text-gray-700 hover:text-primary"} inline-flex items-center gap-2`}
-              >
-                {n.label}
-                {n.chevron && (
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-gray-500">
-                    <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                )}
-              </Link>
-            );
-          })}
+          {nav.map((n) => (
+            <Link
+              key={n.href}
+              href={n.href}
+              className={`text-gray-700 hover:text-accent hover:font-semibold transition-colors inline-flex items-center gap-2`}
+            >
+              {n.label}
+              {n.chevron && (
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-gray-500">
+                  <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              )}
+            </Link>
+          ))}
         </nav>
 
         {/* Donate */}
