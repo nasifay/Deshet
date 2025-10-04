@@ -8,4 +8,3 @@ export default function Stat({ value, label }: { value: React.ReactNode; label: 
     </div>
   );
 }
-

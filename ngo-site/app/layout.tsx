@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Roboto } from "next/font/google";
 import "./globals.css";
 import Header from "~/components/layout/Header";
 import Footer from "~/components/layout/Footer";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const roboto = Roboto({ subsets: ["latin"], variable: "--font-roboto", weight: ["300","400","500","700","900"] });
 
 export const metadata: Metadata = {
   title: {
@@ -18,10 +18,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={roboto.variable}>
       <body className="antialiased bg-background text-foreground">
         <Header />
-        <main className="min-h-dvh">
+        <main className="min-h-dvh pt-4 sm:pt-6 md:pt-10 lg:pt-[154px] space-y-10 md:space-y-16 lg:space-y-[72px]">
           {children}
         </main>
         <Footer />

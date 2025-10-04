@@ -15,4 +15,3 @@ export default function Section({ padding = "md", className = "", ...props }: Se
   const paddingClass = paddingMap[padding];
   return <section className={`${paddingClass} ${className}`} {...props} />;
 }
-

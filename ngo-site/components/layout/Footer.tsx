@@ -1,56 +1,53 @@
+import Container from "~/components/ui/Container";
 import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-50 border-t">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div className="col-span-1 md:col-span-2">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              Tamra for Social Development
-            </h3>
-            <p className="text-gray-600 mb-4">
-              Empowering young people through holistic development in health, education, livelihoods, and civic engagement.
-            </p>
+    <footer className="mt-12 border-t border-border bg-muted/40">
+      <Container className="py-10 grid md:grid-cols-3 gap-8 text-sm">
+        <div>
+          <div className="flex items-center gap-2 font-bold text-primary mb-3">
+            <span className="inline-block w-7 h-7 rounded-full bg-primary" />
+            TSD
           </div>
+          <p className="text-gray-600 dark:text-gray-300 max-w-sm">
+            Empowering young people through holistic development in health, education, livelihoods, and civic engagement.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-2 gap-6">
           <div>
-            <h4 className="text-sm font-semibold text-gray-900 mb-4">Quick Links</h4>
+            <h5 className="font-semibold mb-2">Explore</h5>
             <ul className="space-y-2">
-              <li>
-                <Link href="/" className="text-gray-600 hover:text-primary transition-colors">
-                  Home
-                </Link>
-              </li>
-              <li>
-                <Link href="/about" className="text-gray-600 hover:text-primary transition-colors">
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link href="/programs" className="text-gray-600 hover:text-primary transition-colors">
-                  Programs
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className="text-gray-600 hover:text-primary transition-colors">
-                  Contact
-                </Link>
-              </li>
+              <li><Link href="/who-we-are" className="hover:text-primary">Who we are</Link></li>
+              <li><Link href="/news" className="hover:text-primary">News</Link></li>
+              <li><Link href="/gallery" className="hover:text-primary">Gallery</Link></li>
+              <li><Link href="/volunteer" className="hover:text-primary">Volunteer</Link></li>
             </ul>
           </div>
           <div>
-            <h4 className="text-sm font-semibold text-gray-900 mb-4">Contact</h4>
-            <p className="text-gray-600 text-sm">
-              Email: info@tamra.org<br />
-              Phone: +251 XXX XXX XXX
-            </p>
+            <h5 className="font-semibold mb-2">Legal</h5>
+            <ul className="space-y-2">
+              <li><Link href="#" className="hover:text-primary">Terms & Conditions</Link></li>
+              <li><Link href="#" className="hover:text-primary">Privacy Policy</Link></li>
+            </ul>
           </div>
         </div>
-        <div className="border-t mt-8 pt-8 text-center">
-          <p className="text-gray-600 text-sm">
-            © {new Date().getFullYear()} Tamra for Social Development. All rights reserved.
-          </p>
+
+        <div>
+          <h5 className="font-semibold mb-2">Contact</h5>
+          <p className="text-gray-600 dark:text-gray-300">Addis Ababa, Ethiopia</p>
+          <p className="text-gray-600 dark:text-gray-300">info@example.org</p>
+          <div className="flex gap-3 mt-3">
+            <span className="w-8 h-8 bg-primary/10 text-primary grid place-items-center rounded-full">f</span>
+            <span className="w-8 h-8 bg-primary/10 text-primary grid place-items-center rounded-full">x</span>
+            <span className="w-8 h-8 bg-primary/10 text-primary grid place-items-center rounded-full">in</span>
+          </div>
         </div>
+      </Container>
+
+      <div className="border-t border-border py-4 text-center text-xs text-gray-500">
+        © {new Date().getFullYear()} TSD. All rights reserved.
       </div>
     </footer>
   );

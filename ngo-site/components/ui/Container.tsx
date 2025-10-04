@@ -1,10 +1,10 @@
 import React from "react";
 
-type ContainerProps<T extends React.ElementType = "div"> = React.ComponentPropsWithRef<T> & {
-  as?: T;
+export type ContainerProps = React.HTMLAttributes<HTMLDivElement> & {
+  as?: React.ElementType;
 };
 
-export default function Container<T extends React.ElementType = "div">({ as: Tag = "div" as T, className = "", ...props }: ContainerProps<T>) {
-  return <Tag className={`container-default ${className}`} {...props} />;
+export default function Container({ as: Tag = "div", className = "", ...props }: ContainerProps) {
+  const Component = Tag as React.ElementType;
+  return <Component className={`container-default ${className}`} {...props} />;
 }
-

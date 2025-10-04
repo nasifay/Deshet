@@ -7,7 +7,7 @@
   --primary: #1e8e3e; /* brand green */
   --primary-600: #197a35;
   --primary-50: #eef8f2;
-  --accent: #f6a623; /* brand orange */
+  --accent: #FF9700; /* Orange-Main */
   --muted: #f3f4f6; /* gray-100 */
   --card: #ffffff;
   --border: #e5e7eb; /* gray-200 */
@@ -24,10 +24,10 @@
   --color-card: var(--card);
   --color-border: var(--border);
 
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system,
+  --font-sans: var(--font-roboto), ui-sans-serif, system-ui, -apple-system,
     Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, Helvetica Neue, Arial,
     "Apple Color Emoji", "Segoe UI Emoji";
-  --font-heading: var(--font-inter);
+  --font-heading: var(--font-roboto);
 
   --radius-base: 0.75rem; /* 12px */
   --shadow-card: 0 10px 20px rgba(0,0,0,0.06), 0 2px 6px rgba(0,0,0,0.04);
@@ -64,7 +64,7 @@ body {
 @media (min-width: 768px) { .container-default { max-width: 768px; } }
 @media (min-width: 1024px) { .container-default { max-width: 1024px; } }
 @media (min-width: 1280px) { .container-default { max-width: 1280px; } }
-@media (min-width: 1536px) { .container-default { max-width: 1400px; } }
+@media (min-width: 1536px) { .container-default { max-width: 1595px; } }
 
 /* Cards */
 .card {
@@ -77,4 +77,31 @@ body {
 /* Utilities for overlays */
 .overlay-gradient {
   background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.65) 100%);
+}
+
+/* Hero animations */
+@keyframes heroPanelInL {
+  0% { transform: translateX(-6%); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+@keyframes heroPanelInM {
+  0% { transform: scaleY(0.9); opacity: 0; }
+  100% { transform: scaleY(1); opacity: 1; }
+}
+@keyframes heroPanelInR {
+  0% { transform: translateX(6%); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
+.animate-hero-left { animation: heroPanelInL 700ms 50ms ease-out both; }
+.animate-hero-mid { animation: heroPanelInM 800ms 150ms ease-out both; }
+.animate-hero-right { animation: heroPanelInR 700ms 250ms ease-out both; }
+
+@keyframes heroTextIn {
+  0% { transform: translateY(12px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+.animate-hero-text {
+  animation: heroTextIn 800ms 200ms ease-out both;
 }

@@ -2,54 +2,44 @@ import Image from "next/image";
 import Button from "~/components/ui/Button";
 import Section from "~/components/ui/Section";
 import Container from "~/components/ui/Container";
-import Stat from "~/components/ui/Stat";
 import Card from "~/components/ui/Card";
 import LogoCloud from "~/components/ui/LogoCloud";
 import NewsCard from "~/components/ui/NewsCard";
+import Hero from "~/components/sections/Hero";
+import AboutNew from "~/components/sections/AboutNew";
+import StatsBar from "~/components/sections/StatsBar";
+import ImageHeadlineCard from "~/components/sections/ImageHeadlineCard";
+import MissionScroller from "~/components/sections/MissionScroller";
 
 export default function Home() {
   return (
     <>
-      {/* About Section */}
-      <Section id="about" className="bg-muted/60">
-        <Container className="grid lg:grid-cols-2 gap-8 items-center">
-          <div className="space-y-4">
-            <p className="text-xs uppercase tracking-wider text-primary">About us</p>
-            <h2 className="text-3xl md:text-4xl font-bold">Tamra for Social Development</h2>
-            <p className="text-balance text-gray-600 dark:text-gray-300">
-              Tamra for social development organization (tsd) is an Ethiopian NGO legally registered since 1998. We
-              empower young people through holistic development in health, education, livelihoods, and civic engagement.
-            </p>
-            <Button intent="primary" size="lg">Read More</Button>
-          </div>
-          <Card className="overflow-hidden">
-            <Image src="/images/about.jpg" alt="About us" width={800} height={520} className="w-full h-64 md:h-[320px] object-cover" />
-          </Card>
-        </Container>
-      </Section>
+      <Hero />
 
-      {/* Stats Row */}
+      <AboutNew />
+
       <Section className="py-8">
-        <Container className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          <Stat value="58" label="Staffs" />
-          <Stat value="5" label={<><span>Offices in</span> <span className="text-primary font-semibold">4</span> Regions</>} />
-          <Stat value="250+" label="Volunteers" />
-          <Stat value="15" label="Protocols" />
-        </Container>
+        <StatsBar
+          items={[
+            { value: "58", label: "Staffs" },
+            { value: "5", label: <>Offices in <span className="text-primary font-semibold">4</span> Regions</> },
+            { value: "250+", label: "Volunteers" },
+            { value: "15", label: "Protocols" },
+          ]}
+        />
       </Section>
 
-      {/* Empowerment Hero */}
       <Section padding="none">
-        <Container>
-          <div className="relative rounded-xl overflow-hidden">
-            <Image src="/images/empowerment.jpg" alt="Youth empowerment" width={1600} height={900} className="w-full h-[320px] md:h-[520px] object-cover" />
-            <div className="absolute inset-0 overlay-gradient" />
-            <div className="absolute inset-x-6 md:inset-x-10 bottom-10 text-white max-w-3xl">
-              <h3 className="text-3xl md:text-5xl font-extrabold leading-tight">Youth Empowerment &amp; Peacebuilding</h3>
-            </div>
-          </div>
-        </Container>
+        <ImageHeadlineCard
+          src="/images/empowerment.jpg"
+          alt="Youth empowerment"
+          headline={<>
+            Youth<br />Empowerment &<br />Peacebuilding
+          </>}
+        />
       </Section>
+
+      <MissionScroller />
 
       {/* Partners */}
       <Section>
