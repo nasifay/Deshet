@@ -1,0 +1,80 @@
+@import "tailwindcss";
+
+/* Design tokens aligned to the NGO theme */
+:root {
+  --background: #ffffff;
+  --foreground: #1f2937; /* slate-800 */
+  --primary: #1e8e3e; /* brand green */
+  --primary-600: #197a35;
+  --primary-50: #eef8f2;
+  --accent: #f6a623; /* brand orange */
+  --muted: #f3f4f6; /* gray-100 */
+  --card: #ffffff;
+  --border: #e5e7eb; /* gray-200 */
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-600: var(--primary-600);
+  --color-primary-50: var(--primary-50);
+  --color-accent: var(--accent);
+  --color-muted: var(--muted);
+  --color-card: var(--card);
+  --color-border: var(--border);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system,
+    Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, Helvetica Neue, Arial,
+    "Apple Color Emoji", "Segoe UI Emoji";
+  --font-heading: var(--font-inter);
+
+  --radius-base: 0.75rem; /* 12px */
+  --shadow-card: 0 10px 20px rgba(0,0,0,0.06), 0 2px 6px rgba(0,0,0,0.04);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #e5e7eb;
+    --muted: #111827;
+    --card: #0b0b0b;
+    --border: #1f2937;
+  }
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+/* Layout helpers */
+.container-default {
+  width: 100%;
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
+
+@media (min-width: 640px) { .container-default { max-width: 640px; } }
+@media (min-width: 768px) { .container-default { max-width: 768px; } }
+@media (min-width: 1024px) { .container-default { max-width: 1024px; } }
+@media (min-width: 1280px) { .container-default { max-width: 1280px; } }
+@media (min-width: 1536px) { .container-default { max-width: 1400px; } }
+
+/* Cards */
+.card {
+  background-color: var(--card);
+  border-radius: var(--radius-base);
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--border);
+}
+
+/* Utilities for overlays */
+.overlay-gradient {
+  background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.65) 100%);
+}
