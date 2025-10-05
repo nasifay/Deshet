@@ -105,3 +105,23 @@ body {
 .animate-hero-text {
   animation: heroTextIn 800ms 200ms ease-out both;
 }
+
+/* Header fade-in animation */
+@keyframes fade-in {
+  0% { opacity: 0; transform: translateY(-1rem); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out forwards;
+}
+
+/* Marquee animation for scrolling logos */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+
+.animate-marquee {
+  animation: marquee var(--duration, 30s) linear infinite;
+}
