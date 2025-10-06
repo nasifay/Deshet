@@ -158,7 +158,7 @@ const programs = [
 export function MissionSection() {
   return (
     <section className="flex flex-col w-full items-center gap-[87px] relative">
-      <Card className="w-full bg-white rounded-[46px] shadow-[0px_4px_26.5px_#0000000d] translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:200ms]">
+      <Card className="w-[1595px] bg-white rounded-[46px] shadow-[0px_4px_26.5px_#0000000d] border-0 translate-y-[-1rem] animate-fade-in opacity-1 [--animation-delay:200ms]">
         <CardContent className="flex flex-col items-center justify-center gap-[65px] px-0 py-[88px]">
           <p className="max-w-[993px] [text-shadow:0px_4px_4px_#00000040] [font-family:'Roboto',Helvetica] font-normal text-[#ff9700] text-[32px] text-center tracking-[0] leading-[32.3px]">
             Working hand in hand with communities for a brighter future.
@@ -166,7 +166,7 @@ export function MissionSection() {
         </CardContent>
       </Card>
 
-      <div className="relative w-full h-[744px] bg-[url(https://c.animaapp.com/mgclt9blEcJSeI/img/rectangle-921.svg)] bg-[100%_100%] rounded-[46px] translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:400ms]" />
+      <div className="relative w-[1595px] h-[744px] bg-[url(https://c.animaapp.com/mgclt9blEcJSeI/img/rectangle-921.svg)] bg-[100%_100%] rounded-[46px] translate-y-[-1rem] animate-fade-in opacity-1 [--animation-delay:400ms]" />
 
       <section className="flex w-full items-center gap-[245px] px-[148px] py-[130px] relative [background:url(https://c.animaapp.com/mgclt9blEcJSeI/img/tamra-pattern-2.png)_50%_50%_/_cover,linear-gradient(0deg,rgba(18,131,65,1)_0%,rgba(18,131,65,1)_100%)] translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:600ms]">
         <p className="w-[896px] [font-family:'Roboto',Helvetica] font-normal text-white text-2xl text-justify tracking-[0.80px] leading-[34.8px]">
@@ -238,7 +238,7 @@ export function MissionSection() {
         </div>
       </section>
 
-      <Card className="w-full bg-white rounded-[46px] shadow-[0px_4px_26.5px_#0000000d] translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:1000ms]">
+      <Card className="w-full bg-white rounded-[46px] shadow-[0px_4px_26.5px_#0000000d] border-0 translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:1000ms]">
         <CardContent className="flex flex-col items-center justify-center gap-[82px] px-[85px] py-[88px]">
           <h2 className="w-full max-w-[1369px] [text-shadow:0px_4px_4px_#00000040] [font-family:'Roboto',Helvetica] font-black text-[#128341] text-[70px] tracking-[0] leading-[70.7px]">
             CORE VALUES
@@ -333,7 +333,7 @@ export function MissionSection() {
         </div>
       </section>
 
-      <Card className="w-full bg-white rounded-[46px] shadow-[0px_4px_26.5px_#0000000d] translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:1400ms]">
+      <Card className="w-full bg-white rounded-[46px] shadow-[0px_4px_26.5px_#0000000d] border-0 translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:1400ms]">
         <CardContent className="flex flex-col items-center justify-center gap-[65px] p-[45px]">
           <h2 className="w-full max-w-[1343px] [text-shadow:0px_4px_4px_#00000040] [font-family:'Roboto',Helvetica] font-black text-[#128341] text-[70px] tracking-[0] leading-[70.7px]">
             TARGET GROUP
@@ -422,7 +422,7 @@ export function MissionSection() {
         </div>
       </section>
 
-      <Card className="w-full bg-white rounded-[46px] shadow-[0px_4px_26.5px_#0000000d] translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:1800ms]">
+      <Card className="w-full bg-white rounded-[46px] shadow-[0px_4px_26.5px_#0000000d] border-0 translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:1800ms]">
         <CardContent className="flex flex-col items-center justify-center gap-[65px] px-[65px] py-[88px]">
           <h2 className="w-full max-w-[1343px] [text-shadow:0px_4px_4px_#00000040] [font-family:'Roboto',Helvetica] font-black text-[#128341] text-[70px] tracking-[0] leading-[70.7px]">
             OUR PROGRAMS
