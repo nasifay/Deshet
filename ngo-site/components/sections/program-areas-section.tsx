@@ -1,102 +1,92 @@
-import { ArrowUpCircleIcon } from "lucide-react";
-import React from "react";
-import { Card, CardContent } from "~/components/ui/Card";
-import ScrollStack from "~/components/ui/ScrollStack";
-import SupportersSection from "./SupportersSection";
+"use client";
+import { ArrowUpRight } from "lucide-react";
+import Image from "next/image";
+import { useEffect, useState } from "react";
 
-const programAreas = [
+const programsList: { title: string; image: string }[] = [
   {
-    title: "YOUTH EMPOWERMENT & PEACEBUILDING",
-    bgImage: "https://c.animaapp.com/mgdrgf40cGS3Zf/img/frame-28.png",
+    title: "Youth <br /> Empowerment & <br /> Peacebuilding",
+    image: "/overview/1.png",
   },
   {
-    title: "SEXUAL & REPRODUCTIVE HEALTH & GENDER EQUALITY",
-    bgImage: "https://c.animaapp.com/mgdrgf40cGS3Zf/img/frame-29.png",
+    title: "Sexual <br /> & Reproductive Health & <br /> Gender Equality",
+    image: "/overview/2.png",
   },
   {
-    title: "CLIMATE JUSTICE & LIVELIHOODS",
-    bgImage: "https://c.animaapp.com/mgdrgf40cGS3Zf/img/frame-30.png",
+    title: "Climate Justice & <br /> Livelihoods",
+    image: "/overview/3.png",
   },
   {
-    title: "CHILDREN'S RIGHTS PROTECTION",
-    bgImage: "https://c.animaapp.com/mgdrgf40cGS3Zf/img/frame-31.png",
-  },
-];
-
-const supporterLogos = [
-  {
-    src: "https://c.animaapp.com/mgdrgf40cGS3Zf/img/id08rmwfjo-1753988135293-2.png",
-    alt: "Supporter",
-    width: "w-[53px]",
-    height: "h-[49px]",
-  },
-  {
-    src: "https://c.animaapp.com/mgdrgf40cGS3Zf/img/gac-logo-1.png",
-    alt: "GAC Logo",
-    width: "w-[134px]",
-    height: "h-[49px]",
-  },
-  {
-    src: "https://c.animaapp.com/mgdrgf40cGS3Zf/img/buildup-logo-1024x191-2.png",
-    alt: "BuildUp Logo",
-    width: "w-[264px]",
-    height: "h-[49px]",
-  },
-  {
-    src: "https://c.animaapp.com/mgdrgf40cGS3Zf/img/584823e0cef1014c0b5e49c4-2.png",
-    alt: "Partner",
-    width: "w-[165px]",
-    height: "h-[49px]",
-  },
-  {
-    src: "https://c.animaapp.com/mgdrgf40cGS3Zf/img/zeleman-logo-2.png",
-    alt: "Zeleman Logo",
-    width: "w-[226px]",
-    height: "h-[49px]",
-  },
-  {
-    src: "https://c.animaapp.com/mgdrgf40cGS3Zf/img/ideojznfbb-1753991896369-1.png",
-    alt: "Supporter",
-    width: "w-[60px]",
-    height: "h-[49px]",
-  },
-  {
-    src: "https://c.animaapp.com/mgdrgf40cGS3Zf/img/search-logo-1.png",
-    alt: "Search Logo",
-    width: "w-56",
-    height: "h-12",
-  },
-  {
-    src: "https://c.animaapp.com/mgdrgf40cGS3Zf/img/idoxrk7v4r-1753990881673-1.png",
-    alt: "Partner",
-    width: "w-[59px]",
-    height: "h-12",
+    title: "Children’s Rights <br /> Protection",
+    image: "/overview/4.png",
   },
 ];
 
 export default function ProgramAreasSection() {
-  return (
-    <div className="inline-flex flex-col items-center gap-[72px] w-full px-[148px] pt-[154px] pb-[100px] translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:600ms]">
-      <ScrollStack
-        items={programAreas.map((area, index) => ({
-          id: index,
-          content: (
-            <Card
-              className="flex flex-col w-[1595px] h-[854px] items-start justify-end gap-[23px] px-[65px] py-[88px] rounded-[46px] shadow-[0px_4px_26.5px_#0000000d] bg-cover bg-center bg-no-repeat hover:scale-[1.02] transition-transform cursor-pointer border-0"
-              style={{ backgroundImage: `url(${area.bgImage})` }}
-            >
-              <CardContent className="p-0 flex flex-col items-start justify-center gap-[23px] w-full h-full">
-                <h3 className="relative w-[863px] h-[303px] opacity-100 [text-shadow:0px_4px_4px_#00000040] [font-family:'Roboto',Helvetica] font-black text-white text-[80px] tracking-[0] leading-[81%] uppercase">
-                  {area.title}
-                </h3>
-                <ArrowUpCircleIcon className="relative w-[67.63px] h-[67.63px] fill-[#4EB778]" style={{ transform: 'rotate(40.11deg)' }} />
-              </CardContent>
-            </Card>
-          )
-        }))}
-      />
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [fade, setFade] = useState(false);
 
-      <SupportersSection title="OUR SUPPORTERS" logos={supporterLogos} />
+  useEffect(() => {
+    const interval = setInterval(() => {
+      // Start fade-out
+      setFade(true);
+
+      // Wait for fade-out to finish, then change image
+      setTimeout(() => {
+        setCurrentIndex((prev) => (prev + 1) % programsList.length);
+        setFade(false);
+      }, 700); // match fade duration
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="relative w-full max-w-7xl rounded-2xl overflow-hidden  group">
+      <div
+        className={`transition-all duration-500 ease-in-out ${
+          fade ? "opacity-0 scale-105" : "opacity-100 scale-100"
+        }`}
+      >
+        {/* Image */}
+        <div className="relative w-full  h-auto aspect-[1595/854] overflow-hidden rounded-2xl">
+          <Image
+            src={programsList[currentIndex].image}
+            alt={programsList[currentIndex].title}
+            fill
+            className="object-contain w-full h-auto aspect-[1595/854] rounded-2xl"
+            priority
+          />
+        </div>
+
+        {/* <div className="absolute inset-0 bg-black/40"></div> */}
+
+        {/* Text Content - Left Aligned */}
+        <div className="absolute bottom-20 -translate-y-1/3 left-0 flex items-center z-10">
+          <div className="ml-8 md:ml-12 lg:ml-16 text-white mt-20">
+            <h2
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl 2xl:text-7xl font-black leading-tight uppercase tracking-tight"
+              dangerouslySetInnerHTML={{
+                __html: programsList[currentIndex].title,
+              }}
+            />
+          </div>
+        </div>
+
+        {/* Orange Circle Icon - Bottom Left */}
+        <button
+          aria-label="Learn more"
+          className={
+            "absolute bottom-8 left-8 md:bottom-18 md:left-18 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-primary-orange hover:bg-[#db7f0c] active:scale-95 transition-all duration-300 shadow-[0_3px_10px_rgba(0,0,0,0.25)]"
+          }
+        >
+          <ArrowUpRight
+            size={20}
+            strokeWidth={3}
+            className="text-black/85 opacity-85"
+          />
+        </button>
+      </div>
     </div>
   );
 }

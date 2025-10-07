@@ -1,49 +1,41 @@
+"use client";
+
 import React from "react";
 
-const statsData = [
-  { number: "58", label: "Staffs" },
-  {
-    number: "5",
-    label: "Offices in ",
-    highlight: "4",
-    highlightLabel: " Regions",
-  },
-  { number: "250+", label: "Volunteers" },
-  { number: "15", label: "Protocols" },
-];
-
 export default function StatisticsSection() {
+  const stats = [
+    { number: "58", label: "Staffs" },
+    {
+      number: "5",
+      label: (
+        <>
+          Offices in <span className="text-[#4EB778] font-normal">4</span>{" "}
+          Regions
+        </>
+      ),
+    },
+    { number: "250+", label: "Volunteers" },
+    { number: "15", label: "Protocols" },
+  ];
+
   return (
-    <section className="translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:600ms] flex flex-col items-center justify-center gap-2.5 px-[148px] py-0 relative w-full max-w-[1595px] mx-auto h-[168px]">
-      <div className="flex items-center gap-[209px] w-full">
-        {statsData.map((stat, index) => (
-          <div
-            key={index}
-            className="inline-flex flex-col w-[242px] h-[168px] items-start gap-[18px] px-0 py-[35px] bg-white translate-y-[-1rem] animate-fade-in opacity-0"
-            style={
-              {
-                "--animation-delay": `${400 + index * 100}ms`,
-              } as React.CSSProperties
-            }
-          >
-            <div className="mt-[-1.00px] flex items-center justify-center w-fit [font-family:'Roboto',Helvetica] font-semibold text-[#ff9700] text-5xl tracking-[0] leading-[38px] whitespace-nowrap">
-              {stat.number}
+    <section className="w-full bg-white py-10 md:py-12">
+      <div className=" mx-auto px-6 md:px-8">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-y-8 gap-x-6 md:gap-x-10 lg:gap-x-16 text-center place-content-center place-items-center">
+          {stats.map((item, index) => (
+            <div
+              key={index}
+              className="flex flex-col items-start justify-center font-roboto text-2xl md:text-3xl 2xl:text-4xl"
+            >
+              <span className="font-semibold  text-primary-orange leading-tight">
+                {item.number}
+              </span>
+              <p className="font-light  text-[#1a1a1a] mt-[2px] text-nowrap">
+                {item.label}
+              </p>
             </div>
-            <div className="flex items-center justify-center w-fit [font-family:'Roboto',Helvetica] font-light text-transparent text-5xl tracking-[0] leading-[38px] whitespace-nowrap">
-              {stat.highlight ? (
-                <>
-                  <span className="text-[#020202]">{stat.label}</span>
-                  <span className="text-[#4eb778]">{stat.highlight}</span>
-                  <span className="text-[#020202]">
-                    {stat.highlightLabel}
-                  </span>
-                </>
-              ) : (
-                <span className="text-[#020202]">{stat.label}</span>
-              )}
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </section>
   );

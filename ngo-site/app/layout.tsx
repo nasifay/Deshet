@@ -4,7 +4,11 @@ import "./globals.css";
 import Header from "~/components/layout/Header";
 import Footer from "~/components/layout/Footer";
 
-const roboto = Roboto({ subsets: ["latin"], variable: "--font-roboto", weight: ["300","400","500","700","900"] });
+const roboto = Roboto({
+  subsets: ["latin"],
+  variable: "--font-roboto",
+  weight: ["300", "400", "500", "700", "900"],
+});
 
 export const metadata: Metadata = {
   title: {
@@ -16,14 +20,16 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://example.org"),
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en" className={roboto.variable}>
-      <body className="antialiased bg-background text-foreground">
+      <body className="antialiased bg-white">
         <Header />
-        <main className="min-h-dvh pt-4 sm:pt-6 md:pt-10 lg:pt-[154px] space-y-10 md:space-y-16 lg:space-y-[72px]">
-          {children}
-        </main>
+        <main className="pt-20 bg-white">{children}</main>
         <Footer />
       </body>
     </html>

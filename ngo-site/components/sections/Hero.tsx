@@ -26,7 +26,11 @@ export default function Hero() {
             {/* Three overlays positioned to match Figma */}
             <div className="absolute inset-0" style={overlayVars}>
               {/* Left green overlay */}
-              <div className="absolute inset-y-0 left-0 bg-[rgba(30,142,62,0.5)] animate-hero-left" style={{ right: `calc(100% - var(--mid-left))` }} aria-hidden />
+              <div
+                className="absolute inset-y-0 left-0 bg-[rgba(30,142,62,0.5)] animate-hero-left"
+                style={{ right: `calc(100% - var(--mid-left))` }}
+                aria-hidden
+              />
 
               {/* Middle orange overlay */}
               <div
@@ -37,7 +41,7 @@ export default function Hero() {
 
               {/* Right green overlay */}
               <div
-                className="absolute inset-y-0 right-0 bg-[rgba(30,142,62,0.5)] animate-hero-right" 
+                className="absolute inset-y-0 right-0 bg-[rgba(30,142,62,0.5)] animate-hero-right"
                 style={{ left: `calc(var(--mid-left) + var(--mid-width))` }}
                 aria-hidden
               />

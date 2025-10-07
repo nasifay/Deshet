@@ -5,14 +5,16 @@ import ProgramAreasSection from "~/components/sections/program-areas-section";
 import StatisticsSection from "~/components/sections/statistics-section";
 import AchievementsSection from "~/components/sections/achievements-section";
 import NewsEventsSection from "~/components/sections/news-events-section";
+import SupportersSection from "~/components/sections/supporters-section";
 
 export default function Home() {
   return (
-    <div className="flex z-[2] w-full relative mt-[154px] flex-col items-center gap-[72px]">
+    <div className="flex  w-full relative flex-col mx-auto items-center">
       <HeroSection />
       <AboutSection />
       <StatisticsSection />
       <ProgramAreasSection />
+      <SupportersSection />
       <AchievementsSection />
       <NewsEventsSection />
     </div>

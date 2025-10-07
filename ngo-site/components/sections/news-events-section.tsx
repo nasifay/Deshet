@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import React from "react";
 import Button from "~/components/ui/Button";
 import { Card, CardContent } from "~/components/ui/Card";
@@ -8,103 +9,105 @@ const newsArticles = [
     title: "TSD Launches New Youth Leadership Training in Hawassa",
     description:
       "Tamra for Social Development (TSD) has kicked off a week-long Youth Leadership Training in Hawassa...",
-    backgroundImage: "",
+    backgroundImage: "/images/news.jpg",
   },
   {
     title: "TSD Launches New Youth Leadership Training in Hawassa",
     description:
       "Tamra for Social Development (TSD) has kicked off a week-long Youth Leadership Training in Hawassa...",
-    backgroundImage: "",
+    backgroundImage: "/images/news.jpg",
   },
   {
     title: "TSD Launches New Youth Leadership Training in Hawassa",
     description:
       "Tamra for Social Development (TSD) has kicked off a week-long Youth Leadership Training in Hawassa...",
-    backgroundImage: "",
+    backgroundImage: "/images/news.jpg",
   },
   {
     title: "TSD Launches New Youth Leadership Training in Hawassa",
     description:
       "Tamra for Social Development (TSD) has kicked off a week-long Youth Leadership Training in Hawassa...",
-    backgroundImage: "",
+    backgroundImage: "/images/news.jpg",
   },
 ];
 
 export default function NewsEventsSection() {
   return (
-    <section className="translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:3200ms] flex flex-col w-full max-w-[1596px] items-start gap-[72px] relative flex-[0_0_auto]">
-      <div className="inline-flex items-end gap-[804px] relative flex-[0_0_auto]">
-        <h2 className="relative w-fit mt-[-1.00px] [text-shadow:0px_4px_4px_#00000040] [font-family:'Roboto',Helvetica] font-black text-[#128341] text-[70px] tracking-[0] leading-[70.7px] whitespace-nowrap">
-          NEWS AND EVENTS
-        </h2>
+    <section className="w-full bg-white py-16 px-8">
+      <div className="max-w-7xl mx-auto">
+        {/* Header Section */}
+        <div className="flex items-center justify-between mb-12">
+          <h2 className="text-6xl font-black text-[#268246] uppercase">
+            NEWS AND EVENTS
+          </h2>
+          <a
+            className="text-lg text-gray-500 hover:text-[#268246] transition-colors"
+            href="/news"
+          >
+            See More
+          </a>
+        </div>
 
-        <a
-          className="relative w-fit [font-family:'Roboto',Helvetica] font-normal text-transparent text-xl tracking-[0] leading-[20.2px] whitespace-nowrap"
-          href="https://www.figma.com/proto/MkhksQbAlOq8XFYc7pjyWU/TAMRA-Website-UI?page-id=480%3A745&node-id=590-773&viewport=387%2C-2833%2C0.13&t=7vd0yZSzpPwwKF5z-1&scaling=min-zoom&content-scaling=fixed"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          <span className="font-bold text-[#a19e9d]">See More</span>
-        </a>
-      </div>
-
-      <div className="w-full relative h-[421px]">
-        <div className="left-[calc(50.00%_-_798px)] inline-flex items-center gap-[52px] relative">
+        {/* News Cards */}
+        <div className="grid grid-cols-4 gap-6 mb-16">
           {newsArticles.map((article, index) => (
             <Card
               key={index}
-              className={`translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:${3400 + index * 200}ms] flex w-[360px] items-end justify-center gap-2.5 pt-[9px] pb-[29px] px-[3px] relative h-[421px] border-0 bg-transparent`}
+              className="relative h-96 rounded-2xl overflow-hidden group cursor-pointer"
             >
-              <div className="absolute top-0 left-0 w-[360px] h-[421px]">
-                {article.backgroundImage && (
-                  <img
-                    className="absolute top-0 left-0 w-[359px] h-[421px] object-cover"
-                    alt="Unsplash cveoh jjmee"
-                    src={article.backgroundImage}
-                  />
-                )}
-
-                <div className="absolute top-0 left-0 w-[360px] h-[421px] bg-black rounded-[33px] opacity-50" />
+              <div className="absolute inset-0">
+                <Image
+                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  alt="News event"
+                  src={article.backgroundImage}
+                  width={400}
+                  height={400}
+                />
+                <div className="absolute inset-0 bg-black bg-opacity-40" />
               </div>
 
-              <CardContent className="p-0 flex flex-col w-[315px] items-start gap-[72px] relative z-10">
-                <div className="flex flex-col items-start gap-[5px] relative self-stretch w-full flex-[0_0_auto]">
-                  <h3 className="relative self-stretch mt-[-1.00px] [font-family:'Roboto',Helvetica] font-bold text-[#ff9700] text-base tracking-[0] leading-6">
-                    {article.title}
-                  </h3>
-
-                  <p className="relative self-stretch [font-family:'Roboto',Helvetica] font-normal text-white text-sm tracking-[0] leading-[22.4px]">
-                    {article.description}
-                  </p>
-                </div>
+              <CardContent className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                <h3 className="text-lg font-bold text-[#F09632] mb-2 leading-tight">
+                  {article.title}
+                </h3>
+                <p className="text-sm text-white leading-relaxed">
+                  {article.description}
+                </p>
               </CardContent>
             </Card>
           ))}
         </div>
-      </div>
 
-      {/* Call to Action Section */}
-      <div className="translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:4200ms] relative w-full h-[429.74px] bg-[100%_100%]">
-        <div className="relative top-[104px] left-[295px] w-[1005px] h-[217px] flex flex-col gap-[35.8px]">
-          <h2 className="self-end mr-[2.0px] w-[1003.11px] h-[129.82px] mt-0 font-h2 font-[number:var(--h2-font-weight)] text-[#4eb778] text-[length:var(--h2-font-size)] text-center tracking-[var(--h2-letter-spacing)] leading-[var(--h2-line-height)] [font-style:var(--h2-font-style)]">
-            You can contribute to provide a place for children with special
-            needs!
-          </h2>
+        {/* Call to Action Banner */}
+        <div className="relative h-96 rounded-2xl overflow-hidden">
+          <div className="absolute inset-0">
+            <Image
+              className="w-full h-full object-cover"
+              alt="Group of people"
+              src="/images/cta.jpg"
+              width={1200}
+              height={400}
+            />
+            <div className="absolute inset-0 bg-black bg-opacity-50" />
+          </div>
 
-          <div className="ml-[285.4px] w-[404.09px] h-[51px] flex gap-[89.1px]">
-            <Link href="/volunteer">
-              <Button className="translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:4400ms] h-auto inline-flex w-[200px] items-center justify-center gap-2.5 px-8 py-4 bg-[#ff9700] hover:bg-[#e6870a] rounded-[21px] backdrop-blur-2xl backdrop-brightness-[100%] [-webkit-backdrop-filter:blur(40px)_brightness(100%)]">
-                <span className="[font-family:'Roboto',Helvetica] font-medium text-white text-base text-right tracking-[0] leading-[normal] whitespace-nowrap">
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-8">
+            <h2 className="text-4xl font-bold text-white mb-8 max-w-4xl leading-tight">
+              You can contribute to provide a place for children with special
+              needs!
+            </h2>
+
+            <div className="flex gap-6">
+              <Link href="/volunteer">
+                <Button className="bg-[#F09632] hover:bg-[#e6870a] text-white px-8 py-4 rounded-2xl font-medium transition-colors">
                   Join as a volunteer
-                </span>
-              </Button>
-            </Link>
+                </Button>
+              </Link>
 
-            <Button className="translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:4600ms] h-auto inline-flex w-[115px] items-center justify-center gap-2.5 px-8 py-4 bg-white hover:bg-gray-50 rounded-[21px] backdrop-blur-2xl backdrop-brightness-[100%] [-webkit-backdrop-filter:blur(40px)_brightness(100%)]">
-              <span className="[font-family:'Roboto',Helvetica] font-medium text-[#128341] text-base text-right tracking-[0] leading-[normal] whitespace-nowrap">
+              <Button className="bg-white hover:bg-gray-50 text-[#268246] px-8 py-4 rounded-2xl font-medium transition-colors">
                 Donate
-              </span>
-            </Button>
+              </Button>
+            </div>
           </div>
         </div>
       </div>

@@ -1,34 +1,49 @@
-import { ArrowUpCircleIcon } from "lucide-react";
+"use client";
+
+import Image from "next/image";
+import { motion } from "framer-motion";
 import Link from "next/link";
-import React from "react";
-import Button from "~/components/ui/Button";
-import { Card, CardContent } from "~/components/ui/Card";
 
-export default function HeroSection() {
+export default function Hero() {
   return (
-    <div className="flex z-[2] w-full relative mt-[154px] flex-col items-center gap-[72px]">
-      {/* Hero Section */}
-      <section className="translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:0ms] flex flex-col w-full max-w-[1595px] h-[1060px] items-start gap-[17px] pt-[453px] pb-[389px] px-0 rounded-[46px] relative">
-        <img
-          className="absolute top-[-22px] left-[-26px] w-[1648px] h-[1089px]"
-          alt="Frame"
-          src="https://c.animaapp.com/mfy7s1sw8fTu6i/img/frame-1.svg"
-        />
+    <section className="relative w-full h-[90vh] flex items-center justify-start overflow-hidden bg-neutral-900">
+      {/* Background Image */}
+      <Image
+        src="/home-hero.png"
+        alt="Serving Ethiopian Youth"
+        fill
+        priority
+        className="object-cover brightness-[0.8] scale-105 animate-slowZoom"
+      />
 
-        <div className="translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:200ms] inline-flex flex-col items-start gap-[17px] px-[49px] py-0 relative flex-[0_0_auto] mb-[-67.00px]">
-          <h1 className="relative w-fit mt-[-1.00px] [text-shadow:0px_4px_4px_#00000040] [font-family:'Roboto',Helvetica] font-black text-white text-[100px] tracking-[0] leading-[101px]">
-            SERVING
-            <br />
+      {/* Content */}
+      <div className="relative z-10 px-6 md:px-16 lg:px-24 max-w-2xl text-white">
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="font-roboto font-black text-3xl sm:text-5xl md:text-[60px] lg:text-[80px] 2xl:text-[90px] leading-[1.05] tracking-tight uppercase drop-shadow-[0_3px_6px_rgba(0,0,0,0.5)]"
+        >
+          SERVING <br />
+          <span className="text-[#18c76f] text-nowrap block">
             ETHIOPIAN YOUTH
-          </h1>
+          </span>
+        </motion.h1>
 
-          <Button className="translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:400ms] h-auto w-[196px] bg-[#128341] hover:bg-[#0f6b35] rounded-[25px] shadow-[0px_4px_14.5px_#00000040] px-[78px] py-5">
-            <span className="[font-family:'Roboto',Helvetica] font-normal text-white text-2xl tracking-[0] leading-[normal] whitespace-nowrap">
-              Read More
-            </span>
-          </Button>
-        </div>
-      </section>
-    </div>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.2, delay: 0.7 }}
+          className="mt-10"
+        >
+          <Link
+            href="#contact"
+            className="inline-flex items-center justify-center px-12 py-4 rounded-full bg-[#128341] hover:bg-[#0e6a32] transition-all duration-300 font-roboto font-medium text-base md:text-lg text-white shadow-[0_6px_20px_-5px_rgba(18,131,65,0.4)] hover:shadow-[0_10px_25px_-5px_rgba(18,131,65,0.6)] backdrop-blur-sm"
+          >
+            Contact Us
+          </Link>
+        </motion.div>
+      </div>
+    </section>
   );
 }

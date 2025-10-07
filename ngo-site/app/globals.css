@@ -7,10 +7,13 @@
   --primary: #1e8e3e; /* brand green */
   --primary-600: #197a35;
   --primary-50: #eef8f2;
-  --accent: #FF9700; /* Orange-Main */
+  --accent: #ff9700; /* Orange-Main */
   --muted: #f3f4f6; /* gray-100 */
   --card: #ffffff;
+
   --border: #e5e7eb; /* gray-200 */
+  --primary-orange: #ff7a00; /* Orange text color */
+  --primary-green: #0a7a35; /* Green donate button */
 }
 
 @theme inline {
@@ -23,14 +26,20 @@
   --color-muted: var(--muted);
   --color-card: var(--card);
   --color-border: var(--border);
+  --color-primary-orange: var(--primary-orange);
+  --color-primary-green: var(--primary-green);
 
   --font-sans: var(--font-roboto), ui-sans-serif, system-ui, -apple-system,
     Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, Helvetica Neue, Arial,
     "Apple Color Emoji", "Segoe UI Emoji";
   --font-heading: var(--font-roboto);
+  --font-roboto: var(--font-roboto);
 
   --radius-base: 0.75rem; /* 12px */
-  --shadow-card: 0 10px 20px rgba(0,0,0,0.06), 0 2px 6px rgba(0,0,0,0.04);
+  --shadow-card: 0 10px 20px rgba(0, 0, 0, 0.06), 0 2px 6px rgba(0, 0, 0, 0.04);
+
+  --breakpoint-3xl: 1920px;
+  --breakpoint-wxga: 1366px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -43,7 +52,8 @@
   }
 }
 
-html, body {
+html,
+body {
   height: 100%;
 }
 
@@ -60,11 +70,31 @@ body {
   padding-inline: 1rem;
 }
 
-@media (min-width: 640px) { .container-default { max-width: 640px; } }
-@media (min-width: 768px) { .container-default { max-width: 768px; } }
-@media (min-width: 1024px) { .container-default { max-width: 1024px; } }
-@media (min-width: 1280px) { .container-default { max-width: 1280px; } }
-@media (min-width: 1536px) { .container-default { max-width: 1595px; } }
+@media (min-width: 640px) {
+  .container-default {
+    max-width: 640px;
+  }
+}
+@media (min-width: 768px) {
+  .container-default {
+    max-width: 768px;
+  }
+}
+@media (min-width: 1024px) {
+  .container-default {
+    max-width: 1024px;
+  }
+}
+@media (min-width: 1280px) {
+  .container-default {
+    max-width: 1280px;
+  }
+}
+@media (min-width: 1536px) {
+  .container-default {
+    max-width: 1595px;
+  }
+}
 
 /* Cards */
 .card {
@@ -76,30 +106,64 @@ body {
 
 /* Utilities for overlays */
 .overlay-gradient {
-  background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.65) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.3) 0%,
+    rgba(0, 0, 0, 0.65) 100%
+  );
 }
 
 /* Hero animations */
 @keyframes heroPanelInL {
-  0% { transform: translateX(-6%); opacity: 0; }
-  100% { transform: translateX(0); opacity: 1; }
+  0% {
+    transform: translateX(-6%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 @keyframes heroPanelInM {
-  0% { transform: scaleY(0.9); opacity: 0; }
-  100% { transform: scaleY(1); opacity: 1; }
+  0% {
+    transform: scaleY(0.9);
+    opacity: 0;
+  }
+  100% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
 }
 @keyframes heroPanelInR {
-  0% { transform: translateX(6%); opacity: 0; }
-  100% { transform: translateX(0); opacity: 1; }
+  0% {
+    transform: translateX(6%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
-.animate-hero-left { animation: heroPanelInL 700ms 50ms ease-out both; }
-.animate-hero-mid { animation: heroPanelInM 800ms 150ms ease-out both; }
-.animate-hero-right { animation: heroPanelInR 700ms 250ms ease-out both; }
+.animate-hero-left {
+  animation: heroPanelInL 700ms 50ms ease-out both;
+}
+.animate-hero-mid {
+  animation: heroPanelInM 800ms 150ms ease-out both;
+}
+.animate-hero-right {
+  animation: heroPanelInR 700ms 250ms ease-out both;
+}
 
 @keyframes heroTextIn {
-  0% { transform: translateY(12px); opacity: 0; }
-  100% { transform: translateY(0); opacity: 1; }
+  0% {
+    transform: translateY(12px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .animate-hero-text {
@@ -108,8 +172,14 @@ body {
 
 /* Header fade-in animation */
 @keyframes fade-in {
-  0% { opacity: 0; transform: translateY(-1rem); }
-  100% { opacity: 1; transform: translateY(0); }
+  0% {
+    opacity: 0;
+    transform: translateY(-1rem);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .animate-fade-in {
@@ -118,8 +188,12 @@ body {
 
 /* Marquee animation for scrolling logos */
 @keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-100%); }
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
 }
 
 .animate-marquee {
