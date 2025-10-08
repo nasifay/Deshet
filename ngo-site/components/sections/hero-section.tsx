@@ -6,7 +6,7 @@ import Link from "next/link";
 
 export default function Hero() {
   return (
-    <section className="relative w-full h-[90vh] flex items-center justify-start overflow-hidden bg-neutral-900">
+    <section className="relative w-full h-auto lg:h-[90vh] flex items-center justify-start overflow-hidden bg-neutral-900">
       {/* Background Image */}
       <Image
         src="/home-hero.png"
@@ -17,12 +17,12 @@ export default function Hero() {
       />
 
       {/* Content */}
-      <div className="relative z-10 px-6 md:px-16 lg:px-24 max-w-2xl text-white">
+      <div className="relative z-10 max-sm:py-20 px-6 md:px-16 lg:px-24 max-w-2xl text-white">
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="font-roboto font-black text-3xl sm:text-5xl md:text-[60px] lg:text-[80px] 2xl:text-[90px] leading-[1.05] tracking-tight uppercase drop-shadow-[0_3px_6px_rgba(0,0,0,0.5)]"
+          className="font-roboto font-black text-lg sm:text-2xl md:text-4xl  lg:text-5xl 2xl:text-7xl leading-[1.05] tracking-tight uppercase drop-shadow-[0_3px_6px_rgba(0,0,0,0.5)]"
         >
           SERVING <br />
           <span className="text-[#18c76f] text-nowrap block">
@@ -38,7 +38,7 @@ export default function Hero() {
         >
           <Link
             href="#contact"
-            className="inline-flex items-center justify-center px-12 py-4 rounded-full bg-[#128341] hover:bg-[#0e6a32] transition-all duration-300 font-roboto font-medium text-base md:text-lg text-white shadow-[0_6px_20px_-5px_rgba(18,131,65,0.4)] hover:shadow-[0_10px_25px_-5px_rgba(18,131,65,0.6)] backdrop-blur-sm"
+            className="inline-flex items-center justify-center px-6 py-2 md:px-12 md:py-4 rounded-full bg-[#128341] hover:bg-[#0e6a32] transition-all duration-300 font-roboto font-medium text-sm md:text-lg text-white shadow-[0_6px_20px_-5px_rgba(18,131,65,0.4)] hover:shadow-[0_10px_25px_-5px_rgba(18,131,65,0.6)] backdrop-blur-sm"
           >
             Contact Us
           </Link>

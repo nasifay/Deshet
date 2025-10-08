@@ -13,7 +13,7 @@
 
   --border: #e5e7eb; /* gray-200 */
   --primary-orange: #ff7a00; /* Orange text color */
-  --primary-green: #0a7a35; /* Green donate button */
+  --primary-green: #128341; /* Green donate button */
 }
 
 @theme inline {
@@ -33,13 +33,13 @@
     Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, Helvetica Neue, Arial,
     "Apple Color Emoji", "Segoe UI Emoji";
   --font-heading: var(--font-roboto);
-  --font-roboto: var(--font-roboto);
+  --font-roboto: "Roboto", sans-serif;
 
   --radius-base: 0.75rem; /* 12px */
   --shadow-card: 0 10px 20px rgba(0, 0, 0, 0.06), 0 2px 6px rgba(0, 0, 0, 0.04);
 
-  --breakpoint-3xl: 1920px;
   --breakpoint-wxga: 1366px;
+  --breakpoint-3xl: 1920px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -198,4 +198,34 @@ body {
 
 .animate-marquee {
   animation: marquee var(--duration, 30s) linear infinite;
+}
+
+/* Mobile menu slide-in animation */
+@keyframes slideIn {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slideIn {
+  animation: slideIn 0.3s ease-out forwards;
+}
+
+/* Fade-in animation for overlays and dropdowns */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.2s ease-out forwards;
 }

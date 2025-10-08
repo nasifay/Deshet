@@ -6,6 +6,7 @@ import StatisticsSection from "~/components/sections/statistics-section";
 import AchievementsSection from "~/components/sections/achievements-section";
 import NewsEventsSection from "~/components/sections/news-events-section";
 import SupportersSection from "~/components/sections/supporters-section";
+import VolunteerBanner from "~/components/sections/volunteerBanner";
 
 export default function Home() {
   return (
@@ -17,6 +18,7 @@ export default function Home() {
       <SupportersSection />
       <AchievementsSection />
       <NewsEventsSection />
+      <VolunteerBanner />
     </div>
   );
 }

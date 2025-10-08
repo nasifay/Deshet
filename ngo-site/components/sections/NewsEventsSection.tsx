@@ -1,5 +1,4 @@
 import React from "react";
-import Image from "next/image";
 import { Button } from "~/components/ui/Button";
 import { Card, CardContent } from "~/components/ui/Card";
 
@@ -62,7 +61,9 @@ export const NewsAndEventsSection = () => {
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-50" />
                 <CardContent className="absolute bottom-0 left-0 right-0 p-6 text-white z-10">
-                  <h3 className="font-bold text-base text-[#ff9700]">{news.title}</h3>
+                  <h3 className="font-bold text-base text-[#ff9700]">
+                    {news.title}
+                  </h3>
                   <p className="text-sm text-white mt-1">{news.description}</p>
                 </CardContent>
               </div>
@@ -84,9 +85,7 @@ export const NewsAndEventsSection = () => {
           </h2>
           <div className="flex gap-[89.1px] justify-center">
             <Button className="h-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 bg-[#ff9700] rounded-[21px] backdrop-blur-2xl backdrop-brightness-[100%] [-webkit-backdrop-filter:blur(40px)_brightness(100%)] hover:bg-[#e68900] transition-colors">
-              <span
-                className="[font-family:'Roboto',Helvetica] font-medium text-white text-base text-right tracking-[0] leading-[normal] whitespace-nowrap"
-              >
+              <span className="[font-family:'Roboto',Helvetica] font-medium text-white text-base text-right tracking-[0] leading-[normal] whitespace-nowrap">
                 Join as a volunteer
               </span>
             </Button>
@@ -101,3 +100,5 @@ export const NewsAndEventsSection = () => {
     </div>
   );
 };
+
+export default NewsAndEventsSection;

@@ -1,6 +1,6 @@
 import React from "react";
-import { NewsEventsSection } from "~/components/sections/NewsEventsSection";
 import { MainContentSection } from "~/components/sections/MainContentSection";
+import NewsAndEventsSection from "~/components/sections/NewsEventsSection";
 
 export default function NewsAndEvents() {
   return (
@@ -31,7 +31,7 @@ export default function NewsAndEvents() {
         </div>
 
         <div className="translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:600ms]">
-          <NewsEventsSection />
+          <NewsAndEventsSection />
         </div>
 
         <div className="translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:800ms]">

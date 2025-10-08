@@ -1,113 +1,168 @@
-import React from "react";
+"use client";
 
-const topLinks = [
-  { text: "TERMS CONDITIONS", hasIcon: true },
-  { text: "PRIVACY POLICY", hasIcon: false },
-];
-
-const keyFunders = ["NCA", "YNSD", "CRVPF", "PEPFAR", "Sonke Gender Justice"];
-
-const networksAndMemberships = [
-  "CCRDA",
-  "CORHA",
-  "PHE Ethiopia",
-  "Men Engage Ethiopia",
-  "Ubuntu Youth Peace Alliance",
-  "Ethiopian Civil Societies Council",
-];
-
-const navigationLinks = ["Home", "About", "Contact", "News", "Donate"];
+import {
+  Facebook,
+  Instagram,
+  Linkedin,
+  Twitter,
+  Youtube,
+  Music4,
+} from "lucide-react"; // You can replace Music4 with TikTok icon SVG later if needed
+import Image from "next/image";
+import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="w-full mt-[139px] px-4">
-      <div className="max-w-[1550px] mx-auto flex flex-col gap-2.5">
-        <div className="w-full border-t border-[#4eb778] pt-[50px] pb-8">
-          <div className="flex flex-wrap gap-x-4 gap-y-2 mb-8">
-            {topLinks.map((link, index) => (
-              <React.Fragment key={index}>
-                <button className="[font-family:'Roboto',Helvetica] font-medium text-[#808080] text-[17.8px] tracking-[0] leading-[25px] whitespace-nowrap hover:text-[#4eb778] transition-colors">
-                  {link.text}
-                </button>
-                {link.hasIcon && (
-                  <img
-                    className="w-[18px] h-[18px] self-center"
-                    alt="Separator"
-                    src="https://c.animaapp.com/mgdrgf40cGS3Zf/img/image-1.png"
-                  />
-                )}
-              </React.Fragment>
-            ))}
-          </div>
+    <footer className="w-full bg-white border-t border-[#4EB778] font-['Roboto']">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-12 pt-10 pb-6 flex flex-col gap-10">
+        {/* --- Top Links --- */}
+        <div className="flex flex-wrap items-center gap-6 text-[#666] text-[14px] font-medium tracking-wide">
+          <Link
+            href="#"
+            className="flex items-center gap-1 hover:text-[#4EB778] transition-colors"
+          >
+            TERMS CONDITIONS
+            <span className="text-[#4EB778] text-lg font-bold">›</span>
+          </Link>
+          <Link
+            href="#"
+            className="flex items-center gap-1 hover:text-[#4EB778] transition-colors"
+          >
+            PRIVACY POLICY
+            <span className="text-[#4EB778] text-lg font-bold">›</span>
+          </Link>
+        </div>
 
-          <div className="flex flex-wrap gap-8 items-start">
-            <img
-              className="w-[68px] h-[72px] object-cover"
-              alt="Organization Logo"
-              src="https://c.animaapp.com/mgdrgf40cGS3Zf/img/asset-1-4.png"
+        {/* --- Main Content Section --- */}
+        <div className="flex flex-wrap justify-between gap-10">
+          {/* --- Left: Logo + Info --- */}
+          <div className="flex items-start gap-6 min-w-[280px] max-w-[360px]">
+            <Image
+              src="/logo.svg"
+              alt="Tamra for Social Development Logo"
+              width={70}
+              height={70}
+              className="object-contain"
             />
-
-            <div className="flex flex-col gap-[22px] flex-1 min-w-[300px]">
-              <p className="[font-family:'Roboto',Helvetica] font-medium text-[#666666] text-[12.1px] tracking-[0] leading-[18.8px]">
-                ©Tamra for Social Development Organization.com
-              </p>
-              <div className="[font-family:'Roboto',Helvetica] font-medium text-[#666666] text-[12.1px] tracking-[0] leading-[18.8px]">
-                A legally registered local NGO.
-                <br />
+            <div className="text-[#666] text-[12.5px] leading-[19px] font-medium">
+              <p>©Tamra for Social Development Organization.com</p>
+              <p>A legally registered local NGO.</p>
+              <p>
                 Location: Friendship Business Center, 7th Floor, Bole, Addis
                 Ababa, Ethiopia
-                <br />
-                Customer Feedback: TSD@ngo.com
-              </div>
+              </p>
+              <p>Customer Feedback: TSD@ngo.com</p>
             </div>
+          </div>
 
-            <div className="flex flex-col gap-1 min-w-[166px]">
-              <h3 className="[font-family:'Roboto',Helvetica] font-bold text-[#128341] text-[12.4px] tracking-[0] leading-[18.8px]">
-                Key Funders
-              </h3>
-              {keyFunders.map((funder, index) => (
-                <p
-                  key={index}
-                  className="[font-family:'Roboto',Helvetica] font-medium text-[#666666] text-[12.4px] tracking-[0] leading-[18.8px]"
-                >
-                  {funder}
-                </p>
-              ))}
-            </div>
+          {/* --- Middle: Key Funders --- */}
+          <div className="min-w-[160px]">
+            <h3 className="text-[#128341] text-[12.5px] font-bold mb-1">
+              Key Funders
+            </h3>
+            <ul className="space-y-1 text-[#666] text-[12.5px] font-medium leading-[18px]">
+              <li>NCA</li>
+              <li>YNSD</li>
+              <li>CRVPF</li>
+              <li>PEPFAR</li>
+              <li>Sonke Gender Justice</li>
+            </ul>
+          </div>
 
-            <div className="flex flex-col gap-1 min-w-[200px]">
-              <h3 className="[font-family:'Roboto',Helvetica] font-bold text-[#128341] text-[12.4px] tracking-[0] leading-[18.8px]">
-                Networks & Memberships
-              </h3>
-              {networksAndMemberships.map((network, index) => (
-                <p
-                  key={index}
-                  className="[font-family:'Roboto',Helvetica] font-medium text-[#666666] text-[12.4px] tracking-[0] leading-[18.8px]"
-                >
-                  {network}
-                </p>
-              ))}
-            </div>
+          {/* --- Middle Right: Networks --- */}
+          <div className="min-w-[210px]">
+            <h3 className="text-[#128341] text-[12.5px] font-bold mb-1">
+              Networks & Memberships
+            </h3>
+            <ul className="space-y-1 text-[#666] text-[12.5px] font-medium leading-[18px]">
+              <li>CCRDA</li>
+              <li>CORHA</li>
+              <li>PHE Ethiopia</li>
+              <li>Men Engage Ethiopia</li>
+              <li>Ubuntu Youth Peace Alliance</li>
+              <li>Ethiopian Civil Societies Council</li>
+            </ul>
+          </div>
 
-            <img
-              className="w-[283px] h-[43px] ml-auto"
-              alt="Social Media Links"
-              src="https://c.animaapp.com/mgdrgf40cGS3Zf/img/frame-1000002216.svg"
-            />
+          {/* --- Right: Social Media --- */}
+          <div className="flex items-center gap-4 text-[#20A44D] ml-auto">
+            <Link
+              href="#"
+              className="hover:scale-110 transition-transform"
+              aria-label="Facebook"
+            >
+              <Facebook className="w-5 h-5" />
+            </Link>
+            <Link
+              href="#"
+              className="hover:scale-110 transition-transform"
+              aria-label="Instagram"
+            >
+              <Instagram className="w-5 h-5" />
+            </Link>
+            <Link
+              href="#"
+              className="hover:scale-110 transition-transform"
+              aria-label="TikTok"
+            >
+              <Music4 className="w-5 h-5" />
+            </Link>
+            <Link
+              href="#"
+              className="hover:scale-110 transition-transform"
+              aria-label="LinkedIn"
+            >
+              <Linkedin className="w-5 h-5" />
+            </Link>
+            <Link
+              href="#"
+              className="hover:scale-110 transition-transform"
+              aria-label="X (Twitter)"
+            >
+              <Twitter className="w-5 h-5" />
+            </Link>
           </div>
         </div>
 
-        <nav className="w-full max-w-[351px]">
-          <div className="flex items-center gap-8 p-2.5">
-            {navigationLinks.map((link, index) => (
-              <button
-                key={index}
-                className="[font-family:'Roboto',Helvetica] font-medium text-[#666666] text-[12.6px] tracking-[0] leading-[18.8px] whitespace-nowrap hover:text-[#4eb778] transition-colors"
-              >
-                {link}
-              </button>
-            ))}
-          </div>
+        {/* --- Bottom Navigation --- */}
+        <nav className="border-t border-transparent pt-4 flex justify-center">
+          <ul className="flex flex-wrap justify-center items-center gap-8 text-[#666] text-[12.5px] font-medium">
+            <li>
+              <Link href="#" className="hover:text-[#4EB778] transition-colors">
+                Home
+              </Link>
+            </li>
+            <li>
+              <Link href="#" className="hover:text-[#4EB778] transition-colors">
+                Who we are
+              </Link>
+            </li>
+            <li>
+              <Link href="#" className="hover:text-[#4EB778] transition-colors">
+                News
+              </Link>
+            </li>
+            <li>
+              <Link href="#" className="hover:text-[#4EB778] transition-colors">
+                Gallery
+              </Link>
+            </li>
+            <li>
+              <Link href="#" className="hover:text-[#4EB778] transition-colors">
+                Contact
+              </Link>
+            </li>
+            <li>
+              <Link href="#" className="hover:text-[#4EB778] transition-colors">
+                Volunteer
+              </Link>
+            </li>
+            <li>
+              <Link href="#" className="hover:text-[#4EB778] transition-colors">
+                Donate
+              </Link>
+            </li>
+          </ul>
         </nav>
       </div>
     </footer>

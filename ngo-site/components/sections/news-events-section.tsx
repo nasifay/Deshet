@@ -1,114 +1,80 @@
-import Link from "next/link";
-import Image from "next/image";
-import React from "react";
-import Button from "~/components/ui/Button";
-import { Card, CardContent } from "~/components/ui/Card";
+"use client";
 
-const newsArticles = [
+import Image from "next/image";
+import Link from "next/link";
+
+const newsCards = [
   {
+    image: "/news-and-events/1.png",
     title: "TSD Launches New Youth Leadership Training in Hawassa",
     description:
       "Tamra for Social Development (TSD) has kicked off a week-long Youth Leadership Training in Hawassa...",
-    backgroundImage: "/images/news.jpg",
   },
   {
+    image: "/news-and-events/2.png",
     title: "TSD Launches New Youth Leadership Training in Hawassa",
     description:
       "Tamra for Social Development (TSD) has kicked off a week-long Youth Leadership Training in Hawassa...",
-    backgroundImage: "/images/news.jpg",
   },
   {
+    image: "/news-and-events/3.png",
     title: "TSD Launches New Youth Leadership Training in Hawassa",
     description:
       "Tamra for Social Development (TSD) has kicked off a week-long Youth Leadership Training in Hawassa...",
-    backgroundImage: "/images/news.jpg",
   },
   {
+    image: "/news-and-events/4.png",
     title: "TSD Launches New Youth Leadership Training in Hawassa",
     description:
       "Tamra for Social Development (TSD) has kicked off a week-long Youth Leadership Training in Hawassa...",
-    backgroundImage: "/images/news.jpg",
   },
 ];
 
-export default function NewsEventsSection() {
+export default function NewsAndEvents() {
   return (
-    <section className="w-full bg-white py-16 px-8">
-      <div className="max-w-7xl mx-auto">
-        {/* Header Section */}
+    <section className="w-full bg-white py-16 px-6 md:px-20 lg:px-20 xl:28 2xl:px-36 font-['Roboto']">
+      <div className=" mx-auto">
+        {/* Header */}
         <div className="flex items-center justify-between mb-12">
-          <h2 className="text-6xl font-black text-[#268246] uppercase">
+          <h2 className="justify-self-center self-center text-center text-4xl md:text-5xl font-extrabold text-[#268246] tracking-tight">
             NEWS AND EVENTS
           </h2>
-          <a
-            className="text-lg text-gray-500 hover:text-[#268246] transition-colors"
-            href="/news"
+          <Link
+            href="#"
+            className="text-gray-500 hover:text-[#268246] text-sm font-medium transition-colors duration-200"
           >
             See More
-          </a>
+          </Link>
         </div>
 
-        {/* News Cards */}
-        <div className="grid grid-cols-4 gap-6 mb-16">
-          {newsArticles.map((article, index) => (
-            <Card
+        {/* News Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 wxga:grid-cols-4 gap-6">
+          {newsCards.map((card, index) => (
+            <div
               key={index}
-              className="relative h-96 rounded-2xl overflow-hidden group cursor-pointer"
+              className="relative group overflow-hidden rounded-2xl bg-black"
             >
-              <div className="absolute inset-0">
+              <div className="relative w-auto h-60 md:h-96 ">
                 <Image
-                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                  alt="News event"
-                  src={article.backgroundImage}
-                  width={400}
-                  height={400}
+                  src={card.image}
+                  alt={card.title}
+                  fill
+                  className="object-cover rounded-2xl transition-transform duration-500 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-black bg-opacity-40" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent rounded-2xl" />
               </div>
 
-              <CardContent className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                <h3 className="text-lg font-bold text-[#F09632] mb-2 leading-tight">
-                  {article.title}
+              {/* Text Overlay */}
+              <div className="absolute bottom-0 left-0 right-0 p-4">
+                <h3 className="text-[13px] md:text-sm font-semibold text-[#FFB400] leading-snug mb-1 line-clamp-2">
+                  {card.title}
                 </h3>
-                <p className="text-sm text-white leading-relaxed">
-                  {article.description}
+                <p className="text-[12px] md:text-sm text-white/85 leading-snug line-clamp-3">
+                  {card.description}
                 </p>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-
-        {/* Call to Action Banner */}
-        <div className="relative h-96 rounded-2xl overflow-hidden">
-          <div className="absolute inset-0">
-            <Image
-              className="w-full h-full object-cover"
-              alt="Group of people"
-              src="/images/cta.jpg"
-              width={1200}
-              height={400}
-            />
-            <div className="absolute inset-0 bg-black bg-opacity-50" />
-          </div>
-
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-8">
-            <h2 className="text-4xl font-bold text-white mb-8 max-w-4xl leading-tight">
-              You can contribute to provide a place for children with special
-              needs!
-            </h2>
-
-            <div className="flex gap-6">
-              <Link href="/volunteer">
-                <Button className="bg-[#F09632] hover:bg-[#e6870a] text-white px-8 py-4 rounded-2xl font-medium transition-colors">
-                  Join as a volunteer
-                </Button>
-              </Link>
-
-              <Button className="bg-white hover:bg-gray-50 text-[#268246] px-8 py-4 rounded-2xl font-medium transition-colors">
-                Donate
-              </Button>
+              </div>
             </div>
-          </div>
+          ))}
         </div>
       </div>
     </section>
