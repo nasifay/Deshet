@@ -7,26 +7,26 @@ export default function ContactUs() {
     <div className="bg-white w-full relative min-h-screen px-6  md:px-12 lg:px-20 2xl:px-28">
       {/* Page Title */}
       <div className="mb-6 md:mb-20">
-        <h1 className="text-[55px] font-black text-[#388E3C] tracking-tight text-center">
+        <h1 className="text-4xl md:text-[55px] font-black text-[#388E3C] tracking-tight text-center">
           CONTACT US
         </h1>
-        <p className="mx-2 md:mx-6 mt-2 w-full rounded-3xl py-2  text-center text-lg font-medium text-gray-600 leading-relaxed tracking-wide shadow-sm">
+        <p className="mx-2 md:mx-6 mt-2 w-full rounded-3xl py-2  text-center text-base md:text-lg font-medium text-gray-600 leading-relaxed tracking-wide md:shadow-sm">
           Get in touch and be part of our journey of transformation.
         </p>
       </div>
 
       {/* Main Content Section */}
-      <div className="w-full px-4 pb-16">
+      <div className="w-full md:px-4 pb-16">
         {/* Contact Information and Form Section */}
-        <div className="relative bg-white rounded-3xl shadow-lg overflow-hidden mb-8">
-          <div className="absolute inset-0 bg-white bg-[url(https://c.animaapp.com/mgcmausvNL2kHo/img/tamra-pattern-3.png)] bg-cover bg-center opacity-10" />
+        <div className="relative bg-white rounded-3xl md:shadow-lg overflow-hidden mb-8">
+          <div className="absolute inset-0 bg-white bg-[ur[](https://c.animaapp.com/mgcmausvNL2kHo/img/tamra-pattern-3.png)] bg-cover bg-center opacity-10" />
 
-          <div className="relative flex flex-col lg:flex-row items-start justify-between gap-16 px-6 md:px-8 lg:px-14 lg:p-16">
+          <div className="relative flex flex-col lg:flex-row items-start justify-between gap-8 md:gap-16  md:px-8 lg:px-14 lg:p-16">
             {/* Left Side - Contact Information */}
-            <div className="flex flex-col gap-16 lg:w-1/2">
+            <div className="flex flex-col gap-8 md:gap-16 lg:w-1/2">
               <div className="flex flex-col gap-6 max-w-md">
                 <div>
-                  <h4 className="font-roboto font-light text-4xl leading-[1.01] tracking-[0px] capitalize text-[#333333] mb-4">
+                  <h4 className="font-roboto pt-4 font-light text-xl sm:text-2xl md:text-4xl leading-[1.01] tracking-[0px] capitalize text-[#333333] mb-2 md:mb-4">
                     <span className="font-black">Let’s Explore</span> how we can
                     work together for a better future
                   </h4>
@@ -36,7 +36,7 @@ export default function ContactUs() {
                   </p>
                 </div>
 
-                <div className="flex flex-col text-primary-green gap-4 mt-2 font-roboto font-normal text-[24px] leading-[1.01] tracking-[0px] capitalize">
+                <div className="flex flex-col text-primary-green gap-4 mt-2 font-roboto font-normal text-lg md:text-[24px] leading-[1.01] tracking-[0px] capitalize">
                   <div className="flex items-center gap-3">
                     <Phone className="w-6 h-6" />
                     <span>+251 911 121314</span>
@@ -52,8 +52,8 @@ export default function ContactUs() {
 
             {/* Right Side - Contact Form */}
             <div className="lg:w-1/2 w-full">
-              <Card className="bg-[#E7E7E7] rounded-3xl shadow-md border-0">
-                <CardContent className="p-8">
+              <Card className="bg-[#E7E7E7] md:rounded-3xl md:shadow-md border-0">
+                <CardContent className="pt-4 md:p-6 lg:p-8">
                   <form className="flex flex-col gap-4">
                     {/* Name */}
                     <div className="flex flex-col gap-1">
@@ -135,8 +135,8 @@ export default function ContactUs() {
 
         {/* Map Section */}
         <div className=" rounded-2xl overflow-hidden md:px-6 lg:px-14">
-          <div className="p-4">
-            <div className="w-full h-96 rounded-xl overflow-hidden">
+          <div className="lg:p-4">
+            <div className="w-full h-64 md:h-96 rounded-xl overflow-hidden">
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3940.5!2d38.7578!3d9.0192!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x164b85c1a4e69197%3A0x8c5b5b5b5b5b5b5b!2sAddis%20Ababa%2C%20Ethiopia!5e0!3m2!1sen!2set!4v1234567890123!5m2!1sen!2set"
                 width="100%"
