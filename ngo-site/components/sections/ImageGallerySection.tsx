@@ -105,13 +105,34 @@ export function ImageGallerySection() {
           <Card
             className={`w-full rounded-[46px] shadow-[0px_4px_26.5px_#0000000d] ${
               gallery.hasBackground
-                ? "[background:url(https://c.animaapp.com/mgda0b0iChwFy2/img/frame-48.png)_50%_50%_/_cover,linear-gradient(0deg,rgba(255,255,255,1)_0%,rgba(255,255,255,1)_100%)]"
+                ? "bg-white relative overflow-hidden"
                 : "bg-white"
             }`}
+            style={
+              gallery.hasBackground
+                ? {
+                    backgroundImage: `url(https://c.animaapp.com/mgda0b0iChwFy2/img/frame-48.png)`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center center",
+                    backgroundRepeat: "no-repeat",
+                  }
+                : undefined
+            }
           >
-            <CardContent className="flex flex-col items-start justify-center gap-[65px] px-[65px] py-[88px]">
+            {gallery.hasBackground && (
               <div
-                className={`inline-flex flex-col items-start justify-center ${gallery.gap || "gap-[54px]"}`}
+                className="absolute inset-0 bg-white opacity-[0.95] rounded-[46px]"
+                style={{ zIndex: 1 }}
+              />
+            )}
+            <CardContent
+              className="flex flex-col items-start justify-center gap-[65px] px-[65px] py-[88px] relative"
+              style={{ zIndex: 2 }}
+            >
+              <div
+                className={`inline-flex flex-col items-start justify-center ${
+                  gallery.gap || "gap-[54px]"
+                }`}
               >
                 <div className="inline-flex items-center gap-[15px]">
                   <h2 className="[text-shadow:0px_4px_4px_#00000040] [font-family:'Roboto',Helvetica] font-bold text-[#128341] text-5xl text-center tracking-[0] leading-[48.5px] whitespace-nowrap">

@@ -138,11 +138,90 @@ export default function ProgramsListSection() {
       ],
     },
     {
-      title: "YDP (tsd)",
+      title: "GBV (NCA)",
       categoryId: "srh-gender",
       description:
-        "(2023–2024, Mastercard Foundation via YNSD) – 22,000+ youth trained in workplace skills.",
-      image: "https://c.animaapp.com/mgdags98aKA6oC/img/rectangle-904-3.png",
+        "The Project Aims To Improve Social Norms And Attitudes Toward Ending Violence Against Women And Girls (VAWG) Within School Communities And Other Targeted Areas In The Intervention Sub-Cities. It Seeks To Engage Men, Boys, And Volunteers In Promoting Positive Masculinity And Contributing To The Transformation Of Harmful Social Norms, While Reaching Communities With Gender-Based Violence (GBV) Messages And Information To Encourage Active Participation In Preventing And Responding To VAWG Issues.",
+      image:
+        "https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=800&h=600&fit=crop&crop=center",
+      thumbnails: [
+        {
+          id: 1,
+          src: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop&crop=center",
+        },
+        {
+          id: 2,
+          src: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&h=400&fit=crop&crop=center",
+        },
+        {
+          id: 3,
+          src: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=center",
+        },
+        {
+          id: 4,
+          src: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&h=400&fit=crop&crop=center",
+        },
+      ],
+    },
+    {
+      title: "Safe City (NCA)",
+      categoryId: "srh-gender",
+      description:
+        "The Project Aims To Improve Social Norms And Attitudes Toward Ending Violence Against Women And Girls (VAWG) Within School Communities And Other Target Areas In The Intervention Sub-Cities. It Seeks To Meaningfully Engage Men, Boys, And Volunteers In Promoting Positive Masculinity And Contributing To Equitable Social Norms, While Reaching Communities With Gender-Based Violence (GBV) Messages And Information To Encourage Active Participation In Preventing And Responding To VAWG Issues.",
+      image:
+        "https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?w=800&h=600&fit=crop&crop=center",
+      thumbnails: [
+        {
+          id: 1,
+          src: "https://images.unsplash.com/photo-1573164574572-cb89e39749b4?w=400&h=400&fit=crop&crop=center",
+        },
+        {
+          id: 2,
+          src: "https://images.unsplash.com/photo-1544717297-fa95b6ee9643?w=400&h=400&fit=crop&crop=center",
+        },
+        {
+          id: 3,
+          src: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400&h=400&fit=crop&crop=center",
+        },
+        {
+          id: 4,
+          src: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=400&h=400&fit=crop&crop=center",
+        },
+      ],
+    },
+    {
+      title: "SONKE (SRHR)",
+      categoryId: "srh-gender",
+      description:
+        "The Project Aims To Empower Women, Girls, And Marginalized Groups To Make Informed Decisions And Demand Access To Sexual And Reproductive Health And Rights (SRHR) Information And Services. It Also Seeks To Engage Communities In Challenging Myths And Harmful Practices Related To SRHR By Promoting Shared Responsibility And Mutual Understanding While Strengthening SRHR Service Delivery Through Awareness Creation, Barrier Removal, And Advocacy For Policy Change.",
+      image:
+        "https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=800&h=600&fit=crop&crop=center",
+      thumbnails: [
+        {
+          id: 1,
+          src: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop&crop=center",
+        },
+        {
+          id: 2,
+          src: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&h=400&fit=crop&crop=center",
+        },
+        {
+          id: 3,
+          src: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=center",
+        },
+        {
+          id: 4,
+          src: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&h=400&fit=crop&crop=center",
+        },
+      ],
+    },
+    {
+      title: "GESI (GIZ)",
+      categoryId: "srh-gender",
+      description:
+        "(2017-2025, Packard Foundation Via YNSD) - SRH Awareness, Entrepreneurship, Reusable Sanitary Pads.",
+      image:
+        "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&h=600&fit=crop&crop=center",
       thumbnails: [
         {
           id: 1,
@@ -162,6 +241,58 @@ export default function ProgramsListSection() {
         },
       ],
     },
+    {
+      title: "SRHR (IPAS)",
+      categoryId: "srh-gender",
+      description:
+        "The Project Aims To Raise Awareness Among Factory Workers, Particularly Women And Girls, On Sexual And Reproductive Health And Rights (SRHR), Including Safe Abortion, Contraception, And The Prevention Of Sexual And Gender-Based Violence (SGBV). It Also Seeks To Promote Gender Equality And Ensure Access To SRHR Services And Rights For Women And Girls Working At Eastern Industrial Park, While Fostering Institutional Commitment Among Factory Managers And Public Stakeholders To Support Gender-Responsive SRHR Initiatives Through Advocacy And Policy Dialogue.",
+      image:
+        "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&h=600&fit=crop&crop=center",
+      thumbnails: [
+        {
+          id: 1,
+          src: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop&crop=center",
+        },
+        {
+          id: 2,
+          src: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&h=400&fit=crop&crop=center",
+        },
+        {
+          id: 3,
+          src: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=center",
+        },
+        {
+          id: 4,
+          src: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&h=400&fit=crop&crop=center",
+        },
+      ],
+    },
+    {
+      title: "Climate Resilience (PLACEHOLDER)",
+      categoryId: "climate-justice",
+      description:
+        "This is a placeholder program for Climate Justice & Livelihoods category. The actual program details will be added here when available.",
+      image:
+        "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=600&fit=crop&crop=center",
+      thumbnails: [
+        {
+          id: 1,
+          src: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=400&fit=crop&crop=center",
+        },
+        {
+          id: 2,
+          src: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=400&fit=crop&crop=center",
+        },
+        {
+          id: 3,
+          src: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&h=400&fit=crop&crop=center",
+        },
+        {
+          id: 4,
+          src: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=400&fit=crop&crop=center",
+        },
+      ],
+    },
   ];
 
   return (
@@ -173,9 +304,11 @@ export default function ProgramsListSection() {
         activeTab={activeTab}
       />
       <div className="mt-8 px-6 md:px-20 xl:px-24 2xl:px-40">
-        {programsList.map((program) => (
-          <ProgramItem key={program.title} program={program} />
-        ))}
+        {programsList
+          .filter((program) => program.categoryId === activeTab)
+          .map((program) => (
+            <ProgramItem key={program.title} program={program} />
+          ))}
       </div>
     </div>
   );
@@ -202,7 +335,7 @@ const ProgramItem: React.FC<{ program: Program }> = ({ program }) => {
         </h2>
 
         {/* Description */}
-        <p className="font-roboto font-light text-sm md:text-base lg:text-lg xl:text-[24px] leading-[1.26] tracking-[0.8px] text-start text-justify capitalize text-[#333333] mb-16">
+        <p className="font-roboto font-light text-sm md:text-base lg:text-lg xl:text-[24px] leading-[1.26] tracking-[0.8px] text-justify capitalize text-[#333333] mb-16">
           {program.description}
         </p>
 

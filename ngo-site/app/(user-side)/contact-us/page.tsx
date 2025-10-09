@@ -1,0 +1,156 @@
+import React from "react";
+import { Mail, Phone } from "lucide-react";
+import { Card, CardContent } from "~/components/ui/Card";
+
+export default function ContactUs() {
+  return (
+    <div className="bg-white w-full relative min-h-screen px-6  md:px-12 lg:px-20 2xl:px-28">
+      {/* Page Title */}
+      <div className="mb-6 md:mb-20">
+        <h1 className="text-[55px] font-black text-[#388E3C] tracking-tight text-center">
+          CONTACT US
+        </h1>
+        <p className="mx-2 md:mx-6 mt-2 w-full rounded-3xl py-2  text-center text-lg font-medium text-gray-600 leading-relaxed tracking-wide shadow-sm">
+          Get in touch and be part of our journey of transformation.
+        </p>
+      </div>
+
+      {/* Main Content Section */}
+      <div className="w-full px-4 pb-16">
+        {/* Contact Information and Form Section */}
+        <div className="relative bg-white rounded-3xl shadow-lg overflow-hidden mb-8">
+          <div className="absolute inset-0 bg-white bg-[url(https://c.animaapp.com/mgcmausvNL2kHo/img/tamra-pattern-3.png)] bg-cover bg-center opacity-10" />
+
+          <div className="relative flex flex-col lg:flex-row items-start justify-between gap-16 px-6 md:px-8 lg:px-14 lg:p-16">
+            {/* Left Side - Contact Information */}
+            <div className="flex flex-col gap-16 lg:w-1/2">
+              <div className="flex flex-col gap-6 max-w-md">
+                <div>
+                  <h4 className="font-roboto font-light text-4xl leading-[1.01] tracking-[0px] capitalize text-[#333333] mb-4">
+                    <span className="font-black">Let’s Explore</span> how we can
+                    work together for a better future
+                  </h4>
+                  <p className="text-black font-roboto font-light text-sm md:text-base lg:text-2xl leading-[1.01] tracking-[0px] capitalize">
+                    Together, we can turn challenges into opportunities, let’s
+                    talk.
+                  </p>
+                </div>
+
+                <div className="flex flex-col text-primary-green gap-4 mt-2 font-roboto font-normal text-[24px] leading-[1.01] tracking-[0px] capitalize">
+                  <div className="flex items-center gap-3">
+                    <Phone className="w-6 h-6" />
+                    <span>+251 911 121314</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {/* Updated icon color and size */}
+                    <Mail className="w-6 h-6" />
+                    <span>hello@tsd.com</span>
+                  </div>
+                </div>
+              </div>{" "}
+            </div>
+
+            {/* Right Side - Contact Form */}
+            <div className="lg:w-1/2 w-full">
+              <Card className="bg-[#E7E7E7] rounded-3xl shadow-md border-0">
+                <CardContent className="p-8">
+                  <form className="flex flex-col gap-4">
+                    {/* Name */}
+                    <div className="flex flex-col gap-1">
+                      <label
+                        htmlFor="name"
+                        className="block text-[#333333] text-base font-normal"
+                      >
+                        Name
+                      </label>
+                      <input
+                        id="name"
+                        type="text"
+                        placeholder="enter here"
+                        className="w-full h-11 bg-white rounded-xl border-none px-4 text-[#8c8c8c] text-sm focus:outline-none focus:ring-1 focus:ring-[#4EB778] placeholder:text-sm"
+                      />
+                    </div>
+
+                    {/* Email */}
+                    <div className="flex flex-col gap-1">
+                      <label
+                        htmlFor="email"
+                        className="block text-[#333333] text-base font-normal "
+                      >
+                        Email
+                      </label>
+                      <input
+                        id="email"
+                        type="email"
+                        placeholder="enter here"
+                        className="w-full h-11 bg-white rounded-xl border-none px-4 text-[#8c8c8c] text-sm focus:outline-none focus:ring-1 focus:ring-[#4EB778] placeholder:text-sm"
+                      />
+                    </div>
+
+                    {/* Phone */}
+                    <div className="flex flex-col gap-1">
+                      <label
+                        htmlFor="phone"
+                        className="block text-[#333333] text-base font-normal"
+                      >
+                        Phone number
+                      </label>
+                      <input
+                        id="phone"
+                        type="tel"
+                        placeholder="enter here"
+                        className="w-full h-11 bg-white rounded-xl border-none px-4 text-[#8c8c8c] text-sm focus:outline-none focus:ring-1 focus:ring-[#4EB778] placeholder:text-sm"
+                      />
+                    </div>
+
+                    {/* Message */}
+                    <div className="flex flex-col gap-1">
+                      <label
+                        htmlFor="message"
+                        className="block text-[#333333] text-base font-normal"
+                      >
+                        Message
+                      </label>
+                      <textarea
+                        id="message"
+                        rows={4}
+                        placeholder="Type your message"
+                        className="w-full bg-white rounded-xl border-none px-4 py-3 text-[#8c8c8c] text-sm focus:outline-none focus:ring-1 focus:ring-[#4EB778] resize-none placeholder:text-sm"
+                      ></textarea>
+                    </div>
+
+                    {/* Submit Button */}
+                    <button
+                      type="submit"
+                      className="w-[110px] h-10 bg-[#4EB778] text-white font-normal text-base rounded-lg hover:bg-[#3fa76a] transition-all duration-200 mt-2"
+                    >
+                      Submit
+                    </button>
+                  </form>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+
+        {/* Map Section */}
+        <div className=" rounded-2xl overflow-hidden md:px-6 lg:px-14">
+          <div className="p-4">
+            <div className="w-full h-96 rounded-xl overflow-hidden">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3940.5!2d38.7578!3d9.0192!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x164b85c1a4e69197%3A0x8c5b5b5b5b5b5b5b!2sAddis%20Ababa%2C%20Ethiopia!5e0!3m2!1sen!2set!4v1234567890123!5m2!1sen!2set"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="Location Map - Addis Ababa, Ethiopia"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

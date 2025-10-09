@@ -38,7 +38,7 @@ export default function Header() {
             alt="Logo"
             width={60}
             height={60}
-            className="object-contain transition-transform duration-300 group-hover:scale-105"
+            className="max-sm:size-12 object-contain transition-transform duration-300 group-hover:scale-105"
           />
         </Link>
 
@@ -214,7 +214,7 @@ function MobileHeader() {
                 Volunteer
               </Link>
               <Link
-                href="/contacts"
+                href="/contact-us"
                 onClick={() => setIsMenuOpen(false)}
                 className="px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-[#ff7a00] transition-all duration-200"
               >
