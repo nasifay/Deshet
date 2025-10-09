@@ -1,31 +1,34 @@
 import React from "react";
-import Button from "~/components/ui/Button";
-import { Card, CardContent } from "~/components/ui/Card";
+import Image from "next/image";
 
 const bankAccounts = [
   {
     name: "Commercial Bank Of Ethiopia",
-    accountNumber: "10001112131415",
+    accountNumber: "1000102030405",
+    swiftCode: "CBETETAA",
     logo: "https://c.animaapp.com/mgdan87o3WuVjr/img/image0.png",
     copyIcon: "https://c.animaapp.com/mgdan87o3WuVjr/img/group-1000002174.png",
   },
   {
-    name: "Telebirr",
-    accountNumber: "123456789",
+    name: "Tele Birr",
+    number: "+251 91111111",
+    id: "1122334455",
     logo: "https://c.animaapp.com/mgdan87o3WuVjr/img/commercial-bank-of-ethiopia-logo-1-1.svg",
     copyIcon:
       "https://c.animaapp.com/mgdan87o3WuVjr/img/group-1000002174-1.png",
   },
   {
     name: "Bank Of Abyssinia",
-    accountNumber: "50001112131415",
+    accountNumber: "1000102030405",
+    swiftCode: "ABYSETAAXXX",
     logo: "https://c.animaapp.com/mgdan87o3WuVjr/img/image0-1.png",
     copyIcon:
       "https://c.animaapp.com/mgdan87o3WuVjr/img/group-1000002174-2.png",
   },
   {
     name: "Awash Bank",
-    accountNumber: "30001112131415",
+    accountNumber: "1000102030405",
+    swiftCode: "AWINETAAXXX",
     logo: "https://c.animaapp.com/mgdan87o3WuVjr/img/commercial-bank-of-ethiopia-logo-1.svg",
     copyIcon:
       "https://c.animaapp.com/mgdan87o3WuVjr/img/group-1000002174-3.png",
@@ -34,83 +37,123 @@ const bankAccounts = [
 
 export default function DonatePage() {
   return (
-    <section className="flex flex-col w-full items-center gap-[86px] py-12 px-4">
-      <Card className="w-full max-w-[1595px] bg-[#4eb778] rounded-[46px] shadow-[0px_4px_26.5px_#0000000d] border-0 translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:0ms]">
-        <CardContent className="flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-[195px] p-[45px]">
-          <div className="flex flex-col items-start gap-[65px]">
-            <h2 className="w-full max-w-[537px] [text-shadow:0px_4px_4px_#00000040] [font-family:'Roboto',Helvetica] font-normal text-white text-[55px] tracking-[0] leading-[55.5px]">
-              <span className="font-black">Your Support </span>
-              <span className="font-light">Creates Lasting Change</span>
-            </h2>
+    <div className="min-h-screen bg-white">
+      {/* DONATE Header */}
+      <div className="flex justify-center pt-10 pb-6 lg:pt-16 lg:pb-8">
+        {/* Adjusted padding and font size for mobile/tablet */}
+        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#2E8B57] tracking-wide">
+          DONATE
+        </h1>
+      </div>
 
-            <p className="w-full max-w-[537px] [text-shadow:0px_4px_4px_#00000040] [font-family:'Roboto',Helvetica] font-normal text-transparent text-2xl tracking-[0] leading-6">
-              <span className="font-light text-white leading-[27.8px]">
+      {/* Main Content Container */}
+      <div className="flex flex-col items-center gap-10 sm:gap-12 lg:gap-16 px-4 pb-16">
+        {/* Green Hero Banner */}
+        <div className="w-full max-w-6xl bg-primary-green/90 rounded-[20px] shadow-lg relative overflow-hidden">
+          {/* Background Pattern */}
+          <div className="absolute inset-0 bg-[url(https://c.animaapp.com/mgcmausvNL2kHo/img/tamra-pattern-3.png)] bg-cover bg-center opacity-50" />
+
+          {/* Adjusted to stack content vertically on mobile/tablet (flex-col) and reduce padding */}
+          <div className="relative flex flex-col lg:flex-row items-center justify-between gap-6 sm:gap-8 p-6 sm:p-8 lg:p-12">
+            {/* Left Content */}
+            <div className="flex-1 max-w-2xl text-center lg:text-left">
+              {/* Reduced font size for mobile/tablet */}
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 lg:mb-6 leading-tight">
+                Your Support Creates Lasting Change
+              </h2>
+              {/* Reduced font size and adjusted line height for mobile/tablet */}
+              <p className="text-base sm:text-lg lg:text-xl text-white leading-relaxed">
                 Empowering Youth, Uplifting Women, Protecting The Vulnerable,
-                And Strengthening Leaders.
-                <br />
-              </span>
-              <span className="font-medium text-[#ff9700] leading-[27.8px]">
-                Your Donation Makes It Possible.
-              </span>
-            </p>
-          </div>
-
-          <div className="flex flex-col items-start justify-center">
-            <img
-              className="w-full max-w-[352px] h-auto object-cover"
-              alt="Community support"
-              src="https://c.animaapp.com/mgdan87o3WuVjr/img/rectangle-928.svg"
-            />
-          </div>
-        </CardContent>
-      </Card>
-
-      {bankAccounts.map((bank, index) => (
-        <Card
-          key={index}
-          className="w-full max-w-[1595px] bg-white rounded-[46px] shadow-[0px_4px_26.5px_#0000000d] border-0 translate-y-[-1rem] animate-fade-in opacity-0"
-          style={
-            {
-              "--animation-delay": `${(index + 1) * 200}ms`,
-            } as React.CSSProperties
-          }
-        >
-          <CardContent className="flex flex-col lg:flex-row items-center justify-between gap-[18px] p-[45px]">
-            <div className="flex flex-col w-full items-center gap-[18px]">
-              <div className="flex w-full items-center gap-[49px]">
-                <img
-                  className="h-[59px] lg:h-[89px] w-auto object-contain"
-                  alt={`${bank.name} logo`}
-                  src={bank.logo}
-                />
-                <h3 className="[text-shadow:0px_4px_4px_#00000040] [font-family:'Roboto',Helvetica] font-black text-[#020202] text-3xl lg:text-5xl tracking-[0] leading-[48.5px]">
-                  {bank.name}
-                </h3>
-              </div>
-
-              <div className="flex w-full items-center">
-                <p className="[text-shadow:0px_4px_4px_#00000040] [font-family:'Roboto',Helvetica] font-light text-[#020202] text-3xl lg:text-5xl tracking-[0] leading-[48.5px]">
-                  {bank.accountNumber}
-                </p>
-              </div>
+                And Strengthening Leaders.{" "}
+                <span className="text-[#D4EDDA] font-medium">
+                  Your Donation Makes It Possible.
+                </span>
+              </p>
             </div>
 
-            <Button
-              variant="ghost"
-              className="flex flex-col items-center gap-[17px] px-0 py-2 h-auto hover:bg-transparent"
-            >
-              <img
-                className="w-[50px] h-[50px]"
-                alt="Copy icon"
-                src={bank.copyIcon}
+            {/* Right Image */}
+            {/* Added responsive classes to make the image smaller and responsive on mobile/tablet */}
+            <div className="flex-shrink-0 w-full sm:w-auto flex justify-center">
+              <Image
+                className="w-full h-auto max-w-[200px] max-h-[200px] sm:max-w-[250px] sm:max-h-[250px] lg:w-80 lg:h-80 object-cover rounded-lg"
+                alt="Community support"
+                src="https://c.animaapp.com/mgdan87o3WuVjr/img/rectangle-928.svg"
+                width={320}
+                height={320}
               />
-              <span className="[text-shadow:0px_4px_4px_#00000040] [font-family:'Roboto',Helvetica] font-light text-[#020202] text-2xl tracking-[0] leading-[27.8px]">
-                Copy
-              </span>
-            </Button>
-          </CardContent>
-        </Card>
-      ))}
-    </section>
+            </div>
+          </div>
+        </div>
+
+        {/* BANK OPTIONS Header */}
+        <div className="flex justify-center mt-4">
+          {/* Adjusted font size for mobile/tablet */}
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#2E8B57] tracking-wide">
+            BANK OPTIONS
+          </h2>
+        </div>
+
+        {/* Bank Options Grid */}
+        <div className="w-full max-w-6xl bg-[#F8F8F8] rounded-[20px] shadow-lg relative overflow-hidden">
+          {/* Background Pattern */}
+          <div className="absolute inset-0 bg-[url(https://c.animaapp.com/mgcmausvNL2kHo/img/tamra-pattern-3.png)] bg-cover bg-center opacity-5" />
+
+          {/* Reduced padding for mobile/tablet */}
+          <div className="relative p-6 sm:p-8 lg:p-12">
+            {/* Default grid-cols-1 for mobile, md:grid-cols-2 for tablet/desktop */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+              {bankAccounts.map((bank, index) => (
+                <div
+                  key={index}
+                  className="bg-white rounded-lg p-5 sm:p-6 shadow-sm"
+                >
+                  <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
+                    <Image
+                      // Reduced logo size on mobile
+                      className="w-10 h-10 sm:w-14 sm:h-14 lg:w-16 lg:h-16 object-contain"
+                      alt={`${bank.name} logo`}
+                      src={bank.logo}
+                      width={64}
+                      height={64}
+                    />
+
+                    <div className="space-y-1.5 sm:space-y-2">
+                      <h3 className="text-lg sm:text-xl font-bold text-[#333333]">
+                        {bank.name}
+                      </h3>
+                      <p className="text-xs sm:text-sm text-[#666666]">
+                        Tamra ForSocial Development Organization
+                      </p>
+                      {bank.accountNumber && (
+                        <p className="text-xs sm:text-sm text-[#666666]">
+                          Account Number: {bank.accountNumber}
+                        </p>
+                      )}
+                      {bank.number && (
+                        <p className="text-xs sm:text-sm text-[#666666]">
+                          Number: {bank.number}
+                        </p>
+                      )}
+                      {bank.id && (
+                        <p className="text-xs sm:text-sm text-[#666666]">
+                          ID: {bank.id}
+                        </p>
+                      )}
+                      {bank.swiftCode && (
+                        <p className="text-xs sm:text-sm text-[#666666]">
+                          Swift Code: {bank.swiftCode}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Reduced space-y for mobile/tablet */}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

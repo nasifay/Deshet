@@ -2,12 +2,22 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { ChevronDown, Menu, X } from "lucide-react";
 import Image from "next/image";
 
 export default function Header() {
   const [openDropdown, setOpenDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
+
+  // Helper function to check if a route is active
+  const isActiveRoute = (href: string) => {
+    if (href === "/") {
+      return pathname === "/";
+    }
+    return pathname.startsWith(href);
+  };
 
   const whoWeAreItems = [
     { href: "/history", label: "History" },
@@ -43,15 +53,26 @@ export default function Header() {
         </Link>
 
         {/* ================= Desktop & Tablet Nav (Unchanged) ================= */}
-        <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-800">
-          <Link href="/" className="hover:text-[#ff7a00] transition-colors">
+        <nav className="hidden lg:flex items-center gap-8 text-sm font-medium text-gray-800">
+          <Link
+            href="/"
+            className={`transition-colors ${
+              isActiveRoute("/")
+                ? "text-[#ff7a00] font-semibold"
+                : "hover:text-[#ff7a00]"
+            }`}
+          >
             Home
           </Link>
 
           <div className="relative" ref={dropdownRef}>
             <button
               onClick={() => setOpenDropdown(!openDropdown)}
-              className="flex items-center gap-1 hover:text-[#ff7a00] transition-colors"
+              className={`flex items-center gap-1 transition-colors ${
+                whoWeAreItems.some((item) => isActiveRoute(item.href))
+                  ? "text-[#ff7a00] font-semibold"
+                  : "hover:text-[#ff7a00]"
+              }`}
             >
               Who we are
               <ChevronDown
@@ -68,7 +89,11 @@ export default function Header() {
                     key={item.href}
                     href={item.href}
                     onClick={() => setOpenDropdown(false)}
-                    className="block px-5 py-2.5 text-sm text-gray-700  hover:bg-orange-50  hover:text-[#ff7a00] transition-all duration-200"
+                    className={`block px-5 py-2.5 text-sm transition-all duration-200 ${
+                      isActiveRoute(item.href)
+                        ? "text-[#ff7a00] font-semibold bg-orange-50"
+                        : "text-gray-700 hover:bg-orange-50 hover:text-[#ff7a00]"
+                    }`}
                   >
                     {item.label}
                   </Link>
@@ -77,24 +102,43 @@ export default function Header() {
             )}
           </div>
 
-          <Link href="/news" className="hover:text-[#ff7a00] transition-colors">
+          <Link
+            href="/news"
+            className={`transition-colors ${
+              isActiveRoute("/news")
+                ? "text-[#ff7a00] font-semibold"
+                : "hover:text-[#ff7a00]"
+            }`}
+          >
             News
           </Link>
           <Link
             href="/gallery"
-            className="hover:text-[#ff7a00] transition-colors"
+            className={`transition-colors ${
+              isActiveRoute("/gallery")
+                ? "text-[#ff7a00] font-semibold"
+                : "hover:text-[#ff7a00]"
+            }`}
           >
             Gallery
           </Link>
           <Link
             href="/volunteer"
-            className="hover:text-[#ff7a00] transition-colors"
+            className={`transition-colors ${
+              isActiveRoute("/volunteer")
+                ? "text-[#ff7a00] font-semibold"
+                : "hover:text-[#ff7a00]"
+            }`}
           >
             Volunteer
           </Link>
           <Link
-            href="/contact"
-            className="hover:text-[#ff7a00] transition-colors"
+            href="/contact-us"
+            className={`transition-colors ${
+              isActiveRoute("/contact-us")
+                ? "text-[#ff7a00] font-semibold"
+                : "hover:text-[#ff7a00]"
+            }`}
           >
             Contact us
           </Link>
@@ -103,7 +147,7 @@ export default function Header() {
         {/* Desktop Donate Button */}
         <Link
           href="/donate"
-          className="hidden md:inline-block bg-primary-green text-white text-sm md:text-lg lg:text-2xl font-medium px-10 2xl:px-14 py-2 2xl:py-4 rounded-2xl transition-all duration-300"
+          className="hidden lg:inline-block bg-primary-green text-white text-sm md:text-lg lg:text-2xl font-medium px-10 2xl:px-14 py-2 2xl:py-4 rounded-2xl transition-all duration-300"
         >
           Donate
         </Link>
@@ -121,11 +165,20 @@ export default function Header() {
 function MobileHeader() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const pathname = usePathname();
 
   const whoWeAreItems = [
     { href: "/history", label: "History" },
     { href: "/programs", label: "Programs" },
   ];
+
+  // Helper function to check if a route is active
+  const isActiveRoute = (href: string) => {
+    if (href === "/") {
+      return pathname === "/";
+    }
+    return pathname.startsWith(href);
+  };
 
   return (
     <>
@@ -158,7 +211,11 @@ function MobileHeader() {
               <Link
                 href="/"
                 onClick={() => setIsMenuOpen(false)}
-                className="px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-[#ff7a00] transition-all duration-200"
+                className={`px-4 py-2 rounded-lg transition-all duration-200 ${
+                  isActiveRoute("/")
+                    ? "bg-orange-50 text-[#ff7a00] font-semibold"
+                    : "hover:bg-orange-50 hover:text-[#ff7a00]"
+                }`}
               >
                 Home
               </Link>
@@ -167,7 +224,11 @@ function MobileHeader() {
               <div>
                 <button
                   onClick={() => setDropdownOpen(!dropdownOpen)}
-                  className="flex items-center justify-between w-full px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-[#ff7a00] transition-all duration-200"
+                  className={`flex items-center justify-between w-full px-4 py-2 rounded-lg transition-all duration-200 ${
+                    whoWeAreItems.some((item) => isActiveRoute(item.href))
+                      ? "bg-orange-50 text-[#ff7a00] font-semibold"
+                      : "hover:bg-orange-50 hover:text-[#ff7a00]"
+                  }`}
                 >
                   Who we are
                   <ChevronDown
@@ -183,7 +244,11 @@ function MobileHeader() {
                         key={item.href}
                         href={item.href}
                         onClick={() => setIsMenuOpen(false)}
-                        className="py-2.5 text-sm text-gray-600  hover:text-[#ff7a00] transition-all duration-200"
+                        className={`py-2.5 text-sm transition-all duration-200 ${
+                          isActiveRoute(item.href)
+                            ? "text-[#ff7a00] font-semibold"
+                            : "text-gray-600 hover:text-[#ff7a00]"
+                        }`}
                       >
                         {item.label}
                       </Link>
@@ -195,28 +260,44 @@ function MobileHeader() {
               <Link
                 href="/news"
                 onClick={() => setIsMenuOpen(false)}
-                className="px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-[#ff7a00] transition-all duration-200"
+                className={`px-4 py-2 rounded-lg transition-all duration-200 ${
+                  isActiveRoute("/news")
+                    ? "bg-orange-50 text-[#ff7a00] font-semibold"
+                    : "hover:bg-orange-50 hover:text-[#ff7a00]"
+                }`}
               >
                 News
               </Link>
               <Link
                 href="/gallery"
                 onClick={() => setIsMenuOpen(false)}
-                className="px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-[#ff7a00] transition-all duration-200"
+                className={`px-4 py-2 rounded-lg transition-all duration-200 ${
+                  isActiveRoute("/gallery")
+                    ? "bg-orange-50 text-[#ff7a00] font-semibold"
+                    : "hover:bg-orange-50 hover:text-[#ff7a00]"
+                }`}
               >
                 Gallery
               </Link>
               <Link
                 href="/volunteer"
                 onClick={() => setIsMenuOpen(false)}
-                className="px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-[#ff7a00] transition-all duration-200"
+                className={`px-4 py-2 rounded-lg transition-all duration-200 ${
+                  isActiveRoute("/volunteer")
+                    ? "bg-orange-50 text-[#ff7a00] font-semibold"
+                    : "hover:bg-orange-50 hover:text-[#ff7a00]"
+                }`}
               >
                 Volunteer
               </Link>
               <Link
                 href="/contact-us"
                 onClick={() => setIsMenuOpen(false)}
-                className="px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-[#ff7a00] transition-all duration-200"
+                className={`px-4 py-2 rounded-lg transition-all duration-200 ${
+                  isActiveRoute("/contact-us")
+                    ? "bg-orange-50 text-[#ff7a00] font-semibold"
+                    : "hover:bg-orange-50 hover:text-[#ff7a00]"
+                }`}
               >
                 Contact us
               </Link>
@@ -224,7 +305,11 @@ function MobileHeader() {
               <Link
                 href="/donate"
                 onClick={() => setIsMenuOpen(false)}
-                className="mt-4 bg-primary-green hover:bg-[#0f6d35] text-white text-center py-3 rounded-xl font-semibold transition-all duration-300 hover:shadow-lg"
+                className={`mt-4 text-center py-3 rounded-xl font-semibold transition-all duration-300 hover:shadow-lg ${
+                  isActiveRoute("/donate")
+                    ? "bg-[#0f6d35] text-white"
+                    : "bg-primary-green hover:bg-[#0f6d35] text-white"
+                }`}
               >
                 Donate
               </Link>

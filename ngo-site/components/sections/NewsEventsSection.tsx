@@ -1,27 +1,32 @@
 import React from "react";
+import Link from "next/link";
 import { Button } from "~/components/ui/Button";
 import { Card, CardContent } from "~/components/ui/Card";
 
 const newsCards = [
   {
+    id: "1",
+    image: "/images/news.jpg",
+    title: "TSD NEW YEAR'S PROGRAM",
+    description:
+      "Tames NGO Joyfully Celebrated The Ethiopian New Year Together With Community Members...",
+  },
+  {
+    id: "2",
     image: "/images/hero.jpg",
     title: "TSD Launches New Youth Leadership Training in Hawassa",
     description:
       "Tamra for Social Development (TSD) has kicked off a week-long Youth Leadership Training in Hawassa...",
   },
   {
+    id: "3",
     image: "/images/hero.jpg",
     title: "TSD Launches New Youth Leadership Training in Hawassa",
     description:
       "Tamra for Social Development (TSD) has kicked off a week-long Youth Leadership Training in Hawassa...",
   },
   {
-    image: "/images/hero.jpg",
-    title: "TSD Launches New Youth Leadership Training in Hawassa",
-    description:
-      "Tamra for Social Development (TSD) has kicked off a week-long Youth Leadership Training in Hawassa...",
-  },
-  {
+    id: "4",
     image: "/images/hero.jpg",
     title: "TSD Launches New Youth Leadership Training in Hawassa",
     description:
@@ -49,25 +54,26 @@ export const NewsAndEventsSection = () => {
       <div className="w-full">
         <div className="inline-flex items-center gap-[52px]">
           {newsCards.map((news, index) => (
-            <Card
-              key={index}
-              className="w-[360px] h-[421px] overflow-hidden cursor-pointer hover:scale-[1.05] transition-transform bg-transparent border-none rounded-[33px]"
-            >
-              <div className="relative w-full h-full">
-                <img
-                  src={news.image}
-                  alt={news.title}
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-black bg-opacity-50" />
-                <CardContent className="absolute bottom-0 left-0 right-0 p-6 text-white z-10">
-                  <h3 className="font-bold text-base text-[#ff9700]">
-                    {news.title}
-                  </h3>
-                  <p className="text-sm text-white mt-1">{news.description}</p>
-                </CardContent>
-              </div>
-            </Card>
+            <Link key={index} href={`/news/${news.id}`}>
+              <Card className="w-[360px] h-[421px] overflow-hidden cursor-pointer hover:scale-[1.05] transition-transform bg-transparent border-none rounded-[33px]">
+                <div className="relative w-full h-full">
+                  <img
+                    src={news.image}
+                    alt={news.title}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-black bg-opacity-50" />
+                  <CardContent className="absolute bottom-0 left-0 right-0 p-6 text-white z-10">
+                    <h3 className="font-bold text-base text-[#ff9700]">
+                      {news.title}
+                    </h3>
+                    <p className="text-sm text-white mt-1">
+                      {news.description}
+                    </p>
+                  </CardContent>
+                </div>
+              </Card>
+            </Link>
           ))}
         </div>
       </div>
