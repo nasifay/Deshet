@@ -18,8 +18,8 @@ export default function ContactUs() {
       {/* Main Content Section */}
       <div className="w-full md:px-4 pb-16">
         {/* Contact Information and Form Section */}
-        <div className="relative bg-white rounded-3xl md:shadow-lg overflow-hidden mb-8">
-          <div className="absolute inset-0 bg-white bg-[ur[](https://c.animaapp.com/mgcmausvNL2kHo/img/tamra-pattern-3.png)] bg-cover bg-center opacity-10" />
+        <div className="relative  rounded-3xl md:shadow-lg overflow-hidden mb-8">
+          <div className="absolute inset-0  bg-[url(https://c.animaapp.com/mgcmausvNL2kHo/img/tamra-pattern-3.png)] bg-cover bg-center opacity-5" />
 
           <div className="relative flex flex-col lg:flex-row items-start justify-between gap-8 md:gap-16  md:px-8 lg:px-14 lg:p-16">
             {/* Left Side - Contact Information */}
