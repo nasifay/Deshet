@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 
 export default function VolunteerBanner() {
   return (
@@ -30,18 +31,20 @@ export default function VolunteerBanner() {
 
           {/* Buttons */}
           <div className="mt-6 flex items-center gap-4">
-            <button
+            <Link
+              href="/volunteer"
               className="cursor-pointer bg-primary-orange text-white text-sm md:text-base font-medium py-2.5 px-6 rounded-full hover:bg-[#ffb733] transition-all duration-300"
               aria-label="Join as a volunteer"
             >
               Join as a volunteer
-            </button>
-            <button
+            </Link>
+            <Link
+              href="/donate"
               className="cursor-pointer bg-white text-[#20A44D] text-sm md:text-base font-medium py-2.5 px-6 rounded-full border border-gray-200 hover:bg-gray-50 transition-all duration-300"
               aria-label="Donate"
             >
               Donate
-            </button>
+            </Link>
           </div>
         </div>
       </div>

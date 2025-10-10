@@ -37,7 +37,7 @@ export default function Hero() {
           className="mt-10"
         >
           <Link
-            href="#contact"
+            href="/contact-us"
             className="inline-flex items-center justify-center px-6 py-2 md:px-12 md:py-4 rounded-full bg-[#128341] hover:bg-[#0e6a32] transition-all duration-300 font-roboto font-medium text-sm md:text-lg text-white shadow-[0_6px_20px_-5px_rgba(18,131,65,0.4)] hover:shadow-[0_10px_25px_-5px_rgba(18,131,65,0.6)] backdrop-blur-sm"
           >
             Contact Us
