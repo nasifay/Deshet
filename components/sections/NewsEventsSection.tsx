@@ -42,7 +42,7 @@ export const NewsAndEventsSection = () => {
           NEWS AND EVENTS
         </h2>
         <a
-          className="[font-family:'Roboto',Helvetica] font-bold text-[#a19e9d] text-xl tracking-[0] leading-[20.2px] whitespace-nowrap hover:text-[#128341] transition-colors"
+          className="font-robot font-bold text-[#a19e9d] text-xl tracking-[0] leading-[20.2px] whitespace-nowrap hover:text-[#128341] transition-colors"
           href="https://www.figma.com/proto/MkhksQbAlOq8XFYc7pjyWU/TAMRA-Website-UI?page-id=480%3A745&node-id=590-773&viewport=387%2C-2833%2C0.13&t=7vd0yZSzpPwwKF5z-1&scaling=min-zoom&content-scaling=fixed"
           rel="noopener noreferrer"
           target="_blank"

@@ -42,15 +42,6 @@ export default function NewsAndEvents() {
           <MainContentSection />
         </div>
       </main>
-
-      {/* WhatsApp Button */}
-      <div className="fixed bottom-8 right-8 w-[87px] h-[87px] z-50 cursor-pointer hover:scale-110 transition-transform">
-        <img
-          className="h-[80.25%] w-[70px] object-cover mx-auto mt-2"
-          alt="Whatsapp"
-          src="https://c.animaapp.com/mg8i4bgw8CQdb4/img/whatsapp-1.png"
-        />
-      </div>
     </div>
   );
 }

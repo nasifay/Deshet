@@ -1,98 +1,69 @@
-import React from "react";
-import Container from "../../ui/Container";
+"use client";
+import Image from "next/image";
 
-interface VisionMissionProps {
-  visionImage: string;
-  visionText: string;
-  missionImage: string;
-  missionText: string;
-}
-
-export function VisionMissionSection({ visionImage, visionText, missionImage, missionText }: VisionMissionProps) {
+export default function VisionMission() {
   return (
-    <section className="relative w-full py-8 md:py-16 lg:py-24 xl:py-32 bg-white animate-fade-in opacity-0 [--animation-delay:1200ms]">
-      <Container>
-        <div className="flex flex-col gap-8 md:gap-12 lg:gap-16 xl:gap-20">
-          {/* Vision Section - Mobile: compact side-by-side; md+: stacked then side-by-side as original */}
-          <div className="flex flex-row md:flex-col lg:flex-row items-center md:items-start gap-4 md:gap-8 lg:gap-12 xl:gap-16">
-            {/* Vision Image - 1/3 on mobile, full on md, 1/3 on lg, 1/4 on xl */}
-            <div className="relative w-1/3 md:w-full lg:w-1/3 xl:w-1/4 aspect-square rounded-xl md:rounded-2xl overflow-hidden">
-              <img
-                className="w-full h-full object-cover"
-                alt="Vision Image"
-                src={visionImage}
-              />
-            </div>
+    <section className="relative w-full py-12 md:py-16 px-4 sm:px-6 bg-[#178849] overflow-hidden flex justify-center">
+      {/* Reduced vertical padding on mobile for compact layout */}
+      <div
+        className="absolute inset-0 z-0 opacity-[0.05]"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M-1 15L25 41L25 41L-1 67L-1 15z M75 -1L101 25L101 25L75 51L75 -1z' fill='%23000' fill-opacity='0.1'/%3E%3C/svg%3E")`,
+          backgroundSize: "100px 100px",
+        }}
+      ></div>
 
-            {/* Vision Text Content - Left-aligned, compact on mobile, larger on md+ */}
-            <div className="flex flex-col gap-2 md:gap-6 lg:gap-8 flex-1 text-left md:text-center lg:text-left">
-              {/* Vision Title - Responsive font via CSS */}
-              <h2 className="font-black text-accent uppercase leading-tight tracking-wide">
-                VISION
-              </h2>
-
-              {/* Vision Description - Responsive font via CSS */}
-              <p className="text-muted-foreground leading-relaxed md:text-justify lg:text-left capitalize">
-                {visionText}
-              </p>
-            </div>
+      <div className="relative z-10 mx-auto max-w-[800px] w-full flex flex-col gap-4 md:gap-0 text-white font-sans">
+        {/* Added responsive gap between vision and mission sections for mobile spacing */}
+        <div className="flex flex-col md:flex-row items-start gap-4 md:gap-8">
+          {/* Stacked layout vertically on mobile, row on tablet/desktop; reduced gap on mobile */}
+          <div className="flex-shrink-0 w-full md:w-[200px] h-auto border border-gray-200 md:border-b-0">
+            {/* Made image container full-width on mobile for better scaling */}
+            <Image
+              src="/images/Mask group.png"
+              alt="Vision Image"
+              width={200}
+              height={140}
+              className="object-contain w-full h-auto"
+            />
           </div>
 
-          {/* Mission Section - Reversed on mobile, image left on md+ */}
-          <div className="flex flex-row-reverse md:flex-row items-center md:items-start gap-4 md:gap-8 lg:gap-12 xl:gap-16">
-            {/* Mission Image */}
-            <div className="relative w-1/3 md:w-full lg:w-1/3 xl:w-1/4 aspect-square rounded-xl md:rounded-2xl overflow-hidden">
-              <img
-                className="w-full h-full object-cover"
-                alt="Mission Image"
-                src={missionImage}
-              />
-            </div>
-
-            {/* Mission Text Content */}
-            <div className="flex flex-col gap-2 md:gap-6 lg:gap-8 flex-1 text-left md:text-center lg:text-left">
-              {/* Mission Title */}
-              <h2 className="font-black text-accent uppercase leading-tight tracking-wide">
-                MISSION
-              </h2>
-
-              {/* Mission Description */}
-              <p className="text-muted-foreground leading-relaxed md:text-justify lg:text-left capitalize">
-                {missionText}
-              </p>
-            </div>
+          <div className="flex-1 mt-0">
+            <h3 className="text-[#FF7A00] text-[24px] sm:text-[28px] md:text-[32px] font-extrabold uppercase tracking-wide leading-tight mb-2">
+              {/* Scaled heading text size responsively for readability on smaller screens */}
+              VISION
+            </h3>
+            <p className="text-white text-[16px] md:text-[18px] font-normal leading-relaxed">
+              {/* Scaled paragraph text size for mobile readability */}
+              “TSD Envisioned A Developed Ethiopia With Empowered Youth And
+              Women”.
+            </p>
           </div>
         </div>
-      </Container>
 
-      <style jsx>{`
-        /* Font sizes: compact on mobile, larger on md+ */
-        h2 {
-          font-size: clamp(1.5rem, 6vw, 2.5rem);
-        }
-        p {
-          font-size: clamp(0.875rem, 3vw, 1.5rem);
-        }
-        @media (min-width: 768px) {
-          h2 {
-            font-size: clamp(2.5rem, 8vw, 4.5rem);
-          }
-          p {
-            font-size: clamp(1.25rem, 4vw, 2.5rem);
-          }
-        }
+        <div className="flex flex-col md:flex-row items-start gap-4 md:gap-8">
+          {/* Same responsive adjustments as above for mission section */}
+          <div className="flex-shrink-0 w-full md:w-[200px] h-auto border border-gray-200">
+            <Image
+              src="/images/Mask group (1).png"
+              alt="Mission Image"
+              width={200}
+              height={140}
+              className="object-contain w-full h-auto"
+            />
+          </div>
 
-        /* Additional responsive adjustments for custom breakpoints */
-        @media (min-width: 834px) {
-          .gap-12 { gap: 3rem; }
-        }
-        @media (min-width: 1366px) {
-          .gap-16 { gap: 4rem; }
-        }
-        @media (min-width: 1440px) {
-          .gap-20 { gap: 5rem; }
-        }
-      `}</style>
+          <div className="flex-1 mt-0">
+            <h3 className="text-[#FF7A00] text-[24px] sm:text-[28px] md:text-[32px] font-extrabold uppercase tracking-wide leading-tight mb-2">
+              MISSION
+            </h3>
+            <p className="text-white text-[16px] md:text-[18px] font-normal leading-relaxed">
+              TSD Strives To Realize The Human Right Of Youth And Women Through
+              Evidence-Based Advocacy And Empowerment Works.
+            </p>
+          </div>
+        </div>
+      </div>
     </section>
   );
 }

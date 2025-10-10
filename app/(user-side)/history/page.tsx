@@ -35,15 +35,8 @@ export default function History() {
           </p>
         </div>
       </section>
-      <header className="relative w-full flex items-center justify-center py-12">
-        <img
-          className="absolute left-[205px] w-[71px] h-[73px] object-cover"
-          alt="Asset"
-          src="https://c.animaapp.com/mgcmuny5RiWnl8/img/asset-2-1.png"
-        />
-      </header>
 
-      <div className="inline-flex flex-col items-center justify-center gap-[50px] w-full px-2  md:px-6 lg:px-20 mb-8 md:mb-20">
+      <div className=" mt-6 sm:mt-14 lg:mt-24 inline-flex flex-col items-center justify-center gap-[50px] w-full px-2  md:px-6 lg:px-20 mb-8 md:mb-20">
         <h2 className="font-roboto font-black text-2xl md:text-4xl lg:text-[90px] leading-[101%] tracking-[0] uppercase text-primary-green">
           MILESTONES
         </h2>

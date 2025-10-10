@@ -5,13 +5,22 @@ interface WhatsAppButtonProps {
 }
 
 export function WhatsAppButton({ phoneNumber = "" }: WhatsAppButtonProps) {
+  const whatsappUrl = phoneNumber
+    ? `https://wa.me/${phoneNumber}`
+    : "https://wa.me/";
+
   return (
-    <aside className="fixed top-[1212px] right-[30px] w-[87px] h-[87px] z-40">
-      <a href={`https://wa.me/${phoneNumber}`} target="_blank" rel="noopener noreferrer">
+    <aside className="fixed bottom-8 right-8 size-12  md:size-[80px] z-50">
+      <a
+        href={whatsappUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex items-center justify-center w-full h-full cursor-pointer hover:scale-110 transition-transform"
+      >
         <img
-          className="absolute h-[80.25%] top-[9.88%] left-[calc(50.00%_-_35px)] w-[70px] object-cover hover:scale-110 transition-transform"
+          className="w-[70px] h-auto object-cover"
           alt="Whatsapp"
-          src="https://c.animaapp.com/mgclt9blEcJSeI/img/whatsapp-1.png"
+          src="https://c.animaapp.com/mg8i4bgw8CQdb4/img/whatsapp-1.png"
         />
       </a>
     </aside>

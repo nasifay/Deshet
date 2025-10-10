@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import React from "react";
@@ -15,78 +16,55 @@ interface LeadershipSectionProps {
 
 export function LeadershipSection({ leadershipTeam }: LeadershipSectionProps) {
   return (
-    <section className="relative w-full flex flex-col items-center gap-8 xs:gap-10 sm:gap-12 md:gap-16 lg:gap-20 xl:gap-[87px] mb-12 xs:mb-14 sm:mb-16 md:mb-20 lg:mb-[87px] px-4 xs:px-5 sm:px-6 md:px-8 lg:px-10 xl:px-0 translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:1600ms]">
-      {/* Responsive heading with fluid typography - preserves design aesthetic */}
-      <h2 
-        className="w-full max-w-[1349px] text-center [text-shadow:0px_2px_2px_#00000040] sm:[text-shadow:0px_3px_3px_#00000040] lg:[text-shadow:0px_4px_4px_#00000040] [font-family:'Roboto',Helvetica] font-black text-[#128341] tracking-[0] leading-[1.01]"
-        style={{ fontSize: 'clamp(1.75rem, 4vw + 1rem, 4.375rem)' }}
-      >
+    <section className="relative w-full flex flex-col items-center gap-6 sm:gap-8 md:gap-12 lg:gap-20 xl:gap-[87px] mb-8 sm:mb-12 md:mb-16 lg:mb-[87px] px-4 sm:px-6 md:px-8 lg:px-10 xl:px-0 translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:1600ms] overflow-hidden">
+      {/* Scaled heading with fluid typography */}
+      <h2 className="w-full max-w-[1349px] text-center [text-shadow:0px_2px_2px_#00000040] sm:[text-shadow:0px_4px_4px_#00000040] [font-family:'Roboto',Helvetica] font-black text-[#128341] tracking-[0] leading-[1.01] text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[70px]">
         OUR LEADERSHIP
       </h2>
 
-      {/* Responsive carousel container - adapts height based on card size */}
-      <div className="relative w-full h-auto min-h-[500px] xs:min-h-[550px] sm:min-h-[600px] md:min-h-[650px] lg:min-h-[700px] xl:h-[746px] overflow-hidden py-8 sm:py-10 md:py-12 lg:py-[50px]">
-        <div className="flex items-start gap-4 xs:gap-5 sm:gap-6 md:gap-7 lg:gap-8 xl:gap-[39px] animate-scroll-seamless [--duration:40s] hover:[animation-play-state:paused] will-change-transform">
-          {/* First set of cards - responsive dimensions */}
+      {/* Adjusted container height responsively */}
+      <div className="relative w-full max-w-full h-auto min-h-[350px] sm:min-h-[450px] md:min-h-[550px] lg:min-h-[700px] xl:h-[746px] overflow-hidden py-4 sm:py-6 md:py-8 lg:py-10 xl:py-[50px]">
+        <div className="flex items-start gap-3 sm:gap-4 md:gap-6 lg:gap-[39px] animate-scroll-seamless [--duration:40s] hover:[animation-play-state:paused] will-change-transform">
+          {/* Responsive card sizes */}
           {leadershipTeam.map((member, index) => (
             <Card
               key={`first-${index}`}
-              className="w-[280px] xs:w-[300px] sm:w-[320px] md:w-[350px] lg:w-[380px] xl:w-[424.02px] h-[450px] xs:h-[480px] sm:h-[520px] md:h-[560px] lg:h-[600px] xl:h-[646px] bg-[#b1efca] rounded-3xl sm:rounded-[36px] lg:rounded-[46px] flex-shrink-0 border-0 transition-all duration-500 ease-out hover:scale-105 sm:hover:scale-110 hover:shadow-[0_10px_40px_rgba(0,0,0,0.2)] sm:hover:shadow-[0_20px_60px_rgba(0,0,0,0.3)] hover:z-50 cursor-pointer"
+              className="w-[200px] sm:w-[280px] md:w-[340px] lg:w-[424.02px] h-[320px] sm:h-[450px] md:h-[550px] lg:h-[646px] bg-[#b1efca] rounded-xl sm:rounded-2xl md:rounded-3xl lg:rounded-[46px] flex-shrink-0 border-0 transition-all duration-500 ease-out hover:scale-105 hover:shadow-[0_10px_40px_rgba(0,0,0,0.2)] hover:z-50 cursor-pointer"
             >
               <CardContent className="p-0 relative h-full">
-                {/* Responsive image - maintains aspect ratio */}
                 <img
-                  className="w-full h-[68%] sm:h-[70%] lg:h-[76.6%] object-cover rounded-t-3xl sm:rounded-t-[36px] lg:rounded-t-[46px]"
+                  className="w-full h-[70%] sm:h-[75%] lg:h-[76.6%] object-cover rounded-t-xl sm:rounded-t-2xl md:rounded-t-3xl lg:rounded-t-[46px]"
                   alt={member.name}
                   src={member.image}
                 />
-                {/* Text container - positioned in the green background area below image */}
-                <div className="absolute bottom-0 left-0 right-0 h-[32%] sm:h-[30%] lg:h-[23.4%] flex flex-col justify-center items-start px-4 sm:px-5 lg:px-6">
-                  {/* Fluid typography for member name */}
-                  <h3 
-                    className="[text-shadow:0px_2px_2px_#00000040] sm:[text-shadow:0px_3px_3px_#00000040] lg:[text-shadow:0px_4px_4px_#00000040] [font-family:'Roboto',Helvetica] font-black text-[#4f4f4f] tracking-[0] leading-[1.01] whitespace-pre-line w-full"
-                    style={{ fontSize: 'clamp(1.25rem, 1.5vw + 0.5rem, 1.75rem)' }}
-                  >
+                <div className="absolute bottom-0 left-0 right-0 h-[30%] sm:h-[25%] lg:h-[23.4%] flex flex-col justify-center items-start px-3 sm:px-4 md:px-5 lg:px-6">
+                  <h3 className="[text-shadow:0px_2px_2px_#00000040] sm:[text-shadow:0px_4px_4px_#00000040] [font-family:'Roboto',Helvetica] font-black text-[#4f4f4f] tracking-[0] leading-[1.01] whitespace-pre-line w-full text-base sm:text-lg md:text-xl lg:text-2xl xl:text-[28px]">
                     {member.name}
                   </h3>
-                  {/* Fluid typography for member title */}
-                  <p 
-                    className="[font-family:'Roboto',Helvetica] font-normal text-[#4f4f4f] tracking-[0] leading-[1.06] w-full mt-1 sm:mt-1.5 lg:mt-2"
-                    style={{ fontSize: 'clamp(0.875rem, 1vw + 0.25rem, 1.25rem)' }}
-                  >
+                  <p className="[font-family:'Roboto',Helvetica] font-normal text-[#4f4f4f] tracking-[0] leading-[1.06] w-full mt-0.5 sm:mt-1 md:mt-1.5 lg:mt-2 text-xs sm:text-sm md:text-base lg:text-lg xl:text-[20px]">
                     {member.title}
                   </p>
                 </div>
               </CardContent>
             </Card>
           ))}
-          {/* Duplicate set for seamless loop - responsive dimensions */}
+          {/* Duplicate for loop */}
           {leadershipTeam.map((member, index) => (
             <Card
               key={`second-${index}`}
-              className="w-[280px] xs:w-[300px] sm:w-[320px] md:w-[350px] lg:w-[380px] xl:w-[424.02px] h-[450px] xs:h-[480px] sm:h-[520px] md:h-[560px] lg:h-[600px] xl:h-[646px] bg-[#b1efca] rounded-3xl sm:rounded-[36px] lg:rounded-[46px] flex-shrink-0 border-0 transition-all duration-500 ease-out hover:scale-105 sm:hover:scale-110 hover:shadow-[0_10px_40px_rgba(0,0,0,0.2)] sm:hover:shadow-[0_20px_60px_rgba(0,0,0,0.3)] hover:z-50 cursor-pointer"
+              className="w-[200px] sm:w-[280px] md:w-[340px] lg:w-[424.02px] h-[320px] sm:h-[450px] md:h-[550px] lg:h-[646px] bg-[#b1efca] rounded-xl sm:rounded-2xl md:rounded-3xl lg:rounded-[46px] flex-shrink-0 border-0 transition-all duration-500 ease-out hover:scale-105 hover:shadow-[0_10px_40px_rgba(0,0,0,0.2)] hover:z-50 cursor-pointer"
             >
               <CardContent className="p-0 relative h-full">
-                {/* Responsive image - maintains aspect ratio */}
                 <img
-                  className="w-full h-[68%] sm:h-[70%] lg:h-[76.6%] object-cover rounded-t-3xl sm:rounded-t-[36px] lg:rounded-t-[46px]"
+                  className="w-full h-[70%] sm:h-[75%] lg:h-[76.6%] object-cover rounded-t-xl sm:rounded-t-2xl md:rounded-t-3xl lg:rounded-t-[46px]"
                   alt={member.name}
                   src={member.image}
                 />
-                {/* Text container - positioned in the green background area below image */}
-                <div className="absolute bottom-0 left-0 right-0 h-[32%] sm:h-[30%] lg:h-[23.4%] flex flex-col justify-center items-start px-4 sm:px-5 lg:px-6">
-                  {/* Fluid typography for member name */}
-                  <h3 
-                    className="[text-shadow:0px_2px_2px_#00000040] sm:[text-shadow:0px_3px_3px_#00000040] lg:[text-shadow:0px_4px_4px_#00000040] [font-family:'Roboto',Helvetica] font-black text-[#4f4f4f] tracking-[0] leading-[1.01] whitespace-pre-line w-full"
-                    style={{ fontSize: 'clamp(1.25rem, 1.5vw + 0.5rem, 1.75rem)' }}
-                  >
+                <div className="absolute bottom-0 left-0 right-0 h-[30%] sm:h-[25%] lg:h-[23.4%] flex flex-col justify-center items-start px-3 sm:px-4 md:px-5 lg:px-6">
+                  <h3 className="[text-shadow:0px_2px_2px_#00000040] sm:[text-shadow:0px_4px_4px_#00000040] [font-family:'Roboto',Helvetica] font-black text-[#4f4f4f] tracking-[0] leading-[1.01] whitespace-pre-line w-full text-base sm:text-lg md:text-xl lg:text-2xl xl:text-[28px]">
                     {member.name}
                   </h3>
-                  {/* Fluid typography for member title */}
-                  <p 
-                    className="[font-family:'Roboto',Helvetica] font-normal text-[#4f4f4f] tracking-[0] leading-[1.06] w-full mt-1 sm:mt-1.5 lg:mt-2"
-                    style={{ fontSize: 'clamp(0.875rem, 1vw + 0.25rem, 1.25rem)' }}
-                  >
+                  <p className="[font-family:'Roboto',Helvetica] font-normal text-[#4f4f4f] tracking-[0] leading-[1.06] w-full mt-0.5 sm:mt-1 md:mt-1.5 lg:mt-2 text-xs sm:text-sm md:text-base lg:text-lg xl:text-[20px]">
                     {member.title}
                   </p>
                 </div>

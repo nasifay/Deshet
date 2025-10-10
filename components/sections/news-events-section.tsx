@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import Button from "../ui/Button";
 
 const newsCards = [
   {
@@ -41,7 +42,7 @@ export default function NewsAndEvents() {
           </h2>
           <Link
             href="#"
-            className="text-gray-500 hover:text-[#268246] text-sm font-medium transition-colors duration-200"
+            className=" hidden sm:block text-gray-500 hover:text-[#268246] text-sm font-medium transition-colors duration-200"
           >
             See More
           </Link>
@@ -75,6 +76,15 @@ export default function NewsAndEvents() {
               </div>
             </div>
           ))}
+        </div>
+
+        <div className="flex items-center justify-center mt-4">
+          <Button
+            variant="outline"
+            className="bg-transparent text-black block sm:hidden  hover:text-[#268246] text-sm font-medium transition-colors duration-200"
+          >
+            See More
+          </Button>
         </div>
       </div>
     </section>
