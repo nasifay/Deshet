@@ -54,26 +54,25 @@ export const NewsAndEventsSection = () => {
       <div className="w-full">
         <div className="inline-flex items-center gap-[52px]">
           {newsCards.map((news, index) => (
-            <Link key={index} href={`/news/${news.id}`}>
-              <Card className="w-[360px] h-[421px] overflow-hidden cursor-pointer hover:scale-[1.05] transition-transform bg-transparent border-none rounded-[33px]">
-                <div className="relative w-full h-full">
-                  <img
-                    src={news.image}
-                    alt={news.title}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-black bg-opacity-50" />
-                  <CardContent className="absolute bottom-0 left-0 right-0 p-6 text-white z-10">
-                    <h3 className="font-bold text-base text-[#ff9700]">
-                      {news.title}
-                    </h3>
-                    <p className="text-sm text-white mt-1">
-                      {news.description}
-                    </p>
-                  </CardContent>
-                </div>
-              </Card>
-            </Link>
+            <Card
+              key={index}
+              className="w-[360px] h-[421px] overflow-hidden cursor-pointer hover:scale-[1.05] transition-transform bg-transparent border-none rounded-[33px]"
+            >
+              <div className="relative w-full h-full">
+                <img
+                  src={news.image}
+                  alt={news.title}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-black bg-opacity-50" />
+                <CardContent className="absolute bottom-0 left-0 right-0 p-6 text-white z-10">
+                  <h3 className="font-bold text-base text-[#ff9700]">
+                    {news.title}
+                  </h3>
+                  <p className="text-sm text-white mt-1">{news.description}</p>
+                </CardContent>
+              </div>
+            </Card>
           ))}
         </div>
       </div>

@@ -1,7 +1,7 @@
 import React from "react";
-import { Card, CardContent } from "../../components/ui/Card";
+import { Card, CardContent } from "~/components/ui/Card";
 
-export function MainContentSection() {
+export const MainContentSection = () => {
   const newsItems = [
     {
       id: 1,
@@ -70,12 +70,12 @@ export function MainContentSection() {
   ];
 
   return (
-    <section className="flex flex-col w-full max-w-[1590px] mx-auto items-start gap-11 relative">
-      <div className="grid grid-cols-4 gap-[46px] w-full">
+    <section className="flex flex-col w-full max-w-[1590px] mx-auto items-start gap-11 relative px-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[46px] w-full">
         {newsItems.slice(0, 4).map((item) => (
           <Card
             key={item.id}
-            className="w-full translate-y-[-1rem] animate-fade-in opacity-0 transition-transform hover:scale-105 duration-300"
+            className="w-full translate-y-[-1rem] animate-fade-in opacity-0 transition-transform hover:scale-105 duration-300 border-0"
             style={
               {
                 "--animation-delay": item.animationDelay,
@@ -94,7 +94,7 @@ export function MainContentSection() {
                   {item.title}
                 </h3>
 
-                <div className="w-[340px] font-normal [font-family:'Roboto',Helvetica] text-base tracking-[0.80px] leading-[20.2px]">
+                <div className="w-full font-normal [font-family:'Roboto',Helvetica] text-base tracking-[0.80px] leading-[20.2px]">
                   <span className="font-light text-black tracking-[0.13px]">
                     {item.description}
                     <br />
@@ -109,11 +109,11 @@ export function MainContentSection() {
         ))}
       </div>
 
-      <div className="grid grid-cols-4 gap-[46px] w-full">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[46px] w-full">
         {newsItems.slice(4, 8).map((item) => (
           <Card
             key={item.id}
-            className="w-full translate-y-[-1rem] animate-fade-in opacity-0 transition-transform hover:scale-105 duration-300"
+            className="w-full translate-y-[-1rem] animate-fade-in opacity-0 transition-transform hover:scale-105 duration-300 border-0"
             style={
               {
                 "--animation-delay": item.animationDelay,
@@ -132,7 +132,7 @@ export function MainContentSection() {
                   {item.title}
                 </h3>
 
-                <div className="w-[340px] font-normal [font-family:'Roboto',Helvetica] text-base tracking-[0.80px] leading-[20.2px]">
+                <div className="w-full font-normal [font-family:'Roboto',Helvetica] text-base tracking-[0.80px] leading-[20.2px]">
                   <span className="font-light text-black tracking-[0.13px]">
                     {item.description}
                     <br />
@@ -148,4 +148,4 @@ export function MainContentSection() {
       </div>
     </section>
   );
-}
+};

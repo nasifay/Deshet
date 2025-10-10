@@ -200,6 +200,39 @@ body {
   animation: marquee var(--duration, 30s) linear infinite;
 }
 
+/* Seamless scroll animation for leadership cards */
+@keyframes scroll-seamless {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll-seamless {
+  animation: scroll-seamless var(--duration, 40s) linear infinite;
+}
+
+/* Interactive map pin and text highlighting */
+.pin-highlight {
+  transform: scale(1.25) translateY(-4px) translate(-50%, -50%) !important;
+}
+
+.text-highlight {
+  color: #FF9700 !important;
+}
+
+/* Hide scrollbar for horizontal scrolling sections */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari and Opera */
+}
+
 /* Mobile menu slide-in animation */
 @keyframes slideIn {
   0% {
