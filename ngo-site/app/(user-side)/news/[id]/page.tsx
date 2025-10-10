@@ -3,6 +3,17 @@ import React from "react";
 import Image from "next/image";
 
 export default function NewsDetailsPage() {
+  const news: {
+    title: string;
+    imageUrl: string;
+    paragrahs: string;
+  } = {
+    title: "TSD NEW YEAR'S PROGRAM",
+    imageUrl: "https://c.animaapp.com/mgcmausvNL2kHo/img/tsd-new-year.png",
+    paragrahs:
+      "Tamra NGO joyfully celebrated the Ethiopian New Year together with community members, partners, and staff. The event highlighted our shared achievements over the past year and reaffirmed our commitment to empowering communities through education, health, and social development programs. As we step into the new year, we renew our vision of building a brighter future for all. The celebration was filled with cultural music, traditional dishes, and words of encouragement from beneficiaries whose lives have been transformed through our initiatives. It was also a moment of gratitude, as we thanked our supporters and stakeholders for standing with us. Looking forward, Tamra NGO aims to expand its impact, reaching more vulnerable communities and creating sustainable solutions for lasting change. Tamra NGO joyfully celebrated the Ethiopian New Year together with community members, partners, and staff. The event highlighted our shared achievements over the past year and reaffirmed our commitment to empowering communities through education, health, and social development programs. As we step into the new year, we renew our vision of building a brighter future for all. The celebration was filled with cultural music, traditional dishes, and words of encouragement from beneficiaries whose lives have been transformed through our initiatives. It was also a moment of gratitude, as we thanked our supporters and stakeholders for standing with us. Looking forward, Tamra NGO aims to expand its impact, reaching more vulnerable communities and creating sustainable solutions for lasting change.",
+  };
+
   return (
     <div className="relative w-full bg-white min-h-screen overflow-hidden">
       <main className="relative flex flex-col items-center justify-center px-4 sm:px-8 md:px-12 py-16 sm:py-20">
