@@ -3,41 +3,45 @@ import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-const programsList: { title: string; image: string }[] = [
-  {
-    title: "Youth <br /> Empowerment & <br /> Peacebuilding",
-    image: "/overview/1.png",
-  },
-  {
-    title: "Sexual <br /> & Reproductive Health & <br /> Gender Equality",
-    image: "/overview/2.png",
-  },
-  {
-    title: "Climate Justice & <br /> Livelihoods",
-    image: "/overview/3.png",
-  },
-  {
-    title: "Children’s Rights <br /> Protection",
-    image: "/overview/4.png",
-  },
-];
+interface ProgramAreasSectionProps {
+  programs?: Array<{ title: string; image: string }>;
+}
 
-export default function ProgramAreasSection() {
+export default function ProgramAreasSection({
+  programs = [
+    {
+      title: "Youth <br /> Empowerment & <br /> Peacebuilding",
+      image: "/overview/1.png",
+    },
+    {
+      title: "Sexual <br /> & Reproductive Health & <br /> Gender Equality",
+      image: "/overview/2.png",
+    },
+    {
+      title: "Climate Justice & <br /> Livelihoods",
+      image: "/overview/3.png",
+    },
+    {
+      title: "Children's Rights <br /> Protection",
+      image: "/overview/4.png",
+    },
+  ],
+}: ProgramAreasSectionProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % programsList.length);
+      setCurrentIndex((prev) => (prev + 1) % programs.length);
     }, 4000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [programs.length]);
 
   return (
     <div className="relative w-full  rounded-2xl overflow-hidden group px-6 md:px-16 lg:px-20 xl:28 2xl:px-36">
       {/* Image Container */}
       <div className="relative w-full h-auto aspect-[1595/854] overflow-hidden rounded-2xl">
-        {programsList.map((program, i) => (
+        {programs.map((program, i) => (
           <div
             key={i}
             className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
@@ -60,7 +64,7 @@ export default function ProgramAreasSection() {
             <h2
               className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl 2xl:text-7xl font-black leading-tight uppercase tracking-tight transition-opacity duration-1000"
               dangerouslySetInnerHTML={{
-                __html: programsList[currentIndex].title,
+                __html: programs[currentIndex].title,
               }}
             />
           </div>

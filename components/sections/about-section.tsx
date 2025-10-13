@@ -4,15 +4,27 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function AboutSection() {
-  const [currentIndex, setCurrentIndex] = useState(0);
+interface AboutSectionProps {
+  title?: string;
+  content?: string;
+  images?: string[];
+  ctaText?: string;
+  ctaLink?: string;
+}
 
-  const images = [
+export default function AboutSection({
+  title = "ABOUT US",
+  content = "Tamra for social development organization (tsd) is an Ethiopian NGO legally registered since 1998. Founded as an anti-aids club in shashemene, it now operates across Oromia, Sidama, South & Central Ethiopia, and Addis Ababa. TSD works in youth empowerment, peacebuilding, SRH & gender equality, and climate justice & livelihoods. With 25+ years of impact, we drive change through grassroots engagement, advocacy, and community-driven solutions.",
+  images = [
     "/images/about/1.png",
     "/images/about/2.png",
     "/images/about/3.png",
     "/images/about/4.png",
-  ];
+  ],
+  ctaText = "Read More",
+  ctaLink = "/who-we-are",
+}: AboutSectionProps) {
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -27,30 +39,19 @@ export default function AboutSection() {
         {/* Left Column */}
         <div>
           <h2 className="font-roboto text-primary-green text-5xl md:text-4xl wxga:text-7xl font-black uppercase mb-6 tracking-tight">
-            ABOUT US
+            {title}
           </h2>
 
-          <p className="font-robot font-light text-[#444] text-sm md:text-lg lg:text-2xl  mb-8 max-w-[620px] text-justify tracking-normal leading-4 md:leading-7">
-            Tamra for social development organization (tsd) is an Ethiopian NGO
-            legally registered{" "}
-            <span className="text-[#FF9700] font-medium">since 1998</span>.
-            Founded as an{" "}
-            <span className="text-[#FF9700] font-medium">
-              anti-aids club in shashemene
-            </span>
-            , it now operates across Oromia, Sidama, South & Central Ethiopia,
-            and Addis Ababa. TSD works in youth empowerment, peacebuilding, SRH
-            & gender equality, and climate justice & livelihoods. With{" "}
-            <span className="text-[#FF9700] font-medium">25+ years</span> of
-            impact, we drive change through grassroots engagement, advocacy, and
-            community-driven solutions.
-          </p>
+          <div
+            className="font-robot font-light text-[#444] text-sm md:text-lg lg:text-2xl  mb-8 max-w-[620px] text-justify tracking-normal leading-4 md:leading-7"
+            dangerouslySetInnerHTML={{ __html: content }}
+          />
 
           <Link
-            href="/who-we-are"
+            href={ctaLink}
             className="inline-block bg-primary-green text-white text-sm md:text-lg lg:text-2xl font-medium px-10 2xl:px-14 py-2 2xl:py-4 rounded-full  transition-all duration-300"
           >
-            Read More
+            {ctaText}
           </Link>
         </div>
 

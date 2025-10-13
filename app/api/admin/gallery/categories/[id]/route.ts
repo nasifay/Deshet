@@ -1,112 +1,225 @@
-import { NextRequest, NextResponse } from 'next/server';
-import connectDB from '~/lib/db/mongodb';
-import GalleryCategory from '~/lib/db/models/GalleryCategory';
-import Gallery from '~/lib/db/models/Gallery';
-import { getSession } from '~/lib/auth/session';
+import { NextRequest, NextResponse } from "next/server";
+import connectDB from "~/lib/db/mongodb";
+import GalleryCategory from "~/lib/db/models/GalleryCategory";
+import Gallery from "~/lib/db/models/Gallery";
+import { getSession } from "~/lib/auth/session";
+import mongoose from "mongoose";
 
-// PUT - Update gallery category
-export async function PUT(
+// GET - Get single gallery category by ID
+export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
   try {
     const session = await getSession();
     if (!session) {
-      return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 }
+      );
     }
 
     await connectDB();
 
-    const { id } = await params;
-    const body = await request.json();
-    const { name, description, color, icon, order, isActive } = body;
+    const { id } = params;
 
-    // Generate slug from name if name is provided
-    let updateData: any = { description, color, icon, order, isActive };
-    
-    if (name) {
-      const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-      
-      // Check if slug already exists for different category
-      const existingCategory = await GalleryCategory.findOne({ 
-        slug, 
-        _id: { $ne: id } 
-      });
-      
-      if (existingCategory) {
-        return NextResponse.json(
-          { success: false, error: 'Category with this name already exists' },
-          { status: 400 }
-        );
-      }
-      
-      updateData.name = name;
-      updateData.slug = slug;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return NextResponse.json(
+        { success: false, error: "Invalid category ID" },
+        { status: 400 }
+      );
     }
 
-    const category = await GalleryCategory.findByIdAndUpdate(
-      id,
-      updateData,
-      { new: true }
-    );
+    const category = await GalleryCategory.findById(id).lean();
 
     if (!category) {
-      return NextResponse.json({ success: false, error: 'Category not found' }, { status: 404 });
+      return NextResponse.json(
+        { success: false, error: "Category not found" },
+        { status: 404 }
+      );
     }
+
+    // Get count of gallery items in this category
+    const itemCount = await Gallery.countDocuments({ category: id });
 
     return NextResponse.json({
       success: true,
-      message: 'Category updated successfully',
-      data: category,
+      data: {
+        ...category,
+        itemCount,
+      },
     });
   } catch (error) {
-    console.error('Error updating gallery category:', error);
-    return NextResponse.json({ success: false, error: 'Internal server error' }, { status: 500 });
+    console.error("Error fetching gallery category:", error);
+    return NextResponse.json(
+      { success: false, error: "Internal server error" },
+      { status: 500 }
+    );
+  }
+}
+
+// PUT - Update gallery category
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const session = await getSession();
+    if (!session) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    await connectDB();
+
+    const { id } = params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return NextResponse.json(
+        { success: false, error: "Invalid category ID" },
+        { status: 400 }
+      );
+    }
+
+    const body = await request.json();
+    const {
+      name,
+      slug,
+      description,
+      color,
+      icon,
+      order,
+      isActive,
+      featuredImage,
+      hasBackground,
+      backgroundImage,
+      gap,
+    } = body;
+
+    // Check if category exists
+    const category = await GalleryCategory.findById(id);
+    if (!category) {
+      return NextResponse.json(
+        { success: false, error: "Category not found" },
+        { status: 404 }
+      );
+    }
+
+    // If slug is being changed, check for duplicates
+    if (slug && slug !== category.slug) {
+      const existingCategory = await GalleryCategory.findOne({ slug });
+      if (existingCategory) {
+        return NextResponse.json(
+          { success: false, error: "A category with this slug already exists" },
+          { status: 400 }
+        );
+      }
+    }
+
+    // Update category
+    const updatedCategory = await GalleryCategory.findByIdAndUpdate(
+      id,
+      {
+        name,
+        slug,
+        description,
+        color,
+        icon,
+        order,
+        isActive,
+        featuredImage,
+        hasBackground,
+        backgroundImage,
+        gap,
+      },
+      { new: true, runValidators: true }
+    );
+
+    return NextResponse.json({
+      success: true,
+      data: updatedCategory,
+      message: "Gallery category updated successfully",
+    });
+  } catch (error: any) {
+    console.error("Error updating gallery category:", error);
+
+    if (error.code === 11000) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "A category with this name or slug already exists",
+        },
+        { status: 400 }
+      );
+    }
+
+    return NextResponse.json(
+      { success: false, error: error.message || "Internal server error" },
+      { status: 500 }
+    );
   }
 }
 
 // DELETE - Delete gallery category
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
   try {
     const session = await getSession();
     if (!session) {
-      return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 }
+      );
     }
 
     await connectDB();
 
-    const { id } = await params;
+    const { id } = params;
 
-    // Check if category has any gallery items
-    const galleryCount = await Gallery.countDocuments({ category: id });
-    
-    if (galleryCount > 0) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json(
-        { 
-          success: false, 
-          error: `Cannot delete category. It contains ${galleryCount} gallery items. Please move or delete the items first.` 
+        { success: false, error: "Invalid category ID" },
+        { status: 400 }
+      );
+    }
+
+    // Check if category exists
+    const category = await GalleryCategory.findById(id);
+    if (!category) {
+      return NextResponse.json(
+        { success: false, error: "Category not found" },
+        { status: 404 }
+      );
+    }
+
+    // Check if category has gallery items
+    const itemCount = await Gallery.countDocuments({ category: id });
+    if (itemCount > 0) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: `Cannot delete category with ${itemCount} gallery items. Please move or delete the items first.`,
         },
         { status: 400 }
       );
     }
 
-    const category = await GalleryCategory.findByIdAndDelete(id);
-
-    if (!category) {
-      return NextResponse.json({ success: false, error: 'Category not found' }, { status: 404 });
-    }
+    // Delete category
+    await GalleryCategory.findByIdAndDelete(id);
 
     return NextResponse.json({
       success: true,
-      message: 'Category deleted successfully',
+      message: "Gallery category deleted successfully",
     });
   } catch (error) {
-    console.error('Error deleting gallery category:', error);
-    return NextResponse.json({ success: false, error: 'Internal server error' }, { status: 500 });
+    console.error("Error deleting gallery category:", error);
+    return NextResponse.json(
+      { success: false, error: "Internal server error" },
+      { status: 500 }
+    );
   }
 }
-
-

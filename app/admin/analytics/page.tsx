@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 import {
   BarChart3,
   TrendingUp,
@@ -9,15 +9,11 @@ import {
   Clock,
   Globe,
   Monitor,
-  Smartphone,
-  Tablet,
   RefreshCw,
   Calendar,
-  Download,
   ArrowUp,
-  ArrowDown,
   AlertCircle,
-} from 'lucide-react';
+} from "lucide-react";
 import {
   LineChart,
   Line,
@@ -32,8 +28,8 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-} from 'recharts';
-import { format, parseISO } from 'date-fns';
+} from "recharts";
+import { format, parseISO } from "date-fns";
 
 // Types
 interface OverviewMetrics {
@@ -85,21 +81,28 @@ interface AnalyticsData {
   dailyTrend: DailyTrend[];
 }
 
-type DateRange = '7daysAgo' | '30daysAgo' | '90daysAgo';
+type DateRange = "7daysAgo" | "30daysAgo" | "90daysAgo";
 
 const DATE_RANGES: { value: DateRange; label: string }[] = [
-  { value: '7daysAgo', label: 'Last 7 Days' },
-  { value: '30daysAgo', label: 'Last 30 Days' },
-  { value: '90daysAgo', label: 'Last 90 Days' },
+  { value: "7daysAgo", label: "Last 7 Days" },
+  { value: "30daysAgo", label: "Last 30 Days" },
+  { value: "90daysAgo", label: "Last 90 Days" },
 ];
 
-const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'];
+const COLORS = [
+  "#3b82f6",
+  "#10b981",
+  "#f59e0b",
+  "#ef4444",
+  "#8b5cf6",
+  "#ec4899",
+];
 
 export default function AnalyticsPage() {
   const [data, setData] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [dateRange, setDateRange] = useState<DateRange>('30daysAgo');
+  const [dateRange, setDateRange] = useState<DateRange>("30daysAgo");
   const [refreshing, setRefreshing] = useState(false);
 
   const fetchAnalytics = async (showRefreshIndicator = false) => {
@@ -111,17 +114,22 @@ export default function AnalyticsPage() {
       }
       setError(null);
 
-      const response = await fetch(`/api/admin/analytics/overview?range=${dateRange}`);
+      const response = await fetch(
+        `/api/admin/analytics/overview?range=${dateRange}`
+      );
       const result = await response.json();
 
       if (!result.success) {
-        throw new Error(result.message || result.error || 'Failed to fetch analytics');
+        throw new Error(
+          result.message || result.error || "Failed to fetch analytics"
+        );
       }
 
       setData(result.data);
-    } catch (err: any) {
-      console.error('Error fetching analytics:', err);
-      setError(err.message || 'Failed to load analytics data');
+    } catch (err) {
+      const error = err as Error;
+      console.error("Error fetching analytics:", error);
+      setError(error.message || "Failed to load analytics data");
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -130,6 +138,7 @@ export default function AnalyticsPage() {
 
   useEffect(() => {
     fetchAnalytics();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dateRange]);
 
   const formatDuration = (seconds: number) => {
@@ -139,18 +148,11 @@ export default function AnalyticsPage() {
   };
 
   const formatNumber = (num: number) => {
-    return new Intl.NumberFormat('en-US').format(num);
+    return new Intl.NumberFormat("en-US").format(num);
   };
 
   const formatPercentage = (value: number) => {
     return `${(value * 100).toFixed(1)}%`;
-  };
-
-  const getDeviceIcon = (device: string) => {
-    const deviceLower = device.toLowerCase();
-    if (deviceLower.includes('mobile')) return <Smartphone className="w-5 h-5" />;
-    if (deviceLower.includes('tablet')) return <Tablet className="w-5 h-5" />;
-    return <Monitor className="w-5 h-5" />;
   };
 
   if (loading && !data) {
@@ -158,7 +160,9 @@ export default function AnalyticsPage() {
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
           <RefreshCw className="w-12 h-12 animate-spin text-blue-600 mx-auto mb-4" />
-          <p className="text-gray-600 dark:text-gray-400">Loading analytics data...</p>
+          <p className="text-gray-600 dark:text-gray-400">
+            Loading analytics data...
+          </p>
         </div>
       </div>
     );
@@ -168,7 +172,9 @@ export default function AnalyticsPage() {
     return (
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-black text-gray-900 dark:text-white">Analytics Dashboard</h1>
+          <h1 className="text-3xl font-black text-gray-900 dark:text-white">
+            Analytics Dashboard
+          </h1>
           <p className="text-gray-600 dark:text-gray-400 mt-1">
             Track website performance and user engagement
           </p>
@@ -181,34 +187,186 @@ export default function AnalyticsPage() {
             </div>
             <div className="flex-1">
               <h2 className="text-lg font-bold text-red-900 dark:text-red-200 mb-2">
-                Google Analytics Configuration Error
+                {error.includes("Permission Denied") ||
+                error.includes("PERMISSION_DENIED")
+                  ? "Google Analytics Permission Error"
+                  : error.includes("not configured")
+                  ? "Google Analytics Not Configured"
+                  : error.includes("API Not Enabled") ||
+                    error.includes("API has not been used")
+                  ? "Google Analytics API Not Enabled"
+                  : "Google Analytics Configuration Error"}
               </h2>
               <p className="text-red-800 dark:text-red-300 mb-4">{error}</p>
 
               <div className="space-y-3">
-                <div>
-                  <h3 className="font-semibold text-red-900 dark:text-red-200 mb-2">
-                    Required Environment Variables:
-                  </h3>
-                  <pre className="p-3 bg-red-100 dark:bg-red-950 rounded text-xs overflow-x-auto text-red-900 dark:text-red-100">
-{`GA4_PROPERTY_ID=your_property_id
+                {/* Permission Denied - Most common issue */}
+                {(error.includes("Permission Denied") ||
+                  error.includes("PERMISSION_DENIED")) && (
+                  <>
+                    <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+                      <h3 className="font-semibold text-yellow-900 dark:text-yellow-200 mb-2 flex items-center space-x-2">
+                        <AlertCircle className="w-5 h-5" />
+                        <span>Service Account Missing GA4 Access</span>
+                      </h3>
+                      <p className="text-sm text-yellow-800 dark:text-yellow-300 mb-3">
+                        Your service account credentials are set up correctly,
+                        but the service account doesn&apos;t have access to your
+                        GA4 property.
+                      </p>
+                    </div>
+
+                    <div>
+                      <h3 className="font-semibold text-red-900 dark:text-red-200 mb-2">
+                        How to Fix:
+                      </h3>
+                      <ol className="list-decimal list-inside space-y-2 text-sm text-red-800 dark:text-red-300">
+                        <li>
+                          <strong>Go to Google Analytics</strong>
+                          <p className="ml-5 mt-1 text-xs">
+                            Visit{" "}
+                            <a
+                              href="https://analytics.google.com"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="underline hover:text-red-600"
+                            >
+                              analytics.google.com
+                            </a>
+                          </p>
+                        </li>
+                        <li>
+                          <strong>Select your GA4 property</strong>
+                        </li>
+                        <li>
+                          <strong>
+                            Click &quot;Admin&quot; (bottom left gear icon)
+                          </strong>
+                        </li>
+                        <li>
+                          <strong>
+                            Under &quot;Property&quot;, click &quot;Property
+                            Access Management&quot;
+                          </strong>
+                        </li>
+                        <li>
+                          <strong>
+                            Click the &quot;+&quot; icon to add users
+                          </strong>
+                        </li>
+                        <li>
+                          <strong>Enter your service account email</strong>
+                          <p className="ml-5 mt-1 text-xs">
+                            Found in your .env.local as{" "}
+                            <code className="bg-red-100 dark:bg-red-950 px-1 py-0.5 rounded">
+                              GA4_CLIENT_EMAIL
+                            </code>
+                          </p>
+                          <p className="ml-5 mt-1 text-xs">
+                            Format:{" "}
+                            <code className="bg-red-100 dark:bg-red-950 px-1 py-0.5 rounded">
+                              name@project.iam.gserviceaccount.com
+                            </code>
+                          </p>
+                        </li>
+                        <li>
+                          <strong>Assign &quot;Viewer&quot; role</strong>
+                        </li>
+                        <li>
+                          <strong>Click &quot;Add&quot;</strong>
+                        </li>
+                        <li>
+                          <strong>
+                            Wait 2-3 minutes for permissions to propagate
+                          </strong>
+                        </li>
+                        <li>
+                          <strong>
+                            Click &quot;Retry Connection&quot; below
+                          </strong>
+                        </li>
+                      </ol>
+                    </div>
+                  </>
+                )}
+
+                {/* API Not Enabled */}
+                {(error.includes("API Not Enabled") ||
+                  error.includes("API has not been used")) && (
+                  <>
+                    <div>
+                      <h3 className="font-semibold text-red-900 dark:text-red-200 mb-2">
+                        How to Fix:
+                      </h3>
+                      <ol className="list-decimal list-inside space-y-2 text-sm text-red-800 dark:text-red-300">
+                        <li>
+                          Go to{" "}
+                          <a
+                            href="https://console.cloud.google.com"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="underline hover:text-red-600"
+                          >
+                            Google Cloud Console
+                          </a>
+                        </li>
+                        <li>Select your project</li>
+                        <li>
+                          Go to &quot;APIs &amp; Services&quot; →
+                          &quot;Library&quot;
+                        </li>
+                        <li>
+                          Search for &quot;Google Analytics Data API&quot;
+                        </li>
+                        <li>Click &quot;Enable&quot;</li>
+                        <li>Wait a few minutes, then retry</li>
+                      </ol>
+                    </div>
+                  </>
+                )}
+
+                {/* Not Configured */}
+                {error.includes("not configured") && (
+                  <>
+                    <div>
+                      <h3 className="font-semibold text-red-900 dark:text-red-200 mb-2">
+                        Required Environment Variables:
+                      </h3>
+                      <pre className="p-3 bg-red-100 dark:bg-red-950 rounded text-xs overflow-x-auto text-red-900 dark:text-red-100">
+                        {`GA4_PROPERTY_ID=your_property_id
 GA4_CLIENT_EMAIL=service_account@project.iam.gserviceaccount.com
 GA4_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\n"`}
-                  </pre>
-                </div>
+                      </pre>
+                    </div>
 
-                <div>
-                  <h3 className="font-semibold text-red-900 dark:text-red-200 mb-2">
-                    Quick Setup Steps:
-                  </h3>
-                  <ol className="list-decimal list-inside space-y-1 text-sm text-red-800 dark:text-red-300">
-                    <li>Go to Google Cloud Console</li>
-                    <li>Enable Google Analytics Data API</li>
-                    <li>Create a service account and download JSON credentials</li>
-                    <li>Add the service account email to your GA4 property (Viewer role)</li>
-                    <li>Add the credentials to your .env.local file</li>
-                    <li>Restart your development server</li>
-                  </ol>
+                    <div>
+                      <h3 className="font-semibold text-red-900 dark:text-red-200 mb-2">
+                        Quick Setup Steps:
+                      </h3>
+                      <ol className="list-decimal list-inside space-y-1 text-sm text-red-800 dark:text-red-300">
+                        <li>Go to Google Cloud Console</li>
+                        <li>Enable Google Analytics Data API</li>
+                        <li>
+                          Create a service account and download JSON credentials
+                        </li>
+                        <li>
+                          Add the service account email to your GA4 property
+                          (Viewer role)
+                        </li>
+                        <li>Add the credentials to your .env.local file</li>
+                        <li>Restart your development server</li>
+                      </ol>
+                    </div>
+                  </>
+                )}
+
+                <div className="pt-2 border-t border-red-200 dark:border-red-800">
+                  <p className="text-xs text-red-700 dark:text-red-400 mb-3">
+                    📚 For detailed setup instructions, see{" "}
+                    <code className="bg-red-100 dark:bg-red-950 px-1 py-0.5 rounded">
+                      ANALYTICS_SETUP.md
+                    </code>
+                  </p>
                 </div>
 
                 <button
@@ -232,7 +390,16 @@ GA4_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\
 
   // Format daily trend data for charts
   const chartData = data.dailyTrend.map((day) => ({
-    date: format(parseISO(day.date.slice(0, 4) + '-' + day.date.slice(4, 6) + '-' + day.date.slice(6, 8)), 'MMM dd'),
+    date: format(
+      parseISO(
+        day.date.slice(0, 4) +
+          "-" +
+          day.date.slice(4, 6) +
+          "-" +
+          day.date.slice(6, 8)
+      ),
+      "MMM dd"
+    ),
     users: day.users,
     sessions: day.sessions,
     pageViews: day.pageViews,
@@ -243,7 +410,9 @@ GA4_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\
       {/* Header with Controls */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-black text-gray-900 dark:text-white">Analytics Dashboard</h1>
+          <h1 className="text-3xl font-black text-gray-900 dark:text-white">
+            Analytics Dashboard
+          </h1>
           <p className="text-gray-600 dark:text-gray-400 mt-1">
             Real-time insights from Google Analytics 4
           </p>
@@ -273,7 +442,11 @@ GA4_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\
             className="p-2 bg-white dark:bg-gray-800 rounded-lg shadow hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors disabled:opacity-50"
             title="Refresh data"
           >
-            <RefreshCw className={`w-5 h-5 text-gray-700 dark:text-gray-300 ${refreshing ? 'animate-spin' : ''}`} />
+            <RefreshCw
+              className={`w-5 h-5 text-gray-700 dark:text-gray-300 ${
+                refreshing ? "animate-spin" : ""
+              }`}
+            />
           </button>
         </div>
       </div>
@@ -292,7 +465,9 @@ GA4_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\
             </div>
           </div>
           <p className="text-sm text-blue-100 mb-1">Total Users</p>
-          <p className="text-3xl font-black">{formatNumber(data.overview.totalUsers)}</p>
+          <p className="text-3xl font-black">
+            {formatNumber(data.overview.totalUsers)}
+          </p>
           <p className="text-xs text-blue-100 mt-2">
             {formatNumber(data.overview.sessionsPerUser)} sessions per user
           </p>
@@ -306,7 +481,9 @@ GA4_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\
             </div>
           </div>
           <p className="text-sm text-green-100 mb-1">Page Views</p>
-          <p className="text-3xl font-black">{formatNumber(data.overview.totalPageViews)}</p>
+          <p className="text-3xl font-black">
+            {formatNumber(data.overview.totalPageViews)}
+          </p>
           <p className="text-xs text-green-100 mt-2">
             {formatNumber(data.overview.totalSessions)} sessions
           </p>
@@ -320,7 +497,9 @@ GA4_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\
             </div>
           </div>
           <p className="text-sm text-purple-100 mb-1">Avg. Session</p>
-          <p className="text-3xl font-black">{formatDuration(data.overview.avgSessionDuration)}</p>
+          <p className="text-3xl font-black">
+            {formatDuration(data.overview.avgSessionDuration)}
+          </p>
           <p className="text-xs text-purple-100 mt-2">Per user visit</p>
         </div>
 
@@ -332,7 +511,9 @@ GA4_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\
             </div>
           </div>
           <p className="text-sm text-orange-100 mb-1">Bounce Rate</p>
-          <p className="text-3xl font-black">{formatPercentage(data.overview.bounceRate)}</p>
+          <p className="text-3xl font-black">
+            {formatPercentage(data.overview.bounceRate)}
+          </p>
           <p className="text-xs text-orange-100 mt-2">Single page visits</p>
         </div>
       </div>
@@ -350,16 +531,34 @@ GA4_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\
             <YAxis stroke="#6b7280" />
             <Tooltip
               contentStyle={{
-                backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                border: '1px solid #e5e7eb',
-                borderRadius: '8px',
-                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                backgroundColor: "rgba(255, 255, 255, 0.95)",
+                border: "1px solid #e5e7eb",
+                borderRadius: "8px",
+                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
               }}
             />
             <Legend />
-            <Line type="monotone" dataKey="users" stroke="#3b82f6" strokeWidth={2} name="Users" />
-            <Line type="monotone" dataKey="sessions" stroke="#10b981" strokeWidth={2} name="Sessions" />
-            <Line type="monotone" dataKey="pageViews" stroke="#f59e0b" strokeWidth={2} name="Page Views" />
+            <Line
+              type="monotone"
+              dataKey="users"
+              stroke="#3b82f6"
+              strokeWidth={2}
+              name="Users"
+            />
+            <Line
+              type="monotone"
+              dataKey="sessions"
+              stroke="#10b981"
+              strokeWidth={2}
+              name="Sessions"
+            />
+            <Line
+              type="monotone"
+              dataKey="pageViews"
+              stroke="#f59e0b"
+              strokeWidth={2}
+              name="Page Views"
+            />
           </LineChart>
         </ResponsiveContainer>
       </div>
@@ -381,10 +580,15 @@ GA4_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\
                 cx="50%"
                 cy="50%"
                 outerRadius={80}
-                label={(entry) => `${entry.source}: ${formatNumber(entry.sessions)}`}
+                label={(entry) =>
+                  `${entry.source}: ${formatNumber(entry.sessions)}`
+                }
               >
                 {data.trafficSources.map((_, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                  />
                 ))}
               </Pie>
               <Tooltip />
@@ -405,10 +609,10 @@ GA4_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\
               <YAxis stroke="#6b7280" />
               <Tooltip
                 contentStyle={{
-                  backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                  border: '1px solid #e5e7eb',
-                  borderRadius: '8px',
-                  boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                  backgroundColor: "rgba(255, 255, 255, 0.95)",
+                  border: "1px solid #e5e7eb",
+                  borderRadius: "8px",
+                  boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
                 }}
               />
               <Bar dataKey="users" fill="#8b5cf6" radius={[8, 8, 0, 0]} />
@@ -435,14 +639,18 @@ GA4_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\
                   <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
                     {page.title}
                   </p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{page.path}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                    {page.path}
+                  </p>
                 </div>
                 <div className="ml-4 flex items-center space-x-4">
                   <div className="text-right">
                     <p className="text-sm font-bold text-gray-900 dark:text-white">
                       {formatNumber(page.views)}
                     </p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">views</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      views
+                    </p>
                   </div>
                 </div>
               </div>
@@ -466,20 +674,26 @@ GA4_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\
                   <div className="w-8 h-8 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
                     {index + 1}
                   </div>
-                  <span className="font-medium text-gray-900 dark:text-white">{country.country}</span>
+                  <span className="font-medium text-gray-900 dark:text-white">
+                    {country.country}
+                  </span>
                 </div>
                 <div className="flex items-center space-x-6">
                   <div className="text-right">
                     <p className="text-sm font-bold text-gray-900 dark:text-white">
                       {formatNumber(country.users)}
                     </p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">users</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      users
+                    </p>
                   </div>
                   <div className="text-right">
                     <p className="text-sm font-bold text-gray-900 dark:text-white">
                       {formatNumber(country.sessions)}
                     </p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">sessions</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      sessions
+                    </p>
                   </div>
                 </div>
               </div>

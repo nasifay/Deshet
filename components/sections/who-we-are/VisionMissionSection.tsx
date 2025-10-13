@@ -1,7 +1,19 @@
 "use client";
 import Image from "next/image";
 
-export default function VisionMission() {
+interface VisionMissionProps {
+  visionText?: string;
+  missionText?: string;
+  visionImage?: string;
+  missionImage?: string;
+}
+
+export default function VisionMission({
+  visionText = '"TSD Envisioned A Developed Ethiopia With Empowered Youth And Women".',
+  missionText = "TSD Strives To Realize The Human Right Of Youth And Women Through Evidence-Based Advocacy And Empowerment Works.",
+  visionImage = "/images/Mask group.png",
+  missionImage = "/images/Mask group (1).png",
+}: VisionMissionProps) {
   return (
     <section className="relative w-full py-12 md:py-16 px-4 sm:px-6 bg-[#178849] overflow-hidden flex justify-center">
       {/* Reduced vertical padding on mobile for compact layout */}
@@ -20,7 +32,7 @@ export default function VisionMission() {
           <div className="flex-shrink-0 w-full md:w-[200px] h-auto border border-gray-200 md:border-b-0">
             {/* Made image container full-width on mobile for better scaling */}
             <Image
-              src="/images/Mask group.png"
+              src={visionImage}
               alt="Vision Image"
               width={200}
               height={140}
@@ -35,8 +47,7 @@ export default function VisionMission() {
             </h3>
             <p className="text-white text-[16px] md:text-[18px] font-normal leading-relaxed">
               {/* Scaled paragraph text size for mobile readability */}
-              “TSD Envisioned A Developed Ethiopia With Empowered Youth And
-              Women”.
+              {visionText}
             </p>
           </div>
         </div>
@@ -45,7 +56,7 @@ export default function VisionMission() {
           {/* Same responsive adjustments as above for mission section */}
           <div className="flex-shrink-0 w-full md:w-[200px] h-auto border border-gray-200">
             <Image
-              src="/images/Mask group (1).png"
+              src={missionImage}
               alt="Mission Image"
               width={200}
               height={140}
@@ -58,8 +69,7 @@ export default function VisionMission() {
               MISSION
             </h3>
             <p className="text-white text-[16px] md:text-[18px] font-normal leading-relaxed">
-              TSD Strives To Realize The Human Right Of Youth And Women Through
-              Evidence-Based Advocacy And Empowerment Works.
+              {missionText}
             </p>
           </div>
         </div>

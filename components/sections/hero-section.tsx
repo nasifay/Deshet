@@ -4,12 +4,26 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import Link from "next/link";
 
-export default function Hero() {
+interface HeroSectionProps {
+  title?: string;
+  subtitle?: string;
+  backgroundImage?: string;
+  ctaText?: string;
+  ctaLink?: string;
+}
+
+export default function Hero({
+  title = "SERVING",
+  subtitle = "ETHIOPIAN YOUTH",
+  backgroundImage = "/home-hero.png",
+  ctaText = "Contact Us",
+  ctaLink = "/contact-us",
+}: HeroSectionProps) {
   return (
     <section className="relative w-full h-auto lg:h-[90vh] flex items-center justify-start overflow-hidden bg-neutral-900">
       {/* Background Image */}
       <Image
-        src="/home-hero.png"
+        src={backgroundImage}
         alt="Serving Ethiopian Youth"
         fill
         priority
@@ -24,10 +38,8 @@ export default function Hero() {
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="font-roboto font-black text-lg sm:text-2xl md:text-4xl  lg:text-5xl 2xl:text-7xl leading-[1.05] tracking-tight uppercase drop-shadow-[0_3px_6px_rgba(0,0,0,0.5)]"
         >
-          SERVING <br />
-          <span className="text-[#18c76f] text-nowrap block">
-            ETHIOPIAN YOUTH
-          </span>
+          {title} <br />
+          <span className="text-[#18c76f] text-nowrap block">{subtitle}</span>
         </motion.h1>
 
         <motion.div
@@ -37,10 +49,10 @@ export default function Hero() {
           className="mt-10"
         >
           <Link
-            href="/contact-us"
+            href={ctaLink}
             className="inline-flex items-center justify-center px-6 py-2 md:px-12 md:py-4 rounded-full bg-[#128341] hover:bg-[#0e6a32] transition-all duration-300 font-roboto font-medium text-sm md:text-lg text-white shadow-[0_6px_20px_-5px_rgba(18,131,65,0.4)] hover:shadow-[0_10px_25px_-5px_rgba(18,131,65,0.6)] backdrop-blur-sm"
           >
-            Contact Us
+            {ctaText}
           </Link>
         </motion.div>
       </div>

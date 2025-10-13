@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
-import connectDB from '~/lib/db/mongodb';
-import Gallery from '~/lib/db/models/Gallery';
+import { NextRequest, NextResponse } from "next/server";
+import connectDB from "~/lib/db/mongodb";
+import Gallery from "~/lib/db/models/Gallery";
 
 // GET - List gallery items for public use
 export async function GET(request: NextRequest) {
@@ -8,15 +8,14 @@ export async function GET(request: NextRequest) {
     await connectDB();
 
     const searchParams = request.nextUrl.searchParams;
-    const page = parseInt(searchParams.get('page') || '1');
-    const limit = parseInt(searchParams.get('limit') || '12');
-    const category = searchParams.get('category');
-    const type = searchParams.get('type') || 'image'; // Default to images only
-    const sort = searchParams.get('sort') || '-createdAt';
+    const page = parseInt(searchParams.get("page") || "1");
+    const limit = parseInt(searchParams.get("limit") || "12");
+    const category = searchParams.get("category");
+    const sort = searchParams.get("sort") || "-createdAt";
 
     // Build query - only show images by default
-    const query: any = { type: 'image' };
-    if (category && category !== 'all') {
+    const query: Record<string, unknown> = { type: "image" };
+    if (category && category !== "all") {
       query.category = category; // Expects ObjectId
     }
 
@@ -27,8 +26,10 @@ export async function GET(request: NextRequest) {
         .sort(sort)
         .skip(skip)
         .limit(limit)
-        .populate('category', 'name slug color icon')
-        .select('_id filename originalName url alt caption category createdAt')
+        .populate("category", "_id name slug color icon")
+        .select(
+          "_id filename originalName url alt caption customClass category createdAt"
+        )
         .lean(),
       Gallery.countDocuments(query),
     ]);
@@ -44,7 +45,10 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('Error fetching gallery:', error);
-    return NextResponse.json({ success: false, error: 'Internal server error' }, { status: 500 });
+    console.error("Error fetching gallery:", error);
+    return NextResponse.json(
+      { success: false, error: "Internal server error" },
+      { status: 500 }
+    );
   }
 }

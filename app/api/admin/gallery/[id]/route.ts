@@ -1,93 +1,176 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { unlink } from 'fs/promises';
-import path from 'path';
-import connectDB from '~/lib/db/mongodb';
-import Gallery from '~/lib/db/models/Gallery';
-import User from '~/lib/db/models/User';
-import { getSession } from '~/lib/auth/session';
+import { NextRequest, NextResponse } from "next/server";
+import connectDB from "~/lib/db/mongodb";
+import Gallery from "~/lib/db/models/Gallery";
+import { getSession } from "~/lib/auth/session";
+import mongoose from "mongoose";
 
-// PUT - Update gallery metadata
-export async function PUT(
+// GET - Get single gallery item by ID
+export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
   try {
     const session = await getSession();
     if (!session) {
-      return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 }
+      );
     }
 
     await connectDB();
 
-    const { id } = await params;
-    const body = await request.json();
-    const { alt, caption, category } = body;
+    const { id } = params;
 
-    const gallery = await Gallery.findByIdAndUpdate(
-      id,
-      { alt, caption, category },
-      { new: true }
-    ).populate('uploadedBy', 'name email');
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return NextResponse.json(
+        { success: false, error: "Invalid gallery item ID" },
+        { status: 400 }
+      );
+    }
 
-    if (!gallery) {
-      return NextResponse.json({ success: false, error: 'Gallery item not found' }, { status: 404 });
+    const item = await Gallery.findById(id)
+      .populate("category", "_id name slug color icon")
+      .populate("uploadedBy", "_id name email")
+      .lean();
+
+    if (!item) {
+      return NextResponse.json(
+        { success: false, error: "Gallery item not found" },
+        { status: 404 }
+      );
     }
 
     return NextResponse.json({
       success: true,
-      message: 'Gallery item updated successfully',
-      data: gallery,
+      data: item,
     });
   } catch (error) {
-    console.error('Error updating gallery:', error);
-    return NextResponse.json({ success: false, error: 'Internal server error' }, { status: 500 });
+    console.error("Error fetching gallery item:", error);
+    return NextResponse.json(
+      { success: false, error: "Internal server error" },
+      { status: 500 }
+    );
+  }
+}
+
+// PUT - Update gallery item
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const session = await getSession();
+    if (!session) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    await connectDB();
+
+    const { id } = params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return NextResponse.json(
+        { success: false, error: "Invalid gallery item ID" },
+        { status: 400 }
+      );
+    }
+
+    const body = await request.json();
+    const { originalName, alt, caption, customClass, category } = body;
+
+    // Check if item exists
+    const item = await Gallery.findById(id);
+    if (!item) {
+      return NextResponse.json(
+        { success: false, error: "Gallery item not found" },
+        { status: 404 }
+      );
+    }
+
+    // Update item (only allow updating metadata, not the file itself)
+    const updatedItem = await Gallery.findByIdAndUpdate(
+      id,
+      {
+        originalName,
+        alt,
+        caption,
+        customClass,
+        category,
+      },
+      { new: true, runValidators: true }
+    )
+      .populate("category", "_id name slug color icon")
+      .populate("uploadedBy", "_id name email");
+
+    return NextResponse.json({
+      success: true,
+      data: updatedItem,
+      message: "Gallery item updated successfully",
+    });
+  } catch (error) {
+    console.error("Error updating gallery item:", error);
+    const errorMessage =
+      error instanceof Error ? error.message : "Internal server error";
+    return NextResponse.json(
+      { success: false, error: errorMessage },
+      { status: 500 }
+    );
   }
 }
 
 // DELETE - Delete gallery item
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
   try {
     const session = await getSession();
     if (!session) {
-      return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 }
+      );
     }
 
     await connectDB();
 
-    const { id } = await params;
-    const gallery = await Gallery.findById(id);
+    const { id } = params;
 
-    if (!gallery) {
-      return NextResponse.json({ success: false, error: 'Gallery item not found' }, { status: 404 });
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return NextResponse.json(
+        { success: false, error: "Invalid gallery item ID" },
+        { status: 400 }
+      );
     }
 
-    // Delete file from filesystem
-    try {
-      const filepath = path.join(process.cwd(), 'public', gallery.url);
-      await unlink(filepath);
-    } catch (error) {
-      console.warn('File not found on filesystem:', error);
+    // Check if item exists
+    const item = await Gallery.findById(id);
+    if (!item) {
+      return NextResponse.json(
+        { success: false, error: "Gallery item not found" },
+        { status: 404 }
+      );
     }
 
-    // Delete from database
+    // Delete item
     await Gallery.findByIdAndDelete(id);
+
+    // TODO: Also delete physical file from storage if needed
+    // This would depend on your storage solution (local file system, S3, etc.)
 
     return NextResponse.json({
       success: true,
-      message: 'Gallery item deleted successfully',
+      message: "Gallery item deleted successfully",
     });
   } catch (error) {
-    console.error('Error deleting gallery:', error);
-    return NextResponse.json({ success: false, error: 'Internal server error' }, { status: 500 });
+    console.error("Error deleting gallery item:", error);
+    return NextResponse.json(
+      { success: false, error: "Internal server error" },
+      { status: 500 }
+    );
   }
 }
-
-
-
-
-
-
-

@@ -2,8 +2,9 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { Button } from "~/components/ui/Button";
+import Image from "next/image";
 import { Card, CardContent } from "~/components/ui/Card";
+import { NewsEventsSectionSkeleton } from "~/components/sections/news-page-skeleton";
 
 interface NewsPost {
   _id: string;
@@ -52,17 +53,7 @@ export const NewsEventsSection = () => {
   }, []);
 
   if (loading) {
-    return (
-      <section className="w-full flex justify-center py-8 px-4 sm:py-12 sm:px-8 md:py-16 md:px-12 lg:py-[88px] lg:px-[65px] translate-y-[-1rem] animate-fade-in opacity-0">
-        <Card className="w-full max-w-full md:max-w-[1595px] bg-white rounded-[20px] sm:rounded-[30px] lg:rounded-[46px] shadow-[0px_4px_26.5px_#0000000d] border-0">
-          <CardContent className="p-4 sm:p-6 md:p-8 lg:p-[65px]">
-            <div className="flex items-center justify-center py-20">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#128341]"></div>
-            </div>
-          </CardContent>
-        </Card>
-      </section>
-    );
+    return <NewsEventsSectionSkeleton />;
   }
 
   return (
@@ -78,14 +69,16 @@ export const NewsEventsSection = () => {
                 </h2>
 
                 <div className="flex flex-col gap-2.5 w-full">
-                  {eventsData.map((event, index) => (
+                  {eventsData.map((event) => (
                     <Link key={event._id} href={`/news/${event.slug}`}>
                       <Card className="border-0 shadow-none bg-transparent p-0 hover:bg-gray-50 transition-colors cursor-pointer">
                         <CardContent className="p-0 flex flex-col gap-2.5">
-                          <img
+                          <Image
                             className="w-full max-w-[200px] sm:max-w-[248px] h-auto aspect-[248/138] rounded-xl object-cover"
                             alt="Event"
                             src={event.featuredImage || "/images/news.jpg"}
+                            width={248}
+                            height={138}
                           />
                           <div className="w-full [font-family:'Roboto',Helvetica] font-normal text-sm text-justify tracking-[0.80px] leading-[17.6px]">
                             <span className="font-light text-black tracking-[0.11px]">
@@ -115,12 +108,14 @@ export const NewsEventsSection = () => {
                 <Link href={`/news/${recentNewsData[0].slug}`}>
                   <Card className="border-0 shadow-none bg-transparent p-0 rounded-[24px] h-full hover:bg-gray-50 transition-colors cursor-pointer">
                     <CardContent className="p-0 pb-[35px] h-full flex flex-col">
-                      <img
+                      <Image
                         className="w-full h-[200px] sm:h-[250px] lg:h-[305px] rounded-2xl object-cover"
                         alt="Featured article"
                         src={
                           recentNewsData[0].featuredImage || "/images/news.jpg"
                         }
+                        width={656}
+                        height={305}
                       />
                       <div className="flex flex-col gap-[13px] px-2.5 py-0 pt-[13px]">
                         <h2 className="w-full [font-family:'Roboto',Helvetica] font-medium text-black text-xl sm:text-2xl lg:text-[32px] tracking-[0] leading-[32.3px]">
@@ -146,14 +141,16 @@ export const NewsEventsSection = () => {
               </h2>
 
               <div className="flex flex-col gap-0">
-                {recentNewsData.map((news, index) => (
+                {recentNewsData.map((news) => (
                   <Link key={news._id} href={`/news/${news.slug}`}>
                     <Card className="border-0 shadow-none bg-transparent p-0 hover:bg-gray-50 transition-colors cursor-pointer">
                       <CardContent className="flex items-start gap-2.5 px-0 py-2.5 border-b border-[#a19e9d]">
-                        <img
+                        <Image
                           className="w-[80px] h-[70px] sm:w-[100px] sm:h-[85px] lg:w-[113px] lg:h-[97px] rounded-lg object-cover flex-shrink-0"
                           alt="News"
                           src={news.featuredImage || "/images/news.jpg"}
+                          width={113}
+                          height={97}
                         />
                         <div className="w-full sm:w-[120px] lg:w-[140px] [font-family:'Roboto',Helvetica] font-medium text-black text-sm sm:text-base tracking-[0] leading-[16.2px]">
                           {news.title}

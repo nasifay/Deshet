@@ -3,8 +3,18 @@
 
 import React from "react";
 
-export function OperationRegionsSection() {
-  const operationRegions = [
+export interface OperationRegion {
+  name: string;
+  description?: string;
+  position: { x: string; y: string };
+}
+
+interface OperationRegionsSectionProps {
+  operationRegions?: OperationRegion[];
+}
+
+export function OperationRegionsSection({
+  operationRegions = [
     {
       name: "ADDIS ABABA",
       position: { x: "43.8%", y: "49.4%" },
@@ -25,8 +35,8 @@ export function OperationRegionsSection() {
       name: "CENTRAL ETHIOPIA REGION",
       position: { x: "31.9%", y: "63.0%" },
     },
-  ];
-
+  ],
+}: OperationRegionsSectionProps) {
   const mapImageSrc = "/images/Objects.png";
 
   return (

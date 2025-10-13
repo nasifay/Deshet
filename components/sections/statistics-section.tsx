@@ -2,27 +2,49 @@
 
 import React from "react";
 
-export default function StatisticsSection() {
-  const stats = [
-    { number: "58", label: "Staffs" },
+interface StatsSectionProps {
+  stats?: {
+    staffCount?: string;
+    officesCount?: string;
+    regionsCount?: string;
+    volunteersCount?: string;
+    protocolsCount?: string;
+  };
+}
+
+export default function StatisticsSection({ stats }: StatsSectionProps) {
+  const statsData = [
     {
-      number: "5",
+      number: stats?.staffCount || "58",
+      label: "Staffs",
+    },
+    {
+      number: stats?.officesCount || "5",
       label: (
         <>
-          Offices in <span className="text-[#4EB778] font-normal">4</span>{" "}
+          Offices in{" "}
+          <span className="text-[#4EB778] font-normal">
+            {stats?.regionsCount || "4"}
+          </span>{" "}
           Regions
         </>
       ),
     },
-    { number: "250+", label: "Volunteers" },
-    { number: "15", label: "Protocols" },
+    {
+      number: stats?.volunteersCount || "250+",
+      label: "Volunteers",
+    },
+    {
+      number: stats?.protocolsCount || "15",
+      label: "Protocols",
+    },
   ];
 
   return (
     <section className="w-full bg-white py-10 md:py-12">
       <div className=" mx-auto px-6 md:px-16 lg:px-20 xl:28 2xl:px-36">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-y-8 gap-x-6 md:gap-x-10 lg:gap-x-16  place-content-start md:place-content-center place-items-start md:place-items-center">
-          {stats.map((item, index) => (
+          {statsData.map((item, index) => (
             <div
               key={index}
               className="flex flex-col items-start justify-center font-roboto text-2xl md:text-3xl 2xl:text-4xl"
