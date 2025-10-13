@@ -1,8 +1,40 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import { Mail, Phone } from "lucide-react";
 import { Card, CardContent } from "~/components/ui/Card";
 
 export default function ContactUs() {
+  const [pageData, setPageData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchPageData();
+  }, []);
+
+  const fetchPageData = async () => {
+    try {
+      const response = await fetch('/api/public/pages/contact-us');
+      const data = await response.json();
+      
+      if (data.success) {
+        setPageData(data.data);
+      }
+    } catch (error) {
+      console.error('Error fetching page data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-green"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-white w-full relative min-h-screen px-6  md:px-12 lg:px-20 2xl:px-28">
       {/* Page Title */}

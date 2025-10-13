@@ -1,7 +1,9 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 
-const bankAccounts = [
+const defaultBankAccounts = [
   {
     name: "Commercial Bank Of Ethiopia",
     accountNumber: "1000102030405",
@@ -36,6 +38,37 @@ const bankAccounts = [
 ];
 
 export default function DonatePage() {
+  const [pageData, setPageData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [bankAccounts, setBankAccounts] = useState(defaultBankAccounts);
+
+  useEffect(() => {
+    fetchPageData();
+  }, []);
+
+  const fetchPageData = async () => {
+    try {
+      const response = await fetch('/api/public/pages/donate');
+      const data = await response.json();
+      
+      if (data.success) {
+        setPageData(data.data);
+      }
+    } catch (error) {
+      console.error('Error fetching page data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-green"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-white">
       {/* DONATE Header */}

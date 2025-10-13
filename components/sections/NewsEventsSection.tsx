@@ -1,109 +1,177 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { Button } from "~/components/ui/Button";
 import { Card, CardContent } from "~/components/ui/Card";
 
-const newsCards = [
-  {
-    id: "1",
-    image: "/images/news.jpg",
-    title: "TSD NEW YEAR'S PROGRAM",
-    description:
-      "Tames NGO Joyfully Celebrated The Ethiopian New Year Together With Community Members...",
-  },
-  {
-    id: "2",
-    image: "/images/hero.jpg",
-    title: "TSD Launches New Youth Leadership Training in Hawassa",
-    description:
-      "Tamra for Social Development (TSD) has kicked off a week-long Youth Leadership Training in Hawassa...",
-  },
-  {
-    id: "3",
-    image: "/images/hero.jpg",
-    title: "TSD Launches New Youth Leadership Training in Hawassa",
-    description:
-      "Tamra for Social Development (TSD) has kicked off a week-long Youth Leadership Training in Hawassa...",
-  },
-  {
-    id: "4",
-    image: "/images/hero.jpg",
-    title: "TSD Launches New Youth Leadership Training in Hawassa",
-    description:
-      "Tamra for Social Development (TSD) has kicked off a week-long Youth Leadership Training in Hawassa...",
-  },
-];
+interface NewsPost {
+  _id: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  featuredImage?: string;
+  category: string;
+}
 
-export const NewsAndEventsSection = () => {
+export const NewsEventsSection = () => {
+  const [eventsData, setEventsData] = useState<NewsPost[]>([]);
+  const [recentNewsData, setRecentNewsData] = useState<NewsPost[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchNews = async () => {
+      try {
+        // Fetch events (category = "Events")
+        const eventsResponse = await fetch(
+          "/api/public/news?category=Events&limit=2&sort=-publishedAt"
+        );
+        const eventsData = await eventsResponse.json();
+
+        // Fetch recent news (all categories, limit 3)
+        const recentResponse = await fetch(
+          "/api/public/news?limit=3&sort=-publishedAt"
+        );
+        const recentData = await recentResponse.json();
+
+        if (eventsData.success) {
+          setEventsData(eventsData.data);
+        }
+
+        if (recentData.success) {
+          setRecentNewsData(recentData.data);
+        }
+      } catch (error) {
+        console.error("Error fetching news:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchNews();
+  }, []);
+
+  if (loading) {
+    return (
+      <section className="w-full flex justify-center py-8 px-4 sm:py-12 sm:px-8 md:py-16 md:px-12 lg:py-[88px] lg:px-[65px] translate-y-[-1rem] animate-fade-in opacity-0">
+        <Card className="w-full max-w-full md:max-w-[1595px] bg-white rounded-[20px] sm:rounded-[30px] lg:rounded-[46px] shadow-[0px_4px_26.5px_#0000000d] border-0">
+          <CardContent className="p-4 sm:p-6 md:p-8 lg:p-[65px]">
+            <div className="flex items-center justify-center py-20">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#128341]"></div>
+            </div>
+          </CardContent>
+        </Card>
+      </section>
+    );
+  }
+
   return (
-    <div className="flex flex-col w-full items-start gap-[72px] translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:1000ms]">
-      <div className="inline-flex items-end gap-[804px] w-full">
-        <h2 className="mt-[-1.00px] [text-shadow:0px_4px_4px_#00000040] [font-family:'Roboto',Helvetica] font-black text-[#128341] text-[70px] tracking-[0] leading-[70.7px] whitespace-nowrap">
-          NEWS AND EVENTS
-        </h2>
-        <a
-          className="font-robot font-bold text-[#a19e9d] text-xl tracking-[0] leading-[20.2px] whitespace-nowrap hover:text-[#128341] transition-colors"
-          href="https://www.figma.com/proto/MkhksQbAlOq8XFYc7pjyWU/TAMRA-Website-UI?page-id=480%3A745&node-id=590-773&viewport=387%2C-2833%2C0.13&t=7vd0yZSzpPwwKF5z-1&scaling=min-zoom&content-scaling=fixed"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          See More
-        </a>
-      </div>
+    <section className="w-full flex justify-center py-8 px-4 sm:py-12 sm:px-8 md:py-16 md:px-12 lg:py-[88px] lg:px-[65px] translate-y-[-1rem] animate-fade-in opacity-0">
+      <Card className="w-full max-w-full md:max-w-[1595px] bg-white rounded-[20px] sm:rounded-[30px] lg:rounded-[46px] shadow-[0px_4px_26.5px_#0000000d] border-0">
+        <CardContent className="p-4 sm:p-6 md:p-8 lg:p-[65px]">
+          <div className="flex flex-col lg:flex-row gap-4 lg:gap-[61px] items-start">
+            {/* Events Section */}
+            <div className="flex flex-col items-center gap-5 translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:200ms] flex-1">
+              <div className="flex flex-col items-start gap-2.5 w-full">
+                <h2 className="[font-family:'Roboto',Helvetica] font-medium text-black text-xl sm:text-2xl lg:text-[32px] tracking-[0] leading-[32.3px] whitespace-nowrap">
+                  Events
+                </h2>
 
-      <div className="w-full">
-        <div className="inline-flex items-center gap-[52px]">
-          {newsCards.map((news, index) => (
-            <Card
-              key={index}
-              className="w-[360px] h-[421px] overflow-hidden cursor-pointer hover:scale-[1.05] transition-transform bg-transparent border-none rounded-[33px]"
-            >
-              <div className="relative w-full h-full">
-                <img
-                  src={news.image}
-                  alt={news.title}
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-black bg-opacity-50" />
-                <CardContent className="absolute bottom-0 left-0 right-0 p-6 text-white z-10">
-                  <h3 className="font-bold text-base text-[#ff9700]">
-                    {news.title}
-                  </h3>
-                  <p className="text-sm text-white mt-1">{news.description}</p>
-                </CardContent>
+                <div className="flex flex-col gap-2.5 w-full">
+                  {eventsData.map((event, index) => (
+                    <Link key={event._id} href={`/news/${event.slug}`}>
+                      <Card className="border-0 shadow-none bg-transparent p-0 hover:bg-gray-50 transition-colors cursor-pointer">
+                        <CardContent className="p-0 flex flex-col gap-2.5">
+                          <img
+                            className="w-full max-w-[200px] sm:max-w-[248px] h-auto aspect-[248/138] rounded-xl object-cover"
+                            alt="Event"
+                            src={event.featuredImage || "/images/news.jpg"}
+                          />
+                          <div className="w-full [font-family:'Roboto',Helvetica] font-normal text-sm text-justify tracking-[0.80px] leading-[17.6px]">
+                            <span className="font-light text-black tracking-[0.11px]">
+                              {event.excerpt}
+                              <br />
+                            </span>
+                            <span className="text-[#4eb778] tracking-[0.11px] hover:underline transition-colors cursor-pointer">
+                              Read More
+                            </span>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </Link>
+                  ))}
+                  {eventsData.length === 0 && (
+                    <p className="text-gray-500 text-sm">
+                      No events available yet.
+                    </p>
+                  )}
+                </div>
               </div>
-            </Card>
-          ))}
-        </div>
-      </div>
+            </div>
 
-      <div className="relative w-full h-[429.74px] rounded-[46px] overflow-hidden bg-gradient-to-br from-green-100 to-green-200">
-        <img
-          src="/images/cta.jpg"
-          alt="Background"
-          className="absolute inset-0 w-full h-full object-cover"
-        />
-        <div className="absolute top-[104px] left-1/2 -translate-x-1/2 w-[1005px] flex flex-col gap-[35.8px] z-10">
-          <h2 className="w-full font-h2 font-[number:var(--h2-font-weight)] text-[#4eb778] text-[length:var(--h2-font-size)] text-center tracking-[var(--h2-letter-spacing)] leading-[var(--h2-line-height)] [font-style:var(--h2-font-style)]">
-            You can contribute to provide a place for children with special
-            needs!
-          </h2>
-          <div className="flex gap-[89.1px] justify-center">
-            <Button className="h-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 bg-[#ff9700] rounded-[21px] backdrop-blur-2xl backdrop-brightness-[100%] [-webkit-backdrop-filter:blur(40px)_brightness(100%)] hover:bg-[#e68900] transition-colors">
-              <span className="[font-family:'Roboto',Helvetica] font-medium text-white text-base text-right tracking-[0] leading-[normal] whitespace-nowrap">
-                Join as a volunteer
-              </span>
-            </Button>
-            <Button className="h-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 bg-white rounded-[21px] backdrop-blur-2xl backdrop-brightness-[100%] [-webkit-backdrop-filter:blur(40px)_brightness(100%)] hover:bg-gray-100 transition-colors">
-              <span className="[font-family:'Roboto',Helvetica] font-medium text-[#128341] text-base text-right tracking-[0] leading-[normal] whitespace-nowrap">
-                Donate
-              </span>
-            </Button>
+            {/* Featured Article Section */}
+            <div className="flex flex-col w-full lg:w-[656px] h-auto lg:h-[539px] gap-[13px] translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:400ms]">
+              {recentNewsData.length > 0 && (
+                <Link href={`/news/${recentNewsData[0].slug}`}>
+                  <Card className="border-0 shadow-none bg-transparent p-0 rounded-[24px] h-full hover:bg-gray-50 transition-colors cursor-pointer">
+                    <CardContent className="p-0 pb-[35px] h-full flex flex-col">
+                      <img
+                        className="w-full h-[200px] sm:h-[250px] lg:h-[305px] rounded-2xl object-cover"
+                        alt="Featured article"
+                        src={
+                          recentNewsData[0].featuredImage || "/images/news.jpg"
+                        }
+                      />
+                      <div className="flex flex-col gap-[13px] px-2.5 py-0 pt-[13px]">
+                        <h2 className="w-full [font-family:'Roboto',Helvetica] font-medium text-black text-xl sm:text-2xl lg:text-[32px] tracking-[0] leading-[32.3px]">
+                          {recentNewsData[0].title}
+                        </h2>
+                        <div className="[font-family:'Roboto',Helvetica] font-medium text-black text-sm sm:text-base tracking-[0] leading-[16.2px]">
+                          Featured Article
+                        </div>
+                        <p className="font-light text-black text-justify [font-family:'Roboto',Helvetica] text-sm sm:text-base tracking-[0.80px] leading-[20.2px]">
+                          {recentNewsData[0].excerpt}
+                        </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </Link>
+              )}
+            </div>
+
+            {/* Recent News Section */}
+            <div className="flex flex-col gap-[26px] translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:600ms] flex-1">
+              <h2 className="[font-family:'Roboto',Helvetica] font-medium text-black text-xl sm:text-2xl lg:text-[32px] tracking-[0] leading-[32.3px] whitespace-nowrap">
+                Recent News
+              </h2>
+
+              <div className="flex flex-col gap-0">
+                {recentNewsData.map((news, index) => (
+                  <Link key={news._id} href={`/news/${news.slug}`}>
+                    <Card className="border-0 shadow-none bg-transparent p-0 hover:bg-gray-50 transition-colors cursor-pointer">
+                      <CardContent className="flex items-start gap-2.5 px-0 py-2.5 border-b border-[#a19e9d]">
+                        <img
+                          className="w-[80px] h-[70px] sm:w-[100px] sm:h-[85px] lg:w-[113px] lg:h-[97px] rounded-lg object-cover flex-shrink-0"
+                          alt="News"
+                          src={news.featuredImage || "/images/news.jpg"}
+                        />
+                        <div className="w-full sm:w-[120px] lg:w-[140px] [font-family:'Roboto',Helvetica] font-medium text-black text-sm sm:text-base tracking-[0] leading-[16.2px]">
+                          {news.title}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                ))}
+                {recentNewsData.length === 0 && (
+                  <p className="text-gray-500 text-sm">
+                    No recent news available yet.
+                  </p>
+                )}
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-    </div>
+        </CardContent>
+      </Card>
+    </section>
   );
 };
-
-export default NewsAndEventsSection;
