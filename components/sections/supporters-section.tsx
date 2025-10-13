@@ -3,7 +3,7 @@ import React from "react";
 import Image from "next/image";
 
 const supportersRow1 = [
-  "/suporters/norweigian-church.png",
+  "/suporters/norweign-church.png",
   "/suporters/ipas.png",
   "/suporters/sonke-gender-justice.png",
   "/suporters/children-rights.png",

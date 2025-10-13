@@ -1,13 +1,15 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 interface Thumbnail {
   id: number;
   src: string;
+  alt?: string;
 }
 
 interface Program {
+  _id?: string;
   title: string;
   categoryId: string;
   description: string;
@@ -17,6 +19,8 @@ interface Program {
 
 export default function ProgramsListSection() {
   const [activeTab, setActiveTab] = useState("youth-empowerment");
+  const [programsList, setProgramsList] = useState<Program[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const programCategories = [
     {
@@ -35,7 +39,29 @@ export default function ProgramsListSection() {
 
   const handleTabClick = (id: string) => setActiveTab(id);
 
-  const programsList: Program[] = [
+  // Fetch programs from database
+  useEffect(() => {
+    const fetchPrograms = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('/api/public/programs');
+        const data = await response.json();
+        
+        if (data.success) {
+          setProgramsList(data.data);
+        }
+      } catch (error) {
+        console.error('Error fetching programs:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPrograms();
+  }, []);
+
+  // Fallback data in case API fails or returns empty
+  const fallbackPrograms: Program[] = [
     {
       title: "Youth Challenge Initiative (yci)",
       categoryId: "youth-empowerment",
@@ -295,6 +321,26 @@ export default function ProgramsListSection() {
     },
   ];
 
+  // Use fetched programs or fallback if empty
+  const displayPrograms = programsList.length > 0 ? programsList : fallbackPrograms;
+
+  if (loading) {
+    return (
+      <div className="w-full flex flex-col justify-center mt-8 mb-10">
+        <ProgramTabs
+          programCategories={programCategories}
+          handleTabClick={handleTabClick}
+          activeTab={activeTab}
+        />
+        <div className="mt-8 px-6 md:px-20 xl:px-24 2xl:px-40">
+          <div className="flex items-center justify-center py-20">
+            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary-green"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full flex flex-col justify-center mt-8 mb-10 ">
       {/* Outer container for rounded white bar */}
@@ -304,10 +350,10 @@ export default function ProgramsListSection() {
         activeTab={activeTab}
       />
       <div className="mt-8 px-6 md:px-20 xl:px-24 2xl:px-40">
-        {programsList
+        {displayPrograms
           .filter((program) => program.categoryId === activeTab)
           .map((program) => (
-            <ProgramItem key={program.title} program={program} />
+            <ProgramItem key={program._id || program.title} program={program} />
           ))}
       </div>
     </div>
@@ -315,6 +361,139 @@ export default function ProgramsListSection() {
 }
 
 const ProgramItem: React.FC<{ program: Program }> = ({ program }) => {
+  // If program has projects, display program header first, then each project
+  if (program.projects && program.projects.length > 0) {
+    return (
+      <>
+        {/* Program Header Section */}
+        <section
+          className="relative flex flex-col items-center justify-center w-full  overflow-hidden py-10 md:py-16 px-4 md:px-8 lg:px-16"
+          role="region"
+          aria-labelledby={`${program.categoryId}-program-title`}
+        >
+          {/* Content container */}
+          <div className="relative z-10 flex flex-col items-center text-center w-full ">
+            {/* Program Title */}
+            <h2
+              id={`${program.categoryId}-program-title`}
+              className="font-roboto font-black text-primary-green text-lg md:text-2xl lg:text-5xl xl:text-6xl  leading-[101%] tracking-[0] uppercase w-full mb-4"
+            >
+              <span className="">{program.title.split("(")[0].trim()} </span>
+              <span className="text-primary-orange">
+                ({program.title.split("(")[1]?.replace(")", "")})
+              </span>
+            </h2>
+
+            {/* Program Description */}
+            <p className="font-roboto font-light text-sm md:text-base lg:text-lg xl:text-[24px] leading-[1.26] tracking-[0.8px] text-justify capitalize text-[#333333] mb-16">
+              {program.description}
+            </p>
+
+            {/* Program Main Image */}
+            <div className="relative w-full  h-auto overflow-hidden rounded-[32px] shadow-sm mb-10">
+              <img
+                src={program.image}
+                alt={`${program.title} main image`}
+                className="object-contain w-full h-auto"
+              />
+            </div>
+
+            {/* Program Thumbnails Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 lg:gap-8 w-full">
+              {program.thumbnails.map((thumb) => (
+                <div
+                  key={thumb.id}
+                  className="relative aspect-[285/314] rounded-[20px] overflow-hidden shadow-sm"
+                >
+                  <img
+                    src={
+                      thumb.src ||
+                      "https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=400&h=400&fit=crop&crop=center"
+                    }
+                    alt={`Thumbnail ${thumb.id}`}
+                    className="object-cover transition-transform duration-300 w-full h-full"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Projects Section */}
+        <div className="px-6 md:px-20 xl:px-24 2xl:px-40">
+          <h3 className="font-roboto font-black text-primary-green text-lg md:text-xl lg:text-2xl xl:text-3xl leading-[101%] tracking-[0] uppercase text-center mb-8">
+            Projects Under This Program
+          </h3>
+        </div>
+
+        {program.projects.map((project) => (
+          <section
+            key={project.id}
+            className="relative flex flex-col items-center justify-center w-full  overflow-hidden py-10 md:py-16 px-4 md:px-8 lg:px-16"
+            role="region"
+            aria-labelledby={`${program.categoryId}-${project.id}-title`}
+          >
+            {/* Content container */}
+            <div className="relative z-10 flex flex-col items-center text-center w-full ">
+              {/* Project Title */}
+              <h3
+                id={`${program.categoryId}-${project.id}-title`}
+                className="font-roboto font-black text-primary-green text-lg md:text-xl lg:text-3xl xl:text-4xl  leading-[101%] tracking-[0] uppercase w-full mb-4"
+              >
+                <span className="">{project.name.split("(")[0].trim()} </span>
+                {project.name.split("(")[1] && (
+                  <span className="text-primary-orange">
+                    ({project.name.split("(")[1]?.replace(")", "")})
+                  </span>
+                )}
+              </h3>
+
+              {/* Project Description */}
+              {project.description && (
+                <p className="font-roboto font-light text-sm md:text-base lg:text-lg xl:text-[20px] leading-[1.26] tracking-[0.8px] text-justify capitalize text-[#333333] mb-16">
+                  {project.description}
+                </p>
+              )}
+
+              {/* Project Main Image */}
+              {project.featuredImage && (
+                <div className="relative w-full  h-auto overflow-hidden rounded-[32px] shadow-sm mb-10">
+                  <img
+                    src={project.featuredImage}
+                    alt={`${project.name} main image`}
+                    className="object-contain w-full h-auto"
+                  />
+                </div>
+              )}
+
+              {/* Project Thumbnails Grid - Show project gallery thumbnails if available */}
+              {project.galleryThumbnails && project.galleryThumbnails.length > 0 && (
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 lg:gap-8 w-full">
+                  {project.galleryThumbnails.map((thumb) => (
+                    <div
+                      key={thumb.id}
+                      className="relative aspect-[285/314] rounded-[20px] overflow-hidden shadow-sm"
+                    >
+                      <img
+                        src={
+                          thumb.src ||
+                          "https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=400&h=400&fit=crop&crop=center"
+                        }
+                        alt={thumb.alt || `Thumbnail ${thumb.id}`}
+                        className="object-cover transition-transform duration-300 w-full h-full"
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </section>
+        ))}
+      </>
+    );
+  }
+
+  // Fallback: display program as before if no projects
   return (
     <section
       className="relative flex flex-col items-center justify-center w-full  overflow-hidden py-10 md:py-16 px-4 md:px-8 lg:px-16"

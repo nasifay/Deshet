@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const FormField = ({
   label,
@@ -39,6 +39,36 @@ const MessageField = ({
 );
 
 export default function VolunteerPage() {
+  const [pageData, setPageData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchPageData();
+  }, []);
+
+  const fetchPageData = async () => {
+    try {
+      const response = await fetch('/api/public/pages/volunteer');
+      const data = await response.json();
+      
+      if (data.success) {
+        setPageData(data.data);
+      }
+    } catch (error) {
+      console.error('Error fetching page data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-green"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="relative w-full bg-white overflow-hidden">
       <main className="relative z-10 flex flex-col items-center px-4 py-12 sm:py-16">

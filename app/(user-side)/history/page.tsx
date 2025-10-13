@@ -1,7 +1,39 @@
 /* eslint-disable @next/next/no-img-element */
-import React from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 
 export default function History() {
+  const [pageData, setPageData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchPageData();
+  }, []);
+
+  const fetchPageData = async () => {
+    try {
+      const response = await fetch('/api/public/pages/history');
+      const data = await response.json();
+      
+      if (data.success) {
+        setPageData(data.data);
+      }
+    } catch (error) {
+      console.error('Error fetching page data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-green"></div>
+      </div>
+    );
+  }
+
   return (
     <div
       className="bg-white w-full relative flex flex-col pb-12 pb:mb-20 pb:mb-40"

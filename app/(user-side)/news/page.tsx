@@ -1,6 +1,6 @@
 import React from "react";
+import { NewsEventsSection } from "~/components/sections/NewsEventsSection";
 import { MainContentSection } from "~/components/sections/MainContentSection";
-import NewsAndEventsSection from "~/components/sections/NewsEventsSection";
 
 export default function NewsAndEvents() {
   return (
@@ -34,7 +34,7 @@ export default function NewsAndEvents() {
 
         {/* News Events Section with Events, Featured Article, and Recent News */}
         <div className="translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:600ms]">
-          <NewsAndEventsSection />
+          <NewsEventsSection />
         </div>
 
         {/* Main Content Section with Grid of News Items */}
