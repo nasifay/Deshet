@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
     const sort = searchParams.get('sort') || '-publishedAt';
 
     // Build query - only published posts
-    const query: any = { status: 'published' };
+    const query: Record<string, unknown> = { status: 'published' };
     if (category) query.category = category;
     if (featured === 'true') query.isFeatured = true;
 

@@ -24,7 +24,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
       return NextResponse.json({ success: false, error: 'Settings not found' }, { status: 404 });
     }
 
-    const regionIndex = settings.operationRegions.findIndex((r: any) => r._id.toString() === params.id);
+    const regionIndex = settings.operationRegions.findIndex((r: { _id: { toString: () => string } }) => r._id.toString() === params.id);
     if (regionIndex === -1) {
       return NextResponse.json({ success: false, error: 'Operation region not found' }, { status: 404 });
     }
@@ -38,7 +38,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 
     await settings.save();
     return NextResponse.json({ success: true, data: settings.operationRegions[regionIndex] });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error updating operation region:', error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
@@ -59,7 +59,7 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
       return NextResponse.json({ success: false, error: 'Settings not found' }, { status: 404 });
     }
 
-    const regionIndex = settings.operationRegions.findIndex((r: any) => r._id.toString() === params.id);
+    const regionIndex = settings.operationRegions.findIndex((r: { _id: { toString: () => string } }) => r._id.toString() === params.id);
     if (regionIndex === -1) {
       return NextResponse.json({ success: false, error: 'Operation region not found' }, { status: 404 });
     }
@@ -68,7 +68,7 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
     await settings.save();
 
     return NextResponse.json({ success: true, message: 'Operation region deleted' });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error deleting operation region:', error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }

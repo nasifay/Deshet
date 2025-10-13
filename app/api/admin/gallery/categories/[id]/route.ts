@@ -142,7 +142,7 @@ export async function PUT(
       data: updatedCategory,
       message: "Gallery category updated successfully",
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error updating gallery category:", error);
 
     if (error.code === 11000) {

@@ -1,10 +1,11 @@
 "use client";
 import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import Link from "next/link";
+import ScrollStack from "~/components/ui/ScrollStack";
 
 interface ProgramAreasSectionProps {
-  programs?: Array<{ title: string; image: string }>;
+  programs?: Array<{ title: string; image: string; link?: string }>;
 }
 
 export default function ProgramAreasSection({
@@ -12,78 +13,87 @@ export default function ProgramAreasSection({
     {
       title: "Youth <br /> Empowerment & <br /> Peacebuilding",
       image: "/overview/1.png",
+      link: "/programs",
     },
     {
       title: "Sexual <br /> & Reproductive Health & <br /> Gender Equality",
       image: "/overview/2.png",
+      link: "/programs",
     },
     {
       title: "Climate Justice & <br /> Livelihoods",
       image: "/overview/3.png",
+      link: "/programs",
     },
     {
       title: "Children's Rights <br /> Protection",
       image: "/overview/4.png",
+      link: "/programs",
     },
   ],
 }: ProgramAreasSectionProps) {
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % programs.length);
-    }, 4000);
-
-    return () => clearInterval(interval);
-  }, [programs.length]);
-
-  return (
-    <div className="relative w-full  rounded-2xl overflow-hidden group px-6 md:px-16 lg:px-20 xl:28 2xl:px-36">
-      {/* Image Container */}
-      <div className="relative w-full h-auto aspect-[1595/854] overflow-hidden rounded-2xl">
-        {programs.map((program, i) => (
-          <div
-            key={i}
-            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-              i === currentIndex ? "opacity-100" : "opacity-0"
-            }`}
-          >
+  // Transform programs into ScrollStack items
+  const stackItems = programs.map((program, index) => ({
+    id: `program-${index}`,
+    content: (
+      <div className="relative w-full h-[70vh] md:h-[80vh] px-6 md:px-16 lg:px-20 xl:px-28 2xl:px-36">
+        <div className="relative w-full h-full overflow-hidden rounded-2xl shadow-2xl group">
+          {/* Background Image */}
+          <div className="absolute inset-0">
             <Image
               src={program.image}
-              alt={program.title}
+              alt={program.title.replace(/<br \/>/g, " ")}
               fill
-              className="object-contain w-full h-auto aspect-[1595/854] rounded-2xl"
-              priority={i === 0}
+              className="object-cover transition-transform duration-700 group-hover:scale-105"
+              priority={index === 0}
             />
+            {/* Gradient Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
           </div>
-        ))}
 
-        {/* Text Content - Left Aligned */}
-        <div className="absolute bottom-20 -translate-y-1/3 left-0 flex items-center z-10">
-          <div className="ml-8 md:ml-12 lg:ml-16 text-white mt-20">
+          {/* Content Container */}
+          <div className="relative h-full flex flex-col justify-end p-8 md:p-12 lg:p-16">
+            {/* Title */}
             <h2
-              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl 2xl:text-7xl font-black leading-tight uppercase tracking-tight transition-opacity duration-1000"
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl 2xl:text-7xl font-black leading-tight uppercase tracking-tight text-white mb-6 md:mb-8 drop-shadow-lg"
               dangerouslySetInnerHTML={{
-                __html: programs[currentIndex].title,
+                __html: program.title,
               }}
             />
+
+            {/* Action Button */}
+            {program.link && (
+              <Link
+                href={program.link}
+                className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-primary-orange hover:bg-[#db7f0c] active:scale-95 transition-all duration-300 shadow-lg hover:shadow-xl self-start"
+                aria-label={`Learn more about ${program.title.replace(
+                  /<br \/>/g,
+                  " "
+                )}`}
+              >
+                <ArrowUpRight
+                  size={20}
+                  strokeWidth={3}
+                  className="text-black/85"
+                />
+              </Link>
+            )}
           </div>
         </div>
-
-        {/* Orange Circle Icon - Bottom Left */}
-        <button
-          aria-label="Learn more"
-          className={
-            "absolute bottom-8 left-8 md:bottom-18 md:left-18 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-primary-orange hover:bg-[#db7f0c] active:scale-95 transition-all duration-300 shadow-[0_3px_10px_rgba(0,0,0,0.25)]"
-          }
-        >
-          <ArrowUpRight
-            size={20}
-            strokeWidth={3}
-            className="text-black/85 opacity-85"
-          />
-        </button>
       </div>
+    ),
+  }));
+
+  return (
+    <div className="w-full py-12 md:py-16 lg:py-20 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
+      {/* Section Header */}
+
+      {/* Scroll Stack */}
+      <ScrollStack
+        items={stackItems}
+        className="min-h-[400vh]"
+        opacityAnimation={false}
+      />
     </div>
   );
 }

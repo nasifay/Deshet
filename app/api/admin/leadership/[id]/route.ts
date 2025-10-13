@@ -38,7 +38,7 @@ export async function PUT(
 
     // Find member by ID
     const memberIndex = settings.leadership.findIndex(
-      (m: any) => m._id.toString() === params.id
+      (m: { _id: { toString: () => string } }) => m._id.toString() === params.id
     );
 
     if (memberIndex === -1) {
@@ -66,7 +66,7 @@ export async function PUT(
       success: true,
       data: settings.leadership[memberIndex],
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error updating leadership member:', error);
     return NextResponse.json(
       { success: false, error: error.message || 'Failed to update member' },
@@ -101,7 +101,7 @@ export async function DELETE(
 
     // Find and remove member
     const memberIndex = settings.leadership.findIndex(
-      (m: any) => m._id.toString() === params.id
+      (m: { _id: { toString: () => string } }) => m._id.toString() === params.id
     );
 
     if (memberIndex === -1) {
@@ -118,7 +118,7 @@ export async function DELETE(
       success: true,
       message: 'Member deleted successfully',
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error deleting leadership member:', error);
     return NextResponse.json(
       { success: false, error: error.message || 'Failed to delete member' },

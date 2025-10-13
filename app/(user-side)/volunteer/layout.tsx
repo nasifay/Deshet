@@ -5,25 +5,23 @@ import {
   generateBreadcrumbSchema,
 } from "~/lib/seo/json-ld";
 
-export const metadata: Metadata = PAGE_METADATA.programs;
+export const metadata: Metadata = PAGE_METADATA.volunteer;
 
-export default function ProgramsLayout({
-  hero,
-  programsList,
+export default function VolunteerLayout({
+  children,
 }: {
-  hero: React.ReactNode;
-  programsList: React.ReactNode;
+  children: React.ReactNode;
 }) {
   const webPageSchema = generateWebPageSchema({
-    name: "Our Programs",
+    name: "Join as a Volunteer",
     description:
-      "Explore Tamra's comprehensive programs: Youth Empowerment & Peacebuilding, Sexual Reproductive Health & Gender Development, and Climate Justice & Livelihoods.",
-    url: `${BASE_URL}/programs`,
+      "Join Tamra's volunteer network and become part of the change. Contribute to equality, empowerment, and sustainable development.",
+    url: `${BASE_URL}/volunteer`,
   });
 
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: "Home", url: BASE_URL },
-    { name: "Programs", url: `${BASE_URL}/programs` },
+    { name: "Volunteer", url: `${BASE_URL}/volunteer` },
   ]);
 
   return (
@@ -40,10 +38,7 @@ export default function ProgramsLayout({
           __html: JSON.stringify(breadcrumbSchema),
         }}
       />
-      <div className="flex flex-col gap-y-20">
-        {hero}
-        {programsList}
-      </div>
+      {children}
     </>
   );
 }

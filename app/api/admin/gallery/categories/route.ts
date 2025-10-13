@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
     const isActive = searchParams.get("isActive");
 
     // Build query
-    const query: any = {};
+    const query: Record<string, unknown> = {};
 
     if (search) {
       query.$or = [
@@ -132,7 +132,7 @@ export async function POST(request: NextRequest) {
       data: category,
       message: "Gallery category created successfully",
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error creating gallery category:", error);
 
     if (error.code === 11000) {

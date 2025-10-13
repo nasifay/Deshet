@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
     const includeInactive = searchParams.get('includeInactive') === 'true';
 
     // Build query
-    const query: any = includeInactive ? {} : { isActive: true };
+    const query: Record<string, unknown> = includeInactive ? {} : { isActive: true };
 
     // Fetch categories sorted by order
     const categories = await GalleryCategory.find(query)

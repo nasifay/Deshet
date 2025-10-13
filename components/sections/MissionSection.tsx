@@ -211,8 +211,8 @@ export function MissionSection() {
                   VISION
                 </h2>
                 <p className="[font-family:'Roboto',Helvetica] font-normal text-[#4f4f4f] text-[40px] text-justify tracking-[0] leading-[42.4px]">
-                  "tsd Envisioned A Developed Ethiopia With Empowered Youth
-                  And Women".
+                  &quot;tsd Envisioned A Developed Ethiopia With Empowered Youth
+                  And Women&quot;.
                 </p>
               </div>
             </article>
@@ -277,7 +277,11 @@ export function MissionSection() {
             {coreValues.map((value, index) => (
               <div
                 key={index}
-                className={`flex flex-col w-[16.21%] items-center ${value.gap} absolute h-[69.04%] top-[15.50%] left-[${index * 19.63 + (index === 0 ? 0 : 1.29)}%]`}
+                className={`flex flex-col w-[16.21%] items-center ${
+                  value.gap
+                } absolute h-[69.04%] top-[15.50%] left-[${
+                  index * 19.63 + (index === 0 ? 0 : 1.29)
+                }%]`}
                 style={{ left: `${index * 19.63 + (index === 0 ? 0 : 1.29)}%` }}
               >
                 <h3 className="[text-shadow:0px_4px_4px_#00000040] [font-family:'Roboto',Helvetica] font-black text-[#4f4f4f] text-[28px] text-center tracking-[0] leading-[28.3px] whitespace-pre-line">

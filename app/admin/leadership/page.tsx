@@ -144,7 +144,7 @@ export default function LeadershipManagementPage() {
         <div>
           <h1 className="text-3xl font-black text-gray-900 dark:text-white">Leadership Team</h1>
           <p className="text-gray-600 dark:text-gray-400 mt-1">
-            Manage your organization's leadership team members
+            Manage your organization&apos;s leadership team members
           </p>
         </div>
         <button

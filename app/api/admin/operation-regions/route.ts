@@ -15,13 +15,13 @@ export async function GET(request: NextRequest) {
     const settings = await SiteSettings.findOne();
     const operationRegions = settings?.operationRegions || [];
 
-    const regionsWithIds = operationRegions.map((region: any, index: number) => ({
+    const regionsWithIds = operationRegions.map((region: { _id?: unknown; toObject?: () => unknown; [key: string]: unknown }, index: number) => ({
       _id: region._id || `region-${index}`,
       ...region.toObject ? region.toObject() : region,
     }));
 
     return NextResponse.json({ success: true, data: regionsWithIds });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error fetching operation regions:', error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
     await settings.save();
 
     return NextResponse.json({ success: true, data: settings.operationRegions[settings.operationRegions.length - 1] });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error creating operation region:', error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }

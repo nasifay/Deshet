@@ -20,7 +20,7 @@ interface Page {
   sections?: Array<{
     id: string;
     type: string;
-    data: Record<string, any>;
+    data: Record<string, unknown>;
     order: number;
   }>;
   author: {
@@ -47,7 +47,7 @@ export default function EditPage() {
     sections: [] as Array<{
       id: string;
       type: string;
-      data: Record<string, any>;
+      data: Record<string, unknown>;
       order: number;
     }>,
     seo: {
@@ -76,7 +76,7 @@ export default function EditPage() {
           slug: data.data.slug,
           content: data.data.content,
           status: data.data.status,
-          sections: (data.data.sections || []).map((section: any, index: number) => ({
+          sections: (data.data.sections || []).map((section: { type: string; data: Record<string, unknown>; order?: number }, index: number) => ({
             id: section.id || `section-${index}`,
             type: section.type,
             data: section.data || {},
@@ -251,7 +251,7 @@ export default function EditPage() {
                 </label>
                 <select
                   value={formData.status}
-                  onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.value as any }))}
+                  onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.value as "draft" | "published" | "archived" }))}
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green text-sm"
                 >
                   <option value="draft">Draft</option>

@@ -1,27 +1,22 @@
 import { Metadata } from "next";
 import { PAGE_METADATA, BASE_URL } from "~/lib/seo/metadata-config";
 import {
-  generateWebPageSchema,
+  generateContactPageSchema,
   generateBreadcrumbSchema,
 } from "~/lib/seo/json-ld";
 
-export const metadata: Metadata = PAGE_METADATA.history;
+export const metadata: Metadata = PAGE_METADATA["contact-us"];
 
-export default function HistoryLayout({
+export default function ContactUsLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const webPageSchema = generateWebPageSchema({
-    name: "Our History",
-    description:
-      "Trace Tamra's journey from establishment to today. Explore our milestones, growth, and unwavering commitment to communities across Ethiopia.",
-    url: `${BASE_URL}/history`,
-  });
+  const contactPageSchema = generateContactPageSchema();
 
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: "Home", url: BASE_URL },
-    { name: "History", url: `${BASE_URL}/history` },
+    { name: "Contact Us", url: `${BASE_URL}/contact-us` },
   ]);
 
   return (
@@ -29,7 +24,7 @@ export default function HistoryLayout({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(webPageSchema),
+          __html: JSON.stringify(contactPageSchema),
         }}
       />
       <script

@@ -7,7 +7,7 @@ import ImageUploadField from './ImageUploadField';
 interface Section {
   id: string;
   type: string;
-  data: Record<string, any>;
+  data: Record<string, unknown>;
   order: number;
 }
 
@@ -66,7 +66,7 @@ export default function LandingSectionEditor({ sections, onChange }: LandingSect
     onChange(newSections.map((s, i) => ({ ...s, order: i })));
   };
 
-  const updateSectionData = (id: string, data: Record<string, any>) => {
+  const updateSectionData = (id: string, data: Record<string, unknown>) => {
     onChange(sections.map(s => s.id === id ? { ...s, data } : s));
   };
 
@@ -205,8 +205,8 @@ export default function LandingSectionEditor({ sections, onChange }: LandingSect
 }
 
 // Section Editor Component
-function SectionEditor({ type, data, onChange }: { type: string; data: Record<string, any>; onChange: (data: Record<string, any>) => void }) {
-  const updateField = (field: string, value: any) => {
+function SectionEditor({ type, data, onChange }: { type: string; data: Record<string, unknown>; onChange: (data: Record<string, unknown>) => void }) {
+  const updateField = (field: string, value: unknown) => {
     onChange({ ...data, [field]: value });
   };
 
@@ -335,7 +335,7 @@ function SectionEditor({ type, data, onChange }: { type: string; data: Record<st
         <div className="space-y-4">
           <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">📊 Statistics Settings</h4>
           <div className="space-y-4">
-            {(data.stats || [{ number: '', label: '' }]).map((stat: any, index: number) => (
+            {(data.stats || [{ number: '', label: '' }]).map((stat: { number: string; label: string }, index: number) => (
               <div key={index} className="p-4 border border-gray-200 dark:border-gray-600 rounded-lg">
                 <div className="flex items-center justify-between mb-3">
                   <h5 className="font-medium text-gray-900 dark:text-white">Stat #{index + 1}</h5>
@@ -464,7 +464,7 @@ function SectionEditor({ type, data, onChange }: { type: string; data: Record<st
             />
           </div>
           <div className="space-y-4">
-            {(data.achievements || [{ title: '', description: '' }]).map((achievement: any, index: number) => (
+            {(data.achievements || [{ title: '', description: '' }]).map((achievement: { title: string; description: string }, index: number) => (
               <div key={index} className="p-4 border border-gray-200 dark:border-gray-600 rounded-lg">
                 <div className="flex items-center justify-between mb-3">
                   <h5 className="font-medium text-gray-900 dark:text-white">Achievement #{index + 1}</h5>
@@ -622,7 +622,7 @@ function SectionEditor({ type, data, onChange }: { type: string; data: Record<st
   }
 }
 
-function getDefaultDataForType(type: string): Record<string, any> {
+function getDefaultDataForType(type: string): Record<string, unknown> {
   switch (type) {
     case 'HeroSection':
       return { title: 'SERVING ETHIOPIAN YOUTH', subtitle: '', backgroundImage: '/home-hero.png', ctaText: 'Contact Us', ctaLink: '/contact-us' };

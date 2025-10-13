@@ -53,7 +53,7 @@ export default function VolunteersPage() {
         const allResponse = await fetch('/api/admin/volunteers?limit=1000');
         const allData = await allResponse.json();
         if (allData.success) {
-          const statusCount = allData.data.reduce((acc: any, v: Volunteer) => {
+          const statusCount = allData.data.reduce((acc: Record<string, number>, v: Volunteer) => {
             acc[v.status] = (acc[v.status] || 0) + 1;
             return acc;
           }, {});

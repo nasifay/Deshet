@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import { ArrowLeft, Save, Eye } from 'lucide-react';
-import LandingSectionEditor from '~/app/admin/components/LandingSectionEditor';
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { ArrowLeft, Save, Eye } from "lucide-react";
+import LandingSectionEditor from "~/app/admin/components/LandingSectionEditor";
 
 interface LandingPage {
   _id: string;
   title: string;
   slug: string;
-  status: 'draft' | 'published' | 'archived';
+  status: "draft" | "published" | "archived";
   seo?: {
     metaTitle?: string;
     metaDescription?: string;
@@ -19,7 +19,7 @@ interface LandingPage {
   sections?: Array<{
     id: string;
     type: string;
-    data: Record<string, any>;
+    data: Record<string, unknown>;
     order: number;
   }>;
   author: {
@@ -36,19 +36,28 @@ export default function LandingPageAdmin() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [formData, setFormData] = useState({
-    title: 'Landing Page',
-    slug: 'landing',
-    status: 'published' as 'draft' | 'published' | 'archived',
+    title: "Landing Page",
+    slug: "landing",
+    status: "published" as "draft" | "published" | "archived",
     sections: [] as Array<{
       id: string;
       type: string;
-      data: Record<string, any>;
+      data: Record<string, unknown>;
       order: number;
     }>,
     seo: {
-      metaTitle: 'TSD - Serving Ethiopian Youth | Social Development Organization',
-      metaDescription: 'Tamra for Social Development (TSD) is an Ethiopian NGO working in youth empowerment, peacebuilding, SRH & gender equality, and climate justice since 1998.',
-      keywords: ['TSD', 'Ethiopia', 'youth empowerment', 'peacebuilding', 'social development', 'NGO'],
+      metaTitle:
+        "TSD - Serving Ethiopian Youth | Social Development Organization",
+      metaDescription:
+        "Tamra for Social Development (TSD) is an Ethiopian NGO working in youth empowerment, peacebuilding, SRH & gender equality, and climate justice since 1998.",
+      keywords: [
+        "TSD",
+        "Ethiopia",
+        "youth empowerment",
+        "peacebuilding",
+        "social development",
+        "NGO",
+      ],
     },
   });
 
@@ -59,25 +68,45 @@ export default function LandingPageAdmin() {
   const fetchLandingPage = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/admin/landing');
+      const response = await fetch("/api/admin/landing");
       const data = await response.json();
 
       if (data.success) {
         setPage(data.data);
         setFormData({
-          title: data.data.title || 'Landing Page',
-          slug: data.data.slug || 'landing',
-          status: data.data.status || 'published',
-          sections: (data.data.sections || []).map((section: any, index: number) => ({
-            id: section.id || `section-${index}`,
-            type: section.type,
-            data: section.data || {},
-            order: section.order !== undefined ? section.order : index,
-          })),
+          title: data.data.title || "Landing Page",
+          slug: data.data.slug || "landing",
+          status: data.data.status || "published",
+          sections: (data.data.sections || []).map(
+            (
+              section: {
+                type: string;
+                data: Record<string, unknown>;
+                order?: number;
+              },
+              index: number
+            ) => ({
+              id: section.id || `section-${index}`,
+              type: section.type,
+              data: section.data || {},
+              order: section.order !== undefined ? section.order : index,
+            })
+          ),
           seo: {
-            metaTitle: data.data.seo?.metaTitle || 'TSD - Serving Ethiopian Youth | Social Development Organization',
-            metaDescription: data.data.seo?.metaDescription || 'Tamra for Social Development (TSD) is an Ethiopian NGO working in youth empowerment, peacebuilding, SRH & gender equality, and climate justice since 1998.',
-            keywords: data.data.seo?.keywords || ['TSD', 'Ethiopia', 'youth empowerment', 'peacebuilding', 'social development', 'NGO'],
+            metaTitle:
+              data.data.seo?.metaTitle ||
+              "TSD - Serving Ethiopian Youth | Social Development Organization",
+            metaDescription:
+              data.data.seo?.metaDescription ||
+              "Tamra for Social Development (TSD) is an Ethiopian NGO working in youth empowerment, peacebuilding, SRH & gender equality, and climate justice since 1998.",
+            keywords: data.data.seo?.keywords || [
+              "TSD",
+              "Ethiopia",
+              "youth empowerment",
+              "peacebuilding",
+              "social development",
+              "NGO",
+            ],
           },
         });
       } else {
@@ -85,7 +114,7 @@ export default function LandingPageAdmin() {
         initializeDefaultSections();
       }
     } catch (error) {
-      console.error('Error fetching landing page:', error);
+      console.error("Error fetching landing page:", error);
       initializeDefaultSections();
     } finally {
       setLoading(false);
@@ -95,134 +124,140 @@ export default function LandingPageAdmin() {
   const initializeDefaultSections = () => {
     const defaultSections = [
       {
-        id: 'hero-section',
-        type: 'HeroSection',
+        id: "hero-section",
+        type: "HeroSection",
         data: {
-          title: 'SERVING ETHIOPIAN YOUTH',
-          subtitle: '',
-          backgroundImage: '/home-hero.png',
-          ctaText: 'Contact Us',
-          ctaLink: '/contact-us',
+          title: "SERVING ETHIOPIAN YOUTH",
+          subtitle: "",
+          backgroundImage: "/home-hero.png",
+          ctaText: "Contact Us",
+          ctaLink: "/contact-us",
         },
         order: 0,
       },
       {
-        id: 'about-section',
-        type: 'AboutSection',
+        id: "about-section",
+        type: "AboutSection",
         data: {
-          title: 'ABOUT US',
-          description: 'Tamra for social development organization (tsd) is an Ethiopian NGO legally registered since 1998. Founded as an anti-aids club in shashemene, it now operates across Oromia, Sidama, South & Central Ethiopia, and Addis Ababa. TSD works in youth empowerment, peacebuilding, SRH & gender equality, and climate justice & livelihoods. With 25+ years of impact, we drive change through grassroots engagement, advocacy, and community-driven solutions.',
-          ctaText: 'Read More',
-          ctaLink: '/who-we-are',
+          title: "ABOUT US",
+          description:
+            "Tamra for social development organization (tsd) is an Ethiopian NGO legally registered since 1998. Founded as an anti-aids club in shashemene, it now operates across Oromia, Sidama, South & Central Ethiopia, and Addis Ababa. TSD works in youth empowerment, peacebuilding, SRH & gender equality, and climate justice & livelihoods. With 25+ years of impact, we drive change through grassroots engagement, advocacy, and community-driven solutions.",
+          ctaText: "Read More",
+          ctaLink: "/who-we-are",
           images: [
-            '/images/about/1.png',
-            '/images/about/2.png',
-            '/images/about/3.png',
-            '/images/about/4.png',
+            "/images/about/1.png",
+            "/images/about/2.png",
+            "/images/about/3.png",
+            "/images/about/4.png",
           ],
         },
         order: 1,
       },
       {
-        id: 'statistics-section',
-        type: 'StatisticsSection',
+        id: "statistics-section",
+        type: "StatisticsSection",
         data: {
           stats: [
-            { number: '58', label: 'Staffs' },
-            { number: '5', label: 'Offices in 4 Regions' },
-            { number: '250+', label: 'Volunteers' },
-            { number: '15', label: 'Protocols' },
+            { number: "58", label: "Staffs" },
+            { number: "5", label: "Offices in 4 Regions" },
+            { number: "250+", label: "Volunteers" },
+            { number: "15", label: "Protocols" },
           ],
         },
         order: 2,
       },
       {
-        id: 'program-areas-section',
-        type: 'ProgramAreasSection',
+        id: "program-areas-section",
+        type: "ProgramAreasSection",
         data: {
-          title: 'Program Areas',
+          title: "Program Areas",
           programs: [
             {
-              title: 'Youth Empowerment & Peacebuilding',
-              description: 'Empowering young people to become agents of positive change in their communities.',
-              image: '/programs/hero.png',
+              title: "Youth Empowerment & Peacebuilding",
+              description:
+                "Empowering young people to become agents of positive change in their communities.",
+              image: "/programs/hero.png",
             },
             {
-              title: 'SRH & Gender Development',
-              description: 'Promoting sexual and reproductive health and gender equality.',
-              image: '/programs/hero.png',
+              title: "SRH & Gender Development",
+              description:
+                "Promoting sexual and reproductive health and gender equality.",
+              image: "/programs/hero.png",
             },
             {
-              title: 'Climate Justice & Livelihoods',
-              description: 'Building climate resilience and sustainable livelihoods.',
-              image: '/programs/hero.png',
+              title: "Climate Justice & Livelihoods",
+              description:
+                "Building climate resilience and sustainable livelihoods.",
+              image: "/programs/hero.png",
             },
           ],
         },
         order: 3,
       },
       {
-        id: 'supporters-section',
-        type: 'SupportersSection',
+        id: "supporters-section",
+        type: "SupportersSection",
         data: {
-          title: 'Our Partners',
+          title: "Our Partners",
           supporters: [
-            '/suporters/usaid.png',
-            '/suporters/pepfar.png',
-            '/suporters/gac.png',
-            '/suporters/ipas.png',
-            '/suporters/norwegian-church.png',
-            '/suporters/sonke-gender-justice.png',
+            "/suporters/usaid.png",
+            "/suporters/pepfar.png",
+            "/suporters/gac.png",
+            "/suporters/ipas.png",
+            "/suporters/norwegian-church.png",
+            "/suporters/sonke-gender-justice.png",
           ],
         },
         order: 4,
       },
       {
-        id: 'achievements-section',
-        type: 'AchievementsSection',
+        id: "achievements-section",
+        type: "AchievementsSection",
         data: {
-          title: 'Our Achievements',
+          title: "Our Achievements",
           achievements: [
             {
-              title: '25+ Years of Impact',
-              description: 'Decades of dedicated service to Ethiopian communities.',
+              title: "25+ Years of Impact",
+              description:
+                "Decades of dedicated service to Ethiopian communities.",
             },
             {
-              title: 'Multi-Regional Presence',
-              description: 'Operating across 4 regions of Ethiopia.',
+              title: "Multi-Regional Presence",
+              description: "Operating across 4 regions of Ethiopia.",
             },
             {
-              title: 'Youth-Centered Approach',
-              description: 'Empowering thousands of young people.',
+              title: "Youth-Centered Approach",
+              description: "Empowering thousands of young people.",
             },
           ],
         },
         order: 5,
       },
       {
-        id: 'news-events-section',
-        type: 'NewsEventsSection',
+        id: "news-events-section",
+        type: "NewsEventsSection",
         data: {
-          title: 'Latest News & Events',
+          title: "Latest News & Events",
           showLimit: 3,
         },
         order: 6,
       },
       {
-        id: 'volunteer-banner',
-        type: 'VolunteerBanner',
+        id: "volunteer-banner",
+        type: "VolunteerBanner",
         data: {
-          title: 'Join Our Mission',
-          description: 'Become a volunteer and make a difference in your community.',
-          ctaText: 'Volunteer Now',
-          ctaLink: '/volunteer',
-          backgroundImage: '/images/cta.jpg',
+          title: "Join Our Mission",
+          description:
+            "Become a volunteer and make a difference in your community.",
+          ctaText: "Volunteer Now",
+          ctaLink: "/volunteer",
+          backgroundImage: "/images/cta.jpg",
         },
         order: 7,
       },
     ];
 
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       sections: defaultSections,
     }));
@@ -231,10 +266,10 @@ export default function LandingPageAdmin() {
   const handleSave = async () => {
     try {
       setSaving(true);
-      const response = await fetch('/api/admin/landing', {
-        method: 'PUT',
+      const response = await fetch("/api/admin/landing", {
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
@@ -242,14 +277,14 @@ export default function LandingPageAdmin() {
       const data = await response.json();
 
       if (data.success) {
-        alert('Landing page saved successfully!');
+        alert("Landing page saved successfully!");
         router.refresh();
       } else {
-        alert(data.error || 'Failed to save landing page');
+        alert(data.error || "Failed to save landing page");
       }
     } catch (error) {
-      console.error('Error saving landing page:', error);
-      alert('Failed to save landing page');
+      console.error("Error saving landing page:", error);
+      alert("Failed to save landing page");
     } finally {
       setSaving(false);
     }
@@ -257,17 +292,17 @@ export default function LandingPageAdmin() {
 
   const handleKeywordsChange = (keywordsString: string) => {
     const keywords = keywordsString
-      .split(',')
-      .map(k => k.trim())
-      .filter(k => k.length > 0);
-    setFormData(prev => ({
+      .split(",")
+      .map((k) => k.trim())
+      .filter((k) => k.length > 0);
+    setFormData((prev) => ({
       ...prev,
       seo: { ...prev.seo, keywords },
     }));
   };
 
   const handlePreview = () => {
-    window.open('/', '_blank');
+    window.open("/", "_blank");
   };
 
   if (loading) {
@@ -291,9 +326,13 @@ export default function LandingPageAdmin() {
             <span className="text-sm">Back to Dashboard</span>
           </Link>
           <div>
-            <h1 className="text-2xl font-black text-gray-900 dark:text-white">Landing Page Editor</h1>
+            <h1 className="text-2xl font-black text-gray-900 dark:text-white">
+              Landing Page Editor
+            </h1>
             <p className="text-xs text-gray-500 dark:text-gray-400">
-              {page ? `Last updated: ${new Date(page.updatedAt).toLocaleString()}` : 'Create new landing page'}
+              {page
+                ? `Last updated: ${new Date(page.updatedAt).toLocaleString()}`
+                : "Create new landing page"}
             </p>
           </div>
         </div>
@@ -311,7 +350,7 @@ export default function LandingPageAdmin() {
             className="flex items-center space-x-2 px-4 py-2 bg-primary-green text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 text-sm"
           >
             <Save className="w-4 h-4" />
-            <span>{saving ? 'Saving...' : 'Save Page'}</span>
+            <span>{saving ? "Saving..." : "Save Page"}</span>
           </button>
         </div>
       </div>
@@ -320,8 +359,10 @@ export default function LandingPageAdmin() {
       <div className="space-y-4">
         {/* Basic Information */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4">
-          <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-3">Basic Information</h2>
-          
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-3">
+            Basic Information
+          </h2>
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -330,7 +371,9 @@ export default function LandingPageAdmin() {
               <input
                 type="text"
                 value={formData.title}
-                onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, title: e.target.value }))
+                }
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green text-sm"
                 placeholder="Landing Page"
               />
@@ -343,7 +386,9 @@ export default function LandingPageAdmin() {
               <input
                 type="text"
                 value={formData.slug}
-                onChange={(e) => setFormData(prev => ({ ...prev, slug: e.target.value }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, slug: e.target.value }))
+                }
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green text-sm"
                 placeholder="landing"
               />
@@ -358,7 +403,12 @@ export default function LandingPageAdmin() {
               </label>
               <select
                 value={formData.status}
-                onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.value as any }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    status: e.target.value as "draft" | "published" | "archived",
+                  }))
+                }
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green text-sm"
               >
                 <option value="draft">Draft</option>
@@ -371,8 +421,10 @@ export default function LandingPageAdmin() {
 
         {/* SEO Settings */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4">
-          <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-3">SEO Settings</h2>
-          
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-3">
+            SEO Settings
+          </h2>
+
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -381,16 +433,20 @@ export default function LandingPageAdmin() {
               <input
                 type="text"
                 value={formData.seo.metaTitle}
-                onChange={(e) => setFormData(prev => ({ 
-                  ...prev, 
-                  seo: { ...prev.seo, metaTitle: e.target.value }
-                }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    seo: { ...prev.seo, metaTitle: e.target.value },
+                  }))
+                }
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green text-sm"
                 placeholder="SEO title for search engines"
                 maxLength={60}
               />
               <div className="flex justify-between items-center mt-1">
-                <span className="text-xs text-gray-500 dark:text-gray-400">{formData.seo.metaTitle.length}/60 characters</span>
+                <span className="text-xs text-gray-500 dark:text-gray-400">
+                  {formData.seo.metaTitle.length}/60 characters
+                </span>
               </div>
             </div>
 
@@ -400,17 +456,21 @@ export default function LandingPageAdmin() {
               </label>
               <textarea
                 value={formData.seo.metaDescription}
-                onChange={(e) => setFormData(prev => ({ 
-                  ...prev, 
-                  seo: { ...prev.seo, metaDescription: e.target.value }
-                }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    seo: { ...prev.seo, metaDescription: e.target.value },
+                  }))
+                }
                 rows={3}
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green resize-none text-sm"
                 placeholder="Brief description for search engines"
                 maxLength={160}
               />
               <div className="flex justify-between items-center mt-1">
-                <span className="text-xs text-gray-500 dark:text-gray-400">{formData.seo.metaDescription.length}/160 characters</span>
+                <span className="text-xs text-gray-500 dark:text-gray-400">
+                  {formData.seo.metaDescription.length}/160 characters
+                </span>
               </div>
             </div>
 
@@ -420,7 +480,7 @@ export default function LandingPageAdmin() {
               </label>
               <input
                 type="text"
-                value={formData.seo.keywords.join(', ')}
+                value={formData.seo.keywords.join(", ")}
                 onChange={(e) => handleKeywordsChange(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green text-sm"
                 placeholder="keyword1, keyword2, keyword3"
@@ -435,20 +495,34 @@ export default function LandingPageAdmin() {
         {/* Page Information */}
         {page && (
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4">
-            <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-3">Page Information</h2>
-            
+            <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-3">
+              Page Information
+            </h2>
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
               <div>
-                <span className="font-medium text-gray-700 dark:text-gray-300">Author:</span>
-                <p className="text-gray-600 dark:text-gray-400">{page.author.name}</p>
+                <span className="font-medium text-gray-700 dark:text-gray-300">
+                  Author:
+                </span>
+                <p className="text-gray-600 dark:text-gray-400">
+                  {page.author.name}
+                </p>
               </div>
               <div>
-                <span className="font-medium text-gray-700 dark:text-gray-300">Created:</span>
-                <p className="text-gray-600 dark:text-gray-400">{new Date(page.createdAt).toLocaleString()}</p>
+                <span className="font-medium text-gray-700 dark:text-gray-300">
+                  Created:
+                </span>
+                <p className="text-gray-600 dark:text-gray-400">
+                  {new Date(page.createdAt).toLocaleString()}
+                </p>
               </div>
               <div>
-                <span className="font-medium text-gray-700 dark:text-gray-300">Last Updated:</span>
-                <p className="text-gray-600 dark:text-gray-400">{new Date(page.updatedAt).toLocaleString()}</p>
+                <span className="font-medium text-gray-700 dark:text-gray-300">
+                  Last Updated:
+                </span>
+                <p className="text-gray-600 dark:text-gray-400">
+                  {new Date(page.updatedAt).toLocaleString()}
+                </p>
               </div>
             </div>
           </div>
@@ -458,13 +532,8 @@ export default function LandingPageAdmin() {
       {/* Landing Page Sections - Full Width Section Editor */}
       <LandingSectionEditor
         sections={formData.sections}
-        onChange={(sections) => setFormData(prev => ({ ...prev, sections }))}
+        onChange={(sections) => setFormData((prev) => ({ ...prev, sections }))}
       />
     </div>
   );
 }
-
-
-
-
-

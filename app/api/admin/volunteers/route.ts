@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
     const sort = searchParams.get('sort') || '-createdAt';
 
     // Build query
-    const query: any = {};
+    const query: Record<string, unknown> = {};
     if (status) query.status = status;
     if (search) {
       query.$or = [

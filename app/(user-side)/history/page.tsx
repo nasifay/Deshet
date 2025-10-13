@@ -3,8 +3,19 @@
 
 import React, { useEffect, useState } from "react";
 
+interface PageData {
+  title?: string;
+  slug?: string;
+  content?: string;
+  sections?: Array<{
+    type: string;
+    data: Record<string, unknown>;
+    order: number;
+  }>;
+}
+
 export default function History() {
-  const [pageData, setPageData] = useState<any>(null);
+  const [pageData, setPageData] = useState<PageData | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -13,14 +24,14 @@ export default function History() {
 
   const fetchPageData = async () => {
     try {
-      const response = await fetch('/api/public/pages/history');
+      const response = await fetch("/api/public/pages/history");
       const data = await response.json();
-      
+
       if (data.success) {
         setPageData(data.data);
       }
     } catch (error) {
-      console.error('Error fetching page data:', error);
+      console.error("Error fetching page data:", error);
     } finally {
       setLoading(false);
     }

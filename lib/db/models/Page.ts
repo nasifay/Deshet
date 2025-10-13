@@ -1,5 +1,5 @@
-import mongoose, { Schema, Document, Model } from 'mongoose';
-import User from './User'; // Import User model to register it for population
+import mongoose, { Schema, Document, Model } from "mongoose";
+import User from "./User"; // Import User model to register it for population
 
 export interface IPage extends Document {
   _id: mongoose.Types.ObjectId;
@@ -8,7 +8,7 @@ export interface IPage extends Document {
   content: string;
   excerpt?: string;
   featuredImage?: string;
-  status: 'draft' | 'published' | 'archived';
+  status: "draft" | "published" | "archived";
   author: mongoose.Types.ObjectId;
   seo: {
     metaTitle?: string;
@@ -17,7 +17,7 @@ export interface IPage extends Document {
   };
   sections?: Array<{
     type: string;
-    data: Record<string, any>;
+    data: Record<string, unknown>;
     order: number;
   }>;
   publishedAt?: Date;
@@ -29,19 +29,19 @@ const PageSchema: Schema<IPage> = new Schema(
   {
     title: {
       type: String,
-      required: [true, 'Title is required'],
+      required: [true, "Title is required"],
       trim: true,
     },
     slug: {
       type: String,
-      required: [true, 'Slug is required'],
+      required: [true, "Slug is required"],
       unique: true,
       lowercase: true,
       trim: true,
     },
     content: {
       type: String,
-      default: '',
+      default: "",
     },
     excerpt: {
       type: String,
@@ -53,12 +53,12 @@ const PageSchema: Schema<IPage> = new Schema(
     },
     status: {
       type: String,
-      enum: ['draft', 'published', 'archived'],
-      default: 'draft',
+      enum: ["draft", "published", "archived"],
+      default: "draft",
     },
     author: {
       type: Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
       required: true,
     },
     seo: {
@@ -97,7 +97,7 @@ const PageSchema: Schema<IPage> = new Schema(
 PageSchema.index({ status: 1 });
 PageSchema.index({ publishedAt: -1 });
 
-const Page: Model<IPage> = mongoose.models.Page || mongoose.model<IPage>('Page', PageSchema);
+const Page: Model<IPage> =
+  mongoose.models.Page || mongoose.model<IPage>("Page", PageSchema);
 
 export default Page;
-

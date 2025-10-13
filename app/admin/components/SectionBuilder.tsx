@@ -1,13 +1,20 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Plus, ChevronDown, ChevronUp, Trash2, Edit, GripVertical } from 'lucide-react';
-import ImageUploadField from './ImageUploadField';
+import { useState } from "react";
+import {
+  Plus,
+  ChevronDown,
+  ChevronUp,
+  Trash2,
+  Edit,
+  GripVertical,
+} from "lucide-react";
+import ImageUploadField from "./ImageUploadField";
 
 interface Section {
   id: string;
   type: string;
-  data: Record<string, any>;
+  data: Record<string, unknown>;
   order: number;
 }
 
@@ -17,25 +24,36 @@ interface SectionBuilderProps {
 }
 
 const SECTION_TYPES = [
-  { value: 'AboutUsHeader', label: 'About Us Header', icon: '📄' },
-  { value: 'TaglineSection', label: 'Tagline Section', icon: '💬' },
-  { value: 'GroupPhotoSection', label: 'Group Photo Section', icon: '📷' },
-  { value: 'AboutTSDSection', label: 'About TSD Section', icon: 'ℹ️' },
-  { value: 'VisionMissionSection', label: 'Vision & Mission Section', icon: '🎯' },
-  { value: 'CoreValuesSection', label: 'Core Values Section', icon: '⭐' },
-  { value: 'LeadershipSection', label: 'Leadership Section', icon: '👥' },
-  { value: 'TargetGroupSection', label: 'Target Group Section', icon: '🎯' },
-  { value: 'OperationRegionsSection', label: 'Operation Regions Section', icon: '🗺️' },
-  { value: 'HeroSection', label: 'Hero Section', icon: '🦸' },
-  { value: 'StatisticsSection', label: 'Statistics Section', icon: '📊' },
-  { value: 'AchievementsSection', label: 'Achievements Section', icon: '🏆' },
-  { value: 'NewsEventsSection', label: 'News & Events Section', icon: '📰' },
-  { value: 'SupportersSection', label: 'Supporters Section', icon: '🤝' },
-  { value: 'VolunteerBanner', label: 'Volunteer Banner', icon: '🙋' },
-  { value: 'ContentSection', label: 'Content Section', icon: '📝' },
+  { value: "AboutUsHeader", label: "About Us Header", icon: "📄" },
+  { value: "TaglineSection", label: "Tagline Section", icon: "💬" },
+  { value: "GroupPhotoSection", label: "Group Photo Section", icon: "📷" },
+  { value: "AboutTSDSection", label: "About TSD Section", icon: "ℹ️" },
+  {
+    value: "VisionMissionSection",
+    label: "Vision & Mission Section",
+    icon: "🎯",
+  },
+  { value: "CoreValuesSection", label: "Core Values Section", icon: "⭐" },
+  { value: "LeadershipSection", label: "Leadership Section", icon: "👥" },
+  { value: "TargetGroupSection", label: "Target Group Section", icon: "🎯" },
+  {
+    value: "OperationRegionsSection",
+    label: "Operation Regions Section",
+    icon: "🗺️",
+  },
+  { value: "HeroSection", label: "Hero Section", icon: "🦸" },
+  { value: "StatisticsSection", label: "Statistics Section", icon: "📊" },
+  { value: "AchievementsSection", label: "Achievements Section", icon: "🏆" },
+  { value: "NewsEventsSection", label: "News & Events Section", icon: "📰" },
+  { value: "SupportersSection", label: "Supporters Section", icon: "🤝" },
+  { value: "VolunteerBanner", label: "Volunteer Banner", icon: "🙋" },
+  { value: "ContentSection", label: "Content Section", icon: "📝" },
 ];
 
-export default function SectionBuilder({ sections, onChange }: SectionBuilderProps) {
+export default function SectionBuilder({
+  sections,
+  onChange,
+}: SectionBuilderProps) {
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
   const [showAddModal, setShowAddModal] = useState(false);
 
@@ -52,22 +70,25 @@ export default function SectionBuilder({ sections, onChange }: SectionBuilderPro
   };
 
   const removeSection = (id: string) => {
-    if (confirm('Are you sure you want to remove this section?')) {
-      onChange(sections.filter(s => s.id !== id));
+    if (confirm("Are you sure you want to remove this section?")) {
+      onChange(sections.filter((s) => s.id !== id));
     }
   };
 
-  const moveSection = (id: string, direction: 'up' | 'down') => {
-    const index = sections.findIndex(s => s.id === id);
+  const moveSection = (id: string, direction: "up" | "down") => {
+    const index = sections.findIndex((s) => s.id === id);
     if (index === -1) return;
 
-    if (direction === 'up' && index === 0) return;
-    if (direction === 'down' && index === sections.length - 1) return;
+    if (direction === "up" && index === 0) return;
+    if (direction === "down" && index === sections.length - 1) return;
 
     const newSections = [...sections];
-    const targetIndex = direction === 'up' ? index - 1 : index + 1;
-    [newSections[index], newSections[targetIndex]] = [newSections[targetIndex], newSections[index]];
-    
+    const targetIndex = direction === "up" ? index - 1 : index + 1;
+    [newSections[index], newSections[targetIndex]] = [
+      newSections[targetIndex],
+      newSections[index],
+    ];
+
     // Update order
     newSections.forEach((section, i) => {
       section.order = i;
@@ -76,15 +97,17 @@ export default function SectionBuilder({ sections, onChange }: SectionBuilderPro
     onChange(newSections);
   };
 
-  const updateSectionData = (id: string, data: Record<string, any>) => {
-    onChange(sections.map(s => s.id === id ? { ...s, data } : s));
+  const updateSectionData = (id: string, data: Record<string, unknown>) => {
+    onChange(sections.map((s) => (s.id === id ? { ...s, data } : s)));
   };
 
   return (
     <div className="space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-bold text-gray-900 dark:text-white">Page Sections</h3>
+        <h3 className="text-lg font-bold text-gray-900 dark:text-white">
+          Page Sections
+        </h3>
         <button
           onClick={() => setShowAddModal(true)}
           className="flex items-center space-x-2 px-3 py-2 bg-primary-green text-white rounded-lg hover:bg-green-700 text-sm"
@@ -98,7 +121,9 @@ export default function SectionBuilder({ sections, onChange }: SectionBuilderPro
       <div className="space-y-2">
         {sections.length === 0 ? (
           <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 text-center">
-            <p className="text-gray-600 dark:text-gray-400">No sections added yet</p>
+            <p className="text-gray-600 dark:text-gray-400">
+              No sections added yet
+            </p>
             <button
               onClick={() => setShowAddModal(true)}
               className="mt-2 text-primary-green hover:underline"
@@ -117,19 +142,23 @@ export default function SectionBuilder({ sections, onChange }: SectionBuilderPro
                 <div className="flex items-center space-x-3">
                   <GripVertical className="w-5 h-5 text-gray-400 cursor-move" />
                   <span className="text-2xl">
-                    {SECTION_TYPES.find(t => t.value === section.type)?.icon || '📄'}
+                    {SECTION_TYPES.find((t) => t.value === section.type)
+                      ?.icon || "📄"}
                   </span>
                   <div>
                     <h4 className="font-medium text-gray-900 dark:text-white">
-                      {SECTION_TYPES.find(t => t.value === section.type)?.label || section.type}
+                      {SECTION_TYPES.find((t) => t.value === section.type)
+                        ?.label || section.type}
                     </h4>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">Order: {index + 1}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      Order: {index + 1}
+                    </p>
                   </div>
                 </div>
 
                 <div className="flex items-center space-x-2">
                   <button
-                    onClick={() => moveSection(section.id, 'up')}
+                    onClick={() => moveSection(section.id, "up")}
                     disabled={index === 0}
                     className="p-1 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 disabled:opacity-30"
                     title="Move up"
@@ -137,7 +166,7 @@ export default function SectionBuilder({ sections, onChange }: SectionBuilderPro
                     <ChevronUp className="w-4 h-4" />
                   </button>
                   <button
-                    onClick={() => moveSection(section.id, 'down')}
+                    onClick={() => moveSection(section.id, "down")}
                     disabled={index === sections.length - 1}
                     className="p-1 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 disabled:opacity-30"
                     title="Move down"
@@ -145,7 +174,11 @@ export default function SectionBuilder({ sections, onChange }: SectionBuilderPro
                     <ChevronDown className="w-4 h-4" />
                   </button>
                   <button
-                    onClick={() => setExpandedSection(expandedSection === section.id ? null : section.id)}
+                    onClick={() =>
+                      setExpandedSection(
+                        expandedSection === section.id ? null : section.id
+                      )
+                    }
                     className="p-1 text-blue-600 hover:text-blue-700 dark:text-blue-400"
                     title="Edit"
                   >
@@ -181,7 +214,9 @@ export default function SectionBuilder({ sections, onChange }: SectionBuilderPro
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white">Add Section</h3>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                Add Section
+              </h3>
               <button
                 onClick={() => setShowAddModal(false)}
                 className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
@@ -191,14 +226,16 @@ export default function SectionBuilder({ sections, onChange }: SectionBuilderPro
             </div>
 
             <div className="grid grid-cols-2 gap-3">
-              {SECTION_TYPES.map(type => (
+              {SECTION_TYPES.map((type) => (
                 <button
                   key={type.value}
                   onClick={() => addSection(type.value)}
                   className="flex items-center space-x-3 p-4 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-left"
                 >
                   <span className="text-3xl">{type.icon}</span>
-                  <span className="font-medium text-gray-900 dark:text-white">{type.label}</span>
+                  <span className="font-medium text-gray-900 dark:text-white">
+                    {type.label}
+                  </span>
                 </button>
               ))}
             </div>
@@ -210,32 +247,40 @@ export default function SectionBuilder({ sections, onChange }: SectionBuilderPro
 }
 
 // Section Editor Component
-function SectionEditor({ type, data, onChange }: { type: string; data: Record<string, any>; onChange: (data: Record<string, any>) => void }) {
-  const updateField = (field: string, value: any) => {
+function SectionEditor({
+  type,
+  data,
+  onChange,
+}: {
+  type: string;
+  data: Record<string, unknown>;
+  onChange: (data: Record<string, unknown>) => void;
+}) {
+  const updateField = (field: string, value: unknown) => {
     onChange({ ...data, [field]: value });
   };
 
   // Render different fields based on section type
   switch (type) {
-    case 'OperationRegionsSection':
+    case "OperationRegionsSection":
       return (
         <div className="space-y-4">
           <ImageUploadField
             label="Map Image"
-            value={data.mapImageSrc || ''}
-            onChange={(url) => updateField('mapImageSrc', url)}
+            value={data.mapImageSrc || ""}
+            onChange={(url) => updateField("mapImageSrc", url)}
             placeholder="/images/Objects.png"
           />
           <ImageUploadField
             label="Map Layer Image"
-            value={data.mapLayerSrc || ''}
-            onChange={(url) => updateField('mapLayerSrc', url)}
+            value={data.mapLayerSrc || ""}
+            onChange={(url) => updateField("mapLayerSrc", url)}
             placeholder="https://example.com/layer.png"
           />
         </div>
       );
 
-    case 'TaglineSection':
+    case "TaglineSection":
       return (
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -243,21 +288,21 @@ function SectionEditor({ type, data, onChange }: { type: string; data: Record<st
           </label>
           <input
             type="text"
-            value={data.tagline || ''}
-            onChange={(e) => updateField('tagline', e.target.value)}
+            value={data.tagline || ""}
+            onChange={(e) => updateField("tagline", e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green"
             placeholder="Enter tagline..."
           />
         </div>
       );
 
-    case 'GroupPhotoSection':
+    case "GroupPhotoSection":
       return (
         <div className="space-y-4">
           <ImageUploadField
             label="Group Photo"
-            value={data.imageSrc || ''}
-            onChange={(url) => updateField('imageSrc', url)}
+            value={data.imageSrc || ""}
+            onChange={(url) => updateField("imageSrc", url)}
             placeholder="https://example.com/photo.jpg"
           />
           <div>
@@ -266,8 +311,8 @@ function SectionEditor({ type, data, onChange }: { type: string; data: Record<st
             </label>
             <input
               type="text"
-              value={data.altText || ''}
-              onChange={(e) => updateField('altText', e.target.value)}
+              value={data.altText || ""}
+              onChange={(e) => updateField("altText", e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green"
               placeholder="Image description..."
             />
@@ -275,7 +320,7 @@ function SectionEditor({ type, data, onChange }: { type: string; data: Record<st
         </div>
       );
 
-    case 'AboutTSDSection':
+    case "AboutTSDSection":
       return (
         <div className="space-y-4">
           <div>
@@ -283,8 +328,8 @@ function SectionEditor({ type, data, onChange }: { type: string; data: Record<st
               Description
             </label>
             <textarea
-              value={data.description || ''}
-              onChange={(e) => updateField('description', e.target.value)}
+              value={data.description || ""}
+              onChange={(e) => updateField("description", e.target.value)}
               rows={6}
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green resize-none"
               placeholder="Enter description..."
@@ -292,26 +337,26 @@ function SectionEditor({ type, data, onChange }: { type: string; data: Record<st
           </div>
           <ImageUploadField
             label="Back Image"
-            value={data.backImageSrc || ''}
-            onChange={(url) => updateField('backImageSrc', url)}
+            value={data.backImageSrc || ""}
+            onChange={(url) => updateField("backImageSrc", url)}
             placeholder="Background image URL"
           />
           <ImageUploadField
             label="Front Image"
-            value={data.frontImageSrc || ''}
-            onChange={(url) => updateField('frontImageSrc', url)}
+            value={data.frontImageSrc || ""}
+            onChange={(url) => updateField("frontImageSrc", url)}
             placeholder="Foreground image URL"
           />
         </div>
       );
 
-    case 'VisionMissionSection':
+    case "VisionMissionSection":
       return (
         <div className="space-y-4">
           <ImageUploadField
             label="Vision Image"
-            value={data.visionImage || ''}
-            onChange={(url) => updateField('visionImage', url)}
+            value={data.visionImage || ""}
+            onChange={(url) => updateField("visionImage", url)}
             placeholder="/images/Mask group.png"
           />
           <div>
@@ -319,8 +364,8 @@ function SectionEditor({ type, data, onChange }: { type: string; data: Record<st
               Vision Text
             </label>
             <textarea
-              value={data.visionText || ''}
-              onChange={(e) => updateField('visionText', e.target.value)}
+              value={data.visionText || ""}
+              onChange={(e) => updateField("visionText", e.target.value)}
               rows={3}
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green resize-none"
               placeholder="Enter vision statement..."
@@ -328,8 +373,8 @@ function SectionEditor({ type, data, onChange }: { type: string; data: Record<st
           </div>
           <ImageUploadField
             label="Mission Image"
-            value={data.missionImage || ''}
-            onChange={(url) => updateField('missionImage', url)}
+            value={data.missionImage || ""}
+            onChange={(url) => updateField("missionImage", url)}
             placeholder="/images/Mask group (1).png"
           />
           <div>
@@ -337,8 +382,8 @@ function SectionEditor({ type, data, onChange }: { type: string; data: Record<st
               Mission Text
             </label>
             <textarea
-              value={data.missionText || ''}
-              onChange={(e) => updateField('missionText', e.target.value)}
+              value={data.missionText || ""}
+              onChange={(e) => updateField("missionText", e.target.value)}
               rows={3}
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green resize-none"
               placeholder="Enter mission statement..."
@@ -347,7 +392,7 @@ function SectionEditor({ type, data, onChange }: { type: string; data: Record<st
         </div>
       );
 
-    case 'ContentSection':
+    case "ContentSection":
       return (
         <div className="space-y-4">
           <div>
@@ -356,8 +401,8 @@ function SectionEditor({ type, data, onChange }: { type: string; data: Record<st
             </label>
             <input
               type="text"
-              value={data.title || ''}
-              onChange={(e) => updateField('title', e.target.value)}
+              value={data.title || ""}
+              onChange={(e) => updateField("title", e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green"
               placeholder="Section title..."
             />
@@ -367,8 +412,8 @@ function SectionEditor({ type, data, onChange }: { type: string; data: Record<st
               Content
             </label>
             <textarea
-              value={data.content || ''}
-              onChange={(e) => updateField('content', e.target.value)}
+              value={data.content || ""}
+              onChange={(e) => updateField("content", e.target.value)}
               rows={6}
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green resize-none"
               placeholder="Section content..."
@@ -376,21 +421,24 @@ function SectionEditor({ type, data, onChange }: { type: string; data: Record<st
           </div>
           <ImageUploadField
             label="Image (Optional)"
-            value={data.image || ''}
-            onChange={(url) => updateField('image', url)}
+            value={data.image || ""}
+            onChange={(url) => updateField("image", url)}
             placeholder="Add an image to this section..."
           />
         </div>
       );
 
-    case 'AboutUsHeader':
+    case "AboutUsHeader":
       return (
         <div className="space-y-4">
           <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
-            <h4 className="font-medium text-blue-900 dark:text-blue-300 mb-2">ℹ️ About This Section</h4>
+            <h4 className="font-medium text-blue-900 dark:text-blue-300 mb-2">
+              ℹ️ About This Section
+            </h4>
             <p className="text-sm text-blue-800 dark:text-blue-200">
-              This section displays the "About Us" header with the organization name and tagline. 
-              The content is automatically rendered from your site branding.
+              This section displays the &quot;About Us&quot; header with the
+              organization name and tagline. The content is automatically
+              rendered from your site branding.
             </p>
           </div>
           <div>
@@ -399,29 +447,33 @@ function SectionEditor({ type, data, onChange }: { type: string; data: Record<st
             </label>
             <input
               type="text"
-              value={data.title || ''}
-              onChange={(e) => updateField('title', e.target.value)}
+              value={data.title || ""}
+              onChange={(e) => updateField("title", e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green"
               placeholder="Leave empty for default: WHO WE ARE"
             />
           </div>
           <ImageUploadField
             label="Background Image (Optional)"
-            value={data.backgroundImage || ''}
-            onChange={(url) => updateField('backgroundImage', url)}
+            value={data.backgroundImage || ""}
+            onChange={(url) => updateField("backgroundImage", url)}
             placeholder="Add background image..."
           />
         </div>
       );
 
-    case 'CoreValuesSection':
+    case "CoreValuesSection":
       return (
         <div className="space-y-4">
           <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
-            <h4 className="font-medium text-blue-900 dark:text-blue-300 mb-2">⭐ About This Section</h4>
+            <h4 className="font-medium text-blue-900 dark:text-blue-300 mb-2">
+              ⭐ About This Section
+            </h4>
             <p className="text-sm text-blue-800 dark:text-blue-200">
-              This section displays your organization's core values. The values are managed in the 
-              <strong> Settings → Site Settings</strong> page and pulled from the database automatically.
+              This section displays your organization&apos;s core values. The
+              values are managed in the
+              <strong> Settings → Site Settings</strong> page and pulled from
+              the database automatically.
             </p>
           </div>
           <div>
@@ -430,8 +482,8 @@ function SectionEditor({ type, data, onChange }: { type: string; data: Record<st
             </label>
             <input
               type="text"
-              value={data.sectionTitle || ''}
-              onChange={(e) => updateField('sectionTitle', e.target.value)}
+              value={data.sectionTitle || ""}
+              onChange={(e) => updateField("sectionTitle", e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green"
               placeholder="Leave empty for default: OUR CORE VALUES"
             />
@@ -441,8 +493,8 @@ function SectionEditor({ type, data, onChange }: { type: string; data: Record<st
               Description (Optional)
             </label>
             <textarea
-              value={data.description || ''}
-              onChange={(e) => updateField('description', e.target.value)}
+              value={data.description || ""}
+              onChange={(e) => updateField("description", e.target.value)}
               rows={3}
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green resize-none"
               placeholder="Add a description for this section..."
@@ -450,20 +502,24 @@ function SectionEditor({ type, data, onChange }: { type: string; data: Record<st
           </div>
           <div className="bg-yellow-50 dark:bg-yellow-900/20 p-3 rounded-lg">
             <p className="text-sm text-yellow-800 dark:text-yellow-200">
-              💡 To edit core values, go to: <strong>Admin → Settings → Site Settings</strong>
+              💡 To edit core values, go to:{" "}
+              <strong>Admin → Settings → Site Settings</strong>
             </p>
           </div>
         </div>
       );
 
-    case 'LeadershipSection':
+    case "LeadershipSection":
       return (
         <div className="space-y-4">
           <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
-            <h4 className="font-medium text-blue-900 dark:text-blue-300 mb-2">👥 About This Section</h4>
+            <h4 className="font-medium text-blue-900 dark:text-blue-300 mb-2">
+              👥 About This Section
+            </h4>
             <p className="text-sm text-blue-800 dark:text-blue-200">
-              This section displays your leadership team members. Team members are managed in a dedicated CMS
-              and pulled from the database automatically.
+              This section displays your leadership team members. Team members
+              are managed in a dedicated CMS and pulled from the database
+              automatically.
             </p>
           </div>
           <div>
@@ -472,8 +528,8 @@ function SectionEditor({ type, data, onChange }: { type: string; data: Record<st
             </label>
             <input
               type="text"
-              value={data.sectionTitle || ''}
-              onChange={(e) => updateField('sectionTitle', e.target.value)}
+              value={data.sectionTitle || ""}
+              onChange={(e) => updateField("sectionTitle", e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green"
               placeholder="Leave empty for default: OUR LEADERSHIP"
             />
@@ -483,8 +539,8 @@ function SectionEditor({ type, data, onChange }: { type: string; data: Record<st
               Description (Optional)
             </label>
             <textarea
-              value={data.description || ''}
-              onChange={(e) => updateField('description', e.target.value)}
+              value={data.description || ""}
+              onChange={(e) => updateField("description", e.target.value)}
               rows={3}
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green resize-none"
               placeholder="Add a description about your leadership team..."
@@ -495,26 +551,31 @@ function SectionEditor({ type, data, onChange }: { type: string; data: Record<st
               ✨ Manage Leadership Team Members
             </p>
             <p className="text-sm text-green-700 dark:text-green-300">
-              Go to: <strong>Admin → Leadership</strong> to add, edit, or remove team members with photos, bios, and contact information.
+              Go to: <strong>Admin → Leadership</strong> to add, edit, or remove
+              team members with photos, bios, and contact information.
             </p>
           </div>
         </div>
       );
 
-    case 'TargetGroupSection':
+    case "TargetGroupSection":
       return (
         <div className="space-y-4">
           <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
-            <h4 className="font-medium text-blue-900 dark:text-blue-300 mb-2">🎯 About This Section</h4>
+            <h4 className="font-medium text-blue-900 dark:text-blue-300 mb-2">
+              🎯 About This Section
+            </h4>
             <p className="text-sm text-blue-800 dark:text-blue-200">
-              This section displays your target groups and beneficiaries. The groups are managed in the 
-              <strong> Settings → Site Settings</strong> page and pulled from the database automatically.
+              This section displays your target groups and beneficiaries. The
+              groups are managed in the
+              <strong> Settings → Site Settings</strong> page and pulled from
+              the database automatically.
             </p>
           </div>
           <ImageUploadField
             label="Header Image"
-            value={data.headerImage || ''}
-            onChange={(url) => updateField('headerImage', url)}
+            value={data.headerImage || ""}
+            onChange={(url) => updateField("headerImage", url)}
             placeholder="https://example.com/header-image.png"
           />
           <div>
@@ -523,8 +584,8 @@ function SectionEditor({ type, data, onChange }: { type: string; data: Record<st
             </label>
             <input
               type="text"
-              value={data.sectionTitle || ''}
-              onChange={(e) => updateField('sectionTitle', e.target.value)}
+              value={data.sectionTitle || ""}
+              onChange={(e) => updateField("sectionTitle", e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green"
               placeholder="Leave empty for default: OUR TARGET GROUPS"
             />
@@ -534,8 +595,8 @@ function SectionEditor({ type, data, onChange }: { type: string; data: Record<st
               Description (Optional)
             </label>
             <textarea
-              value={data.description || ''}
-              onChange={(e) => updateField('description', e.target.value)}
+              value={data.description || ""}
+              onChange={(e) => updateField("description", e.target.value)}
               rows={3}
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green resize-none"
               placeholder="Add a description about your target groups..."
@@ -543,28 +604,36 @@ function SectionEditor({ type, data, onChange }: { type: string; data: Record<st
           </div>
           <div className="bg-yellow-50 dark:bg-yellow-900/20 p-3 rounded-lg">
             <p className="text-sm text-yellow-800 dark:text-yellow-200">
-              💡 To edit target groups, go to: <strong>Admin → Settings → Site Settings</strong>
+              💡 To edit target groups, go to:{" "}
+              <strong>Admin → Settings → Site Settings</strong>
             </p>
           </div>
         </div>
       );
 
-    case 'HeroSection':
-    case 'StatisticsSection':
-    case 'AchievementsSection':
-    case 'NewsEventsSection':
-    case 'SupportersSection':
-    case 'VolunteerBanner':
+    case "HeroSection":
+    case "StatisticsSection":
+    case "AchievementsSection":
+    case "NewsEventsSection":
+    case "SupportersSection":
+    case "VolunteerBanner":
       return (
         <div className="space-y-4">
           <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
-            <h4 className="font-medium text-blue-900 dark:text-blue-300 mb-2">ℹ️ About This Section</h4>
+            <h4 className="font-medium text-blue-900 dark:text-blue-300 mb-2">
+              ℹ️ About This Section
+            </h4>
             <p className="text-sm text-blue-800 dark:text-blue-200">
-              This section pulls data automatically from your site settings and database.
-              {type === 'StatisticsSection' && ' Statistics are managed in Settings → Site Settings.'}
-              {type === 'AchievementsSection' && ' Achievements are managed in Settings → Site Settings.'}
-              {type === 'NewsEventsSection' && ' This displays recent news posts from your database.'}
-              {type === 'SupportersSection' && ' Supporters/partners are managed in Settings → Site Settings.'}
+              This section pulls data automatically from your site settings and
+              database.
+              {type === "StatisticsSection" &&
+                " Statistics are managed in Settings → Site Settings."}
+              {type === "AchievementsSection" &&
+                " Achievements are managed in Settings → Site Settings."}
+              {type === "NewsEventsSection" &&
+                " This displays recent news posts from your database."}
+              {type === "SupportersSection" &&
+                " Supporters/partners are managed in Settings → Site Settings."}
             </p>
           </div>
           <div>
@@ -572,20 +641,22 @@ function SectionEditor({ type, data, onChange }: { type: string; data: Record<st
               Show Section
             </label>
             <select
-              value={data.enabled !== false ? 'true' : 'false'}
-              onChange={(e) => updateField('enabled', e.target.value === 'true')}
+              value={data.enabled !== false ? "true" : "false"}
+              onChange={(e) =>
+                updateField("enabled", e.target.value === "true")
+              }
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green"
             >
               <option value="true">Yes, show this section</option>
               <option value="false">No, hide this section</option>
             </select>
           </div>
-          {type === 'HeroSection' && (
+          {type === "HeroSection" && (
             <>
               <ImageUploadField
                 label="Hero Background Image"
-                value={data.backgroundImage || ''}
-                onChange={(url) => updateField('backgroundImage', url)}
+                value={data.backgroundImage || ""}
+                onChange={(url) => updateField("backgroundImage", url)}
                 placeholder="Hero background image..."
               />
               <div>
@@ -594,8 +665,8 @@ function SectionEditor({ type, data, onChange }: { type: string; data: Record<st
                 </label>
                 <input
                   type="text"
-                  value={data.title || ''}
-                  onChange={(e) => updateField('title', e.target.value)}
+                  value={data.title || ""}
+                  onChange={(e) => updateField("title", e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green"
                   placeholder="Hero section title..."
                 />
@@ -605,8 +676,8 @@ function SectionEditor({ type, data, onChange }: { type: string; data: Record<st
                   Hero Subtitle
                 </label>
                 <textarea
-                  value={data.subtitle || ''}
-                  onChange={(e) => updateField('subtitle', e.target.value)}
+                  value={data.subtitle || ""}
+                  onChange={(e) => updateField("subtitle", e.target.value)}
                   rows={2}
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green resize-none"
                   placeholder="Hero subtitle or description..."
@@ -616,7 +687,8 @@ function SectionEditor({ type, data, onChange }: { type: string; data: Record<st
           )}
           <div className="bg-yellow-50 dark:bg-yellow-900/20 p-3 rounded-lg">
             <p className="text-sm text-yellow-800 dark:text-yellow-200">
-              💡 Section data is managed in: <strong>Admin → Settings → Site Settings</strong>
+              💡 Section data is managed in:{" "}
+              <strong>Admin → Settings → Site Settings</strong>
             </p>
           </div>
         </div>
@@ -627,7 +699,8 @@ function SectionEditor({ type, data, onChange }: { type: string; data: Record<st
         <div className="space-y-4">
           <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              This section type uses default data from the database. You can add custom fields by extending the section editor.
+              This section type uses default data from the database. You can add
+              custom fields by extending the section editor.
             </p>
           </div>
           <div>
@@ -653,43 +726,42 @@ function SectionEditor({ type, data, onChange }: { type: string; data: Record<st
 }
 
 // Default data for each section type
-function getDefaultDataForType(type: string): Record<string, any> {
+function getDefaultDataForType(type: string): Record<string, unknown> {
   switch (type) {
-    case 'OperationRegionsSection':
+    case "OperationRegionsSection":
       return {
-        mapImageSrc: '/images/Objects.png',
-        mapLayerSrc: '',
+        mapImageSrc: "/images/Objects.png",
+        mapLayerSrc: "",
       };
-    case 'TaglineSection':
+    case "TaglineSection":
       return {
-        tagline: 'Enter your tagline here',
+        tagline: "Enter your tagline here",
       };
-    case 'GroupPhotoSection':
+    case "GroupPhotoSection":
       return {
-        imageSrc: '',
-        altText: 'Group photo',
+        imageSrc: "",
+        altText: "Group photo",
       };
-    case 'AboutTSDSection':
+    case "AboutTSDSection":
       return {
-        description: '',
-        backImageSrc: '',
-        frontImageSrc: '',
+        description: "",
+        backImageSrc: "",
+        frontImageSrc: "",
       };
-    case 'VisionMissionSection':
+    case "VisionMissionSection":
       return {
-        visionImage: '/images/Mask group.png',
-        visionText: '',
-        missionImage: '/images/Mask group (1).png',
-        missionText: '',
+        visionImage: "/images/Mask group.png",
+        visionText: "",
+        missionImage: "/images/Mask group (1).png",
+        missionText: "",
       };
-    case 'ContentSection':
+    case "ContentSection":
       return {
-        title: '',
-        content: '',
-        image: '',
+        title: "",
+        content: "",
+        image: "",
       };
     default:
       return {};
   }
 }
-

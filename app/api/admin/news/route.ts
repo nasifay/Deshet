@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
     const sort = searchParams.get('sort') || '-publishedAt';
 
     // Build query
-    const query: any = {};
+    const query: Record<string, unknown> = {};
     if (status) query.status = status;
     if (category) query.category = category;
     if (search) {
