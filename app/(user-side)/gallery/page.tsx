@@ -132,7 +132,7 @@ const fallbackRecognitionImages = [
   },
 ];
 
-export function ImageGallerySection() {
+function ImageGallerySection() {
   const [categories, setCategories] = useState<GalleryCategory[]>([]);
   const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
   const [loading, setLoading] = useState(true);
