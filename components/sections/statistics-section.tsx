@@ -1,6 +1,7 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { StatisticsSkeleton } from "./landing-page-skeleton";
 
 interface StatItem {
   number: string;
@@ -20,7 +21,53 @@ interface StatsSectionProps {
       };
 }
 
-export default function StatisticsSection({ stats }: StatsSectionProps) {
+export default function StatisticsSection() {
+  const [stats, setStats] = useState<StatsSectionProps["stats"]>();
+  const [loading, setLoading] = useState(true);
+
+  // Fetch data
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [landingResponse, settingsResponse] = await Promise.all([
+          fetch("/api/public/landing"),
+          fetch("/api/public/settings"),
+        ]);
+
+        const [landingResult, settingsResult] = await Promise.all([
+          landingResponse.json(),
+          settingsResponse.json(),
+        ]);
+
+        // Try to get stats from landing page first
+        if (landingResult.success) {
+          const section = landingResult.data?.sections?.find(
+            (s: any) => s.type === "StatisticsSection"
+          );
+          if (section?.data?.stats) {
+            setStats(section.data.stats);
+          } else if (settingsResult.success && settingsResult.data?.stats) {
+            // Fallback to site settings
+            setStats(settingsResult.data.stats);
+          }
+        } else if (settingsResult.success && settingsResult.data?.stats) {
+          // Fallback to site settings
+          setStats(settingsResult.data.stats);
+        }
+      } catch (error) {
+        console.error("Error fetching statistics data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return <StatisticsSkeleton />;
+  }
+
   // Handle dynamic stats array from landing page CMS
   if (Array.isArray(stats)) {
     return (

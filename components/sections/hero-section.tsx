@@ -15,54 +15,95 @@ interface HeroSectionProps {
   ctaLink?: string;
 }
 
-const Hero = ({
-  title = "SERVING",
-  subtitle = "ETHIOPIAN YOUTH",
-  leftImages = [],
-  middleImages = [],
-  rightImages = [],
-  ctaText = "Contact Us",
-  ctaLink = "/contact-us",
-}: HeroSectionProps) => {
+const Hero = () => {
+  // State for data
+  const [heroData, setHeroData] = useState<HeroSectionProps>({
+    title: "SERVING",
+    subtitle: "ETHIOPIAN YOUTH",
+    leftImages: [],
+    middleImages: [],
+    rightImages: [],
+    ctaText: "Contact Us",
+    ctaLink: "/contact-us",
+  });
+  const [loading, setLoading] = useState(true);
+
   // State to track the current index for each section's image
   const [leftIndex, setLeftIndex] = useState(0);
   const [middleIndex, setMiddleIndex] = useState(0);
   const [rightIndex, setRightIndex] = useState(0);
 
+  // Fetch data
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("/api/public/landing");
+        const result = await response.json();
+
+        if (result.success) {
+          const section = result.data?.sections?.find(
+            (s: any) => s.type === "HeroSection"
+          );
+          if (section?.data) {
+            setHeroData({
+              title: section.data.title || "SERVING",
+              subtitle: section.data.subtitle || "ETHIOPIAN YOUTH",
+              leftImages: section.data.leftImages || [],
+              middleImages: section.data.middleImages || [],
+              rightImages: section.data.rightImages || [],
+              ctaText: section.data.ctaText || "Contact Us",
+              ctaLink: section.data.ctaLink || "/contact-us",
+            });
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching hero data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   // --- TRANSITION LOGIC with DIFFERENT INTERVALS ---
   useEffect(() => {
     // Only set up intervals if arrays have images
     if (
-      leftImages.length === 0 &&
-      middleImages.length === 0 &&
-      rightImages.length === 0
+      heroData.leftImages!.length === 0 &&
+      heroData.middleImages!.length === 0 &&
+      heroData.rightImages!.length === 0
     ) {
       return;
     }
 
     // 1. Left Section: Slowest transition (5 seconds)
     const leftInterval =
-      leftImages.length > 0
+      heroData.leftImages!.length > 0
         ? setInterval(() => {
-            setLeftIndex((prevIndex) => (prevIndex + 1) % leftImages.length);
+            setLeftIndex(
+              (prevIndex) => (prevIndex + 1) % heroData.leftImages!.length
+            );
           }, 5000)
         : null;
 
     // 2. Middle Section: Standard transition (4 seconds)
     const middleInterval =
-      middleImages.length > 0
+      heroData.middleImages!.length > 0
         ? setInterval(() => {
             setMiddleIndex(
-              (prevIndex) => (prevIndex + 1) % middleImages.length
+              (prevIndex) => (prevIndex + 1) % heroData.middleImages!.length
             );
           }, 4000)
         : null;
 
     // 3. Right Section: Medium transition (4.5 seconds)
     const rightInterval =
-      rightImages.length > 0
+      heroData.rightImages!.length > 0
         ? setInterval(() => {
-            setRightIndex((prevIndex) => (prevIndex + 1) % rightImages.length);
+            setRightIndex(
+              (prevIndex) => (prevIndex + 1) % heroData.rightImages!.length
+            );
           }, 4500)
         : null;
 
@@ -72,13 +113,21 @@ const Hero = ({
       if (middleInterval) clearInterval(middleInterval);
       if (rightInterval) clearInterval(rightInterval);
     };
-  }, [leftImages.length, middleImages.length, rightImages.length]);
+  }, [heroData.leftImages, heroData.middleImages, heroData.rightImages]);
 
   // Mapping of section layout to image array and current index
   const sectionData = [
-    { layout: "left", images: leftImages, currentIndex: leftIndex },
-    { layout: "middle", images: middleImages, currentIndex: middleIndex },
-    { layout: "right", images: rightImages, currentIndex: rightIndex },
+    { layout: "left", images: heroData.leftImages!, currentIndex: leftIndex },
+    {
+      layout: "middle",
+      images: heroData.middleImages!,
+      currentIndex: middleIndex,
+    },
+    {
+      layout: "right",
+      images: heroData.rightImages!,
+      currentIndex: rightIndex,
+    },
   ];
 
   return (
@@ -124,8 +173,8 @@ const Hero = ({
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="text-white primary-title  uppercase drop-shadow-[0_3px_6px_rgba(0,0,0,0.5)]"
           >
-            {title} <br />
-            <span className=" text-nowrap block">{subtitle}</span>
+            {heroData.title} <br />
+            <span className=" text-nowrap block">{heroData.subtitle}</span>
           </motion.h1>
 
           <motion.div
@@ -135,10 +184,10 @@ const Hero = ({
             className="mt-10"
           >
             <Link
-              href={ctaLink}
+              href={heroData.ctaLink || "/contact-us"}
               className="inline-flex items-center justify-center px-6 py-2 md:px-12 md:py-4 rounded-full bg-[#128341] hover:bg-[#0e6a32] transition-all duration-300 font-roboto font-medium text-sm md:text-lg text-white shadow-[0_6px_20px_-5px_rgba(18,131,65,0.4)] hover:shadow-[0_10px_25px_-5px_rgba(18,131,65,0.6)] backdrop-blur-sm"
             >
-              {ctaText}
+              {heroData.ctaText}
             </Link>
           </motion.div>
         </div>

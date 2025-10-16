@@ -7,7 +7,7 @@ import mongoose from "mongoose";
 // GET - Get single supporter
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await getUserFromRequest(request);
@@ -20,14 +20,16 @@ export async function GET(
 
     await connectDB();
 
-    if (!mongoose.Types.ObjectId.isValid(params.id)) {
+    const { id } = await params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json(
         { success: false, error: "Invalid supporter ID" },
         { status: 400 }
       );
     }
 
-    const supporter = await Supporter.findById(params.id);
+    const supporter = await Supporter.findById(id);
 
     if (!supporter) {
       return NextResponse.json(
@@ -52,7 +54,7 @@ export async function GET(
 // PUT - Update supporter
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await getUserFromRequest(request);
@@ -65,7 +67,9 @@ export async function PUT(
 
     await connectDB();
 
-    if (!mongoose.Types.ObjectId.isValid(params.id)) {
+    const { id } = await params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json(
         { success: false, error: "Invalid supporter ID" },
         { status: 400 }
@@ -84,7 +88,7 @@ export async function PUT(
     }
 
     const updatedSupporter = await Supporter.findByIdAndUpdate(
-      params.id,
+      id,
       {
         name,
         logo,
@@ -122,7 +126,7 @@ export async function PUT(
 // DELETE - Delete supporter
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await getUserFromRequest(request);
@@ -135,14 +139,16 @@ export async function DELETE(
 
     await connectDB();
 
-    if (!mongoose.Types.ObjectId.isValid(params.id)) {
+    const { id } = await params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json(
         { success: false, error: "Invalid supporter ID" },
         { status: 400 }
       );
     }
 
-    const deletedSupporter = await Supporter.findByIdAndDelete(params.id);
+    const deletedSupporter = await Supporter.findByIdAndDelete(id);
 
     if (!deletedSupporter) {
       return NextResponse.json(

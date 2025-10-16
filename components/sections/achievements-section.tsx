@@ -1,25 +1,68 @@
-import React from "react";
+"use client";
+
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { Card, CardContent } from "~/components/ui/Card";
+import { AchievementsSkeleton } from "./landing-page-skeleton";
 
-interface AchievementsSectionProps {
-  achievements?: {
+export default function AchievementsSection() {
+  const [achievements, setAchievements] = useState<{
     recognitionsCount?: string;
     radioYears?: string;
     serviceYears?: string;
     activeRegions?: string;
-  };
-  headerTitle?: string;
-  headerSubtitle?: string;
-  featuredImage?: string;
-}
+  }>();
+  const [headerTitle, setHeaderTitle] = useState("SINCE 1998");
+  const [headerSubtitle, setHeaderSubtitle] = useState(
+    'Empowering Young People Through Holistic Development In <span class="text-[#F09632]">Health</span>, <span class="text-[#F09632]">Education</span>, <span class="text-[#F09632]">Livelihoods</span>, And <span class="text-[#F09632]">Civic Engagement</span>.'
+  );
+  const [featuredImage, setFeaturedImage] = useState("/images/about/1.png");
+  const [loading, setLoading] = useState(true);
 
-export default function AchievementsSection({
-  achievements,
-  headerTitle = "SINCE 1998",
-  headerSubtitle = 'Empowering Young People Through Holistic Development In <span class="text-[#F09632]">Health</span>, <span class="text-[#F09632]">Education</span>, <span class="text-[#F09632]">Livelihoods</span>, And <span class="text-[#F09632]">Civic Engagement</span>.',
-  featuredImage = "/images/about/1.png",
-}: AchievementsSectionProps) {
+  // Fetch data
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [landingResponse, settingsResponse] = await Promise.all([
+          fetch("/api/public/landing"),
+          fetch("/api/public/settings"),
+        ]);
+
+        const [landingResult, settingsResult] = await Promise.all([
+          landingResponse.json(),
+          settingsResponse.json(),
+        ]);
+
+        // Get achievements from settings
+        if (settingsResult.success && settingsResult.data?.achievements) {
+          setAchievements(settingsResult.data.achievements);
+        }
+
+        // Get section-specific data from landing
+        if (landingResult.success) {
+          const section = landingResult.data?.sections?.find(
+            (s: any) => s.type === "AchievementsSection"
+          );
+          if (section?.data) {
+            setHeaderTitle(section.data.headerTitle || headerTitle);
+            setHeaderSubtitle(section.data.headerSubtitle || headerSubtitle);
+            setFeaturedImage(section.data.featuredImage || featuredImage);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching achievements data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return <AchievementsSkeleton />;
+  }
+
   return (
     <div className="w-full bg-white py-16 px-6 md:px-20 wxga:px-50 xl:60 2xl:px-80">
       <div className=" mx-auto">

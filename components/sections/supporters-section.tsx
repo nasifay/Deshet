@@ -1,13 +1,16 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import { SupportersSkeleton } from "./landing-page-skeleton";
 
 interface SupportersSectionProps {
   supporters?: Array<{ name: string; logo: string }>;
 }
 
-export default function SupportersSection({
-  supporters = [
+export default function SupportersSection() {
+  const [supporters, setSupporters] = useState<
+    Array<{ name: string; logo: string }>
+  >([
     { name: "Norwegian Church Aid", logo: "/suporters/norweign-church.png" },
     { name: "Ipas", logo: "/suporters/ipas.png" },
     {
@@ -27,14 +30,39 @@ export default function SupportersSection({
       logo: "/suporters/search-for-common-ground.png",
     },
     { name: "Supporter 2", logo: "/suporters/supporter-logo-2.png" },
-  ],
-}: SupportersSectionProps) {
+  ]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch data
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("/api/public/supporters");
+        const result = await response.json();
+
+        if (result.success && result.data) {
+          setSupporters(result.data);
+        }
+      } catch (error) {
+        console.error("Error fetching supporters data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return <SupportersSkeleton />;
+  }
+
   // Split supporters into two rows for marquee effect
   const midpoint = Math.ceil(supporters.length / 2);
   const supportersRow1 = supporters.slice(0, midpoint);
   const supportersRow2 = supporters.slice(midpoint);
   return (
-    <section className="bg-white py-12 md:py-16 relative w-full overflow-hidden">
+    <section className="bg-white  py-4 relative w-full overflow-hidden">
       <div className="mx-auto px-4">
         {/* Title */}
         <div className="flex items-center justify-center gap-2 mx-6 md:mx-20">

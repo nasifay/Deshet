@@ -3,13 +3,17 @@ import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import ScrollStack from "~/components/ui/ScrollStack";
+import { useState, useEffect } from "react";
+import { ProgramAreasSkeleton } from "./landing-page-skeleton";
 
 interface ProgramAreasSectionProps {
   programs?: Array<{ title: string; image: string; link?: string }>;
 }
 
-export default function ProgramAreasSection({
-  programs = [
+export default function ProgramAreasSection() {
+  const [programs, setPrograms] = useState<
+    Array<{ title: string; image: string; link?: string }>
+  >([
     {
       title: "Youth <br /> Empowerment & <br /> Peacebuilding",
       image: "/overview/1.png",
@@ -30,8 +34,38 @@ export default function ProgramAreasSection({
       image: "/overview/4.png",
       link: "/programs",
     },
-  ],
-}: ProgramAreasSectionProps) {
+  ]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch data
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("/api/public/landing");
+        const result = await response.json();
+
+        if (result.success) {
+          const section = result.data?.sections?.find(
+            (s: any) => s.type === "ProgramAreasSection"
+          );
+          if (section?.data?.programs) {
+            setPrograms(section.data.programs);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching programs data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return <ProgramAreasSkeleton />;
+  }
+
   // Transform programs into ScrollStack items
   const stackItems = programs.map((program, index) => ({
     id: `program-${index}`,
@@ -85,7 +119,7 @@ export default function ProgramAreasSection({
   }));
 
   return (
-    <div className="w-full py-12 md:py-16 lg:py-20 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
+    <div className="w-full py-4 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
       {/* Section Header */}
 
       {/* Scroll Stack */}

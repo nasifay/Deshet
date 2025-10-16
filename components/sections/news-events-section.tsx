@@ -4,6 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import Button from "../ui/Button";
 import { cn } from "~/lib/utils";
+import { useState, useEffect } from "react";
+import { NewsEventsSkeleton } from "./landing-page-skeleton";
 
 interface NewsItem {
   _id?: string;
@@ -18,8 +20,8 @@ interface NewsEventsSectionProps {
   title?: string;
 }
 
-export default function NewsAndEvents({
-  news = [
+export default function NewsAndEvents() {
+  const [news, setNews] = useState<NewsItem[]>([
     {
       featuredImage: "/news-and-events/1.png",
       title: "TSD Launches New Youth Leadership Training in Hawassa",
@@ -44,9 +46,34 @@ export default function NewsAndEvents({
       excerpt:
         "Tamra for Social Development (TSD) has kicked off a week-long Youth Leadership Training in Hawassa...",
     },
-  ],
-  title = "NEWS AND EVENTS",
-}: NewsEventsSectionProps) {
+  ]);
+  const [loading, setLoading] = useState(true);
+  const title = "NEWS AND EVENTS";
+
+  // Fetch data
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("/api/public/news?limit=4&featured=true");
+        const result = await response.json();
+
+        if (result.success && result.data) {
+          setNews(result.data);
+        }
+      } catch (error) {
+        console.error("Error fetching news data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return <NewsEventsSkeleton />;
+  }
+
   return (
     <section className="w-full bg-white py-16 px-6 md:px-20 lg:px-20 xl:28 2xl:px-36 font-['Roboto']">
       <div className=" mx-auto">
