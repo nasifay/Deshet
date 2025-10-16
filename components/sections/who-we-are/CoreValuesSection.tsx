@@ -20,15 +20,15 @@ export function CoreValuesSection({ coreValues }: CoreValuesSectionProps) {
   return (
     <section className="relative w-full flex justify-center mb-12 sm:mb-16 md:mb-20 lg:mb-[87px] translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:1400ms]">
       {/* Adjusted margin-bottom for mobile/tablet */}
-      <Card className="w-full max-w-[1595px] bg-white rounded-2xl sm:rounded-3xl md:rounded-[40px] lg:rounded-[46px] shadow-[0px_2px_13px_#0000000d] sm:shadow-[0px_4px_26.5px_#0000000d] border-0">
+      <Card className="w-full  bg-white rounded-2xl sm:rounded-3xl md:rounded-[40px] lg:rounded-[46px] shadow-[0px_2px_13px_#0000000d] sm:shadow-[0px_4px_26.5px_#0000000d] border-0">
         <CardContent className="flex flex-col items-center justify-center gap-6 sm:gap-8 md:gap-10 lg:gap-[82px] px-4 sm:px-6 md:px-8 lg:px-[85px] py-6 sm:py-8 md:py-10 lg:py-[88px]">
           {/* Scaled heading for mobile/tablet */}
-          <h2 className="w-full max-w-[1369px] [text-shadow:0px_2px_2px_#00000040] sm:[text-shadow:0px_4px_4px_#00000040] [font-family:'Roboto',Helvetica] font-black text-[#128341] text-3xl sm:text-4xl md:text-5xl lg:text-[70px] tracking-[0] leading-tight">
+          <h2 className="w-full primary-title text-primary-green">
             CORE VALUES
           </h2>
 
           {/* Adjusted grid to stack on mobile, 2 cols on tablet, 3 on md, 5 on lg */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6 md:gap-8 lg:gap-4 w-full max-w-[1376px]">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6 md:gap-8 lg:gap-4 w-full ">
             {coreValues.map((value, index) => {
               const bgUrl =
                 index === 0
@@ -45,12 +45,12 @@ export function CoreValuesSection({ coreValues }: CoreValuesSectionProps) {
               return (
                 <div
                   key={index}
-                  className={`flex flex-col items-center justify-between p-4 sm:p-6 md:p-8 lg:p-4 bg-cover bg-center rounded-2xl sm:rounded-none ${roundedClass} min-h-[300px] sm:min-h-[400px] md:min-h-[450px] lg:min-h-[696px] cursor-pointer transition-all duration-300 hover:border-4 hover:border-[#FF9700] hover:border-opacity-50`}
+                  className={`flex flex-col items-center justify-between p-4 sm:p-6 md:p-8 lg:p-4 bg-cover bg-center rounded-2xl sm:rounded-none ${roundedClass} min-h-[40vh] sm:min-h-[40vh] md:min-h-[50vh] lg:min-h-[82vh] cursor-pointer transition-all duration-300 hover:border-4 hover:border-[#FF9700] hover:border-opacity-50`}
                   style={{ backgroundImage: `url(${bgUrl})` }}
                 >
                   <div className="flex flex-col items-center justify-center flex-1">
                     {/* Scaled text sizes */}
-                    <h3 className="[font-family:'Roboto',Helvetica] font-black text-[#4f4f4f] text-base sm:text-lg md:text-xl lg:text-[28px] text-center tracking-[0] leading-tight whitespace-pre-line mb-2 sm:mb-3 md:mb-4">
+                    <h3 className="[font-family:'Roboto',Helvetica] font-black text-[#4f4f4f] text-sm sm:text-base md:text-lg lg:text-xl 2xl:text-2xl text-center tracking-[0] leading-tight  mb-2 sm:mb-3 md:mb-4">
                       {value.title}
                     </h3>
                     <img

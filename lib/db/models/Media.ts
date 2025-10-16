@@ -1,12 +1,12 @@
-import mongoose, { Schema, Document, Model } from 'mongoose';
-import User from './User'; // Import User model to register it for population
+import mongoose, { Schema, Document, Model } from "mongoose";
+import User from "./User"; // Import User model to register it for population
 
 export interface IGallery extends Document {
   _id: mongoose.Types.ObjectId;
   filename: string;
   originalName: string;
   url: string;
-  type: 'image' | 'video' | 'document' | 'other';
+  type: "image" | "video" | "document" | "other";
   mimeType: string;
   size: number;
   dimensions?: {
@@ -25,19 +25,19 @@ const GallerySchema: Schema<IGallery> = new Schema(
   {
     filename: {
       type: String,
-      required: [true, 'Filename is required'],
+      required: [true, "Filename is required"],
     },
     originalName: {
       type: String,
-      required: [true, 'Original name is required'],
+      required: [true, "Original name is required"],
     },
     url: {
       type: String,
-      required: [true, 'URL is required'],
+      required: [true, "URL is required"],
     },
     type: {
       type: String,
-      enum: ['image', 'video', 'document', 'other'],
+      enum: ["image", "video", "document", "other"],
       required: true,
     },
     mimeType: {
@@ -62,12 +62,12 @@ const GallerySchema: Schema<IGallery> = new Schema(
     },
     category: {
       type: String,
-      default: 'general',
+      default: "general",
       trim: true,
     },
     uploadedBy: {
       type: Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
       required: true,
     },
   },
@@ -81,13 +81,7 @@ GallerySchema.index({ type: 1, category: 1 });
 GallerySchema.index({ uploadedBy: 1 });
 GallerySchema.index({ createdAt: -1 });
 
-const Gallery: Model<IGallery> = mongoose.models.Gallery || mongoose.model<IGallery>('Gallery', GallerySchema);
+const Gallery: Model<IGallery> =
+  mongoose.models.Gallery || mongoose.model<IGallery>("Gallery", GallerySchema);
 
 export default Gallery;
-
-
-
-
-
-
-

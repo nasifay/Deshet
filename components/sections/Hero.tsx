@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import Section from "~/components/ui/Section";
 import Button from "~/components/ui/Button";
 import type { CSSProperties } from "react";
@@ -54,8 +55,8 @@ export default function Hero() {
                   Serving Ethiopian Youth
                 </h1>
                 <div className="mt-4 sm:mt-5">
-                  <Button intent="primary" rounded="full" size="lg">
-                    Read More
+                  <Button asChild variant="default" size="lg">
+                    <Link href="/who-we-are">Read More</Link>
                   </Button>
                 </div>
               </div>

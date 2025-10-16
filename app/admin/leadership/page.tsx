@@ -1,34 +1,69 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { Plus, Edit, Trash2, Save, X } from 'lucide-react';
-import ImageUploadField from '../components/ImageUploadField';
+import { useEffect, useState } from "react";
+
+import { Plus, Edit, Trash2, Save, X } from "lucide-react";
+
+import ImageUploadField, {
+  uploadImageFile,
+} from "../components/ImageUploadField";
 
 interface LeadershipMember {
   _id?: string;
+
   name: string;
+
   position: string;
+
   bio?: string;
+
   photo?: string;
+
   order: number;
+
   email?: string;
+
   phone?: string;
 }
 
 export default function LeadershipManagementPage() {
   const [members, setMembers] = useState<LeadershipMember[]>([]);
+
   const [loading, setLoading] = useState(true);
-  const [editingMember, setEditingMember] = useState<LeadershipMember | null>(null);
+
+  const [saving, setSaving] = useState(false);
+
+  const [deleting, setDeleting] = useState<string | null>(null);
+
+  const [editingMember, setEditingMember] = useState<LeadershipMember | null>(
+    null
+  );
+
   const [isAddingNew, setIsAddingNew] = useState(false);
+
   const [formData, setFormData] = useState<LeadershipMember>({
-    name: '',
-    position: '',
-    bio: '',
-    photo: '',
+    name: "",
+
+    position: "",
+
+    bio: "",
+
+    photo: "",
+
     order: 0,
-    email: '',
-    phone: '',
+
+    email: "",
+
+    phone: "",
   });
+
+  const [pendingPhotoFile, setPendingPhotoFile] = useState<File | null>(null);
+
+  // Debug: Log form data changes (remove this after testing)
+
+  useEffect(() => {
+    console.log("Form data changed:", formData);
+  }, [formData]);
 
   useEffect(() => {
     fetchMembers();
@@ -37,14 +72,26 @@ export default function LeadershipManagementPage() {
   const fetchMembers = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/admin/leadership');
+
+      const response = await fetch("/api/admin/leadership");
+
       const data = await response.json();
-      
+
+      console.log("API Response:", data);
+
       if (data.success) {
         setMembers(data.data);
+      } else {
+        console.error("Failed to fetch members:", data.error);
+
+        alert("⚠️ Failed to load team members. Please refresh the page.");
       }
     } catch (error) {
-      console.error('Error fetching leadership members:', error);
+      console.error("Error fetching leadership members:", error);
+
+      alert(
+        "❌ Error loading team members. Please check your connection and try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -52,117 +99,223 @@ export default function LeadershipManagementPage() {
 
   const handleEdit = (member: LeadershipMember) => {
     setEditingMember(member);
-    setFormData(member);
+
+    setPendingPhotoFile(null);
+
+    setFormData({
+      name: member.name || "",
+
+      position: member.position || "",
+
+      bio: member.bio || "",
+
+      photo: member.photo || "",
+
+      order: member.order ?? 0,
+
+      email: member.email || "",
+
+      phone: member.phone || "",
+
+      _id: member._id,
+    });
+
     setIsAddingNew(false);
   };
 
   const handleAddNew = () => {
     setIsAddingNew(true);
+
     setEditingMember(null);
+
+    setPendingPhotoFile(null);
+
     setFormData({
-      name: '',
-      position: '',
-      bio: '',
-      photo: '',
+      name: "",
+
+      position: "",
+
+      bio: "",
+
+      photo: "",
+
       order: members.length,
-      email: '',
-      phone: '',
+
+      email: "",
+
+      phone: "",
     });
   };
 
   const handleCancel = () => {
     setEditingMember(null);
+
     setIsAddingNew(false);
+
+    setPendingPhotoFile(null);
+
     setFormData({
-      name: '',
-      position: '',
-      bio: '',
-      photo: '',
+      name: "",
+
+      position: "",
+
+      bio: "",
+
+      photo: "",
+
       order: 0,
-      email: '',
-      phone: '',
+
+      email: "",
+
+      phone: "",
     });
   };
 
   const handleSave = async () => {
+    if (saving) return;
+
     try {
-      const url = editingMember 
+      setSaving(true);
+
+      // Upload the pending photo file first if there is one
+
+      let photoUrl = formData.photo;
+
+      if (pendingPhotoFile) {
+        try {
+          photoUrl = await uploadImageFile(pendingPhotoFile);
+
+          console.log("Photo uploaded successfully:", photoUrl);
+        } catch (error) {
+          console.error("Error uploading photo:", error);
+
+          alert("❌ Failed to upload photo. Please try again.");
+
+          setSaving(false);
+
+          return;
+        }
+      }
+
+      const url = editingMember
         ? `/api/admin/leadership/${editingMember._id}`
-        : '/api/admin/leadership';
-      
-      const method = editingMember ? 'PUT' : 'POST';
+        : "/api/admin/leadership";
+
+      const method = editingMember ? "PUT" : "POST";
+
+      // Remove _id from formData for new members
+
+      const dataToSend = { ...formData, photo: photoUrl };
+
+      if (isAddingNew) {
+        delete dataToSend._id;
+      }
+
+      console.log("Saving member data:", dataToSend);
 
       const response = await fetch(url, {
         method,
+
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+
+        body: JSON.stringify(dataToSend),
       });
 
       const data = await response.json();
 
+      console.log("Save response:", data);
+
       if (data.success) {
-        alert(editingMember ? 'Member updated successfully!' : 'Member added successfully!');
-        fetchMembers();
+        alert(
+          editingMember
+            ? "✅ Member updated successfully!"
+            : "✅ Member added successfully!"
+        );
+
+        await fetchMembers();
+
         handleCancel();
       } else {
-        alert(data.error || 'Failed to save member');
+        alert("❌ " + (data.error || "Failed to save member"));
       }
     } catch (error) {
-      console.error('Error saving member:', error);
-      alert('Failed to save member');
+      console.error("Error saving member:", error);
+
+      alert("❌ Failed to save member. Please try again.");
+    } finally {
+      setSaving(false);
     }
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this member?')) return;
+    if (
+      !confirm(
+        "⚠️ Are you sure you want to delete this member? This action cannot be undone."
+      )
+    )
+      return;
 
     try {
+      setDeleting(id);
+
       const response = await fetch(`/api/admin/leadership/${id}`, {
-        method: 'DELETE',
+        method: "DELETE",
       });
 
       const data = await response.json();
 
       if (data.success) {
-        alert('Member deleted successfully!');
-        fetchMembers();
+        alert("✅ Member deleted successfully!");
+
+        await fetchMembers();
       } else {
-        alert(data.error || 'Failed to delete member');
+        alert("❌ " + (data.error || "Failed to delete member"));
       }
     } catch (error) {
-      console.error('Error deleting member:', error);
-      alert('Failed to delete member');
+      console.error("Error deleting member:", error);
+
+      alert("❌ Failed to delete member. Please try again.");
+    } finally {
+      setDeleting(null);
     }
   };
 
   return (
     <div className="space-y-6">
       {/* Header */}
+
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-black text-gray-900 dark:text-white">Leadership Team</h1>
+          <h1 className="text-3xl font-black text-gray-900 dark:text-white">
+            Leadership Team
+          </h1>
+
           <p className="text-gray-600 dark:text-gray-400 mt-1">
             Manage your organization&apos;s leadership team members
           </p>
         </div>
+
         <button
           onClick={handleAddNew}
           className="flex items-center space-x-2 px-4 py-2 bg-primary-green text-white rounded-lg hover:bg-green-700 transition-colors"
         >
           <Plus className="w-5 h-5" />
+
           <span>Add Member</span>
         </button>
       </div>
 
       {/* Edit/Add Form */}
+
       {(editingMember || isAddingNew) && (
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 border-2 border-primary-green">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-              {isAddingNew ? 'Add New Member' : 'Edit Member'}
+              {isAddingNew ? "Add New Member" : "Edit Member"}
             </h2>
+
             <button
               onClick={handleCancel}
               className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
@@ -171,28 +324,55 @@ export default function LeadershipManagementPage() {
             </button>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Photo */}
-            <div>
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            {/* Photo Section */}
+
+            <div className="lg:col-span-1">
               <ImageUploadField
                 label="Photo"
-                value={formData.photo || ''}
-                onChange={(url) => setFormData(prev => ({ ...prev, photo: url }))}
+                value={formData.photo || ""}
+                onChange={(url) =>
+                  setFormData((prev) => ({ ...prev, photo: url }))
+                }
                 placeholder="Upload member photo..."
+                deferUpload={true}
+                onFileSelect={(file) => setPendingPhotoFile(file)}
               />
+
+              {/* Circular Preview */}
+
+              {formData.photo && (
+                <div className="mt-4">
+                  <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Preview
+                  </p>
+
+                  <div className="w-32 h-32 rounded-full mx-auto overflow-hidden border-4 border-primary-green bg-gray-100 dark:bg-gray-600">
+                    <img
+                      src={formData.photo}
+                      alt="Preview"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Details */}
-            <div className="lg:col-span-2 space-y-4">
+
+            <div className="lg:col-span-3 space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Name *
                   </label>
+
                   <input
                     type="text"
-                    value={formData.name}
-                    onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                    value={formData.name || ""}
+                    onChange={(e) =>
+                      setFormData((prev) => ({ ...prev, name: e.target.value }))
+                    }
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green"
                     placeholder="John Doe"
                   />
@@ -202,10 +382,17 @@ export default function LeadershipManagementPage() {
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Position *
                   </label>
+
                   <input
                     type="text"
-                    value={formData.position}
-                    onChange={(e) => setFormData(prev => ({ ...prev, position: e.target.value }))}
+                    value={formData.position || ""}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+
+                        position: e.target.value,
+                      }))
+                    }
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green"
                     placeholder="Executive Director"
                   />
@@ -215,10 +402,17 @@ export default function LeadershipManagementPage() {
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Email
                   </label>
+
                   <input
                     type="email"
-                    value={formData.email || ''}
-                    onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                    value={formData.email || ""}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+
+                        email: e.target.value,
+                      }))
+                    }
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green"
                     placeholder="john@example.com"
                   />
@@ -228,10 +422,17 @@ export default function LeadershipManagementPage() {
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Phone
                   </label>
+
                   <input
                     type="tel"
-                    value={formData.phone || ''}
-                    onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
+                    value={formData.phone || ""}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+
+                        phone: e.target.value,
+                      }))
+                    }
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green"
                     placeholder="+251 911 123456"
                   />
@@ -241,10 +442,17 @@ export default function LeadershipManagementPage() {
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Display Order
                   </label>
+
                   <input
                     type="number"
-                    value={formData.order}
-                    onChange={(e) => setFormData(prev => ({ ...prev, order: parseInt(e.target.value) || 0 }))}
+                    value={formData.order ?? 0}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+
+                        order: parseInt(e.target.value) || 0,
+                      }))
+                    }
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green"
                     min="0"
                   />
@@ -255,9 +463,12 @@ export default function LeadershipManagementPage() {
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Biography
                 </label>
+
                 <textarea
-                  value={formData.bio || ''}
-                  onChange={(e) => setFormData(prev => ({ ...prev, bio: e.target.value }))}
+                  value={formData.bio || ""}
+                  onChange={(e) =>
+                    setFormData((prev) => ({ ...prev, bio: e.target.value }))
+                  }
                   rows={4}
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green resize-none"
                   placeholder="Brief biography or description..."
@@ -267,12 +478,24 @@ export default function LeadershipManagementPage() {
               <div className="flex items-center space-x-3">
                 <button
                   onClick={handleSave}
-                  disabled={!formData.name || !formData.position}
-                  className="flex items-center space-x-2 px-4 py-2 bg-primary-green text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
+                  disabled={!formData.name || !formData.position || saving}
+                  className="flex items-center space-x-2 px-4 py-2 bg-primary-green text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <Save className="w-4 h-4" />
-                  <span>{isAddingNew ? 'Add Member' : 'Save Changes'}</span>
+                  {saving ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+
+                      <span>Saving...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Save className="w-4 h-4" />
+
+                      <span>{isAddingNew ? "Add Member" : "Save Changes"}</span>
+                    </>
+                  )}
                 </button>
+
                 <button
                   onClick={handleCancel}
                   className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
@@ -286,15 +509,22 @@ export default function LeadershipManagementPage() {
       )}
 
       {/* Members List */}
+
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow">
         {loading ? (
           <div className="p-8 text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-green mx-auto"></div>
-            <p className="mt-4 text-gray-600 dark:text-gray-400">Loading team members...</p>
+
+            <p className="mt-4 text-gray-600 dark:text-gray-400">
+              Loading team members...
+            </p>
           </div>
         ) : members.length === 0 ? (
           <div className="p-8 text-center">
-            <p className="text-gray-600 dark:text-gray-400">No team members yet</p>
+            <p className="text-gray-600 dark:text-gray-400">
+              No team members yet
+            </p>
+
             <button
               onClick={handleAddNew}
               className="mt-4 text-primary-green hover:underline"
@@ -310,56 +540,84 @@ export default function LeadershipManagementPage() {
                 className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 hover:shadow-lg transition-shadow"
               >
                 {/* Photo */}
-                {member.photo && (
-                  <div className="mb-4">
+
+                <div className="mb-4">
+                  {member.photo ? (
                     <img
                       src={member.photo}
                       alt={member.name}
                       className="w-32 h-32 rounded-full mx-auto object-cover border-4 border-primary-green"
                     />
-                  </div>
-                )}
+                  ) : (
+                    <div className="w-32 h-32 rounded-full mx-auto bg-gray-300 dark:bg-gray-600 border-4 border-gray-400 dark:border-gray-500 flex items-center justify-center">
+                      <span className="text-4xl font-bold text-gray-500 dark:text-gray-400">
+                        {member.name.charAt(0).toUpperCase()}
+                      </span>
+                    </div>
+                  )}
+                </div>
 
                 {/* Details */}
+
                 <div className="text-center mb-4">
                   <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">
                     {member.name}
                   </h3>
+
                   <p className="text-sm text-primary-green font-medium mb-2">
                     {member.position}
                   </p>
+
                   {member.bio && (
                     <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-3">
                       {member.bio}
                     </p>
                   )}
+
                   {(member.email || member.phone) && (
                     <div className="mt-3 text-xs text-gray-500 dark:text-gray-400">
                       {member.email && <p>{member.email}</p>}
+
                       {member.phone && <p>{member.phone}</p>}
                     </div>
                   )}
                 </div>
 
                 {/* Actions */}
+
                 <div className="flex items-center justify-center space-x-2">
                   <button
                     onClick={() => handleEdit(member)}
                     className="flex items-center space-x-1 px-3 py-1.5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 text-sm"
                   >
                     <Edit className="w-3 h-3" />
+
                     <span>Edit</span>
                   </button>
+
                   <button
                     onClick={() => member._id && handleDelete(member._id)}
-                    className="flex items-center space-x-1 px-3 py-1.5 bg-red-500 text-white rounded-lg hover:bg-red-600 text-sm"
+                    disabled={deleting === member._id}
+                    className="flex items-center space-x-1 px-3 py-1.5 bg-red-500 text-white rounded-lg hover:bg-red-600 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    <Trash2 className="w-3 h-3" />
-                    <span>Delete</span>
+                    {deleting === member._id ? (
+                      <>
+                        <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-white"></div>
+
+                        <span>Deleting...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Trash2 className="w-3 h-3" />
+
+                        <span>Delete</span>
+                      </>
+                    )}
                   </button>
                 </div>
 
                 {/* Order Badge */}
+
                 <div className="mt-3 text-center">
                   <span className="text-xs bg-gray-200 dark:bg-gray-600 px-2 py-1 rounded">
                     Order: {member.order}
@@ -373,10 +631,3 @@ export default function LeadershipManagementPage() {
     </div>
   );
 }
-
-
-
-
-
-
-

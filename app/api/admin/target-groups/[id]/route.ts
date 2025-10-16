@@ -4,7 +4,7 @@ import { getUserFromRequest } from "~/lib/auth/session";
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await getUserFromRequest(request);
@@ -16,11 +16,11 @@ export async function PUT(
     }
 
     const body = await request.json();
-    const { name, description, icon } = body;
+    const { title, icon, iconWidth, iconHeight } = body;
 
-    if (!name || !description) {
+    if (!title) {
       return NextResponse.json(
-        { success: false, error: "Name and description are required" },
+        { success: false, error: "Title is required" },
         { status: 400 }
       );
     }
@@ -36,8 +36,10 @@ export async function PUT(
       );
     }
 
+    const { id } = await params;
+
     const groupIndex = settings.targetGroups.findIndex(
-      (g: { _id: { toString: () => string } }) => g._id.toString() === params.id
+      (g: any) => g._id?.toString() === id
     );
     if (groupIndex === -1) {
       return NextResponse.json(
@@ -47,11 +49,13 @@ export async function PUT(
     }
 
     settings.targetGroups[groupIndex] = {
-      ...settings.targetGroups[groupIndex].toObject(),
-      name,
-      description,
+      ...((settings.targetGroups[groupIndex] as any).toObject?.() ||
+        settings.targetGroups[groupIndex]),
+      title,
       icon: icon || "",
-    };
+      iconWidth: iconWidth || "",
+      iconHeight: iconHeight || "",
+    } as any;
 
     await settings.save();
     return NextResponse.json({
@@ -60,8 +64,10 @@ export async function PUT(
     });
   } catch (error: unknown) {
     console.error("Error updating target group:", error);
+    const errorMessage =
+      error instanceof Error ? error.message : "Failed to update target group";
     return NextResponse.json(
-      { success: false, error: error.message },
+      { success: false, error: errorMessage },
       { status: 500 }
     );
   }
@@ -69,7 +75,7 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await getUserFromRequest(request);
@@ -91,8 +97,10 @@ export async function DELETE(
       );
     }
 
+    const { id } = await params;
+
     const groupIndex = settings.targetGroups.findIndex(
-      (g: { _id: { toString: () => string } }) => g._id.toString() === params.id
+      (g: any) => g._id?.toString() === id
     );
     if (groupIndex === -1) {
       return NextResponse.json(
@@ -110,8 +118,10 @@ export async function DELETE(
     });
   } catch (error: unknown) {
     console.error("Error deleting target group:", error);
+    const errorMessage =
+      error instanceof Error ? error.message : "Failed to delete target group";
     return NextResponse.json(
-      { success: false, error: error.message },
+      { success: false, error: errorMessage },
       { status: 500 }
     );
   }

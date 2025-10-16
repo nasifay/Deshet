@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { Search, Filter, Eye, Check, X, Clock, UserCheck } from 'lucide-react';
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { Search, Filter, Eye, Check, X, Clock, UserCheck } from "lucide-react";
 
 interface Volunteer {
   _id: string;
@@ -12,7 +12,7 @@ interface Volunteer {
   location: string;
   availability: string;
   skills: string[];
-  status: 'pending' | 'reviewed' | 'approved' | 'rejected' | 'contacted';
+  status: "pending" | "reviewed" | "approved" | "rejected" | "contacted";
   reviewedBy?: {
     name: string;
   };
@@ -22,11 +22,17 @@ interface Volunteer {
 export default function VolunteersPage() {
   const [volunteers, setVolunteers] = useState<Volunteer[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [stats, setStats] = useState({ pending: 0, reviewed: 0, approved: 0, rejected: 0 });
+  const [stats, setStats] = useState({
+    pending: 0,
+    reviewed: 0,
+    approved: 0,
+    rejected: 0,
+    contacted: 0,
+  });
 
   useEffect(() => {
     fetchVolunteers();
@@ -37,7 +43,7 @@ export default function VolunteersPage() {
       setLoading(true);
       const params = new URLSearchParams({
         page: page.toString(),
-        limit: '10',
+        limit: "10",
         ...(statusFilter && { status: statusFilter }),
         ...(searchTerm && { search: searchTerm }),
       });
@@ -48,20 +54,29 @@ export default function VolunteersPage() {
       if (data.success) {
         setVolunteers(data.data);
         setTotalPages(data.pagination.pages);
-        
+
         // Calculate stats
-        const allResponse = await fetch('/api/admin/volunteers?limit=1000');
+        const allResponse = await fetch("/api/admin/volunteers?limit=1000");
         const allData = await allResponse.json();
         if (allData.success) {
-          const statusCount = allData.data.reduce((acc: Record<string, number>, v: Volunteer) => {
-            acc[v.status] = (acc[v.status] || 0) + 1;
-            return acc;
-          }, {});
-          setStats(statusCount);
+          const statusCount = allData.data.reduce(
+            (acc: Record<string, number>, v: Volunteer) => {
+              acc[v.status] = (acc[v.status] || 0) + 1;
+              return acc;
+            },
+            {}
+          );
+          setStats({
+            pending: statusCount.pending || 0,
+            reviewed: statusCount.reviewed || 0,
+            approved: statusCount.approved || 0,
+            rejected: statusCount.rejected || 0,
+            contacted: statusCount.contacted || 0,
+          });
         }
       }
     } catch (error) {
-      console.error('Error fetching volunteers:', error);
+      console.error("Error fetching volunteers:", error);
     } finally {
       setLoading(false);
     }
@@ -70,8 +85,8 @@ export default function VolunteersPage() {
   const handleStatusChange = async (id: string, newStatus: string) => {
     try {
       const response = await fetch(`/api/admin/volunteers/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: newStatus }),
       });
 
@@ -79,11 +94,11 @@ export default function VolunteersPage() {
       if (data.success) {
         fetchVolunteers();
       } else {
-        alert(data.error || 'Failed to update status');
+        alert(data.error || "Failed to update status");
       }
     } catch (error) {
-      console.error('Error updating status:', error);
-      alert('Failed to update status');
+      console.error("Error updating status:", error);
+      alert("Failed to update status");
     }
   };
 
@@ -95,11 +110,14 @@ export default function VolunteersPage() {
 
   const getStatusBadge = (status: string) => {
     const colors = {
-      pending: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300',
-      reviewed: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300',
-      approved: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
-      rejected: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300',
-      contacted: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300',
+      pending:
+        "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",
+      reviewed: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
+      approved:
+        "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
+      rejected: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300",
+      contacted:
+        "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300",
     };
     return colors[status as keyof typeof colors] || colors.pending;
   };
@@ -119,7 +137,9 @@ export default function VolunteersPage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-black text-gray-900 dark:text-white">Volunteer Applications</h1>
+        <h1 className="text-3xl font-black text-gray-900 dark:text-white">
+          Volunteer Applications
+        </h1>
         <p className="text-gray-600 dark:text-gray-400 mt-1">
           Review and manage volunteer applications
         </p>
@@ -130,8 +150,12 @@ export default function VolunteersPage() {
         <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-yellow-800 dark:text-yellow-200">Pending</p>
-              <p className="text-2xl font-bold text-yellow-900 dark:text-yellow-100">{stats.pending || 0}</p>
+              <p className="text-sm font-medium text-yellow-800 dark:text-yellow-200">
+                Pending
+              </p>
+              <p className="text-2xl font-bold text-yellow-900 dark:text-yellow-100">
+                {stats.pending || 0}
+              </p>
             </div>
             <Clock className="w-8 h-8 text-yellow-600 dark:text-yellow-400" />
           </div>
@@ -140,8 +164,12 @@ export default function VolunteersPage() {
         <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-blue-800 dark:text-blue-200">Reviewed</p>
-              <p className="text-2xl font-bold text-blue-900 dark:text-blue-100">{stats.reviewed || 0}</p>
+              <p className="text-sm font-medium text-blue-800 dark:text-blue-200">
+                Reviewed
+              </p>
+              <p className="text-2xl font-bold text-blue-900 dark:text-blue-100">
+                {stats.reviewed || 0}
+              </p>
             </div>
             <Eye className="w-8 h-8 text-blue-600 dark:text-blue-400" />
           </div>
@@ -150,8 +178,12 @@ export default function VolunteersPage() {
         <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-green-800 dark:text-green-200">Approved</p>
-              <p className="text-2xl font-bold text-green-900 dark:text-green-100">{stats.approved || 0}</p>
+              <p className="text-sm font-medium text-green-800 dark:text-green-200">
+                Approved
+              </p>
+              <p className="text-2xl font-bold text-green-900 dark:text-green-100">
+                {stats.approved || 0}
+              </p>
             </div>
             <Check className="w-8 h-8 text-green-600 dark:text-green-400" />
           </div>
@@ -160,8 +192,12 @@ export default function VolunteersPage() {
         <div className="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-purple-800 dark:text-purple-200">Contacted</p>
-              <p className="text-2xl font-bold text-purple-900 dark:text-purple-100">{stats.contacted || 0}</p>
+              <p className="text-sm font-medium text-purple-800 dark:text-purple-200">
+                Contacted
+              </p>
+              <p className="text-2xl font-bold text-purple-900 dark:text-purple-100">
+                {stats.contacted || 0}
+              </p>
             </div>
             <UserCheck className="w-8 h-8 text-purple-600 dark:text-purple-400" />
           </div>
@@ -210,11 +246,15 @@ export default function VolunteersPage() {
         {loading ? (
           <div className="p-8 text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-green mx-auto"></div>
-            <p className="mt-4 text-gray-600 dark:text-gray-400">Loading applications...</p>
+            <p className="mt-4 text-gray-600 dark:text-gray-400">
+              Loading applications...
+            </p>
           </div>
         ) : volunteers.length === 0 ? (
           <div className="p-8 text-center">
-            <p className="text-gray-600 dark:text-gray-400">No volunteer applications found</p>
+            <p className="text-gray-600 dark:text-gray-400">
+              No volunteer applications found
+            </p>
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -246,21 +286,29 @@ export default function VolunteersPage() {
               </thead>
               <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                 {volunteers.map((volunteer) => (
-                  <tr key={volunteer._id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                  <tr
+                    key={volunteer._id}
+                    className="hover:bg-gray-50 dark:hover:bg-gray-700"
+                  >
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-medium text-gray-900 dark:text-white">
                         {volunteer.fullName}
                       </div>
                       {volunteer.skills.length > 0 && (
                         <div className="text-xs text-gray-500 dark:text-gray-400">
-                          {volunteer.skills.slice(0, 2).join(', ')}
-                          {volunteer.skills.length > 2 && ` +${volunteer.skills.length - 2}`}
+                          {volunteer.skills.slice(0, 2).join(", ")}
+                          {volunteer.skills.length > 2 &&
+                            ` +${volunteer.skills.length - 2}`}
                         </div>
                       )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900 dark:text-white">{volunteer.email}</div>
-                      <div className="text-sm text-gray-500 dark:text-gray-400">{volunteer.phone}</div>
+                      <div className="text-sm text-gray-900 dark:text-white">
+                        {volunteer.email}
+                      </div>
+                      <div className="text-sm text-gray-500 dark:text-gray-400">
+                        {volunteer.phone}
+                      </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                       {volunteer.location}
@@ -292,17 +340,21 @@ export default function VolunteersPage() {
                         >
                           <Eye className="w-4 h-4" />
                         </Link>
-                        {volunteer.status === 'pending' && (
+                        {volunteer.status === "pending" && (
                           <>
                             <button
-                              onClick={() => handleStatusChange(volunteer._id, 'approved')}
+                              onClick={() =>
+                                handleStatusChange(volunteer._id, "approved")
+                              }
                               className="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300"
                               title="Approve"
                             >
                               <Check className="w-4 h-4" />
                             </button>
                             <button
-                              onClick={() => handleStatusChange(volunteer._id, 'rejected')}
+                              onClick={() =>
+                                handleStatusChange(volunteer._id, "rejected")
+                              }
                               className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
                               title="Reject"
                             >
@@ -325,7 +377,7 @@ export default function VolunteersPage() {
             <button
               onClick={() => setPage(page - 1)}
               disabled={page === 1}
-              className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-600 disabled:opacity-[0.5] disabled:cursor-not-allowed"
             >
               Previous
             </button>
@@ -335,7 +387,7 @@ export default function VolunteersPage() {
             <button
               onClick={() => setPage(page + 1)}
               disabled={page === totalPages}
-              className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-600 disabled:opacity-[0.5] disabled:cursor-not-allowed"
             >
               Next
             </button>
@@ -345,11 +397,3 @@ export default function VolunteersPage() {
     </div>
   );
 }
-
-
-
-
-
-
-
-

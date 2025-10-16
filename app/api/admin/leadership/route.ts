@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import connectDB from "~/lib/db/mongodb";
 import { getUserFromRequest } from "~/lib/auth/session";
+import mongoose from "mongoose";
 
+// GET - List all leadership members
 export async function GET(request: NextRequest) {
   try {
     const user = await getUserFromRequest(request);
@@ -12,40 +14,44 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    console.log("🔍 Admin leadership API called");
     await connectDB();
+    console.log("✅ Database connected");
+
     const SiteSettings = (await import("~/lib/db/models/SiteSettings")).default;
 
     const settings = await SiteSettings.findOne();
-    const leadership = settings?.leadership || [];
+    if (!settings) {
+      return NextResponse.json(
+        { success: false, error: "Settings not found" },
+        { status: 404 }
+      );
+    }
 
-    // Add IDs to each member for editing
-    const membersWithIds = leadership.map(
-      (
-        member: {
-          _id?: unknown;
-          toObject?: () => unknown;
-          [key: string]: unknown;
-        },
-        index: number
-      ) => ({
-        _id: member._id || `member-${index}`,
-        ...(member.toObject ? member.toObject() : member),
-      })
+    // Sort leadership by order
+    const leadership = settings.leadership.sort(
+      (a: any, b: any) => (a.order || 0) - (b.order || 0)
     );
+
+    console.log(`📊 Found ${leadership.length} leadership members`);
 
     return NextResponse.json({
       success: true,
-      data: membersWithIds,
+      data: leadership,
     });
-  } catch (error: unknown) {
-    console.error("Error fetching leadership:", error);
+  } catch (error) {
+    console.error("❌ Error fetching leadership members:", error);
+    const errorMessage =
+      error instanceof Error ? error.message : "Unknown error";
+    console.error("Error details:", errorMessage);
     return NextResponse.json(
-      { success: false, error: error.message || "Failed to fetch leadership" },
+      { success: false, error: "Internal server error", details: errorMessage },
       { status: 500 }
     );
   }
 }
 
+// POST - Create new leadership member
 export async function POST(request: NextRequest) {
   try {
     const user = await getUserFromRequest(request);
@@ -56,45 +62,63 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    await connectDB();
+
     const body = await request.json();
+    console.log("POST API - Received body:", body);
+
     const { name, position, bio, photo, order, email, phone } = body;
 
+    // Validate required fields
     if (!name || !position) {
+      console.log("POST API - Validation failed: missing name or position");
       return NextResponse.json(
         { success: false, error: "Name and position are required" },
         { status: 400 }
       );
     }
 
-    await connectDB();
     const SiteSettings = (await import("~/lib/db/models/SiteSettings")).default;
 
-    let settings = await SiteSettings.findOne();
+    const settings = await SiteSettings.findOne();
     if (!settings) {
-      settings = await SiteSettings.create({ leadership: [] });
+      return NextResponse.json(
+        { success: false, error: "Settings not found" },
+        { status: 404 }
+      );
     }
 
-    // Add new member
-    settings.leadership.push({
+    // Create new leadership member
+    const newMember = {
+      _id: new mongoose.Types.ObjectId(),
       name,
       position,
       bio: bio || "",
       photo: photo || "",
-      order: order || settings.leadership.length,
+      order: order !== undefined ? order : settings.leadership.length,
       email: email || "",
       phone: phone || "",
-    });
+    };
 
-    await settings.save();
+    console.log("POST API - Creating new member:", newMember);
+
+    // Add to leadership array
+    settings.leadership.push(newMember as any);
+    await settings.save({ validateModifiedOnly: true });
+
+    console.log("POST API - Member created successfully");
 
     return NextResponse.json({
       success: true,
-      data: settings.leadership[settings.leadership.length - 1],
+      data: newMember,
+      message: "Leadership member created successfully",
     });
-  } catch (error: unknown) {
+  } catch (error) {
     console.error("Error creating leadership member:", error);
+    const errorMessage =
+      error instanceof Error ? error.message : "Internal server error";
     return NextResponse.json(
-      { success: false, error: error.message || "Failed to create member" },
+      { success: false, error: errorMessage },
       { status: 500 }
     );
   }

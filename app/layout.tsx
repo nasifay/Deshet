@@ -47,7 +47,7 @@ export default function RootLayout({
   const organizationSchema = generateOrganizationSchema();
 
   return (
-    <html lang="en" className={roboto.variable}>
+    <html lang="en" className={roboto.className}>
       <head>
         <script
           type="application/ld+json"

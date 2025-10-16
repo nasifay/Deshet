@@ -44,13 +44,13 @@ export function DonationModal({ isOpen, onClose }: DonationModalProps) {
 
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     }
 
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     };
   }, [isOpen]);
 
@@ -80,7 +80,7 @@ export function DonationModal({ isOpen, onClose }: DonationModalProps) {
   `;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
       <style dangerouslySetInnerHTML={{ __html: scrollbarStyles }} />
       <div className="relative w-[95vw] h-[95vh] overflow-y-auto bg-white shadow-2xl rounded-t-[46px] rounded-b-none modal-scroll">
         {/* Close button */}
@@ -103,8 +103,8 @@ export function DonationModal({ isOpen, onClose }: DonationModalProps) {
 
                 <p className="w-full max-w-[537px] [text-shadow:0px_4px_4px_#00000040] [font-family:'Roboto',Helvetica] font-normal text-transparent text-lg md:text-2xl tracking-[0] leading-5 md:leading-6">
                   <span className="font-light text-white leading-5 md:leading-[27.8px]">
-                    Empowering Youth, Uplifting Women, Protecting The Vulnerable,
-                    And Strengthening Leaders.
+                    Empowering Youth, Uplifting Women, Protecting The
+                    Vulnerable, And Strengthening Leaders.
                     <br />
                   </span>
                   <span className="font-medium text-[#ff9700] leading-5 md:leading-[27.8px]">
@@ -161,7 +161,9 @@ export function DonationModal({ isOpen, onClose }: DonationModalProps) {
                       src={bank.copyIcon}
                     />
                     <span className="[text-shadow:0px_4px_4px_#00000040] [font-family:'Roboto',Helvetica] font-light text-[#020202] text-lg md:text-2xl tracking-[0] leading-tight md:leading-[27.8px]">
-                      {copiedAccount === bank.accountNumber ? "Copied!" : "Copy"}
+                      {copiedAccount === bank.accountNumber
+                        ? "Copied!"
+                        : "Copy"}
                     </span>
                   </Button>
                 </CardContent>

@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document, Model } from 'mongoose';
+import mongoose, { Schema, Document, Model } from "mongoose";
 
 export interface ISiteSettings extends Document {
   _id: mongoose.Types.ObjectId;
@@ -30,8 +30,12 @@ export interface ISiteSettings extends Document {
   // Leadership Team
   leadership: Array<{
     name: string;
-    title: string;
-    image: string;
+    position: string;
+    bio?: string;
+    photo?: string;
+    order: number;
+    email?: string;
+    phone?: string;
   }>;
   // Target Groups
   targetGroups: Array<{
@@ -58,17 +62,17 @@ export interface ISiteSettings extends Document {
 const SiteSettingsSchema: Schema<ISiteSettings> = new Schema(
   {
     stats: {
-      staffCount: { type: String, default: '58' },
-      officesCount: { type: String, default: '5' },
-      regionsCount: { type: String, default: '4' },
-      volunteersCount: { type: String, default: '250+' },
-      protocolsCount: { type: String, default: '15' },
+      staffCount: { type: String, default: "58" },
+      officesCount: { type: String, default: "5" },
+      regionsCount: { type: String, default: "4" },
+      volunteersCount: { type: String, default: "250+" },
+      protocolsCount: { type: String, default: "15" },
     },
     achievements: {
-      recognitionsCount: { type: String, default: '120+' },
-      radioYears: { type: String, default: '11+' },
-      serviceYears: { type: String, default: '28' },
-      activeRegions: { type: String, default: '4' },
+      recognitionsCount: { type: String, default: "120+" },
+      radioYears: { type: String, default: "11+" },
+      serviceYears: { type: String, default: "28" },
+      activeRegions: { type: String, default: "4" },
     },
     coreValues: [
       {
@@ -83,9 +87,13 @@ const SiteSettingsSchema: Schema<ISiteSettings> = new Schema(
     ],
     leadership: [
       {
-        name: String,
-        title: String,
-        image: String,
+        name: { type: String, required: true },
+        position: { type: String, required: true },
+        bio: { type: String, default: "" },
+        photo: { type: String, default: "" },
+        order: { type: Number, default: 0 },
+        email: { type: String, default: "" },
+        phone: { type: String, default: "" },
       },
     ],
     targetGroups: [
@@ -119,8 +127,7 @@ const SiteSettingsSchema: Schema<ISiteSettings> = new Schema(
 );
 
 const SiteSettings: Model<ISiteSettings> =
-  mongoose.models.SiteSettings || mongoose.model<ISiteSettings>('SiteSettings', SiteSettingsSchema);
+  mongoose.models.SiteSettings ||
+  mongoose.model<ISiteSettings>("SiteSettings", SiteSettingsSchema);
 
 export default SiteSettings;
-
-

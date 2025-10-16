@@ -14,7 +14,7 @@ import Link from "next/link";
 export default function Footer() {
   return (
     <footer className="w-full bg-white border-t border-[#4EB778] font-['Roboto']">
-      <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-12 pt-10 pb-6 flex flex-col gap-10">
+      <div className=" mx-auto px-4 md:px-8 lg:px-16 xl:px-20 2xl:px-32 pt-10 pb-6 flex flex-col gap-10">
         {/* --- Top Links --- */}
         <div className="flex flex-wrap items-center gap-6 text-[#666] text-[14px] font-medium tracking-wide">
           <Link

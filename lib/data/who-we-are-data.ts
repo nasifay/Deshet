@@ -10,7 +10,8 @@ export const coreValues: CoreValue[] = [
     icon: "https://c.animaapp.com/mgclt9blEcJSeI/img/asset-1-9.png",
     iconWidth: "w-[148px]",
     iconHeight: "h-[171px]",
-    separator: "https://c.animaapp.com/mgclt9blEcJSeI/img/frame-1000002153-4.svg",
+    separator:
+      "https://c.animaapp.com/mgclt9blEcJSeI/img/frame-1000002153-4.svg",
     gap: "gap-20",
   },
   {
@@ -19,7 +20,8 @@ export const coreValues: CoreValue[] = [
     icon: "https://c.animaapp.com/mgclt9blEcJSeI/img/gemini-generated-image-5bmphv5bmphv5bmp-photoroom-1.png",
     iconWidth: "w-[203px]",
     iconHeight: "h-[175px]",
-    separator: "https://c.animaapp.com/mgclt9blEcJSeI/img/frame-1000002153-2.svg",
+    separator:
+      "https://c.animaapp.com/mgclt9blEcJSeI/img/frame-1000002153-2.svg",
     gap: "gap-[58px]",
   },
   {
@@ -28,7 +30,8 @@ export const coreValues: CoreValue[] = [
     icon: "https://c.animaapp.com/mgclt9blEcJSeI/img/gemini-generated-image-gh6fohgh6fohgh6f-photoroom-1.png",
     iconWidth: "w-[175px]",
     iconHeight: "h-[129px]",
-    separator: "https://c.animaapp.com/mgclt9blEcJSeI/img/frame-1000002153-1.svg",
+    separator:
+      "https://c.animaapp.com/mgclt9blEcJSeI/img/frame-1000002153-1.svg",
     gap: "gap-[95px]",
   },
   {
@@ -46,7 +49,8 @@ export const coreValues: CoreValue[] = [
     icon: "https://c.animaapp.com/mgclt9blEcJSeI/img/gemini-generated-image-5i1yck5i1yck5i1y-photoroom-1.png",
     iconWidth: "w-[175px]",
     iconHeight: "h-[162px]",
-    separator: "https://c.animaapp.com/mgclt9blEcJSeI/img/frame-1000002153-3.svg",
+    separator:
+      "https://c.animaapp.com/mgclt9blEcJSeI/img/frame-1000002153-3.svg",
     gap: "gap-[64.5px]",
   },
 ];
@@ -54,53 +58,63 @@ export const coreValues: CoreValue[] = [
 export const leadershipTeam: LeadershipMember[] = [
   {
     name: "SELAMAWIT GETACHEW",
-    title: "Executive Director",
-    image: "https://c.animaapp.com/mgclt9blEcJSeI/img/rectangle-910.svg",
+    position: "Executive Director",
+    photo: "https://c.animaapp.com/mgclt9blEcJSeI/img/rectangle-910.svg",
+    order: 0,
   },
   {
     name: "DAWIT\nMEKONNEN",
-    title: "Finance & Administration Director",
-    image: "https://c.animaapp.com/mgclt9blEcJSeI/img/rectangle-912.svg",
+    position: "Finance & Administration Director",
+    photo: "https://c.animaapp.com/mgclt9blEcJSeI/img/rectangle-912.svg",
+    order: 1,
   },
   {
     name: "MERON\nABEBE",
-    title: "Program Director",
-    image: "https://c.animaapp.com/mgclt9blEcJSeI/img/rectangle-914-3.svg",
+    position: "Program Director",
+    photo: "https://c.animaapp.com/mgclt9blEcJSeI/img/rectangle-914-3.svg",
+    order: 2,
   },
   {
     name: "MERON\nABEBE",
-    title: "Program Director",
-    image: "https://c.animaapp.com/mgclt9blEcJSeI/img/rectangle-914.svg",
+    position: "Program Director",
+    photo: "https://c.animaapp.com/mgclt9blEcJSeI/img/rectangle-914.svg",
+    order: 3,
   },
   {
     name: "DANIEL\nABEBE",
-    title: "Program Director",
-    image: "https://c.animaapp.com/mgclt9blEcJSeI/img/rectangle-914-1.svg",
+    position: "Program Director",
+    photo: "https://c.animaapp.com/mgclt9blEcJSeI/img/rectangle-914-1.svg",
+    order: 4,
   },
   {
     name: "SELAMAWIT GETACHEW",
-    title: "Executive Director",
-    image: "https://c.animaapp.com/mgclt9blEcJSeI/img/rectangle-910.svg",
+    position: "Executive Director",
+    photo: "https://c.animaapp.com/mgclt9blEcJSeI/img/rectangle-910.svg",
+    order: 5,
   },
   {
     name: "DAWIT\nMEKONNEN",
-    title: "Finance & Administration Director",
-    image: "https://c.animaapp.com/mgclt9blEcJSeI/img/rectangle-912.svg",
+    position: "Finance & Administration Director",
+    photo: "https://c.animaapp.com/mgclt9blEcJSeI/img/rectangle-912.svg",
+    order: 6,
   },
   {
     name: "MERON\nABEBE",
-    title: "Program Director",
-    image: "https://c.animaapp.com/mgclt9blEcJSeI/img/rectangle-914-3.svg",
+    position: "Program Director",
+    photo: "https://c.animaapp.com/mgclt9blEcJSeI/img/rectangle-914-3.svg",
+    order: 7,
   },
   {
     name: "MERON\nABEBE",
-    title: "Program Director",
-    image: "https://c.animaapp.com/mgclt9blEcJSeI/img/rectangle-914.svg",
+    position: "Program Director",
+    photo: "https://c.animaapp.com/mgclt9blEcJSeI/img/rectangle-914.svg",
+    order: 8,
   },
   {
     name: "DANIEL\nABEBE",
-    title: "Program Director",
-    image: "https://c.animaapp.com/mgclt9blEcJSeI/img/rectangle-914-1.svg",
+    position: "Program Director",
+    photo: "https://c.animaapp.com/mgclt9blEcJSeI/img/rectangle-914-1.svg",
+    order: 9,
   },
 ];
 

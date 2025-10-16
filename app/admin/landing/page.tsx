@@ -80,6 +80,7 @@ export default function LandingPageAdmin() {
           sections: (data.data.sections || []).map(
             (
               section: {
+                id?: string;
                 type: string;
                 data: Record<string, unknown>;
                 order?: number;
@@ -127,9 +128,23 @@ export default function LandingPageAdmin() {
         id: "hero-section",
         type: "HeroSection",
         data: {
-          title: "SERVING ETHIOPIAN YOUTH",
-          subtitle: "",
-          backgroundImage: "/home-hero.png",
+          title: "SERVING",
+          subtitle: "ETHIOPIAN YOUTH",
+          leftImages: [
+            "/landing-left.png",
+            "https://images.unsplash.com/photo-1543269865-cbf427effbad?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          ],
+          middleImages: [
+            "/landing-middle.png",
+            "https://images.unsplash.com/photo-1573496773905-f5b17e76b254?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=2232&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          ],
+          rightImages: [
+            "/landing-right.png",
+            "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            "https://images.unsplash.com/photo-1600880292210-f7615b5978e5?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          ],
           ctaText: "Contact Us",
           ctaLink: "/contact-us",
         },
@@ -195,22 +210,6 @@ export default function LandingPageAdmin() {
         order: 3,
       },
       {
-        id: "supporters-section",
-        type: "SupportersSection",
-        data: {
-          title: "Our Partners",
-          supporters: [
-            "/suporters/usaid.png",
-            "/suporters/pepfar.png",
-            "/suporters/gac.png",
-            "/suporters/ipas.png",
-            "/suporters/norwegian-church.png",
-            "/suporters/sonke-gender-justice.png",
-          ],
-        },
-        order: 4,
-      },
-      {
         id: "achievements-section",
         type: "AchievementsSection",
         data: {
@@ -231,16 +230,7 @@ export default function LandingPageAdmin() {
             },
           ],
         },
-        order: 5,
-      },
-      {
-        id: "news-events-section",
-        type: "NewsEventsSection",
-        data: {
-          title: "Latest News & Events",
-          showLimit: 3,
-        },
-        order: 6,
+        order: 4,
       },
       {
         id: "volunteer-banner",
@@ -253,7 +243,7 @@ export default function LandingPageAdmin() {
           ctaLink: "/volunteer",
           backgroundImage: "/images/cta.jpg",
         },
-        order: 7,
+        order: 5,
       },
     ];
 
@@ -287,6 +277,26 @@ export default function LandingPageAdmin() {
       alert("Failed to save landing page");
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleAutoSave = async (sections: typeof formData.sections) => {
+    try {
+      const response = await fetch("/api/admin/landing", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ...formData, sections }),
+      });
+
+      const data = await response.json();
+
+      if (!data.success) {
+        console.error("Auto-save failed:", data.error);
+      }
+    } catch (error) {
+      console.error("Error auto-saving:", error);
     }
   };
 
@@ -406,7 +416,10 @@ export default function LandingPageAdmin() {
                 onChange={(e) =>
                   setFormData((prev) => ({
                     ...prev,
-                    status: e.target.value as "draft" | "published" | "archived",
+                    status: e.target.value as
+                      | "draft"
+                      | "published"
+                      | "archived",
                   }))
                 }
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green text-sm"
@@ -533,6 +546,7 @@ export default function LandingPageAdmin() {
       <LandingSectionEditor
         sections={formData.sections}
         onChange={(sections) => setFormData((prev) => ({ ...prev, sections }))}
+        onAutoSave={handleAutoSave}
       />
     </div>
   );

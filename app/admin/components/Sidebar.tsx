@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
   FileText,
@@ -14,7 +14,11 @@ import {
   X,
   Heart,
   Home,
-} from 'lucide-react';
+  MessageSquare,
+  Building2,
+  UsersRound,
+  Handshake,
+} from "lucide-react";
 
 interface MenuItem {
   title: string;
@@ -40,56 +44,76 @@ export default function Sidebar({
 
   const menuItems: MenuItem[] = [
     {
-      title: 'Dashboard',
-      url: '/admin',
+      title: "Dashboard",
+      url: "/admin",
       icon: <LayoutDashboard className="w-5 h-5" />,
     },
     {
-      title: 'Landing Page',
-      url: '/admin/landing',
+      title: "Landing Page",
+      url: "/admin/landing",
       icon: <Home className="w-5 h-5" />,
     },
     {
-      title: 'Pages',
-      url: '/admin/pages',
+      title: "Pages",
+      url: "/admin/pages",
       icon: <FileText className="w-5 h-5" />,
     },
     {
-      title: 'News & Events',
-      url: '/admin/news',
+      title: "News & Events",
+      url: "/admin/news",
       icon: <Newspaper className="w-5 h-5" />,
     },
     {
-      title: 'Programs',
-      url: '/admin/programs',
+      title: "Programs",
+      url: "/admin/programs",
       icon: <FolderKanban className="w-5 h-5" />,
     },
     {
-      title: 'Gallery',
-      url: '/admin/gallery',
+      title: "Gallery",
+      url: "/admin/gallery",
       icon: <Images className="w-5 h-5" />,
     },
     {
-      title: 'Volunteers',
-      url: '/admin/volunteers',
+      title: "Volunteers",
+      url: "/admin/volunteers",
       icon: <Heart className="w-5 h-5" />,
     },
     {
-      title: 'Users',
-      url: '/admin/users',
-      icon: <Users className="w-5 h-5" />,
-      roles: ['admin', 'superadmin'],
+      title: "Contacts",
+      url: "/admin/contacts",
+      icon: <MessageSquare className="w-5 h-5" />,
     },
     {
-      title: 'Analytics',
-      url: '/admin/analytics',
+      title: "Bank Options",
+      url: "/admin/bank-options",
+      icon: <Building2 className="w-5 h-5" />,
+    },
+    {
+      title: "Leadership",
+      url: "/admin/leadership",
+      icon: <UsersRound className="w-5 h-5" />,
+    },
+    {
+      title: "Supporters",
+      url: "/admin/supporters",
+      icon: <Handshake className="w-5 h-5" />,
+    },
+    {
+      title: "Users",
+      url: "/admin/users",
+      icon: <Users className="w-5 h-5" />,
+      roles: ["admin", "superadmin"],
+    },
+    {
+      title: "Analytics",
+      url: "/admin/analytics",
       icon: <BarChart3 className="w-5 h-5" />,
     },
     {
-      title: 'Settings',
-      url: '/admin/settings',
+      title: "Settings",
+      url: "/admin/settings",
       icon: <Settings className="w-5 h-5" />,
-      roles: ['admin', 'superadmin'],
+      roles: ["admin", "superadmin"],
     },
   ];
 
@@ -100,8 +124,8 @@ export default function Sidebar({
   });
 
   const isActive = (url: string) => {
-    if (url === '/admin') {
-      return pathname === '/admin';
+    if (url === "/admin") {
+      return pathname === "/admin";
     }
     return pathname.startsWith(url);
   };
@@ -111,7 +135,7 @@ export default function Sidebar({
       {/* Desktop Sidebar */}
       <aside
         className={`fixed left-0 top-0 h-full bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-all duration-300 z-40 hidden lg:block ${
-          isOpen ? 'w-64' : 'w-20'
+          isOpen ? "w-64" : "w-20"
         }`}
       >
         {/* Logo */}
@@ -122,8 +146,12 @@ export default function Sidebar({
                 <span className="text-white text-xl font-black">TSD</span>
               </div>
               <div className="flex flex-col">
-                <span className="text-sm font-black text-gray-800 dark:text-white">TSD</span>
-                <span className="text-xs text-gray-500 dark:text-gray-400">Admin</span>
+                <span className="text-sm font-black text-gray-800 dark:text-white">
+                  TSD
+                </span>
+                <span className="text-xs text-gray-500 dark:text-gray-400">
+                  Admin
+                </span>
               </div>
             </div>
           ) : (
@@ -141,13 +169,15 @@ export default function Sidebar({
               href={item.url}
               className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors ${
                 isActive(item.url)
-                  ? 'bg-primary-green text-white'
-                  : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                  ? "bg-primary-green text-white"
+                  : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
               }`}
-              title={isOpen ? '' : item.title}
+              title={isOpen ? "" : item.title}
             >
               {item.icon}
-              {isOpen && <span className="text-sm font-medium">{item.title}</span>}
+              {isOpen && (
+                <span className="text-sm font-medium">{item.title}</span>
+              )}
             </Link>
           ))}
         </nav>
@@ -156,7 +186,7 @@ export default function Sidebar({
       {/* Mobile Sidebar */}
       <aside
         className={`fixed left-0 top-0 h-full w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-transform duration-300 z-50 lg:hidden ${
-          mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+          mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         {/* Header */}
@@ -166,8 +196,12 @@ export default function Sidebar({
               <span className="text-white text-xl font-black">TSD</span>
             </div>
             <div className="flex flex-col">
-              <span className="text-sm font-black text-gray-800 dark:text-white">TSD</span>
-              <span className="text-xs text-gray-500 dark:text-gray-400">Admin</span>
+              <span className="text-sm font-black text-gray-800 dark:text-white">
+                TSD
+              </span>
+              <span className="text-xs text-gray-500 dark:text-gray-400">
+                Admin
+              </span>
             </div>
           </div>
           <button
@@ -187,8 +221,8 @@ export default function Sidebar({
               onClick={onClose}
               className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors ${
                 isActive(item.url)
-                  ? 'bg-primary-green text-white'
-                  : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                  ? "bg-primary-green text-white"
+                  : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
               }`}
             >
               {item.icon}
@@ -200,4 +234,3 @@ export default function Sidebar({
     </>
   );
 }
-

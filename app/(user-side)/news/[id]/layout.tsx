@@ -9,7 +9,7 @@ import {
 
 interface NewsDetailsLayoutProps {
   children: React.ReactNode;
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 interface NewsPost {
@@ -45,9 +45,10 @@ async function fetchNewsData(slug: string): Promise<NewsPost | null> {
 export async function generateMetadata({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }): Promise<Metadata> {
-  const news = await fetchNewsData(params.id);
+  const { id } = await params;
+  const news = await fetchNewsData(id);
 
   if (!news) {
     return {
@@ -73,7 +74,8 @@ export default async function NewsDetailsLayout({
   children,
   params,
 }: NewsDetailsLayoutProps) {
-  const news = await fetchNewsData(params.id);
+  const { id } = await params;
+  const news = await fetchNewsData(id);
 
   if (!news) {
     return <div className="min-h-screen bg-white">{children}</div>;

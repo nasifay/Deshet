@@ -28,15 +28,19 @@ export async function GET(request: NextRequest) {
         index: number
       ) => ({
         _id: group._id || `group-${index}`,
-        ...(group.toObject ? group.toObject() : group),
+        ...(group.toObject
+          ? (group.toObject() as Record<string, unknown>)
+          : (group as Record<string, unknown>)),
       })
     );
 
     return NextResponse.json({ success: true, data: groupsWithIds });
   } catch (error: unknown) {
     console.error("Error fetching target groups:", error);
+    const errorMessage =
+      error instanceof Error ? error.message : "Failed to fetch target groups";
     return NextResponse.json(
-      { success: false, error: error.message },
+      { success: false, error: errorMessage },
       { status: 500 }
     );
   }
@@ -53,11 +57,11 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { name, description, icon } = body;
+    const { title, icon, iconWidth, iconHeight } = body;
 
-    if (!name || !description) {
+    if (!title) {
       return NextResponse.json(
-        { success: false, error: "Name and description are required" },
+        { success: false, error: "Title is required" },
         { status: 400 }
       );
     }
@@ -70,7 +74,12 @@ export async function POST(request: NextRequest) {
       settings = await SiteSettings.create({ targetGroups: [] });
     }
 
-    settings.targetGroups.push({ name, description, icon: icon || "" });
+    settings.targetGroups.push({
+      title,
+      icon: icon || "",
+      iconWidth: iconWidth || "",
+      iconHeight: iconHeight || "",
+    });
     await settings.save();
 
     return NextResponse.json({
@@ -79,8 +88,10 @@ export async function POST(request: NextRequest) {
     });
   } catch (error: unknown) {
     console.error("Error creating target group:", error);
+    const errorMessage =
+      error instanceof Error ? error.message : "Failed to create target group";
     return NextResponse.json(
-      { success: false, error: error.message },
+      { success: false, error: errorMessage },
       { status: 500 }
     );
   }

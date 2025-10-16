@@ -35,15 +35,15 @@ export default function AboutSection({
 
   return (
     <section className="relative w-full bg-white py-20 px-6 md:px-12 lg:px-24 font-['Roboto']">
-      <div className="w-full flex flex-col wxga:flex-row items-center justify-center gap-12 wxga:gap-[118px]">
+      <div className="w-full flex flex-col lg:flex-row items-center justify-center gap-12 xl:gap-[118px]">
         {/* Left Column */}
-        <div>
-          <h2 className="font-roboto text-primary-green text-5xl md:text-4xl wxga:text-7xl font-black uppercase mb-6 tracking-tight">
+        <div className="w-full lg:flex-1 lg:max-w-[50%]">
+          <h2 className="primary-title text-primary-green uppercase mb-6 ">
             {title}
           </h2>
 
           <div
-            className="font-robot font-light text-[#444] text-sm md:text-lg lg:text-2xl  mb-8 max-w-[620px] text-justify tracking-normal leading-4 md:leading-7"
+            className="description   mb-8 max-w-[620px] text-justify tracking-normal leading-4 md:leading-7"
             dangerouslySetInnerHTML={{ __html: content }}
           />
 
@@ -56,13 +56,13 @@ export default function AboutSection({
         </div>
 
         {/* Right Column — Fade Carousel */}
-        <div className="flex justify-center relative w-full wxga:w-auto">
+        <div className="flex justify-center relative w-full lg:flex-1 lg:max-w-[50%]">
           <div className="relative w-full wxga:w-[520px] h-[330px] md:h-[380px] lg:h-[400px] rounded-2xl overflow-hidden shadow-sm">
             {images.map((src, i) => (
               <div
                 key={i}
                 className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-                  i === currentIndex ? "opacity-100" : "opacity-0"
+                  i === currentIndex ? "opacity-[1]" : "opacity-0"
                 }`}
               >
                 <Image

@@ -228,12 +228,12 @@ export default function NewGalleryItemPage() {
               </div>
 
               {/* Overlay buttons */}
-              <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center space-x-3">
+              <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-[1] transition-opacity rounded-lg flex items-center justify-center space-x-3">
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
                   disabled={uploading}
-                  className="px-4 py-2 bg-white text-gray-900 rounded-lg hover:bg-gray-100 transition-colors text-sm font-medium disabled:opacity-50"
+                  className="px-4 py-2 bg-white text-gray-900 rounded-lg hover:bg-gray-100 transition-colors text-sm font-medium disabled:opacity-[0.5]"
                 >
                   Change
                 </button>
@@ -241,14 +241,14 @@ export default function NewGalleryItemPage() {
                   type="button"
                   onClick={handleRemove}
                   disabled={uploading}
-                  className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors text-sm font-medium disabled:opacity-50"
+                  className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors text-sm font-medium disabled:opacity-[0.5]"
                 >
                   Remove
                 </button>
               </div>
 
               {uploading && (
-                <div className="absolute inset-0 bg-black/40 bg-opacity-70 rounded-lg flex items-center justify-center">
+                <div className="absolute inset-0 bg-black/70 rounded-lg flex items-center justify-center">
                   <div className="text-center">
                     <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-white mx-auto mb-2"></div>
                     <p className="text-white text-sm">Uploading...</p>
@@ -391,7 +391,7 @@ export default function NewGalleryItemPage() {
           <button
             type="submit"
             disabled={saving || !formData.url}
-            className="flex items-center space-x-2 px-6 py-2 bg-primary-green text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center space-x-2 px-6 py-2 bg-primary-green text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-[0.5] disabled:cursor-not-allowed"
           >
             <Save className="w-4 h-4" />
             <span>{saving ? "Saving..." : "Add to Gallery"}</span>

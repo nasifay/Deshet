@@ -134,21 +134,21 @@ export default function TabbedSectionEditor({
                   : "border-transparent hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400"
               }`}
             >
-              <GripVertical className="w-4 h-4 opacity-50" />
+              <GripVertical className="w-4 h-4 opacity-[0.5]" />
               <span className="text-lg">{getIcon(section.type)}</span>
               <span className="font-medium text-sm">
                 {getLabel(section.type)}
               </span>
 
               {/* Reorder & Delete (on hover) */}
-              <div className="absolute -top-2 -right-2 opacity-0 group-hover:opacity-100 transition-opacity flex space-x-1">
+              <div className="absolute -top-2 -right-2 opacity-0 group-hover:opacity-[1] transition-opacity flex space-x-1">
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
                     moveSection(section.id, "left");
                   }}
                   disabled={index === 0}
-                  className="p-1 bg-blue-500 text-white rounded-full hover:bg-blue-600 disabled:opacity-30 disabled:cursor-not-allowed"
+                  className="p-1 bg-blue-500 text-white rounded-full hover:bg-blue-600 disabled:opacity-[0.3] disabled:cursor-not-allowed"
                   title="Move left"
                 >
                   <ChevronLeft className="w-3 h-3" />
@@ -159,7 +159,7 @@ export default function TabbedSectionEditor({
                     moveSection(section.id, "right");
                   }}
                   disabled={index === sections.length - 1}
-                  className="p-1 bg-blue-500 text-white rounded-full hover:bg-blue-600 disabled:opacity-30 disabled:cursor-not-allowed"
+                  className="p-1 bg-blue-500 text-white rounded-full hover:bg-blue-600 disabled:opacity-[0.3] disabled:cursor-not-allowed"
                   title="Move right"
                 >
                   <ChevronRight className="w-3 h-3" />
@@ -214,7 +214,7 @@ export default function TabbedSectionEditor({
 
       {/* Add Section Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto m-4">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-xl font-bold text-gray-900 dark:text-white">
@@ -761,7 +761,7 @@ function LeadershipManager({
                 <button
                   onClick={handleSave}
                   disabled={!formData.name || !formData.position}
-                  className="flex items-center space-x-1 px-3 py-1.5 bg-primary-green text-white rounded-lg hover:bg-green-700 text-sm disabled:opacity-50"
+                  className="flex items-center space-x-1 px-3 py-1.5 bg-primary-green text-white rounded-lg hover:bg-green-700 text-sm disabled:opacity-[0.5]"
                 >
                   <Save className="w-4 h-4" />
                   <span>{isAddingNew ? "Add" : "Save"}</span>
@@ -1490,7 +1490,7 @@ function OperationRegionsManager({
                         >
                           <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
                         </svg>
-                        <span className="absolute top-full mt-1 left-1/2 -translate-x-1/2 text-xs font-bold text-orange-600 whitespace-nowrap bg-white dark:bg-gray-800 px-2 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span className="absolute top-full mt-1 left-1/2 -translate-x-1/2 text-xs font-bold text-orange-600 whitespace-nowrap bg-white dark:bg-gray-800 px-2 py-1 rounded shadow opacity-0 group-hover:opacity-[1] transition-opacity">
                           {region.name}
                         </span>
                       </div>

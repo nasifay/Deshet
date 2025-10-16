@@ -20,6 +20,7 @@ export default function Header() {
   };
 
   const whoWeAreItems = [
+    { href: "/who-we-are", label: "About Us" },
     { href: "/history", label: "History" },
     { href: "/programs", label: "Programs" },
   ];
@@ -147,7 +148,7 @@ export default function Header() {
         {/* Desktop Donate Button */}
         <Link
           href="/donate"
-          className="hidden lg:inline-block bg-primary-green text-white text-sm md:text-lg lg:text-2xl font-medium px-10 2xl:px-14 py-2 2xl:py-4 rounded-2xl transition-all duration-300"
+          className="hidden lg:inline-block bg-primary-green text-white text-sm md:text-lg lg:text-2xl font-medium px-8 2xl:px-14 py-1 2xl:py-3 rounded-lg transition-all duration-300"
         >
           Donate
         </Link>

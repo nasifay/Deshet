@@ -18,6 +18,8 @@
     "migrate:gallery": "tsx scripts/migrate-gallery-categories.ts",
     "seed:gallery:additional": "tsx scripts/seed-additional-gallery.ts",
     "seed:gallery:complete": "tsx scripts/seed-gallery-complete.ts",
+    "seed:bank-options": "tsx scripts/seed-bank-options-v2.ts",
+    "seed:supporters": "tsx scripts/seed-supporters.ts",
     "verify:ga4": "tsx scripts/verify-ga4-config.ts"
   },
   "dependencies": {

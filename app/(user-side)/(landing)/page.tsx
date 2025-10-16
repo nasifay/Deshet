@@ -57,6 +57,10 @@ export default function Home() {
   const [news, setNews] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const [supporters, setSupporters] = useState<
+    Array<{ name: string; logo: string }>
+  >([]);
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -64,18 +68,25 @@ export default function Home() {
   const fetchData = async () => {
     try {
       // Fetch all data in parallel
-      const [landingResponse, settingsResponse, newsResponse] =
-        await Promise.all([
-          fetch("/api/public/landing"),
-          fetch("/api/public/settings"),
-          fetch("/api/public/news?limit=4&featured=true"),
-        ]);
-
-      const [landingResult, settingsResult, newsResult] = await Promise.all([
-        landingResponse.json(),
-        settingsResponse.json(),
-        newsResponse.json(),
+      const [
+        landingResponse,
+        settingsResponse,
+        newsResponse,
+        supportersResponse,
+      ] = await Promise.all([
+        fetch("/api/public/landing"),
+        fetch("/api/public/settings"),
+        fetch("/api/public/news?limit=4&featured=true"),
+        fetch("/api/public/supporters"),
       ]);
+
+      const [landingResult, settingsResult, newsResult, supportersResult] =
+        await Promise.all([
+          landingResponse.json(),
+          settingsResponse.json(),
+          newsResponse.json(),
+          supportersResponse.json(),
+        ]);
 
       if (landingResult.success) {
         setLandingData(landingResult.data);
@@ -88,6 +99,23 @@ export default function Home() {
       if (newsResult.success) {
         setNews(newsResult.data);
       }
+
+      if (supportersResult.success) {
+        setSupporters(supportersResult.data);
+        console.log("✅ Loaded supporters:", supportersResult.data.length);
+      } else {
+        console.error("❌ Failed to load supporters:", supportersResult.error);
+        // Fallback to default supporters if API fails
+        setSupporters([
+          {
+            name: "Norwegian Church Aid",
+            logo: "/suporters/norweign-church.png",
+          },
+          { name: "Ipas", logo: "/suporters/ipas.png" },
+          { name: "USAID", logo: "/suporters/usaid.png" },
+          { name: "PEPFAR", logo: "/suporters/pepfar.png" },
+        ]);
+      }
     } catch (error) {
       console.error("Error fetching landing page data:", error);
     } finally {
@@ -95,29 +123,28 @@ export default function Home() {
     }
   };
 
-  if (loading) {
-    return <LandingPageSkeleton />;
-  }
-
   // Extract section data from landingData
   const getSectionData = (type: string) => {
     return landingData?.sections?.find((section) => section.type === type)
       ?.data;
   };
 
-  const heroData = getSectionData("hero") as
+  const heroData = getSectionData("HeroSection") as
     | {
         title?: string;
         subtitle?: string;
-        backgroundImage?: string;
+        leftImages?: string[];
+        middleImages?: string[];
+        rightImages?: string[];
         ctaText?: string;
         ctaLink?: string;
       }
     | undefined;
 
-  const aboutData = getSectionData("about") as
+  const aboutData = getSectionData("AboutSection") as
     | {
         title?: string;
+        description?: string;
         content?: string;
         images?: string[];
         ctaText?: string;
@@ -125,63 +152,95 @@ export default function Home() {
       }
     | undefined;
 
-  const programsData = getSectionData("programs") as
+  const programsData = getSectionData("ProgramAreasSection") as
     | {
-        programs?: Array<{ title: string; image: string }>;
+        programs?: Array<{
+          title: string;
+          image: string;
+          description?: string;
+        }>;
       }
     | undefined;
 
-  const achievementsData = getSectionData("achievements") as
+  const statisticsData = getSectionData("StatisticsSection") as
     | {
+        stats?: Array<{
+          number: string;
+          label: string;
+        }>;
+      }
+    | undefined;
+
+  const achievementsData = getSectionData("AchievementsSection") as
+    | {
+        title?: string;
         headerTitle?: string;
         headerSubtitle?: string;
         featuredImage?: string;
       }
     | undefined;
 
-  const volunteerData = getSectionData("volunteer-cta") as
+  const volunteerData = getSectionData("VolunteerBanner") as
     | {
         title?: string;
+        description?: string;
         subtitle?: string;
         backgroundImage?: string;
+        ctaText?: string;
         volunteerButtonText?: string;
         donateButtonText?: string;
+        ctaLink?: string;
       }
     | undefined;
 
   return (
-    <div className="flex  w-full relative flex-col mx-auto items-center">
+    <div className="flex  w-full relative flex-col mx-auto items-center gap-y-2 md:gap-y-14 lg:gap-y-20">
+      {/* Hero Section - Dynamic, fetches data from CMS */}
       <HeroSection
         title={heroData?.title}
         subtitle={heroData?.subtitle}
-        backgroundImage={heroData?.backgroundImage}
+        leftImages={heroData?.leftImages}
+        middleImages={heroData?.middleImages}
+        rightImages={heroData?.rightImages}
         ctaText={heroData?.ctaText}
         ctaLink={heroData?.ctaLink}
       />
-      <AboutSection
-        title={aboutData?.title}
-        content={aboutData?.content}
-        images={aboutData?.images}
-        ctaText={aboutData?.ctaText}
-        ctaLink={aboutData?.ctaLink}
-      />
-      <StatisticsSection stats={siteSettings?.stats} />
-      <ProgramAreasSection programs={programsData?.programs} />
-      <SupportersSection supporters={siteSettings?.supporters} />
-      <AchievementsSection
-        achievements={siteSettings?.achievements}
-        headerTitle={achievementsData?.headerTitle}
-        headerSubtitle={achievementsData?.headerSubtitle}
-        featuredImage={achievementsData?.featuredImage}
-      />
-      <NewsEventsSection news={news} />
-      <VolunteerBanner
-        title={volunteerData?.title}
-        subtitle={volunteerData?.subtitle}
-        backgroundImage={volunteerData?.backgroundImage}
-        volunteerButtonText={volunteerData?.volunteerButtonText}
-        donateButtonText={volunteerData?.donateButtonText}
-      />
+
+      {/* Data-dependent sections - show skeleton while loading */}
+      {loading ? (
+        <LandingPageSkeleton />
+      ) : (
+        <>
+          <AboutSection
+            title={aboutData?.title}
+            content={aboutData?.description || aboutData?.content}
+            images={aboutData?.images}
+            ctaText={aboutData?.ctaText}
+            ctaLink={aboutData?.ctaLink}
+          />
+          <StatisticsSection
+            stats={statisticsData?.stats || siteSettings?.stats}
+          />
+          <ProgramAreasSection programs={programsData?.programs} />
+          <SupportersSection supporters={supporters} />
+          <AchievementsSection
+            achievements={siteSettings?.achievements}
+            headerTitle={achievementsData?.headerTitle}
+            headerSubtitle={achievementsData?.headerSubtitle}
+            featuredImage={achievementsData?.featuredImage}
+          />
+          <NewsEventsSection news={news} />
+          <VolunteerBanner
+            title={volunteerData?.title}
+            subtitle={volunteerData?.description || volunteerData?.subtitle}
+            backgroundImage={volunteerData?.backgroundImage}
+            volunteerButtonText={
+              volunteerData?.ctaText || volunteerData?.volunteerButtonText
+            }
+            donateButtonText={volunteerData?.donateButtonText}
+          />
+        </>
+      )}
     </div>
   );
 }

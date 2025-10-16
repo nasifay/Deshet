@@ -135,7 +135,12 @@ export async function POST(request: NextRequest) {
   } catch (error: unknown) {
     console.error("Error creating gallery category:", error);
 
-    if (error.code === 11000) {
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "code" in error &&
+      error.code === 11000
+    ) {
       return NextResponse.json(
         {
           success: false,
@@ -145,8 +150,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const errorMessage =
+      error instanceof Error ? error.message : "Internal server error";
     return NextResponse.json(
-      { success: false, error: error.message || "Internal server error" },
+      { success: false, error: errorMessage },
       { status: 500 }
     );
   }

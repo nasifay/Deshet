@@ -8,6 +8,14 @@ interface Thumbnail {
   alt?: string;
 }
 
+interface Project {
+  id: string;
+  name: string;
+  description?: string;
+  featuredImage?: string;
+  galleryThumbnails?: Thumbnail[];
+}
+
 interface Program {
   _id?: string;
   title: string;
@@ -15,6 +23,7 @@ interface Program {
   description: string;
   image: string;
   thumbnails: Thumbnail[];
+  projects?: Project[];
 }
 
 export default function ProgramsListSection() {
@@ -44,14 +53,14 @@ export default function ProgramsListSection() {
     const fetchPrograms = async () => {
       try {
         setLoading(true);
-        const response = await fetch('/api/public/programs');
+        const response = await fetch("/api/public/programs");
         const data = await response.json();
-        
+
         if (data.success) {
           setProgramsList(data.data);
         }
       } catch (error) {
-        console.error('Error fetching programs:', error);
+        console.error("Error fetching programs:", error);
       } finally {
         setLoading(false);
       }
@@ -322,7 +331,8 @@ export default function ProgramsListSection() {
   ];
 
   // Use fetched programs or fallback if empty
-  const displayPrograms = programsList.length > 0 ? programsList : fallbackPrograms;
+  const displayPrograms =
+    programsList.length > 0 ? programsList : fallbackPrograms;
 
   if (loading) {
     return (
@@ -467,25 +477,26 @@ const ProgramItem: React.FC<{ program: Program }> = ({ program }) => {
               )}
 
               {/* Project Thumbnails Grid - Show project gallery thumbnails if available */}
-              {project.galleryThumbnails && project.galleryThumbnails.length > 0 && (
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 lg:gap-8 w-full">
-                  {project.galleryThumbnails.map((thumb) => (
-                    <div
-                      key={thumb.id}
-                      className="relative aspect-[285/314] rounded-[20px] overflow-hidden shadow-sm"
-                    >
-                      <img
-                        src={
-                          thumb.src ||
-                          "https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=400&h=400&fit=crop&crop=center"
-                        }
-                        alt={thumb.alt || `Thumbnail ${thumb.id}`}
-                        className="object-cover transition-transform duration-300 w-full h-full"
-                      />
-                    </div>
-                  ))}
-                </div>
-              )}
+              {project.galleryThumbnails &&
+                project.galleryThumbnails.length > 0 && (
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 lg:gap-8 w-full">
+                    {project.galleryThumbnails.map((thumb) => (
+                      <div
+                        key={thumb.id}
+                        className="relative aspect-[285/314] rounded-[20px] overflow-hidden shadow-sm"
+                      >
+                        <img
+                          src={
+                            thumb.src ||
+                            "https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=400&h=400&fit=crop&crop=center"
+                          }
+                          alt={thumb.alt || `Thumbnail ${thumb.id}`}
+                          className="object-cover transition-transform duration-300 w-full h-full"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
             </div>
           </section>
         ))}

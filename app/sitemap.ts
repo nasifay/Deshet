@@ -61,10 +61,28 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   // Fetch dynamic news routes
+  // Skip during build time if BASE_URL is not properly configured
+  if (process.env.NODE_ENV === "production" && !BASE_URL.startsWith("http")) {
+    console.warn(
+      "Skipping dynamic news routes in sitemap: BASE_URL not configured"
+    );
+    return staticRoutes;
+  }
+
   try {
-    const newsResponse = await fetch(`${BASE_URL}/api/public/news?limit=100`, {
+    // For build time, use internal API endpoint if available
+    const apiUrl = process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}/api/public/news?limit=100`
+      : `${BASE_URL}/api/public/news?limit=100`;
+
+    const newsResponse = await fetch(apiUrl, {
       next: { revalidate: 3600 },
     });
+
+    if (!newsResponse.ok) {
+      throw new Error(`API responded with status ${newsResponse.status}`);
+    }
+
     const newsData = await newsResponse.json();
 
     const newsRoutes: MetadataRoute.Sitemap =
@@ -80,6 +98,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     return [...staticRoutes, ...newsRoutes];
   } catch (error) {
     console.error("Error generating sitemap:", error);
+    // Return static routes on error
     return staticRoutes;
   }
 }

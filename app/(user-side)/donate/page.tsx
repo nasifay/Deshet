@@ -51,10 +51,12 @@ interface PageData {
 export default function DonatePage() {
   const [pageData, setPageData] = useState<PageData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [bankAccounts] = useState(defaultBankAccounts);
+  const [bankAccounts, setBankAccounts] = useState(defaultBankAccounts);
+  const [bankOptionsLoading, setBankOptionsLoading] = useState(true);
 
   useEffect(() => {
     fetchPageData();
+    fetchBankOptions();
   }, []);
 
   const fetchPageData = async () => {
@@ -69,6 +71,27 @@ export default function DonatePage() {
       console.error("Error fetching page data:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchBankOptions = async () => {
+    try {
+      setBankOptionsLoading(true);
+      const response = await fetch("/api/public/bank-options");
+      const data = await response.json();
+
+      if (data.success && data.data.length > 0) {
+        setBankAccounts(data.data);
+      } else {
+        // Use default bank accounts if no data from API
+        setBankAccounts(defaultBankAccounts);
+      }
+    } catch (error) {
+      console.error("Error fetching bank options:", error);
+      // Fallback to default on error
+      setBankAccounts(defaultBankAccounts);
+    } finally {
+      setBankOptionsLoading(false);
     }
   };
 
@@ -146,54 +169,82 @@ export default function DonatePage() {
           <div className="relative p-6 sm:p-8 lg:p-12">
             {/* Default grid-cols-1 for mobile, md:grid-cols-2 for tablet/desktop */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
-              {bankAccounts.map((bank, index) => (
-                <div
-                  key={index}
-                  className="bg-white rounded-lg p-5 sm:p-6 shadow-sm"
-                >
-                  <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
-                    <Image
-                      // Reduced logo size on mobile
-                      className="w-10 h-10 sm:w-14 sm:h-14 lg:w-16 lg:h-16 object-contain"
-                      alt={`${bank.name} logo`}
-                      src={bank.logo}
-                      width={64}
-                      height={64}
-                    />
+              {bankOptionsLoading ? (
+                // Loading Skeleton for Bank Options
+                <>
+                  {[1, 2, 3, 4].map((index) => (
+                    <div
+                      key={index}
+                      className="bg-white rounded-lg p-5 sm:p-6 shadow-sm animate-pulse"
+                    >
+                      <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
+                        {/* Logo Skeleton */}
+                        <div className="w-10 h-10 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gray-300 rounded"></div>
 
-                    <div className="space-y-1.5 sm:space-y-2">
-                      <h3 className="text-lg sm:text-xl font-bold text-[#333333]">
-                        {bank.name}
-                      </h3>
-                      <p className="text-xs sm:text-sm text-[#666666]">
-                        Tamra ForSocial Development Organization
-                      </p>
-                      {bank.accountNumber && (
-                        <p className="text-xs sm:text-sm text-[#666666]">
-                          Account Number: {bank.accountNumber}
-                        </p>
-                      )}
-                      {bank.number && (
-                        <p className="text-xs sm:text-sm text-[#666666]">
-                          Number: {bank.number}
-                        </p>
-                      )}
-                      {bank.id && (
-                        <p className="text-xs sm:text-sm text-[#666666]">
-                          ID: {bank.id}
-                        </p>
-                      )}
-                      {bank.swiftCode && (
-                        <p className="text-xs sm:text-sm text-[#666666]">
-                          Swift Code: {bank.swiftCode}
-                        </p>
-                      )}
+                        <div className="flex-1 space-y-2">
+                          {/* Bank Name Skeleton */}
+                          <div className="h-5 sm:h-6 bg-gray-300 rounded w-3/4"></div>
+                          {/* Organization Name Skeleton */}
+                          <div className="h-3 sm:h-4 bg-gray-200 rounded w-full"></div>
+                          {/* Account Details Skeleton */}
+                          <div className="h-3 sm:h-4 bg-gray-200 rounded w-5/6"></div>
+                          <div className="h-3 sm:h-4 bg-gray-200 rounded w-2/3"></div>
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                  ))}
+                </>
+              ) : (
+                // Actual Bank Options
+                bankAccounts.map((bank, index) => (
+                  <div
+                    key={index}
+                    className="bg-white rounded-lg p-5 sm:p-6 shadow-sm"
+                  >
+                    <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
+                      <Image
+                        // Reduced logo size on mobile
+                        className="w-10 h-10 sm:w-14 sm:h-14 lg:w-16 lg:h-16 object-contain"
+                        alt={`${bank.name} logo`}
+                        src={bank.logo}
+                        width={64}
+                        height={64}
+                      />
 
-                  {/* Reduced space-y for mobile/tablet */}
-                </div>
-              ))}
+                      <div className="space-y-1.5 sm:space-y-2">
+                        <h3 className="text-lg sm:text-xl font-bold text-[#333333]">
+                          {bank.name}
+                        </h3>
+                        <p className="text-xs sm:text-sm text-[#666666]">
+                          Tamra ForSocial Development Organization
+                        </p>
+                        {bank.accountNumber && (
+                          <p className="text-xs sm:text-sm text-[#666666]">
+                            Account Number: {bank.accountNumber}
+                          </p>
+                        )}
+                        {bank.number && (
+                          <p className="text-xs sm:text-sm text-[#666666]">
+                            Number: {bank.number}
+                          </p>
+                        )}
+                        {bank.id && (
+                          <p className="text-xs sm:text-sm text-[#666666]">
+                            ID: {bank.id}
+                          </p>
+                        )}
+                        {bank.swiftCode && (
+                          <p className="text-xs sm:text-sm text-[#666666]">
+                            Swift Code: {bank.swiftCode}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Reduced space-y for mobile/tablet */}
+                  </div>
+                ))
+              )}
             </div>
           </div>
         </div>

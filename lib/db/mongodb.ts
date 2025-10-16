@@ -9,6 +9,8 @@ import "~/lib/db/models/Media";
 import "~/lib/db/models/Volunteer";
 import "~/lib/db/models/Gallery";
 import "~/lib/db/models/GalleryCategory";
+import "~/lib/db/models/Contact";
+import "~/lib/db/models/BankOption";
 
 const MONGODB_URI =
   process.env.MONGODB_URI || "mongodb://localhost:27017/tamra_sdt";

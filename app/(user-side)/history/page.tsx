@@ -2,6 +2,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { HistoryPageSkeleton } from "~/components/sections/history-page-skeleton";
 
 interface PageData {
   title?: string;
@@ -38,11 +39,7 @@ export default function History() {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-green"></div>
-      </div>
-    );
+    return <HistoryPageSkeleton />;
   }
 
   return (
@@ -51,9 +48,7 @@ export default function History() {
       data-model-id="932:11162"
     >
       <section className="flex flex-col items-center justify-center gap-6 sm:gap-8 md:gap-20 lg:gap-24 px-6 md:px-16 lg:px-24 xl:px-36">
-        <h1 className="font-roboto font-black text-2xl md:text-4xl lg:text-[90px] leading-[101%] tracking-[0] uppercase text-primary-green">
-          HISTORY
-        </h1>
+        <h1 className="primary-title text-primary-green">HISTORY</h1>
         <p className="w-full   font-roboto font-normal text-lg md:text-xl lg:text-[32px] leading-[101%] text-center text-[#ff9700]">
           Tracing our journey of growth, impact, and commitment to communities
           across Ethiopia.

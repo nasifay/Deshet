@@ -15,7 +15,7 @@ export default function VisionMission({
   missionImage = "/images/Mask group (1).png",
 }: VisionMissionProps) {
   return (
-    <section className="relative w-full py-12 md:py-16 px-4 sm:px-6 bg-[#178849] overflow-hidden flex justify-center">
+    <section className="relative w-full mx-auto py-12 md:py-16 px-4 sm:px-6 md:max-w-3xl overflow-hidden flex justify-center items-center">
       {/* Reduced vertical padding on mobile for compact layout */}
       <div
         className="absolute inset-0 z-0 opacity-[0.05]"
@@ -25,11 +25,11 @@ export default function VisionMission({
         }}
       ></div>
 
-      <div className="relative z-10 mx-auto max-w-[800px] w-full flex flex-col gap-4 md:gap-0 text-white font-sans">
+      <div className="relative z-10 mx-auto max-w-7xl  w-full flex flex-col gap-4 md:gap-6 text-white font-sans">
         {/* Added responsive gap between vision and mission sections for mobile spacing */}
         <div className="flex flex-col md:flex-row items-start gap-4 md:gap-8">
           {/* Stacked layout vertically on mobile, row on tablet/desktop; reduced gap on mobile */}
-          <div className="flex-shrink-0 w-full md:w-[200px] h-auto border border-gray-200 md:border-b-0">
+          <div className="flex-shrink-0 w-full md:w-[200px] h-auto border-2 border-gray-200 ">
             {/* Made image container full-width on mobile for better scaling */}
             <Image
               src={visionImage}
@@ -45,7 +45,7 @@ export default function VisionMission({
               {/* Scaled heading text size responsively for readability on smaller screens */}
               VISION
             </h3>
-            <p className="text-white text-[16px] md:text-[18px] font-normal leading-relaxed">
+            <p className="text-black description">
               {/* Scaled paragraph text size for mobile readability */}
               {visionText}
             </p>
@@ -54,7 +54,7 @@ export default function VisionMission({
 
         <div className="flex flex-col md:flex-row items-start gap-4 md:gap-8">
           {/* Same responsive adjustments as above for mission section */}
-          <div className="flex-shrink-0 w-full md:w-[200px] h-auto border border-gray-200">
+          <div className="flex-shrink-0 w-full md:w-[200px] h-auto border-2 border-gray-200">
             <Image
               src={missionImage}
               alt="Mission Image"
@@ -68,9 +68,7 @@ export default function VisionMission({
             <h3 className="text-[#FF7A00] text-[24px] sm:text-[28px] md:text-[32px] font-extrabold uppercase tracking-wide leading-tight mb-2">
               MISSION
             </h3>
-            <p className="text-white text-[16px] md:text-[18px] font-normal leading-relaxed">
-              {missionText}
-            </p>
+            <p className="text-black description">{missionText}</p>
           </div>
         </div>
       </div>

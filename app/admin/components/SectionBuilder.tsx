@@ -44,8 +44,6 @@ const SECTION_TYPES = [
   { value: "HeroSection", label: "Hero Section", icon: "🦸" },
   { value: "StatisticsSection", label: "Statistics Section", icon: "📊" },
   { value: "AchievementsSection", label: "Achievements Section", icon: "🏆" },
-  { value: "NewsEventsSection", label: "News & Events Section", icon: "📰" },
-  { value: "SupportersSection", label: "Supporters Section", icon: "🤝" },
   { value: "VolunteerBanner", label: "Volunteer Banner", icon: "🙋" },
   { value: "ContentSection", label: "Content Section", icon: "📝" },
 ];
@@ -160,7 +158,7 @@ export default function SectionBuilder({
                   <button
                     onClick={() => moveSection(section.id, "up")}
                     disabled={index === 0}
-                    className="p-1 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 disabled:opacity-30"
+                    className="p-1 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 disabled:opacity-[0.3]"
                     title="Move up"
                   >
                     <ChevronUp className="w-4 h-4" />
@@ -168,7 +166,7 @@ export default function SectionBuilder({
                   <button
                     onClick={() => moveSection(section.id, "down")}
                     disabled={index === sections.length - 1}
-                    className="p-1 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 disabled:opacity-30"
+                    className="p-1 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 disabled:opacity-[0.3]"
                     title="Move down"
                   >
                     <ChevronDown className="w-4 h-4" />
@@ -211,7 +209,7 @@ export default function SectionBuilder({
 
       {/* Add Section Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-xl font-bold text-gray-900 dark:text-white">
@@ -267,13 +265,13 @@ function SectionEditor({
         <div className="space-y-4">
           <ImageUploadField
             label="Map Image"
-            value={data.mapImageSrc || ""}
+            value={(data.mapImageSrc as string) || ""}
             onChange={(url) => updateField("mapImageSrc", url)}
             placeholder="/images/Objects.png"
           />
           <ImageUploadField
             label="Map Layer Image"
-            value={data.mapLayerSrc || ""}
+            value={(data.mapLayerSrc as string) || ""}
             onChange={(url) => updateField("mapLayerSrc", url)}
             placeholder="https://example.com/layer.png"
           />
@@ -288,7 +286,7 @@ function SectionEditor({
           </label>
           <input
             type="text"
-            value={data.tagline || ""}
+            value={(data.tagline as string) || ""}
             onChange={(e) => updateField("tagline", e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green"
             placeholder="Enter tagline..."
@@ -301,7 +299,7 @@ function SectionEditor({
         <div className="space-y-4">
           <ImageUploadField
             label="Group Photo"
-            value={data.imageSrc || ""}
+            value={(data.imageSrc as string) || ""}
             onChange={(url) => updateField("imageSrc", url)}
             placeholder="https://example.com/photo.jpg"
           />
@@ -311,7 +309,7 @@ function SectionEditor({
             </label>
             <input
               type="text"
-              value={data.altText || ""}
+              value={(data.altText as string) || ""}
               onChange={(e) => updateField("altText", e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green"
               placeholder="Image description..."
@@ -328,7 +326,7 @@ function SectionEditor({
               Description
             </label>
             <textarea
-              value={data.description || ""}
+              value={(data.description as string) || ""}
               onChange={(e) => updateField("description", e.target.value)}
               rows={6}
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green resize-none"
@@ -337,13 +335,13 @@ function SectionEditor({
           </div>
           <ImageUploadField
             label="Back Image"
-            value={data.backImageSrc || ""}
+            value={(data.backImageSrc as string) || ""}
             onChange={(url) => updateField("backImageSrc", url)}
             placeholder="Background image URL"
           />
           <ImageUploadField
             label="Front Image"
-            value={data.frontImageSrc || ""}
+            value={(data.frontImageSrc as string) || ""}
             onChange={(url) => updateField("frontImageSrc", url)}
             placeholder="Foreground image URL"
           />
@@ -355,7 +353,7 @@ function SectionEditor({
         <div className="space-y-4">
           <ImageUploadField
             label="Vision Image"
-            value={data.visionImage || ""}
+            value={(data.visionImage as string) || ""}
             onChange={(url) => updateField("visionImage", url)}
             placeholder="/images/Mask group.png"
           />
@@ -364,7 +362,7 @@ function SectionEditor({
               Vision Text
             </label>
             <textarea
-              value={data.visionText || ""}
+              value={(data.visionText as string) || ""}
               onChange={(e) => updateField("visionText", e.target.value)}
               rows={3}
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green resize-none"
@@ -373,7 +371,7 @@ function SectionEditor({
           </div>
           <ImageUploadField
             label="Mission Image"
-            value={data.missionImage || ""}
+            value={(data.missionImage as string) || ""}
             onChange={(url) => updateField("missionImage", url)}
             placeholder="/images/Mask group (1).png"
           />
@@ -382,7 +380,7 @@ function SectionEditor({
               Mission Text
             </label>
             <textarea
-              value={data.missionText || ""}
+              value={(data.missionText as string) || ""}
               onChange={(e) => updateField("missionText", e.target.value)}
               rows={3}
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green resize-none"
@@ -401,7 +399,7 @@ function SectionEditor({
             </label>
             <input
               type="text"
-              value={data.title || ""}
+              value={(data.title as string) || ""}
               onChange={(e) => updateField("title", e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green"
               placeholder="Section title..."
@@ -412,7 +410,7 @@ function SectionEditor({
               Content
             </label>
             <textarea
-              value={data.content || ""}
+              value={(data.content as string) || ""}
               onChange={(e) => updateField("content", e.target.value)}
               rows={6}
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green resize-none"
@@ -421,7 +419,7 @@ function SectionEditor({
           </div>
           <ImageUploadField
             label="Image (Optional)"
-            value={data.image || ""}
+            value={(data.image as string) || ""}
             onChange={(url) => updateField("image", url)}
             placeholder="Add an image to this section..."
           />
@@ -447,7 +445,7 @@ function SectionEditor({
             </label>
             <input
               type="text"
-              value={data.title || ""}
+              value={(data.title as string) || ""}
               onChange={(e) => updateField("title", e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green"
               placeholder="Leave empty for default: WHO WE ARE"
@@ -455,7 +453,7 @@ function SectionEditor({
           </div>
           <ImageUploadField
             label="Background Image (Optional)"
-            value={data.backgroundImage || ""}
+            value={(data.backgroundImage as string) || ""}
             onChange={(url) => updateField("backgroundImage", url)}
             placeholder="Add background image..."
           />
@@ -482,7 +480,7 @@ function SectionEditor({
             </label>
             <input
               type="text"
-              value={data.sectionTitle || ""}
+              value={(data.sectionTitle as string) || ""}
               onChange={(e) => updateField("sectionTitle", e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green"
               placeholder="Leave empty for default: OUR CORE VALUES"
@@ -493,7 +491,7 @@ function SectionEditor({
               Description (Optional)
             </label>
             <textarea
-              value={data.description || ""}
+              value={(data.description as string) || ""}
               onChange={(e) => updateField("description", e.target.value)}
               rows={3}
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green resize-none"
@@ -528,7 +526,7 @@ function SectionEditor({
             </label>
             <input
               type="text"
-              value={data.sectionTitle || ""}
+              value={(data.sectionTitle as string) || ""}
               onChange={(e) => updateField("sectionTitle", e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green"
               placeholder="Leave empty for default: OUR LEADERSHIP"
@@ -539,7 +537,7 @@ function SectionEditor({
               Description (Optional)
             </label>
             <textarea
-              value={data.description || ""}
+              value={(data.description as string) || ""}
               onChange={(e) => updateField("description", e.target.value)}
               rows={3}
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green resize-none"
@@ -574,7 +572,7 @@ function SectionEditor({
           </div>
           <ImageUploadField
             label="Header Image"
-            value={data.headerImage || ""}
+            value={(data.headerImage as string) || ""}
             onChange={(url) => updateField("headerImage", url)}
             placeholder="https://example.com/header-image.png"
           />
@@ -584,7 +582,7 @@ function SectionEditor({
             </label>
             <input
               type="text"
-              value={data.sectionTitle || ""}
+              value={(data.sectionTitle as string) || ""}
               onChange={(e) => updateField("sectionTitle", e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green"
               placeholder="Leave empty for default: OUR TARGET GROUPS"
@@ -595,7 +593,7 @@ function SectionEditor({
               Description (Optional)
             </label>
             <textarea
-              value={data.description || ""}
+              value={(data.description as string) || ""}
               onChange={(e) => updateField("description", e.target.value)}
               rows={3}
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green resize-none"
@@ -614,8 +612,6 @@ function SectionEditor({
     case "HeroSection":
     case "StatisticsSection":
     case "AchievementsSection":
-    case "NewsEventsSection":
-    case "SupportersSection":
     case "VolunteerBanner":
       return (
         <div className="space-y-4">
@@ -630,10 +626,6 @@ function SectionEditor({
                 " Statistics are managed in Settings → Site Settings."}
               {type === "AchievementsSection" &&
                 " Achievements are managed in Settings → Site Settings."}
-              {type === "NewsEventsSection" &&
-                " This displays recent news posts from your database."}
-              {type === "SupportersSection" &&
-                " Supporters/partners are managed in Settings → Site Settings."}
             </p>
           </div>
           <div>
@@ -641,7 +633,7 @@ function SectionEditor({
               Show Section
             </label>
             <select
-              value={data.enabled !== false ? "true" : "false"}
+              value={(data.enabled as boolean) !== false ? "true" : "false"}
               onChange={(e) =>
                 updateField("enabled", e.target.value === "true")
               }
@@ -655,7 +647,7 @@ function SectionEditor({
             <>
               <ImageUploadField
                 label="Hero Background Image"
-                value={data.backgroundImage || ""}
+                value={(data.backgroundImage as string) || ""}
                 onChange={(url) => updateField("backgroundImage", url)}
                 placeholder="Hero background image..."
               />
@@ -665,7 +657,7 @@ function SectionEditor({
                 </label>
                 <input
                   type="text"
-                  value={data.title || ""}
+                  value={(data.title as string) || ""}
                   onChange={(e) => updateField("title", e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green"
                   placeholder="Hero section title..."
@@ -676,7 +668,7 @@ function SectionEditor({
                   Hero Subtitle
                 </label>
                 <textarea
-                  value={data.subtitle || ""}
+                  value={(data.subtitle as string) || ""}
                   onChange={(e) => updateField("subtitle", e.target.value)}
                   rows={2}
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green resize-none"

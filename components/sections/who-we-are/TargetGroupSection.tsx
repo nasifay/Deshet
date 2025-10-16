@@ -40,12 +40,7 @@ export function TargetGroupSection({
           {/* Scaled heading */}
           <h2
             id="target-group-heading"
-            className="w-full max-w-[1343px] 
-              [text-shadow:0px_2px_2px_rgba(0,0,0,0.15)] sm:[text-shadow:0px_4px_4px_#00000040]
-              [font-family:'Roboto',Helvetica] font-black text-[#128341] 
-              tracking-[0] 
-              text-center text-3xl sm:text-4xl md:text-5xl lg:text-[70px]
-              leading-tight"
+            className="w-full primary-title text-primary-green    "
           >
             TARGET GROUP
           </h2>

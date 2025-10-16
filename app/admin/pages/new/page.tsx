@@ -110,7 +110,7 @@ export default function NewPage() {
           <button
             onClick={handleSave}
             disabled={saving || !formData.title.trim()}
-            className="flex items-center space-x-2 px-4 py-2 bg-primary-green text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 text-sm"
+            className="flex items-center space-x-2 px-4 py-2 bg-primary-green text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-[0.5] text-sm"
           >
             <Save className="w-4 h-4" />
             <span>{saving ? "Creating..." : "Create Page"}</span>

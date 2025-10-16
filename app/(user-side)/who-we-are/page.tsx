@@ -36,8 +36,12 @@ interface SiteSettings {
   }>;
   leadership?: Array<{
     name: string;
-    title: string;
-    image: string;
+    position: string;
+    photo: string;
+    bio?: string;
+    email?: string;
+    phone?: string;
+    order?: number;
   }>;
   targetGroups?: Array<{
     icon: string;
@@ -99,16 +103,29 @@ export default function AboutUs() {
     return pageData?.sections?.find((section) => section.type === type)?.data;
   };
 
-  const heroData = getSectionData("hero") as
+  const heroData = getSectionData("AboutUsHeader") as
     | {
         title?: string;
         subtitle?: string;
-        image?: string;
-        content?: string;
       }
     | undefined;
 
-  const visionMissionData = getSectionData("vision-mission") as
+  const groupPhotoData = getSectionData("GroupPhotoSection") as
+    | {
+        imageSrc?: string;
+        altText?: string;
+      }
+    | undefined;
+
+  const aboutTSDData = getSectionData("AboutTSDSection") as
+    | {
+        description?: string;
+        backImageSrc?: string;
+        frontImageSrc?: string;
+      }
+    | undefined;
+
+  const visionMissionData = getSectionData("VisionMissionSection") as
     | {
         visionText?: string;
         missionText?: string;
@@ -143,8 +160,9 @@ export default function AboutUs() {
       <AboutHeroSection
         title={heroData?.title}
         subtitle={heroData?.subtitle}
-        image={heroData?.image}
-        content={heroData?.content}
+        mainImage={groupPhotoData?.imageSrc}
+        contentImage={aboutTSDData?.frontImageSrc}
+        content={aboutTSDData?.description}
       />
 
       <VisionMission

@@ -1,24 +1,24 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useRouter, useParams } from 'next/navigation';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { ArrowLeft, Save, Trash2 } from 'lucide-react';
-import Link from 'next/link';
-import RichTextEditor from '../../../components/RichTextEditor';
-import ImageUploadField from '../../../components/ImageUploadField';
+import { useState, useEffect } from "react";
+import { useRouter, useParams } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { ArrowLeft, Save, Trash2 } from "lucide-react";
+import Link from "next/link";
+import RichTextEditor from "../../../components/RichTextEditor";
+import ImageUploadField from "../../../components/ImageUploadField";
 
 const newsSchema = z.object({
-  title: z.string().min(1, 'Title is required'),
-  slug: z.string().min(1, 'Slug is required'),
-  excerpt: z.string().min(1, 'Excerpt is required'),
-  content: z.string().min(1, 'Content is required'),
+  title: z.string().min(1, "Title is required"),
+  slug: z.string().min(1, "Slug is required"),
+  excerpt: z.string().min(1, "Excerpt is required"),
+  content: z.string().min(1, "Content is required"),
   featuredImage: z.string().optional(),
-  category: z.string().min(1, 'Category is required'),
+  category: z.string().min(1, "Category is required"),
   tags: z.string(),
-  status: z.enum(['draft', 'published', 'archived']),
+  status: z.enum(["draft", "published", "archived"]),
   isFeatured: z.boolean(),
 });
 
@@ -29,7 +29,7 @@ export default function EditNewsPage() {
   const params = useParams();
   const [isLoading, setIsLoading] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [content, setContent] = useState('');
+  const [content, setContent] = useState("");
 
   const {
     register,
@@ -50,23 +50,23 @@ export default function EditNewsPage() {
 
         if (data.success) {
           const post = data.data;
-          setValue('title', post.title);
-          setValue('slug', post.slug);
-          setValue('excerpt', post.excerpt);
-          setValue('featuredImage', post.featuredImage || '');
-          setValue('category', post.category);
-          setValue('tags', post.tags.join(', '));
-          setValue('status', post.status);
-          setValue('isFeatured', post.isFeatured);
+          setValue("title", post.title);
+          setValue("slug", post.slug);
+          setValue("excerpt", post.excerpt);
+          setValue("featuredImage", post.featuredImage || "");
+          setValue("category", post.category);
+          setValue("tags", post.tags.join(", "));
+          setValue("status", post.status);
+          setValue("isFeatured", post.isFeatured);
           setContent(post.content);
         } else {
-          alert('Failed to load post');
-          router.push('/admin/news');
+          alert("Failed to load post");
+          router.push("/admin/news");
         }
       } catch (error) {
-        console.error('Error fetching post:', error);
-        alert('Failed to load post');
-        router.push('/admin/news');
+        console.error("Error fetching post:", error);
+        alert("Failed to load post");
+        router.push("/admin/news");
       } finally {
         setLoading(false);
       }
@@ -76,12 +76,12 @@ export default function EditNewsPage() {
   }, [params.id, router, setValue]);
 
   // Auto-generate slug from title
-  const title = watch('title');
+  const title = watch("title");
   const generateSlug = (text: string) => {
     return text
       .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/(^-|-$)/g, '');
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "");
   };
 
   const onSubmit = async (data: NewsFormData) => {
@@ -91,53 +91,60 @@ export default function EditNewsPage() {
       const payload = {
         ...data,
         content,
-        tags: data.tags.split(',').map((tag) => tag.trim()).filter(Boolean),
+        tags: data.tags
+          .split(",")
+          .map((tag) => tag.trim())
+          .filter(Boolean),
       };
 
       const response = await fetch(`/api/admin/news/${params.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
 
       const result = await response.json();
 
       if (!response.ok) {
-        alert(result.error || 'Failed to update post');
+        alert(result.error || "Failed to update post");
         setIsLoading(false);
         return;
       }
 
-      alert('Post updated successfully!');
-      router.push('/admin/news');
+      alert("Post updated successfully!");
+      router.push("/admin/news");
     } catch (error) {
-      console.error('Error updating post:', error);
-      alert('An unexpected error occurred');
+      console.error("Error updating post:", error);
+      alert("An unexpected error occurred");
       setIsLoading(false);
     }
   };
 
   const handleDelete = async () => {
-    if (!confirm('Are you sure you want to delete this post? This action cannot be undone.')) {
+    if (
+      !confirm(
+        "Are you sure you want to delete this post? This action cannot be undone."
+      )
+    ) {
       return;
     }
 
     try {
       const response = await fetch(`/api/admin/news/${params.id}`, {
-        method: 'DELETE',
+        method: "DELETE",
       });
 
       const result = await response.json();
 
       if (result.success) {
-        alert('Post deleted successfully!');
-        router.push('/admin/news');
+        alert("Post deleted successfully!");
+        router.push("/admin/news");
       } else {
-        alert(result.error || 'Failed to delete post');
+        alert(result.error || "Failed to delete post");
       }
     } catch (error) {
-      console.error('Error deleting post:', error);
-      alert('Failed to delete post');
+      console.error("Error deleting post:", error);
+      alert("Failed to delete post");
     }
   };
 
@@ -161,7 +168,9 @@ export default function EditNewsPage() {
             <ArrowLeft className="w-5 h-5" />
           </Link>
           <div>
-            <h1 className="text-3xl font-black text-gray-900 dark:text-white">Edit News Post</h1>
+            <h1 className="text-3xl font-black text-gray-900 dark:text-white">
+              Edit News Post
+            </h1>
             <p className="text-gray-600 dark:text-gray-400 mt-1">
               Update and manage your news post
             </p>
@@ -182,32 +191,40 @@ export default function EditNewsPage() {
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 space-y-6">
           {/* Title */}
           <div>
-            <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label
+              htmlFor="title"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >
               Title *
             </label>
             <input
-              {...register('title')}
+              {...register("title")}
               type="text"
               id="title"
               onChange={(e) => {
-                register('title').onChange(e);
-                setValue('slug', generateSlug(e.target.value));
+                register("title").onChange(e);
+                setValue("slug", generateSlug(e.target.value));
               }}
               className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green"
               placeholder="Enter post title"
             />
             {errors.title && (
-              <p className="mt-1 text-sm text-red-600">{errors.title.message}</p>
+              <p className="mt-1 text-sm text-red-600">
+                {errors.title.message}
+              </p>
             )}
           </div>
 
           {/* Slug */}
           <div>
-            <label htmlFor="slug" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label
+              htmlFor="slug"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >
               Slug *
             </label>
             <input
-              {...register('slug')}
+              {...register("slug")}
               type="text"
               id="slug"
               className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green"
@@ -220,18 +237,23 @@ export default function EditNewsPage() {
 
           {/* Excerpt */}
           <div>
-            <label htmlFor="excerpt" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label
+              htmlFor="excerpt"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >
               Excerpt *
             </label>
             <textarea
-              {...register('excerpt')}
+              {...register("excerpt")}
               id="excerpt"
               rows={3}
               className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green"
               placeholder="Brief description of the post"
             />
             {errors.excerpt && (
-              <p className="mt-1 text-sm text-red-600">{errors.excerpt.message}</p>
+              <p className="mt-1 text-sm text-red-600">
+                {errors.excerpt.message}
+              </p>
             )}
           </div>
 
@@ -246,18 +268,23 @@ export default function EditNewsPage() {
               placeholder="Write your post content..."
             />
             {errors.content && (
-              <p className="mt-1 text-sm text-red-600">{errors.content.message}</p>
+              <p className="mt-1 text-sm text-red-600">
+                {errors.content.message}
+              </p>
             )}
           </div>
 
           {/* Category & Tags */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label htmlFor="category" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label
+                htmlFor="category"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+              >
                 Category *
               </label>
               <select
-                {...register('category')}
+                {...register("category")}
                 id="category"
                 className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green"
               >
@@ -268,16 +295,21 @@ export default function EditNewsPage() {
                 <option value="Success Stories">Success Stories</option>
               </select>
               {errors.category && (
-                <p className="mt-1 text-sm text-red-600">{errors.category.message}</p>
+                <p className="mt-1 text-sm text-red-600">
+                  {errors.category.message}
+                </p>
               )}
             </div>
 
             <div>
-              <label htmlFor="tags" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label
+                htmlFor="tags"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+              >
                 Tags
               </label>
               <input
-                {...register('tags')}
+                {...register("tags")}
                 type="text"
                 id="tags"
                 className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green"
@@ -293,8 +325,8 @@ export default function EditNewsPage() {
           <div>
             <ImageUploadField
               label="Featured Image"
-              value={watch('featuredImage') || ''}
-              onChange={(url) => setValue('featuredImage', url)}
+              value={watch("featuredImage") || ""}
+              onChange={(url) => setValue("featuredImage", url)}
               placeholder="Upload an image or paste image URL..."
             />
           </div>
@@ -303,12 +335,15 @@ export default function EditNewsPage() {
           <div className="space-y-4">
             <div className="flex items-center">
               <input
-                {...register('isFeatured')}
+                {...register("isFeatured")}
                 type="checkbox"
                 id="isFeatured"
                 className="w-4 h-4 text-primary-green border-gray-300 rounded focus:ring-primary-green"
               />
-              <label htmlFor="isFeatured" className="ml-2 text-sm text-gray-700 dark:text-gray-300">
+              <label
+                htmlFor="isFeatured"
+                className="ml-2 text-sm text-gray-700 dark:text-gray-300"
+              >
                 Mark as featured post
               </label>
             </div>
@@ -322,30 +357,36 @@ export default function EditNewsPage() {
             <div className="flex space-x-4">
               <label className="flex items-center">
                 <input
-                  {...register('status')}
+                  {...register("status")}
                   type="radio"
                   value="draft"
                   className="w-4 h-4 text-primary-green border-gray-300 focus:ring-primary-green"
                 />
-                <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">Draft</span>
+                <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">
+                  Draft
+                </span>
               </label>
               <label className="flex items-center">
                 <input
-                  {...register('status')}
+                  {...register("status")}
                   type="radio"
                   value="published"
                   className="w-4 h-4 text-primary-green border-gray-300 focus:ring-primary-green"
                 />
-                <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">Published</span>
+                <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">
+                  Published
+                </span>
               </label>
               <label className="flex items-center">
                 <input
-                  {...register('status')}
+                  {...register("status")}
                   type="radio"
                   value="archived"
                   className="w-4 h-4 text-primary-green border-gray-300 focus:ring-primary-green"
                 />
-                <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">Archived</span>
+                <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">
+                  Archived
+                </span>
               </label>
             </div>
           </div>
@@ -362,16 +403,13 @@ export default function EditNewsPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="flex items-center space-x-2 px-6 py-2 bg-primary-green text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center space-x-2 px-6 py-2 bg-primary-green text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-[0.5] disabled:cursor-not-allowed"
           >
             <Save className="w-4 h-4" />
-            <span>{isLoading ? 'Saving...' : 'Save Changes'}</span>
+            <span>{isLoading ? "Saving..." : "Save Changes"}</span>
           </button>
         </div>
       </form>
     </div>
   );
 }
-
-
-

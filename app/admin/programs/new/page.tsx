@@ -21,6 +21,20 @@ export default function NewProgram() {
       alt?: string;
       uploaded?: boolean;
     }>,
+    projects: [] as Array<{
+      id: number;
+      name: string;
+      description: string;
+      featuredImage: string;
+      galleryThumbnails: Array<{
+        id: number;
+        src: string;
+        alt?: string;
+        uploaded?: boolean;
+      }>;
+      status: string;
+      partner: string;
+    }>,
     status: "draft" as "draft" | "published" | "archived",
     order: 1,
   });
@@ -189,7 +203,7 @@ export default function NewProgram() {
           <button
             onClick={handleSave}
             disabled={saving || !formData.title.trim()}
-            className="flex items-center space-x-2 px-4 py-2 bg-primary-green text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
+            className="flex items-center space-x-2 px-4 py-2 bg-primary-green text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-[0.5]"
           >
             <Save className="w-4 h-4" />
             <span>{saving ? "Creating..." : "Create Program"}</span>
@@ -288,7 +302,10 @@ export default function NewProgram() {
                   onChange={(e) =>
                     setFormData((prev) => ({
                       ...prev,
-                      status: e.target.value as "draft" | "published" | "archived",
+                      status: e.target.value as
+                        | "draft"
+                        | "published"
+                        | "archived",
                     }))
                   }
                   className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green"
@@ -417,7 +434,7 @@ export default function NewProgram() {
                               onClick={() =>
                                 removeProjectThumbnail(project.id, thumbnail.id)
                               }
-                              className="absolute top-0 right-0 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 opacity-0 group-hover:opacity-100 transition-opacity"
+                              className="absolute top-0 right-0 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 opacity-0 group-hover:opacity-[1] transition-opacity"
                             >
                               <X className="w-2 h-2" />
                             </button>

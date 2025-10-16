@@ -270,14 +270,14 @@ export default function GalleryManagementPage() {
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">
                         <ImageIcon className="w-16 h-16 text-gray-400" />
-                        <span className="absolute bottom-2 right-2 px-2 py-1 bg-black bg-opacity-60 text-white text-xs rounded">
+                        <span className="absolute bottom-2 right-2 px-2 py-1 bg-black/60 text-white text-xs rounded">
                           {item.type}
                         </span>
                       </div>
                     )}
 
                     {/* Overlay Actions */}
-                    <div className="absolute inset-0 bg-black/40 bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center space-x-2">
+                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-[1] transition-opacity flex items-center justify-center space-x-2">
                       <Link
                         href={`/admin/gallery/${item._id}/edit`}
                         className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"

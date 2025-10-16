@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { Plus, Search, Filter, Edit, Trash2, Eye } from 'lucide-react';
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { Plus, Search, Filter, Edit, Trash2, Eye } from "lucide-react";
 
 interface NewsPost {
   _id: string;
@@ -10,7 +10,7 @@ interface NewsPost {
   slug: string;
   excerpt: string;
   category: string;
-  status: 'draft' | 'published' | 'archived';
+  status: "draft" | "published" | "archived";
   views: number;
   isFeatured: boolean;
   author: {
@@ -25,8 +25,8 @@ interface NewsPost {
 export default function NewsListPage() {
   const [posts, setPosts] = useState<NewsPost[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
@@ -39,7 +39,7 @@ export default function NewsListPage() {
       setLoading(true);
       const params = new URLSearchParams({
         page: page.toString(),
-        limit: '10',
+        limit: "10",
         ...(statusFilter && { status: statusFilter }),
         ...(searchTerm && { search: searchTerm }),
       });
@@ -52,27 +52,29 @@ export default function NewsListPage() {
         setTotalPages(data.pagination.pages);
       }
     } catch (error) {
-      console.error('Error fetching posts:', error);
+      console.error("Error fetching posts:", error);
     } finally {
       setLoading(false);
     }
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this post?')) return;
+    if (!confirm("Are you sure you want to delete this post?")) return;
 
     try {
-      const response = await fetch(`/api/admin/news/${id}`, { method: 'DELETE' });
+      const response = await fetch(`/api/admin/news/${id}`, {
+        method: "DELETE",
+      });
       const data = await response.json();
 
       if (data.success) {
         fetchPosts();
       } else {
-        alert(data.error || 'Failed to delete post');
+        alert(data.error || "Failed to delete post");
       }
     } catch (error) {
-      console.error('Error deleting post:', error);
-      alert('Failed to delete post');
+      console.error("Error deleting post:", error);
+      alert("Failed to delete post");
     }
   };
 
@@ -84,9 +86,10 @@ export default function NewsListPage() {
 
   const getStatusBadge = (status: string) => {
     const colors = {
-      draft: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300',
-      published: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
-      archived: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300',
+      draft: "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300",
+      published:
+        "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
+      archived: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300",
     };
     return colors[status as keyof typeof colors] || colors.draft;
   };
@@ -96,7 +99,9 @@ export default function NewsListPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-black text-gray-900 dark:text-white">News & Events</h1>
+          <h1 className="text-3xl font-black text-gray-900 dark:text-white">
+            News & Events
+          </h1>
           <p className="text-gray-600 dark:text-gray-400 mt-1">
             Manage your news posts and events
           </p>
@@ -152,7 +157,9 @@ export default function NewsListPage() {
         {loading ? (
           <div className="p-8 text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-green mx-auto"></div>
-            <p className="mt-4 text-gray-600 dark:text-gray-400">Loading posts...</p>
+            <p className="mt-4 text-gray-600 dark:text-gray-400">
+              Loading posts...
+            </p>
           </div>
         ) : posts.length === 0 ? (
           <div className="p-8 text-center">
@@ -188,7 +195,10 @@ export default function NewsListPage() {
               </thead>
               <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                 {posts.map((post) => (
-                  <tr key={post._id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                  <tr
+                    key={post._id}
+                    className="hover:bg-gray-50 dark:hover:bg-gray-700"
+                  >
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <div>
@@ -263,7 +273,7 @@ export default function NewsListPage() {
             <button
               onClick={() => setPage(page - 1)}
               disabled={page === 1}
-              className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-600 disabled:opacity-[0.5] disabled:cursor-not-allowed"
             >
               Previous
             </button>
@@ -273,7 +283,7 @@ export default function NewsListPage() {
             <button
               onClick={() => setPage(page + 1)}
               disabled={page === totalPages}
-              className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-600 disabled:opacity-[0.5] disabled:cursor-not-allowed"
             >
               Next
             </button>
@@ -283,11 +293,3 @@ export default function NewsListPage() {
     </div>
   );
 }
-
-
-
-
-
-
-
-

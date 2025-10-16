@@ -52,7 +52,7 @@ export default function NewsAndEvents({
       <div className=" mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-12">
-          <h2 className="justify-self-center self-center text-center text-4xl md:text-5xl font-extrabold text-[#268246] tracking-tight">
+          <h2 className="primary-title text-primary-green justify-self-center self-center text-center ">
             {title}
           </h2>
           <Link

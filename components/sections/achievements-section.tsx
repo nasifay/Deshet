@@ -62,7 +62,7 @@ export default function AchievementsSection({
         {/* Bottom Row Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* White Card */}
-          <div className="bg-white rounded-2xl p-8 h-64 flex flex-col justify-center border border-gray-100 group">
+          <div className="bg-white rounded-2xl p-8 h-64 flex flex-col justify-center  group">
             <div className="text-6xl font-black text-white mb-2 group-hover:mb-4 origin-top-left group-hover:scale-120 transition-all duration-300">
               <span className="text-[#F09632]">
                 {achievements?.serviceYears || "28"}
@@ -73,7 +73,7 @@ export default function AchievementsSection({
           </div>
 
           {/* Image Card */}
-          <Card className="rounded-2xl overflow-hidden h-64 group">
+          <Card className="rounded-2xl overflow-hidden h-64 group border-none">
             <Image
               className="w-full h-full object-cover scale-110 group-hover:scale-100"
               alt="Youth engagement activity"
@@ -84,8 +84,8 @@ export default function AchievementsSection({
           </Card>
 
           {/* Light Orange Card */}
-          <Card className="bg-[#FADCB4] rounded-2xl p-8 h-64 flex flex-col justify-center group">
-            <CardContent className="p-0">
+          <Card className="bg-[#FADCB4] rounded-2xl p-8 h-64 flex flex-col justify-center group border-none">
+            <CardContent className="p-0 border-none">
               <div className="text-xl text-[#646464]">
                 Active In{" "}
                 <span className="font-bold text-[#F09632] group-hover:scale-110">

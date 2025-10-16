@@ -216,7 +216,7 @@ export function VolunteerBannerSkeleton() {
 export default function LandingPageSkeleton() {
   return (
     <div className="flex w-full relative flex-col mx-auto items-center">
-      <HeroSkeleton />
+      {/* <HeroSkeleton /> */}
       <AboutSkeleton />
       <StatisticsSkeleton />
       <ProgramAreasSkeleton />

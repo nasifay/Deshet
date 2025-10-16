@@ -688,8 +688,8 @@ export default function EditProgram() {
                     />
 
                     {/* Overlay with actions */}
-                    <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-200 rounded flex items-center justify-center">
-                      <div className="opacity-0 group-hover:opacity-100 flex space-x-1">
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition-all duration-200 rounded flex items-center justify-center">
+                      <div className="opacity-0 group-hover:opacity-[1] flex space-x-1">
                         <button
                           onClick={() => removeThumbnail(thumbnail.id)}
                           className="p-1 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"

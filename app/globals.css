@@ -4,6 +4,9 @@
 
 /* Design tokens aligned to the NGO theme */
 :root {
+  --font-sans: var(--font-roboto), ui-sans-serif, system-ui, -apple-system,
+    Segoe UI, Noto Sans, Ubuntu, Cantarell, Helvetica Neue, Arial, sans-serif;
+
   /* slate-800 */
   --primary: oklch(0.205 0 0); /* brand green */
   --primary-600: #197a35;
@@ -57,11 +60,11 @@
   --color-primary-orange: var(--primary-orange);
   --color-primary-green: var(--primary-green);
 
-  --font-sans: var(--font-roboto), ui-sans-serif, system-ui, -apple-system,
-    Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, Helvetica Neue, Arial,
-    "Apple Color Emoji", "Segoe UI Emoji";
-  --font-heading: var(--font-roboto);
-  --font-roboto: "Roboto", sans-serif;
+  /* --font-sans: ui-sans-serif, system-ui, -apple-system, Segoe UI Noto Sans,
+    Ubuntu, Cantarell, Helvetica Neue, Arial, "Apple Color Emoji",
+    "Segoe UI Emoji"; */
+
+  /* --font-roboto: var(--font-roboto); */
 
   --radius-base: 0.75rem; /* 12px */
   --shadow-card: 0 10px 20px rgba(0, 0, 0, 0.06), 0 2px 6px rgba(0, 0, 0, 0.04);
@@ -116,36 +119,114 @@ body {
   font-family: var(--font-sans);
 }
 
-/* Layout helpers */
+/* Layout Helpers */
 .container-default {
   width: 100%;
   margin-inline: auto;
   padding-inline: 1rem;
 }
 
+/* Title Styling */
+.primary-title {
+  font-family: var(--font-roboto);
+  font-weight: 900;
+  font-style: normal;
+  font-size: 20px;
+  line-height: 1.01;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.subtitle {
+  font-family: var(--font-roboto), Roboto, Arial, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 14px;
+  line-height: 1.01;
+  letter-spacing: 0px;
+}
+
+.description {
+  font-family: var(--font-roboto);
+  font-weight: 300;
+  font-style: normal;
+  font-size: 12px;
+  line-height: 1.25;
+  letter-spacing: 0.5px;
+  text-align: justify;
+  text-transform: capitalize;
+}
+
+/* Responsive Layout & Typography */
+
+/* Small screens ≥640px */
 @media (min-width: 640px) {
   .container-default {
     max-width: 640px;
   }
+  .primary-title {
+    font-size: 42px;
+  }
 }
+
+/* Tablet screens ≥768px */
 @media (min-width: 768px) {
   .container-default {
     max-width: 768px;
   }
+  .primary-title {
+    font-size: 60px;
+  }
+
+  .subtitle {
+    font-size: 20px;
+  }
+
+  .description {
+    font-size: 16px;
+  }
 }
+
+/* Desktop screens ≥1024px */
 @media (min-width: 1024px) {
   .container-default {
     max-width: 1024px;
   }
+  .primary-title {
+    font-size: 70px;
+  }
+  .description {
+    font-size: 20px;
+  }
 }
+
+/* Large desktops ≥1280px */
 @media (min-width: 1280px) {
   .container-default {
     max-width: 1280px;
   }
+  .primary-title {
+    font-size: 80px;
+  }
+  .subtitle {
+    font-size: 24px;
+  }
 }
+
+/* Extra large desktops ≥1536px */
 @media (min-width: 1536px) {
   .container-default {
     max-width: 1595px;
+  }
+  .primary-title {
+    font-size: 100px;
+  }
+  .subtitle {
+    font-size: 32px;
+  }
+
+  .description {
+    font-size: 24px;
   }
 }
 
@@ -358,3 +439,9 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* @layer utilities {
+  .font-roboto {
+    font-family: var(--font-roboto);
+  }
+} */

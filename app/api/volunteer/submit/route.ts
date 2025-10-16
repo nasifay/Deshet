@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
-import connectDB from '~/lib/db/mongodb';
-import Volunteer from '~/lib/db/models/Volunteer';
+import { NextRequest, NextResponse } from "next/server";
+import connectDB from "~/lib/db/mongodb";
+import Volunteer from "~/lib/db/models/Volunteer";
 
 // POST - Submit volunteer application (public endpoint)
 export async function POST(request: NextRequest) {
@@ -25,9 +25,17 @@ export async function POST(request: NextRequest) {
     } = body;
 
     // Validation
-    if (!fullName || !email || !phone || !location || !availability || !motivation || !referenceSource) {
+    if (
+      !fullName ||
+      !email ||
+      !phone ||
+      !location ||
+      !availability ||
+      !motivation ||
+      !referenceSource
+    ) {
       return NextResponse.json(
-        { success: false, error: 'Please fill in all required fields' },
+        { success: false, error: "Please fill in all required fields" },
         { status: 400 }
       );
     }
@@ -36,7 +44,10 @@ export async function POST(request: NextRequest) {
     const existingVolunteer = await Volunteer.findOne({ email });
     if (existingVolunteer) {
       return NextResponse.json(
-        { success: false, error: 'An application with this email already exists' },
+        {
+          success: false,
+          error: "An application with this email already exists",
+        },
         { status: 409 }
       );
     }
@@ -56,13 +67,14 @@ export async function POST(request: NextRequest) {
       experience,
       motivation,
       referenceSource,
-      status: 'pending',
+      status: "pending",
     });
 
     return NextResponse.json(
       {
         success: true,
-        message: 'Thank you for your interest in volunteering! We will review your application and contact you soon.',
+        message:
+          "Thank you for your interest in volunteering! We will review your application and contact you soon.",
         data: {
           id: volunteer._id,
           fullName: volunteer.fullName,
@@ -71,19 +83,23 @@ export async function POST(request: NextRequest) {
       },
       { status: 201 }
     );
-  } catch (error) {
-    console.error('Error submitting volunteer application:', error);
+  } catch (error: any) {
+    console.error("Error submitting volunteer application:", error);
+
+    // Handle Mongoose validation errors
+    if (error.name === "ValidationError") {
+      const validationErrors = Object.values(error.errors).map(
+        (err: any) => err.message
+      );
+      return NextResponse.json(
+        { success: false, error: validationErrors.join(", ") },
+        { status: 400 }
+      );
+    }
+
     return NextResponse.json(
-      { success: false, error: 'Internal server error' },
+      { success: false, error: "Internal server error" },
       { status: 500 }
     );
   }
 }
-
-
-
-
-
-
-
-

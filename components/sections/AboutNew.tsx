@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import Section from "~/components/ui/Section";
 import SectionCard from "~/components/ui/SectionCard";
 import Button from "~/components/ui/Button";
@@ -16,20 +17,42 @@ export default function AboutNew() {
             </h2>
 
             {/* Body copy per spec */}
-            <div className="text-gray-700 text-justify lowercase" style={{ fontWeight: 300, fontSize: 24, lineHeight: "125%", letterSpacing: 0.5 }}>
+            <div
+              className="text-gray-700 text-justify lowercase"
+              style={{
+                fontWeight: 300,
+                fontSize: 24,
+                lineHeight: "125%",
+                letterSpacing: 0.5,
+              }}
+            >
               <p>
-                tamra for social development organization (tsd) is an ethiopian ngo legally registered <span className="text-accent">since 1998.</span> founded as an <span className="text-accent">anti-aids club in shashemene</span>, it now operates across oromia, sidama, south & central ethiopia, and addis ababa. tsd works in youth empowerment, peacebuilding, srh & gender equality, and climate justice & livelihoods. with <span className="text-accent">25+ years</span> of impact, we drive change through grassroots engagement, advocacy, and community-driven solutions.
+                tamra for social development organization (tsd) is an ethiopian
+                ngo legally registered{" "}
+                <span className="text-accent">since 1998.</span> founded as an{" "}
+                <span className="text-accent">
+                  anti-aids club in shashemene
+                </span>
+                , it now operates across oromia, sidama, south & central
+                ethiopia, and addis ababa. tsd works in youth empowerment,
+                peacebuilding, srh & gender equality, and climate justice &
+                livelihoods. with <span className="text-accent">25+ years</span>{" "}
+                of impact, we drive change through grassroots engagement,
+                advocacy, and community-driven solutions.
               </p>
             </div>
 
             <div>
               <Button
-                intent="primary"
-                rounded="full"
+                asChild
+                variant="default"
                 className="w-[196px] h-[56px] rounded-[21px] px-[40px]"
-                href="/who-we-are"
               >
-                <span className="block w-[116px] h-[28px] text-[24px] leading-[1] font-normal text-center">Read More</span>
+                <Link href="/who-we-are">
+                  <span className="block w-[116px] h-[28px] text-[24px] leading-[1] font-normal text-center">
+                    Read More
+                  </span>
+                </Link>
               </Button>
             </div>
           </div>
@@ -37,7 +60,12 @@ export default function AboutNew() {
           {/* Right image */}
           <div className="w-full lg:w-[649px]">
             <div className="relative w-full h-[300px] sm:h-[380px] md:h-[460px] lg:h-[538px] rounded-[46px] overflow-hidden">
-              <Image src="/images/about.jpg" alt="About us" fill className="object-cover" />
+              <Image
+                src="/images/about.jpg"
+                alt="About us"
+                fill
+                className="object-cover"
+              />
             </div>
           </div>
         </div>

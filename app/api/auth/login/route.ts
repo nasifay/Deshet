@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server';
-import connectDB from '~/lib/db/mongodb';
-import User from '~/lib/db/models/User';
-import { comparePassword } from '~/lib/auth/password';
-import { generateToken, generateRefreshToken } from '~/lib/auth/jwt';
-import { setAuthCookies } from '~/lib/auth/session';
+import { NextRequest, NextResponse } from "next/server";
+import connectDB from "~/lib/db/mongodb";
+import User from "~/lib/db/models/User";
+import { comparePassword } from "~/lib/auth/password";
+import { generateToken, generateRefreshToken } from "~/lib/auth/jwt";
+import { setAuthCookies } from "~/lib/auth/session";
 
 export async function POST(request: NextRequest) {
   try {
@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
     // Validation
     if (!email || !password) {
       return NextResponse.json(
-        { success: false, error: 'Email and password are required' },
+        { success: false, error: "Email and password are required" },
         { status: 400 }
       );
     }
@@ -21,11 +21,11 @@ export async function POST(request: NextRequest) {
     await connectDB();
 
     // Find user with password field
-    const user = await User.findOne({ email }).select('+password');
+    const user = await User.findOne({ email }).select("+password");
 
     if (!user) {
       return NextResponse.json(
-        { success: false, error: 'Invalid email or password' },
+        { success: false, error: "Invalid email or password" },
         { status: 401 }
       );
     }
@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
     // Check if user is active
     if (!user.isActive) {
       return NextResponse.json(
-        { success: false, error: 'Account is deactivated' },
+        { success: false, error: "Account is deactivated" },
         { status: 403 }
       );
     }
@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
 
     if (!isPasswordValid) {
       return NextResponse.json(
-        { success: false, error: 'Invalid email or password' },
+        { success: false, error: "Invalid email or password" },
         { status: 401 }
       );
     }
@@ -62,13 +62,10 @@ export async function POST(request: NextRequest) {
     const token = await generateToken(tokenPayload);
     const refreshToken = await generateRefreshToken(tokenPayload);
 
-    // Set cookies
-    await setAuthCookies(token, refreshToken);
-
-    // Return user data (without password)
-    return NextResponse.json({
+    // Create response
+    const response = NextResponse.json({
       success: true,
-      message: 'Login successful',
+      message: "Login successful",
       user: {
         id: user._id,
         name: user.name,
@@ -78,19 +75,30 @@ export async function POST(request: NextRequest) {
         lastLogin: user.lastLogin,
       },
     });
+
+    // Set cookies on the response
+    response.cookies.set("admin_token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24 * 7, // 7 days
+      path: "/",
+    });
+
+    response.cookies.set("admin_refresh_token", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24 * 30, // 30 days
+      path: "/",
+    });
+
+    return response;
   } catch (error) {
-    console.error('Login error:', error);
+    console.error("Login error:", error);
     return NextResponse.json(
-      { success: false, error: 'Internal server error' },
+      { success: false, error: "Internal server error" },
       { status: 500 }
     );
   }
 }
-
-
-
-
-
-
-
-
