@@ -299,6 +299,19 @@ function SectionEditor({
             />
           </div>
 
+          {/* Landscape/Main Hero Image */}
+          <div className="border border-blue-300 dark:border-blue-600 rounded-lg p-4 bg-blue-50 dark:bg-blue-900/20">
+            <ImageUploadField
+              label="Main Landscape Hero Image"
+              value={(data.landscapeImage as string) || ""}
+              onChange={(url) => updateField("landscapeImage", url)}
+            />
+            <p className="text-xs text-blue-800 dark:text-blue-200 mt-2">
+              This image will be displayed when the page first loads and when
+              the carousel finishes looping.
+            </p>
+          </div>
+
           {/* Left Section Images */}
           <div className="border border-gray-300 dark:border-gray-600 rounded-lg p-4 bg-gray-50 dark:bg-gray-900">
             <ImageArrayUploadField
@@ -772,6 +785,7 @@ function getDefaultDataForType(type: string): Record<string, unknown> {
       return {
         title: "SERVING",
         subtitle: "ETHIOPIAN YOUTH",
+        landscapeImage: "",
         leftImages: [],
         middleImages: [],
         rightImages: [],

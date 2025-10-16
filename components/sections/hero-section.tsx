@@ -8,6 +8,7 @@ import Image from "next/image";
 interface HeroSectionProps {
   title?: string;
   subtitle?: string;
+  landscapeImage?: string;
   leftImages?: string[];
   middleImages?: string[];
   rightImages?: string[];
@@ -20,6 +21,7 @@ const Hero = () => {
   const [heroData, setHeroData] = useState<HeroSectionProps>({
     title: "SERVING",
     subtitle: "ETHIOPIAN YOUTH",
+    landscapeImage: "",
     leftImages: [],
     middleImages: [],
     rightImages: [],
@@ -27,6 +29,7 @@ const Hero = () => {
     ctaLink: "/contact-us",
   });
   const [loading, setLoading] = useState(true);
+  const [showLandscape, setShowLandscape] = useState(true);
 
   // State to track the current index for each section's image
   const [leftIndex, setLeftIndex] = useState(0);
@@ -48,6 +51,7 @@ const Hero = () => {
             setHeroData({
               title: section.data.title || "SERVING",
               subtitle: section.data.subtitle || "ETHIOPIAN YOUTH",
+              landscapeImage: section.data.landscapeImage || "",
               leftImages: section.data.leftImages || [],
               middleImages: section.data.middleImages || [],
               rightImages: section.data.rightImages || [],
@@ -66,24 +70,56 @@ const Hero = () => {
     fetchData();
   }, []);
 
+  // --- LANDSCAPE IMAGE DISPLAY LOGIC ---
+  useEffect(() => {
+    // If landscape image exists, show it initially for 5 seconds
+    if (heroData.landscapeImage && !loading) {
+      setShowLandscape(true);
+      const landscapeTimer = setTimeout(() => {
+        setShowLandscape(false);
+      }, 5000); // Show landscape for 5 seconds initially
+
+      return () => clearTimeout(landscapeTimer);
+    } else {
+      setShowLandscape(false);
+    }
+  }, [heroData.landscapeImage, loading]);
+
   // --- TRANSITION LOGIC with DIFFERENT INTERVALS ---
   useEffect(() => {
-    // Only set up intervals if arrays have images
+    // Only set up intervals if arrays have images and not showing landscape
     if (
-      heroData.leftImages!.length === 0 &&
-      heroData.middleImages!.length === 0 &&
-      heroData.rightImages!.length === 0
+      showLandscape ||
+      (heroData.leftImages!.length === 0 &&
+        heroData.middleImages!.length === 0 &&
+        heroData.rightImages!.length === 0)
     ) {
       return;
     }
+
+    let loopCount = 0;
+    const totalImages = Math.max(
+      heroData.leftImages!.length,
+      heroData.middleImages!.length,
+      heroData.rightImages!.length
+    );
 
     // 1. Left Section: Slowest transition (5 seconds)
     const leftInterval =
       heroData.leftImages!.length > 0
         ? setInterval(() => {
-            setLeftIndex(
-              (prevIndex) => (prevIndex + 1) % heroData.leftImages!.length
-            );
+            setLeftIndex((prevIndex) => {
+              const newIndex = (prevIndex + 1) % heroData.leftImages!.length;
+              if (newIndex === 0) loopCount++;
+
+              // If we've looped through all images and landscape image exists, show it
+              if (loopCount >= totalImages && heroData.landscapeImage) {
+                setTimeout(() => setShowLandscape(true), 0);
+                loopCount = 0;
+              }
+
+              return newIndex;
+            });
           }, 5000)
         : null;
 
@@ -113,7 +149,13 @@ const Hero = () => {
       if (middleInterval) clearInterval(middleInterval);
       if (rightInterval) clearInterval(rightInterval);
     };
-  }, [heroData.leftImages, heroData.middleImages, heroData.rightImages]);
+  }, [
+    heroData.leftImages,
+    heroData.middleImages,
+    heroData.rightImages,
+    showLandscape,
+    heroData.landscapeImage,
+  ]);
 
   // Mapping of section layout to image array and current index
   const sectionData = [
@@ -132,39 +174,58 @@ const Hero = () => {
 
   return (
     <section className="relative w-full h-[40vh] md:h-[50vh] lg:h-[88vh] overflow-hidden">
-      {/* Three-column image/background layout */}
-      <div className="flex w-full h-full">
-        {sectionData.map((section, index) => {
-          const currentImage = section.images[section.currentIndex];
-          return (
-            <div key={section.layout} className="relative w-1/3 h-full">
-              {/* The Image component with the current, transitioning image */}
-              {currentImage && (
-                <Image
-                  src={currentImage}
-                  alt={`Ethiopian youth in a dynamic setting - ${section.layout} section`}
-                  fill
-                  style={{ objectFit: "cover" }}
-                  priority={index === 0}
-                  sizes="(max-width: 768px) 33vw, 33vw"
-                  className="transition-opacity duration-1000 ease-in-out" // Fade transition: 1s duration
-                />
-              )}
-              {/* Overlay to create the distinct color blocks. */}
-              <div
-                className={`absolute inset-0
-                  ${
-                    section.layout === "middle"
-                      ? "bg-[#f1a840] opacity-[0.7]" // Gold/Orange
-                      : "bg-[#1f532a] opacity-[0.7]" // Dark Green
-                  }
-                `}
-              ></div>
-            </div>
-          );
-        })}
-      </div>
+      {/* Conditionally render landscape image or three-column layout */}
+      {showLandscape && heroData.landscapeImage ? (
+        // Full-width landscape image
+        <div className="relative w-full h-full">
+          <Image
+            src={heroData.landscapeImage}
+            alt="Hero landscape image"
+            fill
+            style={{ objectFit: "cover" }}
+            priority
+            sizes="100vw"
+            className="transition-opacity duration-1000 ease-in-out"
+          />
+          {/* Dark overlay for better text visibility */}
+          <div className="absolute inset-0 bg-black/40"></div>
+        </div>
+      ) : (
+        // Three-column image/background layout
+        <div className="flex w-full h-full">
+          {sectionData.map((section, index) => {
+            const currentImage = section.images[section.currentIndex];
+            return (
+              <div key={section.layout} className="relative w-1/3 h-full">
+                {/* The Image component with the current, transitioning image */}
+                {currentImage && (
+                  <Image
+                    src={currentImage}
+                    alt={`Ethiopian youth in a dynamic setting - ${section.layout} section`}
+                    fill
+                    style={{ objectFit: "cover" }}
+                    priority={index === 0}
+                    sizes="(max-width: 768px) 33vw, 33vw"
+                    className="transition-opacity duration-1000 ease-in-out" // Fade transition: 1s duration
+                  />
+                )}
+                {/* Overlay to create the distinct color blocks. */}
+                <div
+                  className={`absolute inset-0
+                    ${
+                      section.layout === "middle"
+                        ? "bg-[#f1a840] opacity-[0.7]" // Gold/Orange
+                        : "bg-[#1f532a] opacity-[0.7]" // Dark Green
+                    }
+                  `}
+                ></div>
+              </div>
+            );
+          })}
+        </div>
+      )}
 
+      {/* Content overlay - always visible */}
       <div className="absolute inset-0 flex items-center p-8 md:p-16 lg:p-24">
         <div className="max-w-xl">
           <motion.h1
