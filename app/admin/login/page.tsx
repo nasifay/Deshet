@@ -55,9 +55,8 @@ function LoginForm() {
         return;
       }
 
-      // Redirect to callback URL
-      router.push(callbackUrl);
-      router.refresh();
+      // Use window.location for hard navigation to ensure cookies are properly loaded
+      window.location.href = callbackUrl;
     } catch (err) {
       setError("An unexpected error occurred. Please try again.");
       setIsLoading(false);

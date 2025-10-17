@@ -28,7 +28,6 @@ const LANDING_SECTION_TYPES = [
   { value: "HeroSection", label: "Hero Section", icon: "🎯" },
   { value: "AboutSection", label: "About Section", icon: "ℹ️" },
   { value: "StatisticsSection", label: "Statistics", icon: "📊" },
-  { value: "ProgramAreasSection", label: "Program Areas", icon: "📁" },
   { value: "AchievementsSection", label: "Achievements", icon: "🏆" },
   { value: "VolunteerBanner", label: "Volunteer Banner", icon: "💚" },
 ];
@@ -561,31 +560,6 @@ function SectionEditor({
         </div>
       );
 
-    case "ProgramAreasSection":
-      return (
-        <div className="space-y-4">
-          <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-            📁 Program Areas Settings
-          </h4>
-          <div>
-            <label className={labelClass}>Section Title</label>
-            <input
-              type="text"
-              value={(data.title as string) || ""}
-              onChange={(e) => updateField("title", e.target.value)}
-              className={inputClass}
-              placeholder="Program Areas"
-            />
-          </div>
-          <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
-            <p className="text-sm text-blue-800 dark:text-blue-200">
-              This section automatically pulls programs from the Programs
-              database. You can manage programs in the Programs section.
-            </p>
-          </div>
-        </div>
-      );
-
     case "AchievementsSection":
       return (
         <div className="space-y-4">
@@ -809,8 +783,6 @@ function getDefaultDataForType(type: string): Record<string, unknown> {
           { number: "15", label: "Protocols" },
         ],
       };
-    case "ProgramAreasSection":
-      return { title: "Program Areas" };
     case "AchievementsSection":
       return { title: "Our Achievements", achievements: [] };
     case "VolunteerBanner":

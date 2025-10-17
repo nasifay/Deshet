@@ -3,6 +3,9 @@ import connectDB from "~/lib/db/mongodb";
 import Volunteer from "~/lib/db/models/Volunteer";
 import User from "~/lib/db/models/User";
 import { getSession } from "~/lib/auth/session";
+import { unlink } from "fs/promises";
+import path from "path";
+import { existsSync } from "fs";
 
 // GET - Get single volunteer application
 export async function GET(
@@ -119,7 +122,7 @@ export async function DELETE(
     await connectDB();
 
     const { id } = await params;
-    const volunteer = await Volunteer.findByIdAndDelete(id);
+    const volunteer = await Volunteer.findById(id);
 
     if (!volunteer) {
       return NextResponse.json(
@@ -127,6 +130,22 @@ export async function DELETE(
         { status: 404 }
       );
     }
+
+    // Delete associated document file if it exists
+    if (volunteer.document) {
+      try {
+        const filePath = path.join(process.cwd(), "public", volunteer.document);
+        if (existsSync(filePath)) {
+          await unlink(filePath);
+        }
+      } catch (fileError) {
+        console.error("Error deleting volunteer document file:", fileError);
+        // Continue with deletion even if file removal fails
+      }
+    }
+
+    // Delete the volunteer record
+    await Volunteer.findByIdAndDelete(id);
 
     return NextResponse.json({
       success: true,

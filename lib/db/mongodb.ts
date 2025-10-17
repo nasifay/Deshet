@@ -11,6 +11,8 @@ import "~/lib/db/models/Gallery";
 import "~/lib/db/models/GalleryCategory";
 import "~/lib/db/models/Contact";
 import "~/lib/db/models/BankOption";
+import "~/lib/db/models/KeyFunder";
+import "~/lib/db/models/Supporter";
 
 const MONGODB_URI =
   process.env.MONGODB_URI || "mongodb://localhost:27017/tamra_sdt";

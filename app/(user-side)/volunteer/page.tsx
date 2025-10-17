@@ -12,6 +12,7 @@ interface FormData {
   gender: string;
   location: string;
   motivation: string;
+  document: File | null;
 }
 
 // All country codes with flags - sorted by number of digits (1-digit, 2-digit, 3-digit, 4-digit)
@@ -445,6 +446,47 @@ const MessageField = ({
   </div>
 );
 
+const FileUploadField = ({
+  label,
+  name,
+  onChange,
+  accept,
+  required = false,
+  disabled = false,
+  file,
+}: {
+  label: string;
+  name?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  accept?: string;
+  required?: boolean;
+  disabled?: boolean;
+  file?: File | null;
+}) => (
+  <div className="flex flex-col w-full gap-2">
+    <label className="text-[16px] font-medium text-[#333333]">{label}</label>
+    <div className="relative">
+      <input
+        type="file"
+        name={name}
+        onChange={onChange}
+        accept={accept}
+        required={required}
+        disabled={disabled}
+        className="w-full h-[48px] rounded-[8px] bg-white border border-[#E5E5E5] px-4 text-[#333333] text-[15px] focus:outline-none focus:ring-1 focus:ring-[#4EB778] disabled:opacity-[0.6] file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-[#4EB778] file:text-white hover:file:bg-[#3fa76a]"
+      />
+    </div>
+    {file && (
+      <p className="text-sm text-gray-600">
+        Selected: {file.name} ({(file.size / 1024).toFixed(2)} KB)
+      </p>
+    )}
+    <p className="text-xs text-gray-500">
+      Upload your resume/CV (PDF, DOC, DOCX, or TXT - Max 10MB)
+    </p>
+  </div>
+);
+
 export default function VolunteerPage() {
   const [formData, setFormData] = useState<FormData>({
     fullName: "",
@@ -455,6 +497,7 @@ export default function VolunteerPage() {
     gender: "",
     location: "",
     motivation: "",
+    document: null,
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<{
@@ -471,28 +514,36 @@ export default function VolunteerPage() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    setFormData((prev) => ({ ...prev, document: file }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitStatus({ type: null, message: "" });
 
     try {
+      // Prepare form data for submission
+      const submitData = new FormData();
+      submitData.append("fullName", formData.fullName);
+      submitData.append("email", formData.email);
+      submitData.append("phone", `${formData.countryCode} ${formData.phone}`);
+      submitData.append("age", formData.age);
+      submitData.append("gender", formData.gender);
+      submitData.append("location", formData.location);
+      submitData.append("motivation", formData.motivation);
+      submitData.append("availability", "flexible");
+      submitData.append("referenceSource", "Website");
+
+      if (formData.document) {
+        submitData.append("document", formData.document);
+      }
+
       const response = await fetch("/api/volunteer/submit", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          fullName: formData.fullName,
-          email: formData.email,
-          phone: `${formData.countryCode} ${formData.phone}`,
-          age: formData.age ? parseInt(formData.age) : undefined,
-          gender: formData.gender || undefined,
-          location: formData.location,
-          motivation: formData.motivation,
-          availability: "flexible", // Default value
-          referenceSource: "Website", // Default value
-        }),
+        body: submitData,
       });
 
       const result = await response.json();
@@ -511,6 +562,7 @@ export default function VolunteerPage() {
           gender: "",
           location: "",
           motivation: "",
+          document: null,
         });
       } else {
         setSubmitStatus({
@@ -646,6 +698,14 @@ export default function VolunteerPage() {
               onChange={handleInputChange}
               required
               disabled={isSubmitting}
+            />
+            <FileUploadField
+              label="Upload Resume/CV (Optional)"
+              name="document"
+              onChange={handleFileChange}
+              accept=".pdf,.doc,.docx,.txt"
+              disabled={isSubmitting}
+              file={formData.document}
             />
 
             {/* Submit Status */}

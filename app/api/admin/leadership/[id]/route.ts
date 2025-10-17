@@ -72,7 +72,7 @@ export async function PUT(
     const body = await request.json();
     console.log("PUT API - Received body:", body);
 
-    const { name, position, bio, photo, order, email, phone } = body;
+    const { name, position, bio, photo, order, email, phone, type } = body;
     console.log("PUT API - Extracted fields:", {
       name,
       position,
@@ -81,6 +81,7 @@ export async function PUT(
       order,
       email,
       phone,
+      type,
     });
 
     if (!name || !position) {
@@ -129,15 +130,26 @@ export async function PUT(
           : (settings.leadership[memberIndex] as any).order || 0,
       email: email || "",
       phone: phone || "",
+      type:
+        type !== undefined && type !== null && type !== ""
+          ? type
+          : (settings.leadership[memberIndex] as any).type || "leadership",
     };
 
     console.log("PUT API - Updating member:", updatedMember);
+    console.log("PUT API - Type being saved:", updatedMember.type);
 
     settings.leadership[memberIndex] = updatedMember as any;
 
-    // Use validateModifiedOnly to avoid validating unchanged array elements
+    // Mark the leadership array as modified to ensure MongoDB saves it
+    settings.markModified("leadership");
+
     await settings.save({ validateModifiedOnly: true });
     console.log("PUT API - Member updated successfully");
+    console.log(
+      "PUT API - Saved member type:",
+      (settings.leadership[memberIndex] as any).type
+    );
 
     // Debug: Check what's actually in the database after save
     const savedMember = settings.leadership[memberIndex];

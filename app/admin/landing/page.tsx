@@ -183,34 +183,6 @@ export default function LandingPageAdmin() {
         order: 2,
       },
       {
-        id: "program-areas-section",
-        type: "ProgramAreasSection",
-        data: {
-          title: "Program Areas",
-          programs: [
-            {
-              title: "Youth Empowerment & Peacebuilding",
-              description:
-                "Empowering young people to become agents of positive change in their communities.",
-              image: "/programs/hero.png",
-            },
-            {
-              title: "SRH & Gender Development",
-              description:
-                "Promoting sexual and reproductive health and gender equality.",
-              image: "/programs/hero.png",
-            },
-            {
-              title: "Climate Justice & Livelihoods",
-              description:
-                "Building climate resilience and sustainable livelihoods.",
-              image: "/programs/hero.png",
-            },
-          ],
-        },
-        order: 3,
-      },
-      {
         id: "achievements-section",
         type: "AchievementsSection",
         data: {
@@ -231,7 +203,7 @@ export default function LandingPageAdmin() {
             },
           ],
         },
-        order: 4,
+        order: 3,
       },
       {
         id: "volunteer-banner",
@@ -244,7 +216,7 @@ export default function LandingPageAdmin() {
           ctaLink: "/volunteer",
           backgroundImage: "/images/cta.jpg",
         },
-        order: 5,
+        order: 4,
       },
     ];
 
@@ -329,13 +301,6 @@ export default function LandingPageAdmin() {
       {/* Header */}
       <div className="flex items-center justify-between bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4">
         <div className="flex items-center space-x-3">
-          <Link
-            href="/admin"
-            className="flex items-center space-x-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span className="text-sm">Back to Dashboard</span>
-          </Link>
           <div>
             <h1 className="text-2xl font-black text-gray-900 dark:text-white">
               Landing Page Editor

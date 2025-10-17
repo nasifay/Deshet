@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     console.log("POST API - Received body:", body);
 
-    const { name, position, bio, photo, order, email, phone } = body;
+    const { name, position, bio, photo, order, email, phone, type } = body;
 
     // Validate required fields
     if (!name || !position) {
@@ -98,12 +98,18 @@ export async function POST(request: NextRequest) {
       order: order !== undefined ? order : settings.leadership.length,
       email: email || "",
       phone: phone || "",
+      type: type && type !== "" ? type : "leadership", // Default to leadership if not specified
     };
 
     console.log("POST API - Creating new member:", newMember);
+    console.log("POST API - Type being saved:", newMember.type);
 
     // Add to leadership array
     settings.leadership.push(newMember as any);
+
+    // Mark the leadership array as modified to ensure MongoDB saves it
+    settings.markModified("leadership");
+
     await settings.save({ validateModifiedOnly: true });
 
     console.log("POST API - Member created successfully");

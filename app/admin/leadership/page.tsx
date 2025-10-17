@@ -24,6 +24,8 @@ interface LeadershipMember {
   email?: string;
 
   phone?: string;
+
+  type: "leadership" | "team_member";
 }
 
 export default function LeadershipManagementPage() {
@@ -41,6 +43,10 @@ export default function LeadershipManagementPage() {
 
   const [isAddingNew, setIsAddingNew] = useState(false);
 
+  const [filterType, setFilterType] = useState<
+    "all" | "leadership" | "team_member"
+  >("all");
+
   const [formData, setFormData] = useState<LeadershipMember>({
     name: "",
 
@@ -55,6 +61,8 @@ export default function LeadershipManagementPage() {
     email: "",
 
     phone: "",
+
+    type: "leadership",
   });
 
   const [pendingPhotoFile, setPendingPhotoFile] = useState<File | null>(null);
@@ -117,6 +125,8 @@ export default function LeadershipManagementPage() {
 
       phone: member.phone || "",
 
+      type: member.type || "leadership",
+
       _id: member._id,
     });
 
@@ -144,6 +154,8 @@ export default function LeadershipManagementPage() {
       email: "",
 
       phone: "",
+
+      type: "leadership",
     });
   };
 
@@ -168,6 +180,8 @@ export default function LeadershipManagementPage() {
       email: "",
 
       phone: "",
+
+      type: "leadership",
     });
   };
 
@@ -203,15 +217,19 @@ export default function LeadershipManagementPage() {
 
       const method = editingMember ? "PUT" : "POST";
 
-      // Remove _id from formData for new members
-
-      const dataToSend = { ...formData, photo: photoUrl };
+      // Prepare data to send - ensure type field is always included
+      const dataToSend = {
+        ...formData,
+        photo: photoUrl,
+        type: formData.type || "leadership", // Always ensure type has a value
+      };
 
       if (isAddingNew) {
         delete dataToSend._id;
       }
 
       console.log("Saving member data:", dataToSend);
+      console.log("Type field value:", dataToSend.type);
 
       const response = await fetch(url, {
         method,
@@ -226,6 +244,7 @@ export default function LeadershipManagementPage() {
       const data = await response.json();
 
       console.log("Save response:", data);
+      console.log("Saved member type:", data.data?.type);
 
       if (data.success) {
         alert(
@@ -282,6 +301,11 @@ export default function LeadershipManagementPage() {
     }
   };
 
+  // Filter members by type
+  const filteredMembers = members.filter((member) =>
+    filterType === "all" ? true : member.type === filterType
+  );
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -289,11 +313,11 @@ export default function LeadershipManagementPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-black text-gray-900 dark:text-white">
-            Leadership Team
+            Leadership & Team Members
           </h1>
 
           <p className="text-gray-600 dark:text-gray-400 mt-1">
-            Manage your organization&apos;s leadership team members
+            Manage your organization&apos;s leadership team and staff members
           </p>
         </div>
 
@@ -305,6 +329,46 @@ export default function LeadershipManagementPage() {
 
           <span>Add Member</span>
         </button>
+      </div>
+
+      {/* Filter Tabs */}
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
+        <div className="flex items-center space-x-2">
+          <span className="text-sm font-medium text-gray-700 dark:text-gray-300 mr-2">
+            Filter by:
+          </span>
+          <button
+            onClick={() => setFilterType("all")}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              filterType === "all"
+                ? "bg-primary-green text-white"
+                : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
+            }`}
+          >
+            All ({members.length})
+          </button>
+          <button
+            onClick={() => setFilterType("leadership")}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              filterType === "leadership"
+                ? "bg-primary-green text-white"
+                : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
+            }`}
+          >
+            Leadership ({members.filter((m) => m.type === "leadership").length})
+          </button>
+          <button
+            onClick={() => setFilterType("team_member")}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              filterType === "team_member"
+                ? "bg-primary-green text-white"
+                : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
+            }`}
+          >
+            Team Members (
+            {members.filter((m) => m.type === "team_member").length})
+          </button>
+        </div>
       </div>
 
       {/* Edit/Add Form */}
@@ -400,6 +464,26 @@ export default function LeadershipManagementPage() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Type *
+                  </label>
+
+                  <select
+                    value={formData.type || "leadership"}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        type: e.target.value as "leadership" | "team_member",
+                      }))
+                    }
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green"
+                  >
+                    <option value="leadership">Leadership</option>
+                    <option value="team_member">Team Member</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Email
                   </label>
 
@@ -478,7 +562,12 @@ export default function LeadershipManagementPage() {
               <div className="flex items-center space-x-3">
                 <button
                   onClick={handleSave}
-                  disabled={!formData.name || !formData.position || saving}
+                  disabled={
+                    !formData.name ||
+                    !formData.position ||
+                    !formData.type ||
+                    saving
+                  }
                   className="flex items-center space-x-2 px-4 py-2 bg-primary-green text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {saving ? (
@@ -532,9 +621,19 @@ export default function LeadershipManagementPage() {
               Add your first team member
             </button>
           </div>
+        ) : filteredMembers.length === 0 ? (
+          <div className="p-8 text-center">
+            <p className="text-gray-600 dark:text-gray-400">
+              No{" "}
+              {filterType === "leadership"
+                ? "leadership members"
+                : "team members"}{" "}
+              found
+            </p>
+          </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
-            {members.map((member) => (
+            {filteredMembers.map((member) => (
               <div
                 key={member._id}
                 className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 hover:shadow-lg transition-shadow"
@@ -560,6 +659,20 @@ export default function LeadershipManagementPage() {
                 {/* Details */}
 
                 <div className="text-center mb-4">
+                  <div className="mb-2">
+                    <span
+                      className={`text-xs px-2 py-1 rounded-full ${
+                        member.type === "leadership"
+                          ? "bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300"
+                          : "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300"
+                      }`}
+                    >
+                      {member.type === "leadership"
+                        ? "Leadership"
+                        : "Team Member"}
+                    </span>
+                  </div>
+
                   <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">
                     {member.name}
                   </h3>

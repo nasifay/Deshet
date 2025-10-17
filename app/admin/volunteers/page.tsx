@@ -2,7 +2,17 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Search, Filter, Eye, Check, X, Clock, UserCheck } from "lucide-react";
+import {
+  Search,
+  Filter,
+  Eye,
+  Check,
+  X,
+  Clock,
+  UserCheck,
+  Trash2,
+  FileText,
+} from "lucide-react";
 
 interface Volunteer {
   _id: string;
@@ -12,6 +22,7 @@ interface Volunteer {
   location: string;
   availability: string;
   skills: string[];
+  document?: string;
   status: "pending" | "reviewed" | "approved" | "rejected" | "contacted";
   reviewedBy?: {
     name: string;
@@ -26,6 +37,8 @@ export default function VolunteersPage() {
   const [statusFilter, setStatusFilter] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [stats, setStats] = useState({
     pending: 0,
     reviewed: 0,
@@ -106,6 +119,53 @@ export default function VolunteersPage() {
     e.preventDefault();
     setPage(1);
     fetchVolunteers();
+  };
+
+  const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.checked) {
+      setSelectedIds(volunteers.map((v) => v._id));
+    } else {
+      setSelectedIds([]);
+    }
+  };
+
+  const handleSelectOne = (id: string) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
+    );
+  };
+
+  const handleBulkDelete = async () => {
+    if (selectedIds.length === 0) return;
+
+    const confirmed = confirm(
+      `Are you sure you want to delete ${selectedIds.length} volunteer application(s)? This action cannot be undone.`
+    );
+
+    if (!confirmed) return;
+
+    try {
+      setIsDeleting(true);
+      const response = await fetch("/api/admin/volunteers", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ids: selectedIds }),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        alert(data.message);
+        setSelectedIds([]);
+        fetchVolunteers();
+      } else {
+        alert(data.error || "Failed to delete volunteers");
+      }
+    } catch (error) {
+      console.error("Error deleting volunteers:", error);
+      alert("Failed to delete volunteers");
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   const getStatusBadge = (status: string) => {
@@ -204,6 +264,25 @@ export default function VolunteersPage() {
         </div>
       </div>
 
+      {/* Bulk Actions */}
+      {selectedIds.length > 0 && (
+        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
+          <div className="flex items-center justify-between">
+            <p className="text-red-800 dark:text-red-200">
+              {selectedIds.length} volunteer(s) selected
+            </p>
+            <button
+              onClick={handleBulkDelete}
+              disabled={isDeleting}
+              className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-[0.5] disabled:cursor-not-allowed"
+            >
+              <Trash2 className="w-4 h-4" />
+              {isDeleting ? "Deleting..." : "Delete Selected"}
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Filters */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -261,6 +340,17 @@ export default function VolunteersPage() {
             <table className="w-full">
               <thead className="bg-gray-50 dark:bg-gray-700">
                 <tr>
+                  <th className="px-6 py-3 text-left">
+                    <input
+                      type="checkbox"
+                      checked={
+                        volunteers.length > 0 &&
+                        selectedIds.length === volunteers.length
+                      }
+                      onChange={handleSelectAll}
+                      className="w-4 h-4 text-primary-green bg-gray-100 border-gray-300 rounded focus:ring-primary-green focus:ring-2"
+                    />
+                  </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                     Applicant
                   </th>
@@ -272,6 +362,9 @@ export default function VolunteersPage() {
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                     Availability
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    Document
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                     Status
@@ -290,6 +383,14 @@ export default function VolunteersPage() {
                     key={volunteer._id}
                     className="hover:bg-gray-50 dark:hover:bg-gray-700"
                   >
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <input
+                        type="checkbox"
+                        checked={selectedIds.includes(volunteer._id)}
+                        onChange={() => handleSelectOne(volunteer._id)}
+                        className="w-4 h-4 text-primary-green bg-gray-100 border-gray-300 rounded focus:ring-primary-green focus:ring-2"
+                      />
+                    </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-medium text-gray-900 dark:text-white">
                         {volunteer.fullName}
@@ -315,6 +416,22 @@ export default function VolunteersPage() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white capitalize">
                       {volunteer.availability}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {volunteer.document ? (
+                        <a
+                          href={volunteer.document}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-1 text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
+                          title="View Document"
+                        >
+                          <FileText className="w-4 h-4" />
+                          <span className="text-xs">View</span>
+                        </a>
+                      ) : (
+                        <span className="text-xs text-gray-400">N/A</span>
+                      )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center space-x-2">

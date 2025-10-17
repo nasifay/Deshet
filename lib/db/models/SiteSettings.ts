@@ -36,6 +36,7 @@ export interface ISiteSettings extends Document {
     order: number;
     email?: string;
     phone?: string;
+    type: "leadership" | "team_member"; // Categorize members
   }>;
   // Target Groups
   targetGroups: Array<{
@@ -55,6 +56,35 @@ export interface ISiteSettings extends Document {
     name: string;
     logo: string;
   }>;
+  // Footer Settings
+  footer: {
+    socialLinks: Array<{
+      platform: string;
+      url: string;
+      icon: string;
+      isActive: boolean;
+    }>;
+    whatsappNumber: string;
+    termsAndConditions: {
+      fileUrl: string;
+      fileName: string;
+    };
+    privacyPolicy: {
+      fileUrl: string;
+      fileName: string;
+    };
+    contactInfo: {
+      email: string;
+      address: string;
+      phone: string;
+    };
+    keyFunders: Array<{
+      name: string;
+    }>;
+    networks: Array<{
+      name: string;
+    }>;
+  };
   updatedAt: Date;
   createdAt: Date;
 }
@@ -94,6 +124,11 @@ const SiteSettingsSchema: Schema<ISiteSettings> = new Schema(
         order: { type: Number, default: 0 },
         email: { type: String, default: "" },
         phone: { type: String, default: "" },
+        type: {
+          type: String,
+          enum: ["leadership", "team_member"],
+          default: "leadership",
+        },
       },
     ],
     targetGroups: [
@@ -120,6 +155,44 @@ const SiteSettingsSchema: Schema<ISiteSettings> = new Schema(
         logo: String,
       },
     ],
+    footer: {
+      socialLinks: [
+        {
+          platform: { type: String, required: true },
+          url: { type: String, required: true },
+          icon: { type: String, required: true },
+          isActive: { type: Boolean, default: true },
+        },
+      ],
+      whatsappNumber: { type: String, default: "" },
+      termsAndConditions: {
+        fileUrl: { type: String, default: "" },
+        fileName: { type: String, default: "" },
+      },
+      privacyPolicy: {
+        fileUrl: { type: String, default: "" },
+        fileName: { type: String, default: "" },
+      },
+      contactInfo: {
+        email: { type: String, default: "TSD@ngo.com" },
+        address: {
+          type: String,
+          default:
+            "Friendship Business Center, 7th Floor, Bole, Addis Ababa, Ethiopia",
+        },
+        phone: { type: String, default: "" },
+      },
+      keyFunders: [
+        {
+          name: String,
+        },
+      ],
+      networks: [
+        {
+          name: String,
+        },
+      ],
+    },
   },
   {
     timestamps: true,

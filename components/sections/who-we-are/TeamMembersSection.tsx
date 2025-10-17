@@ -11,7 +11,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
-export interface LeadershipMember {
+export interface TeamMember {
   name: string;
   position: string;
   photo: string;
@@ -22,16 +22,16 @@ export interface LeadershipMember {
   type?: "leadership" | "team_member";
 }
 
-interface LeadershipSectionProps {
-  leadershipTeam: LeadershipMember[];
+interface TeamMemberSectionProps {
+  teamMember: TeamMember[];
 }
 
-export function LeadershipSection({ leadershipTeam }: LeadershipSectionProps) {
+export function TeamMemberSection({ teamMember }: TeamMemberSectionProps) {
   return (
     <section className="relative w-full flex flex-col items-center gap-6 sm:gap-8 md:gap-12 lg:gap-20 xl:gap-[87px] mb-8 sm:mb-12 md:mb-16 lg:mb-[87px] px-4 sm:px-6 md:px-8 lg:px-10 xl:px-0 translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:1600ms] overflow-hidden">
       {/* Scaled heading with fluid typography */}
       <h2 className="w-full primary-title text-primary-green mx-auto px-6 sm:px-8 md:px-16 2xl:px-20">
-        OUR LEADERSHIP
+        Team Members
       </h2>
 
       {/* Swiper Container */}
@@ -48,12 +48,12 @@ export function LeadershipSection({ leadershipTeam }: LeadershipSectionProps) {
             }}
             loop={true}
             navigation={{
-              nextEl: ".leadership-swiper-button-next",
-              prevEl: ".leadership-swiper-button-prev",
+              nextEl: ".team-swiper-button-next",
+              prevEl: ".team-swiper-button-prev",
             }}
             pagination={{
               clickable: true,
-              el: ".leadership-swiper-pagination",
+              el: ".team-swiper-pagination",
               bulletClass: "swiper-pagination-bullet",
               bulletActiveClass: "swiper-pagination-bullet-active",
             }}
@@ -69,7 +69,7 @@ export function LeadershipSection({ leadershipTeam }: LeadershipSectionProps) {
             }}
             className="w-full"
           >
-            {leadershipTeam.map((member, index) => (
+            {teamMember.map((member, index) => (
               <SwiperSlide key={index}>
                 <Card className="w-full h-[200px] sm:h-[280px] md:h-[340px] lg:h-[400px] bg-[#b1efca] rounded-lg sm:rounded-xl md:rounded-2xl lg:rounded-[32px] border-0 transition-all duration-500 ease-out hover:scale-105 hover:shadow-[0_10px_40px_rgba(0,0,0,0.2)] hover:z-50 cursor-pointer overflow-visible">
                   <CardContent className="p-0 relative h-full">
@@ -105,13 +105,13 @@ export function LeadershipSection({ leadershipTeam }: LeadershipSectionProps) {
           </Swiper>
 
           {/* Custom Navigation Buttons */}
-          <button className="leadership-swiper-button-prev absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 sm:w-12 sm:h-12 bg-primary-green hover:bg-primary-green/90 rounded-full shadow-xl flex items-center justify-center transition-all duration-300 hover:scale-110 disabled:opacity-30 disabled:cursor-not-allowed">
+          <button className="team-swiper-button-prev absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 sm:w-12 sm:h-12 bg-primary-green hover:bg-primary-green/90 rounded-full shadow-xl flex items-center justify-center transition-all duration-300 hover:scale-110 disabled:opacity-30 disabled:cursor-not-allowed">
             <ChevronLeft
               className="w-5 h-5 sm:w-6 sm:h-6 text-white"
               strokeWidth={3}
             />
           </button>
-          <button className="leadership-swiper-button-next absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 sm:w-12 sm:h-12 bg-primary-green hover:bg-primary-green/90 rounded-full shadow-xl flex items-center justify-center transition-all duration-300 hover:scale-110 disabled:opacity-30 disabled:cursor-not-allowed">
+          <button className="team-swiper-button-next absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 sm:w-12 sm:h-12 bg-primary-green hover:bg-primary-green/90 rounded-full shadow-xl flex items-center justify-center transition-all duration-300 hover:scale-110 disabled:opacity-30 disabled:cursor-not-allowed">
             <ChevronRight
               className="w-5 h-5 sm:w-6 sm:h-6 text-white"
               strokeWidth={3}
@@ -119,7 +119,7 @@ export function LeadershipSection({ leadershipTeam }: LeadershipSectionProps) {
           </button>
 
           {/* Custom Pagination */}
-          <div className="leadership-swiper-pagination flex justify-center mt-6 space-x-2"></div>
+          <div className="team-swiper-pagination flex justify-center mt-6 space-x-2"></div>
         </div>
       </div>
     </section>

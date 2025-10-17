@@ -6,10 +6,6 @@ import ScrollStack from "~/components/ui/ScrollStack";
 import { useState, useEffect } from "react";
 import { ProgramAreasSkeleton } from "./landing-page-skeleton";
 
-interface ProgramAreasSectionProps {
-  programs?: Array<{ title: string; image: string; link?: string }>;
-}
-
 export default function ProgramAreasSection() {
   const [programs, setPrograms] = useState<
     Array<{ title: string; image: string; link?: string }>

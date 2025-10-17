@@ -6,8 +6,10 @@ import ProgramAreasSection from "~/components/sections/program-areas-section";
 import StatisticsSection from "~/components/sections/statistics-section";
 import AchievementsSection from "~/components/sections/achievements-section";
 import NewsEventsSection from "~/components/sections/news-events-section";
+import KeyFundersSection from "~/components/sections/key-funders-section";
 import SupportersSection from "~/components/sections/supporters-section";
 import VolunteerBanner from "~/components/sections/volunteerBanner";
+import TestimonialsSection from "~/components/sections/TestimonialSection";
 
 /**
  * Landing page component
@@ -21,10 +23,12 @@ export default function Home() {
       <AboutSection />
       <StatisticsSection />
       <ProgramAreasSection />
+      <KeyFundersSection />
       <SupportersSection />
       <AchievementsSection />
       <NewsEventsSection />
       <VolunteerBanner />
+      <TestimonialsSection />
     </div>
   );
 }

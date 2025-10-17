@@ -1,7 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Plus, Edit, Trash2, Save, X, Eye, EyeOff } from "lucide-react";
+import {
+  Plus,
+  Edit,
+  Trash2,
+  Save,
+  X,
+  Eye,
+  EyeOff,
+  Handshake,
+  DollarSign,
+} from "lucide-react";
 import ImageUploadField, {
   uploadImageFile,
 } from "../components/ImageUploadField";
@@ -16,32 +26,51 @@ interface Supporter {
   description?: string;
 }
 
+interface KeyFunder {
+  _id?: string;
+  name: string;
+  logo: string;
+  order: number;
+  isActive: boolean;
+  link?: string;
+  description?: string;
+  type: "key_funder" | "supporter";
+}
+
 export default function SupportersManagementPage() {
+  const [activeTab, setActiveTab] = useState<"supporters" | "keyfunders">(
+    "supporters"
+  );
   const [supporters, setSupporters] = useState<Supporter[]>([]);
+  const [keyFunders, setKeyFunders] = useState<KeyFunder[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState<string | null>(null);
   const [editingSupporter, setEditingSupporter] = useState<Supporter | null>(
     null
   );
+  const [editingKeyFunder, setEditingKeyFunder] = useState<KeyFunder | null>(
+    null
+  );
   const [isAddingNew, setIsAddingNew] = useState(false);
-  const [formData, setFormData] = useState<Supporter>({
+  const [formData, setFormData] = useState<Supporter | KeyFunder>({
     name: "",
     logo: "",
     order: 0,
     isActive: true,
     link: "",
     description: "",
+    type: "key_funder",
   });
   const [pendingLogoFile, setPendingLogoFile] = useState<File | null>(null);
 
   useEffect(() => {
     fetchSupporters();
+    fetchKeyFunders();
   }, []);
 
   const fetchSupporters = async () => {
     try {
-      setLoading(true);
       const response = await fetch("/api/admin/supporters");
       const data = await response.json();
 
@@ -56,47 +85,89 @@ export default function SupportersManagementPage() {
       alert(
         "❌ Error loading supporters. Please check your connection and try again."
       );
+    }
+  };
+
+  const fetchKeyFunders = async () => {
+    try {
+      const response = await fetch("/api/admin/keyfunders");
+      const data = await response.json();
+
+      if (data.success) {
+        setKeyFunders(data.data);
+      } else {
+        console.error("Failed to fetch key funders:", data.error);
+        alert("⚠️ Failed to load key funders. Please refresh the page.");
+      }
+    } catch (error) {
+      console.error("Error fetching key funders:", error);
+      alert(
+        "❌ Error loading key funders. Please check your connection and try again."
+      );
     } finally {
       setLoading(false);
     }
   };
 
-  const handleEdit = (supporter: Supporter) => {
-    setEditingSupporter(supporter);
+  const handleEdit = (
+    item: Supporter | KeyFunder,
+    type: "supporter" | "keyfunder"
+  ) => {
+    if (type === "supporter") {
+      setEditingSupporter(item as Supporter);
+      setEditingKeyFunder(null);
+    } else {
+      setEditingKeyFunder(item as KeyFunder);
+      setEditingSupporter(null);
+    }
     setFormData({
-      name: supporter.name,
-      logo: supporter.logo,
-      order: supporter.order,
-      isActive: supporter.isActive,
-      link: supporter.link || "",
-      description: supporter.description || "",
+      name: item.name,
+      logo: item.logo,
+      order: item.order,
+      isActive: item.isActive,
+      link: item.link || "",
+      description: item.description || "",
+      type: "type" in item ? item.type : "key_funder",
     });
     setPendingLogoFile(null);
     setIsAddingNew(false);
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this supporter?")) {
+  const handleDelete = async (id: string, type: "supporter" | "keyfunder") => {
+    const itemType = type === "supporter" ? "supporter" : "key funder";
+    if (!confirm(`Are you sure you want to delete this ${itemType}?`)) {
       return;
     }
 
     try {
       setDeleting(id);
-      const response = await fetch(`/api/admin/supporters/${id}`, {
+      const endpoint =
+        type === "supporter"
+          ? `/api/admin/supporters/${id}`
+          : `/api/admin/keyfunders/${id}`;
+      const response = await fetch(endpoint, {
         method: "DELETE",
       });
 
       const data = await response.json();
 
       if (data.success) {
-        alert("✅ Supporter deleted successfully!");
-        fetchSupporters();
+        alert(
+          `✅ ${
+            itemType.charAt(0).toUpperCase() + itemType.slice(1)
+          } deleted successfully!`
+        );
+        if (type === "supporter") {
+          fetchSupporters();
+        } else {
+          fetchKeyFunders();
+        }
       } else {
-        alert(`⚠️ Failed to delete supporter: ${data.error}`);
+        alert(`⚠️ Failed to delete ${itemType}: ${data.error}`);
       }
     } catch (error) {
-      console.error("Error deleting supporter:", error);
-      alert("❌ Error deleting supporter. Please try again.");
+      console.error(`Error deleting ${itemType}:`, error);
+      alert(`❌ Error deleting ${itemType}. Please try again.`);
     } finally {
       setDeleting(null);
     }
@@ -105,8 +176,12 @@ export default function SupportersManagementPage() {
   const handleAddNew = () => {
     setIsAddingNew(true);
     setEditingSupporter(null);
+    setEditingKeyFunder(null);
+    const currentItems = activeTab === "supporters" ? supporters : keyFunders;
     const maxOrder =
-      supporters.length > 0 ? Math.max(...supporters.map((s) => s.order)) : -1;
+      currentItems.length > 0
+        ? Math.max(...currentItems.map((s) => s.order))
+        : -1;
     setFormData({
       name: "",
       logo: "",
@@ -114,12 +189,14 @@ export default function SupportersManagementPage() {
       isActive: true,
       link: "",
       description: "",
+      type: activeTab === "supporters" ? "supporter" : "key_funder",
     });
     setPendingLogoFile(null);
   };
 
   const handleCancel = () => {
     setEditingSupporter(null);
+    setEditingKeyFunder(null);
     setIsAddingNew(false);
     setFormData({
       name: "",
@@ -128,13 +205,15 @@ export default function SupportersManagementPage() {
       isActive: true,
       link: "",
       description: "",
+      type: "key_funder",
     });
     setPendingLogoFile(null);
   };
 
   const handleSave = async () => {
+    const itemType = activeTab === "supporters" ? "supporter" : "key funder";
     if (!formData.name.trim()) {
-      alert("Please enter supporter name");
+      alert(`Please enter ${itemType} name`);
       return;
     }
 
@@ -165,11 +244,17 @@ export default function SupportersManagementPage() {
         name: formData.name.trim(),
         link: formData.link?.trim() || "",
         description: formData.description?.trim() || "",
+        type: activeTab === "supporters" ? "supporter" : "key_funder",
       };
 
-      const url = isAddingNew
-        ? "/api/admin/supporters"
-        : `/api/admin/supporters/${editingSupporter?._id}`;
+      const isEditing = editingSupporter || editingKeyFunder;
+      const editingId = editingSupporter?._id || editingKeyFunder?._id;
+      const endpoint =
+        activeTab === "supporters"
+          ? "/api/admin/supporters"
+          : "/api/admin/keyfunders";
+
+      const url = isAddingNew ? endpoint : `${endpoint}/${editingId}`;
 
       const method = isAddingNew ? "POST" : "PUT";
 
@@ -185,16 +270,22 @@ export default function SupportersManagementPage() {
 
       if (data.success) {
         alert(
-          `✅ Supporter ${isAddingNew ? "created" : "updated"} successfully!`
+          `✅ ${itemType.charAt(0).toUpperCase() + itemType.slice(1)} ${
+            isAddingNew ? "created" : "updated"
+          } successfully!`
         );
-        fetchSupporters();
+        if (activeTab === "supporters") {
+          fetchSupporters();
+        } else {
+          fetchKeyFunders();
+        }
         handleCancel();
       } else {
-        alert(`⚠️ Failed to save supporter: ${data.error}`);
+        alert(`⚠️ Failed to save ${itemType}: ${data.error}`);
       }
     } catch (error) {
-      console.error("Error saving supporter:", error);
-      alert("❌ Error saving supporter. Please try again.");
+      console.error(`Error saving ${itemType}:`, error);
+      alert(`❌ Error saving ${itemType}. Please try again.`);
     } finally {
       setSaving(false);
     }
@@ -219,28 +310,68 @@ export default function SupportersManagementPage() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-              Supporters Management
+              Supporters & Funders Management
             </h1>
             <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-              Manage your organization's partners and supporters
+              Manage your organization's partners, supporters, and key funders
             </p>
           </div>
           <button
             onClick={handleAddNew}
-            disabled={isAddingNew || editingSupporter !== null}
+            disabled={
+              isAddingNew ||
+              editingSupporter !== null ||
+              editingKeyFunder !== null
+            }
             className="flex items-center space-x-2 px-4 py-2 bg-primary-green text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Plus className="w-5 h-5" />
-            <span>Add Supporter</span>
+            <span>
+              Add {activeTab === "supporters" ? "Supporter" : "Key Funder"}
+            </span>
           </button>
+        </div>
+
+        {/* Tabs */}
+        <div className="mt-6 border-b border-gray-200 dark:border-gray-700">
+          <nav className="-mb-px flex space-x-8">
+            <button
+              onClick={() => setActiveTab("supporters")}
+              className={`flex items-center space-x-2 py-2 px-1 border-b-2 font-medium text-sm ${
+                activeTab === "supporters"
+                  ? "border-primary-green text-primary-green"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+              }`}
+            >
+              <Handshake className="w-4 h-4" />
+              <span>Supporters ({supporters.length})</span>
+            </button>
+            <button
+              onClick={() => setActiveTab("keyfunders")}
+              className={`flex items-center space-x-2 py-2 px-1 border-b-2 font-medium text-sm ${
+                activeTab === "keyfunders"
+                  ? "border-primary-green text-primary-green"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+              }`}
+            >
+              <DollarSign className="w-4 h-4" />
+              <span>Key Funders ({keyFunders.length})</span>
+            </button>
+          </nav>
         </div>
       </div>
 
       {/* Add/Edit Form */}
-      {(isAddingNew || editingSupporter) && (
+      {(isAddingNew || editingSupporter || editingKeyFunder) && (
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
           <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
-            {isAddingNew ? "Add New Supporter" : "Edit Supporter"}
+            {isAddingNew
+              ? `Add New ${
+                  activeTab === "supporters" ? "Supporter" : "Key Funder"
+                }`
+              : `Edit ${
+                  activeTab === "supporters" ? "Supporter" : "Key Funder"
+                }`}
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -349,7 +480,13 @@ export default function SupportersManagementPage() {
               className="flex items-center space-x-2 px-4 py-2 bg-primary-green text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
             >
               <Save className="w-4 h-4" />
-              <span>{saving ? "Saving..." : "Save Supporter"}</span>
+              <span>
+                {saving
+                  ? "Saving..."
+                  : `Save ${
+                      activeTab === "supporters" ? "Supporter" : "Key Funder"
+                    }`}
+              </span>
             </button>
             <button
               onClick={handleCancel}
@@ -363,25 +500,35 @@ export default function SupportersManagementPage() {
         </div>
       )}
 
-      {/* Supporters List */}
+      {/* List */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden">
         <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
           <h2 className="text-lg font-bold text-gray-900 dark:text-white">
-            Supporters ({supporters.length})
+            {activeTab === "supporters"
+              ? `Supporters (${supporters.length})`
+              : `Key Funders (${keyFunders.length})`}
           </h2>
         </div>
 
-        {supporters.length === 0 ? (
+        {(
+          activeTab === "supporters"
+            ? supporters.length === 0
+            : keyFunders.length === 0
+        ) ? (
           <div className="p-12 text-center">
             <p className="text-gray-500 dark:text-gray-400 mb-4">
-              No supporters added yet
+              No {activeTab === "supporters" ? "supporters" : "key funders"}{" "}
+              added yet
             </p>
             <button
               onClick={handleAddNew}
               className="inline-flex items-center space-x-2 px-4 py-2 bg-primary-green text-white rounded-lg hover:bg-green-700"
             >
               <Plus className="w-4 h-4" />
-              <span>Add Your First Supporter</span>
+              <span>
+                Add Your First{" "}
+                {activeTab === "supporters" ? "Supporter" : "Key Funder"}
+              </span>
             </button>
           </div>
         ) : (
@@ -410,92 +557,98 @@ export default function SupportersManagementPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                {supporters.map((supporter) => (
-                  <tr
-                    key={supporter._id}
-                    className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-                  >
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="w-20 h-10 relative border border-gray-300 dark:border-gray-600 rounded overflow-hidden bg-white">
-                        <img
-                          src={supporter.logo}
-                          alt={supporter.name}
-                          className="w-full h-full object-contain"
-                        />
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900 dark:text-white">
-                        {supporter.name}
-                      </div>
-                      {supporter.description && (
-                        <div className="text-xs text-gray-500 dark:text-gray-400 mt-1 max-w-xs truncate">
-                          {supporter.description}
+                {(activeTab === "supporters" ? supporters : keyFunders).map(
+                  (item) => (
+                    <tr
+                      key={item._id}
+                      className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                    >
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="w-20 h-10 relative border border-gray-300 dark:border-gray-600 rounded overflow-hidden bg-white">
+                          <img
+                            src={item.logo}
+                            alt={item.name}
+                            className="w-full h-full object-contain"
+                          />
                         </div>
-                      )}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="text-sm text-gray-600 dark:text-gray-400">
-                        {supporter.order}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span
-                        className={`inline-flex items-center space-x-1 px-2 py-1 text-xs font-medium rounded-full ${
-                          supporter.isActive
-                            ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
-                            : "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300"
-                        }`}
-                      >
-                        {supporter.isActive ? (
-                          <>
-                            <Eye className="w-3 h-3" />
-                            <span>Active</span>
-                          </>
-                        ) : (
-                          <>
-                            <EyeOff className="w-3 h-3" />
-                            <span>Inactive</span>
-                          </>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm font-medium text-gray-900 dark:text-white">
+                          {item.name}
+                        </div>
+                        {item.description && (
+                          <div className="text-xs text-gray-500 dark:text-gray-400 mt-1 max-w-xs truncate">
+                            {item.description}
+                          </div>
                         )}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {supporter.link ? (
-                        <a
-                          href={supporter.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="text-sm text-gray-600 dark:text-gray-400">
+                          {item.order}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span
+                          className={`inline-flex items-center space-x-1 px-2 py-1 text-xs font-medium rounded-full ${
+                            item.isActive
+                              ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                              : "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300"
+                          }`}
                         >
-                          Visit
-                        </a>
-                      ) : (
-                        <span className="text-sm text-gray-400">-</span>
-                      )}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <div className="flex items-center justify-end space-x-2">
-                        <button
-                          onClick={() => handleEdit(supporter)}
-                          disabled={isAddingNew || editingSupporter !== null}
-                          className="p-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                          title="Edit"
-                        >
-                          <Edit className="w-4 h-4" />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(supporter._id!)}
-                          disabled={deleting === supporter._id}
-                          className="p-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors disabled:opacity-50"
-                          title="Delete"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                          {item.isActive ? (
+                            <>
+                              <Eye className="w-3 h-3" />
+                              <span>Active</span>
+                            </>
+                          ) : (
+                            <>
+                              <EyeOff className="w-3 h-3" />
+                              <span>Inactive</span>
+                            </>
+                          )}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {item.link ? (
+                          <a
+                            href={item.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
+                          >
+                            Visit
+                          </a>
+                        ) : (
+                          <span className="text-sm text-gray-400">-</span>
+                        )}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <div className="flex items-center justify-end space-x-2">
+                          <button
+                            onClick={() => handleEdit(item, activeTab)}
+                            disabled={
+                              isAddingNew ||
+                              editingSupporter !== null ||
+                              editingKeyFunder !== null
+                            }
+                            className="p-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            title="Edit"
+                          >
+                            <Edit className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={() => handleDelete(item._id!, activeTab)}
+                            disabled={deleting === item._id}
+                            className="p-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors disabled:opacity-50"
+                            title="Delete"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  )
+                )}
               </tbody>
             </table>
           </div>

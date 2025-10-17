@@ -6,13 +6,15 @@ import {
   generateArticleSchema,
   generateBreadcrumbSchema,
 } from "~/lib/seo/json-ld";
+import connectDB from "~/lib/db/mongodb";
+import NewsPost from "~/lib/db/models/NewsPost";
 
 interface NewsDetailsLayoutProps {
   children: React.ReactNode;
   params: Promise<{ id: string }>;
 }
 
-interface NewsPost {
+interface NewsPostData {
   _id: string;
   title: string;
   slug: string;
@@ -29,13 +31,29 @@ interface NewsPost {
   };
 }
 
-async function fetchNewsData(slug: string): Promise<NewsPost | null> {
+async function fetchNewsData(slug: string): Promise<NewsPostData | null> {
   try {
-    const res = await fetch(`/api/public/news/${slug}`, {
-      next: { revalidate: 3600 }, // Revalidate every hour
-    });
-    const data = await res.json();
-    return data.success ? data.data : null;
+    await connectDB();
+
+    const post = await NewsPost.findOne({
+      slug: slug,
+      status: "published",
+    })
+      .select("-__v")
+      .populate("author", "name")
+      .lean();
+
+    if (!post) {
+      return null;
+    }
+
+    // Convert MongoDB _id to string for serialization
+    return {
+      ...post,
+      _id: post._id.toString(),
+      publishedAt: post.publishedAt?.toISOString() || new Date().toISOString(),
+      updatedAt: post.updatedAt?.toISOString(),
+    } as NewsPostData;
   } catch (error) {
     console.error("Error fetching news for metadata:", error);
     return null;

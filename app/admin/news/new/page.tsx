@@ -8,13 +8,15 @@ import { z } from "zod";
 import { ArrowLeft, Save } from "lucide-react";
 import Link from "next/link";
 import RichTextEditor from "../../components/RichTextEditor";
-import ImageUploadField from "../../components/ImageUploadField";
+import ImageUploadField, {
+  uploadImageFile,
+} from "../../components/ImageUploadField";
 
 const newsSchema = z.object({
   title: z.string().min(1, "Title is required"),
   slug: z.string().min(1, "Slug is required"),
   excerpt: z.string().min(1, "Excerpt is required"),
-  content: z.string().min(1, "Content is required"),
+  content: z.string().optional(), // Content is handled separately by RichTextEditor
   featuredImage: z.string().optional(),
   category: z.string().min(1, "Category is required"),
   tags: z.string(),
@@ -28,6 +30,7 @@ export default function NewNewsPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [content, setContent] = useState("");
+  const [pendingImageFile, setPendingImageFile] = useState<File | null>(null);
 
   const {
     register,
@@ -57,14 +60,38 @@ export default function NewNewsPage() {
     setIsLoading(true);
 
     try {
+      // Validate content separately since it's not part of the form data
+      if (!content || content.trim() === "") {
+        alert("Content is required");
+        setIsLoading(false);
+        return;
+      }
+
+      let featuredImageUrl = data.featuredImage;
+
+      // Upload image if there's a pending file
+      if (pendingImageFile) {
+        try {
+          featuredImageUrl = await uploadImageFile(pendingImageFile);
+        } catch (error) {
+          console.error("Error uploading image:", error);
+          alert("Failed to upload image. Please try again.");
+          setIsLoading(false);
+          return;
+        }
+      }
+
       const payload = {
         ...data,
         content,
+        featuredImage: featuredImageUrl,
         tags: data.tags
           .split(",")
           .map((tag) => tag.trim())
           .filter(Boolean),
       };
+
+      console.log("Submitting payload:", payload); // Debug log
 
       const response = await fetch("/api/admin/news", {
         method: "POST",
@@ -73,6 +100,8 @@ export default function NewNewsPage() {
       });
 
       const result = await response.json();
+
+      console.log("API response:", result); // Debug log
 
       if (!response.ok) {
         alert(result.error || "Failed to create post");
@@ -192,11 +221,6 @@ export default function NewNewsPage() {
               onChange={setContent}
               placeholder="Write your post content..."
             />
-            {errors.content && (
-              <p className="mt-1 text-sm text-red-600">
-                {errors.content.message}
-              </p>
-            )}
           </div>
 
           {/* Category & Tags */}
@@ -252,12 +276,38 @@ export default function NewNewsPage() {
               label="Featured Image"
               value={watch("featuredImage") || ""}
               onChange={(url) => setValue("featuredImage", url)}
+              onFileSelect={setPendingImageFile}
+              deferUpload={true}
               placeholder="Upload an image or paste image URL..."
             />
           </div>
 
           {/* Options */}
           <div className="space-y-4">
+            <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+              <div className="flex items-start space-x-3">
+                <div className="flex-shrink-0 mt-0.5">
+                  <svg
+                    className="w-5 h-5 text-blue-600 dark:text-blue-400"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm text-blue-700 dark:text-blue-400">
+                    Featured news posts will be automatically displayed on the
+                    landing page in the News & Events section for maximum
+                    visibility.
+                  </p>
+                </div>
+              </div>
+            </div>
             <div className="flex items-center">
               <input
                 {...register("isFeatured")}
@@ -317,7 +367,7 @@ export default function NewNewsPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="flex items-center space-x-2 px-6 py-2 bg-primary-green text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-[0.5] disabled:cursor-not-allowed"
+            className="cursor-pointer flex items-center space-x-2 px-6 py-2 bg-primary-green text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-[0.5] disabled:cursor-not-allowed"
           >
             <Save className="w-4 h-4" />
             <span>{isLoading ? "Creating..." : "Create Post"}</span>

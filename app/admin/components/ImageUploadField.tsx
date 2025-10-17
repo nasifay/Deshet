@@ -134,6 +134,7 @@ export default function ImageUploadField({
           {/* Overlay buttons on hover */}
           <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-[1] transition-opacity rounded-lg flex items-center justify-center space-x-3">
             <button
+              type="button"
               onClick={() => fileInputRef.current?.click()}
               disabled={uploading}
               className="px-4 py-2 bg-white text-gray-900 rounded-lg hover:bg-gray-100 transition-colors text-sm font-medium disabled:opacity-[0.5]"
@@ -141,6 +142,7 @@ export default function ImageUploadField({
               Change
             </button>
             <button
+              type="button"
               onClick={handleRemove}
               disabled={uploading}
               className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors text-sm font-medium disabled:opacity-[0.5]"
@@ -199,7 +201,7 @@ export default function ImageUploadField({
       <div className="flex items-center space-x-2">
         <div className="flex-1">
           <input
-            type="url"
+            type="text"
             value={value}
             onChange={(e) => {
               onChange(e.target.value);
@@ -211,6 +213,7 @@ export default function ImageUploadField({
         </div>
         {value && (
           <button
+            type="button"
             onClick={handleRemove}
             className="p-2 text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
             title="Clear"

@@ -12,6 +12,7 @@ import {
   leadershipTeam,
   targetGroups,
 } from "~/lib/data/who-we-are-data";
+import { TeamMemberSection } from "~/components/sections/who-we-are/TeamMembersSection";
 
 interface PageSection {
   type: string;
@@ -42,6 +43,7 @@ interface SiteSettings {
     email?: string;
     phone?: string;
     order?: number;
+    type?: "leadership" | "team_member";
   }>;
   targetGroups?: Array<{
     icon: string;
@@ -60,6 +62,8 @@ interface SiteSettings {
 export default function AboutUs() {
   const [pageData, setPageData] = useState<PageData | null>(null);
   const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null);
+  const [leadershipMembers, setLeadershipMembers] = useState<any[]>([]);
+  const [teamMembers, setTeamMembers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -76,12 +80,32 @@ export default function AboutUs() {
       const settingsResponse = await fetch("/api/public/settings");
       const settingsData = await settingsResponse.json();
 
+      // Fetch leadership members separately
+      const leadershipResponse = await fetch(
+        "/api/public/leadership?type=leadership"
+      );
+      const leadershipData = await leadershipResponse.json();
+
+      // Fetch team members separately
+      const teamResponse = await fetch(
+        "/api/public/leadership?type=team_member"
+      );
+      const teamData = await teamResponse.json();
+
       if (pageData.success) {
         setPageData(pageData.data);
       }
 
       if (settingsData.success) {
         setSiteSettings(settingsData.data);
+      }
+
+      if (leadershipData.success) {
+        setLeadershipMembers(leadershipData.data);
+      }
+
+      if (teamData.success) {
+        setTeamMembers(teamData.data);
       }
     } catch (error) {
       console.error("Error fetching page data:", error);
@@ -141,9 +165,11 @@ export default function AboutUs() {
       : coreValues;
 
   const finalLeadership =
-    siteSettings?.leadership && siteSettings.leadership.length > 0
-      ? siteSettings.leadership
-      : leadershipTeam;
+    leadershipMembers.length > 0
+      ? leadershipMembers
+      : leadershipTeam.filter((m: any) => m.type !== "team_member");
+
+  const finalTeamMembers = teamMembers.length > 0 ? teamMembers : [];
 
   const finalTargetGroups =
     siteSettings?.targetGroups && siteSettings.targetGroups.length > 0
@@ -174,7 +200,13 @@ export default function AboutUs() {
 
       <CoreValuesSection coreValues={finalCoreValues} />
 
-      <LeadershipSection leadershipTeam={finalLeadership} />
+      {finalTeamMembers.length > 0 && (
+        <TeamMemberSection teamMember={finalTeamMembers} />
+      )}
+
+      {finalLeadership.length > 0 && (
+        <LeadershipSection leadershipTeam={finalLeadership} />
+      )}
 
       <TargetGroupSection
         targetGroups={finalTargetGroups}

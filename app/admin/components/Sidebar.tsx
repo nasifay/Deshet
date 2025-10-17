@@ -18,6 +18,7 @@ import {
   Building2,
   UsersRound,
   Handshake,
+  Link as LinkIcon,
 } from "lucide-react";
 
 interface MenuItem {
@@ -94,9 +95,14 @@ export default function Sidebar({
       icon: <UsersRound className="w-5 h-5" />,
     },
     {
-      title: "Supporters",
+      title: "Supporters & Funders",
       url: "/admin/supporters",
       icon: <Handshake className="w-5 h-5" />,
+    },
+    {
+      title: "Footer",
+      url: "/admin/footer",
+      icon: <LinkIcon className="w-5 h-5" />,
     },
     {
       title: "Users",
