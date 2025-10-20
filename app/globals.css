@@ -31,6 +31,50 @@
   padding-bottom: 8px !important;
 }
 
+/* Testimonials Swiper Styles */
+.testimonials-swiper {
+  overflow: hidden !important;
+  width: 100% !important;
+}
+
+.testimonials-swiper .swiper-wrapper {
+  overflow: visible !important;
+  padding-bottom: 20px !important;
+}
+
+.testimonials-swiper .swiper-slide {
+  overflow: visible !important;
+  height: auto !important;
+}
+
+.testimonials-swiper .swiper-pagination-bullet {
+  width: 12px !important;
+  height: 12px !important;
+  background: #d1d5db !important; /* Light gray for inactive */
+  opacity: 0.7 !important;
+  margin: 0 6px !important;
+  transition: all 0.3s ease !important;
+}
+
+.testimonials-swiper .swiper-pagination-bullet-active {
+  background: #1a7d36 !important; /* Green theme color for active */
+  opacity: 1 !important;
+  transform: scale(1.3) !important;
+  box-shadow: 0 2px 8px rgba(26, 125, 54, 0.4) !important;
+}
+
+.testimonials-swiper .swiper-pagination {
+  bottom: 0 !important;
+  margin-top: 48px !important;
+}
+
+/* Mobile-specific spacing for testimonial dots */
+@media (max-width: 640px) {
+  .testimonials-swiper .swiper-pagination {
+    margin-top: 56px !important;
+  }
+}
+
 /* Swiper container overflow fix */
 .swiper {
   overflow: visible !important;
@@ -60,6 +104,9 @@
   --border: oklch(0.922 0 0); /* gray-200 */
   --primary-orange: #ff7a00; /* Orange text color */
   --primary-green: #128341; /* Green donate button */
+
+  --secondary-orange: #ffdeb3; /* Orange text color */
+
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -101,6 +148,7 @@
   --color-border: var(--border);
   --color-primary-orange: var(--primary-orange);
   --color-primary-green: var(--primary-green);
+  --color-secondary-orange: var(--secondary-orange);
 
   /* --font-sans: ui-sans-serif, system-ui, -apple-system, Segoe UI Noto Sans,
     Ubuntu, Cantarell, Helvetica Neue, Arial, "Apple Color Emoji",

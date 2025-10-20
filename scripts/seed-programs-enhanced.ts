@@ -1,14 +1,14 @@
-import { MongoClient } from 'mongodb';
-import * as dotenv from 'dotenv';
-import * as path from 'path';
+import { MongoClient } from "mongodb";
+import * as dotenv from "dotenv";
+import * as path from "path";
 
 // Load environment variables
-dotenv.config({ path: path.resolve(process.cwd(), '.env.local') });
+dotenv.config({ path: path.resolve(process.cwd(), ".env") });
 
 const MONGODB_URI = process.env.MONGODB_URI;
 
 if (!MONGODB_URI) {
-  throw new Error('Please define MONGODB_URI in your .env.local file');
+  throw new Error("Please define MONGODB_URI in your .env file");
 }
 
 // Enhanced program data based on organizational chart
@@ -52,35 +52,40 @@ const programsData = [
       {
         id: 1,
         name: "YCI YNSD",
-        description: "Youth Challenge Initiative implemented by Youth Network for Sustainable Development",
+        description:
+          "Youth Challenge Initiative implemented by Youth Network for Sustainable Development",
         status: "active",
         partner: "YNSD",
       },
       {
         id: 2,
         name: "Peace - NORAD",
-        description: "Peacebuilding project funded by Norwegian Agency for Development Cooperation",
+        description:
+          "Peacebuilding project funded by Norwegian Agency for Development Cooperation",
         status: "active",
         partner: "NORAD",
       },
       {
         id: 3,
         name: "ERASE EILDA",
-        description: "Enhance resilience against online and offline violence in the society of Ethiopia",
+        description:
+          "Enhance resilience against online and offline violence in the society of Ethiopia",
         status: "active",
         partner: "EILDA",
       },
       {
         id: 4,
         name: "VAC CRVPF",
-        description: "Violence Against Children project under Children's Rights and Violence Prevention Fund",
+        description:
+          "Violence Against Children project under Children's Rights and Violence Prevention Fund",
         status: "active",
         partner: "CRVPF",
       },
       {
         id: 5,
         name: "YDP - TSD",
-        description: "Youth Development Program implemented by Tamra Sustainable Development",
+        description:
+          "Youth Development Program implemented by Tamra Sustainable Development",
         status: "active",
         partner: "TSD",
       },
@@ -98,7 +103,8 @@ const programsData = [
     categoryLabel: "SRH and Gender Development",
     description:
       "This program aims to improve sexual and reproductive health awareness, promote gender equality, and prevent gender-based violence. We work with communities to challenge harmful social norms and ensure access to quality SRH services for women and girls.",
-    image: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=800&h=600&fit=crop&crop=center",
+    image:
+      "https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=800&h=600&fit=crop&crop=center",
     thumbnails: [
       {
         id: 1,
@@ -129,7 +135,8 @@ const programsData = [
       {
         id: 1,
         name: "GBV - NCA",
-        description: "Gender-Based Violence prevention project funded by Norwegian Church Aid",
+        description:
+          "Gender-Based Violence prevention project funded by Norwegian Church Aid",
         status: "active",
         partner: "NCA",
       },
@@ -143,21 +150,24 @@ const programsData = [
       {
         id: 3,
         name: "SRHR - Sonke",
-        description: "Sexual and Reproductive Health and Rights project with Sonke Gender Justice",
+        description:
+          "Sexual and Reproductive Health and Rights project with Sonke Gender Justice",
         status: "active",
         partner: "Sonke",
       },
       {
         id: 4,
         name: "GESI - GIZ",
-        description: "Gender Equality and Social Inclusion project with German Development Cooperation",
+        description:
+          "Gender Equality and Social Inclusion project with German Development Cooperation",
         status: "active",
         partner: "GIZ",
       },
       {
         id: 5,
         name: "SRHR Ipas",
-        description: "Sexual and Reproductive Health and Rights project with Ipas",
+        description:
+          "Sexual and Reproductive Health and Rights project with Ipas",
         status: "active",
         partner: "Ipas",
       },
@@ -175,7 +185,8 @@ const programsData = [
     categoryLabel: "Climate Justice and Livelihood",
     description:
       "This program addresses climate change impacts and promotes sustainable livelihoods. We work with communities to build resilience against climate change, promote environmental sustainability, and create economic opportunities that support both people and the planet.",
-    image: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=600&fit=crop&crop=center",
+    image:
+      "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=600&fit=crop&crop=center",
     thumbnails: [
       {
         id: 1,
@@ -206,7 +217,8 @@ const programsData = [
       {
         id: 1,
         name: "Climate - NCA",
-        description: "Climate adaptation and mitigation project with Norwegian Church Aid",
+        description:
+          "Climate adaptation and mitigation project with Norwegian Church Aid",
         status: "active",
         partner: "NCA",
       },
@@ -220,7 +232,8 @@ const programsData = [
       {
         id: 3,
         name: "CSPW - YNSD",
-        description: "Climate Smart Practices for Women implemented by Youth Network for Sustainable Development",
+        description:
+          "Climate Smart Practices for Women implemented by Youth Network for Sustainable Development",
         status: "active",
         partner: "YNSD",
       },
@@ -241,7 +254,8 @@ const programsData = [
       {
         id: 6,
         name: "Envt TSD",
-        description: "Environmental protection project by Tamra Sustainable Development",
+        description:
+          "Environmental protection project by Tamra Sustainable Development",
         status: "active",
         partner: "TSD",
       },
@@ -256,75 +270,75 @@ async function seedPrograms() {
   let client: MongoClient | null = null;
 
   try {
-    console.log('🔌 Connecting to MongoDB...');
+    console.log("🔌 Connecting to MongoDB...");
     client = new MongoClient(MONGODB_URI!);
     await client.connect();
-    console.log('✅ Connected to MongoDB');
+    console.log("✅ Connected to MongoDB");
 
     const db = client.db();
-    const programsCollection = db.collection('programs');
+    const programsCollection = db.collection("programs");
 
     // Check if programs already exist
     const existingCount = await programsCollection.countDocuments();
 
     if (existingCount > 0) {
       console.log(`⚠️  Found ${existingCount} existing programs.`);
-      console.log('🗑️  Clearing existing programs...');
+      console.log("🗑️  Clearing existing programs...");
       await programsCollection.deleteMany({});
-      console.log('✅ Cleared existing programs');
+      console.log("✅ Cleared existing programs");
     }
 
     // Add timestamps to each program
-    const programsWithTimestamps = programsData.map(program => ({
+    const programsWithTimestamps = programsData.map((program) => ({
       ...program,
       createdAt: new Date(),
       updatedAt: new Date(),
     }));
 
     // Insert programs
-    console.log('📚 Seeding enhanced programs...');
+    console.log("📚 Seeding enhanced programs...");
     const result = await programsCollection.insertMany(programsWithTimestamps);
     console.log(`✅ Successfully seeded ${result.insertedCount} programs`);
 
     // Display summary
-    console.log('\n📊 Enhanced Programs Seeding Summary:');
-    console.log('─'.repeat(70));
-    
+    console.log("\n📊 Enhanced Programs Seeding Summary:");
+    console.log("─".repeat(70));
+
     programsData.forEach((program, index) => {
       console.log(`${index + 1}. ${program.title}`);
       console.log(`   Projects: ${program.projects.length}`);
-      program.projects.forEach(project => {
+      program.projects.forEach((project) => {
         console.log(`     - ${project.name} (${project.partner})`);
       });
-      console.log('');
+      console.log("");
     });
 
-    console.log('─'.repeat(70));
+    console.log("─".repeat(70));
     console.log(`Total Programs: ${result.insertedCount}`);
-    console.log(`Total Projects: ${programsData.reduce((acc, p) => acc + p.projects.length, 0)}`);
-    console.log('─'.repeat(70));
+    console.log(
+      `Total Projects: ${programsData.reduce(
+        (acc, p) => acc + p.projects.length,
+        0
+      )}`
+    );
+    console.log("─".repeat(70));
 
-    console.log('\n✨ Enhanced programs seeding completed successfully!');
-    console.log('\n🎯 Structure:');
-    console.log('Programs → Projects');
-    console.log('• Youth Empowerment & Peace Building → 5 projects');
-    console.log('• SRH and Gender Development → 5 projects');
-    console.log('• Climate Justice and Livelihood → 6 projects');
-
+    console.log("\n✨ Enhanced programs seeding completed successfully!");
+    console.log("\n🎯 Structure:");
+    console.log("Programs → Projects");
+    console.log("• Youth Empowerment & Peace Building → 5 projects");
+    console.log("• SRH and Gender Development → 5 projects");
+    console.log("• Climate Justice and Livelihood → 6 projects");
   } catch (error) {
-    console.error('❌ Error seeding programs:', error);
+    console.error("❌ Error seeding programs:", error);
     process.exit(1);
   } finally {
     if (client) {
       await client.close();
-      console.log('🔌 Disconnected from MongoDB');
+      console.log("🔌 Disconnected from MongoDB");
     }
   }
 }
 
 // Run the seed function
 seedPrograms();
-
-
-
-

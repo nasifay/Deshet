@@ -58,7 +58,7 @@ export function OperationRegionsSection({
         <div className="w-full bg-transparent p-6 sm:p-8 md:p-10 lg:p-12">
           <div className="flex flex-col lg:flex-row items-start justify-between gap-6 sm:gap-8 md:gap-10 lg:gap-12">
             {/* Numbered list on the left */}
-            <div className="flex flex-col gap-4 sm:gap-5 md:gap-6 w-full lg:w-auto lg:min-w-[320px]">
+            <div className="flex flex-col gap-1 w-full lg:w-auto lg:min-w-[320px]">
               {operationRegions.map((region, index) => (
                 <div
                   key={index}

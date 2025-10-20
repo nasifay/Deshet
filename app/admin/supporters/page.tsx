@@ -625,7 +625,14 @@ export default function SupportersManagementPage() {
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <div className="flex items-center justify-end space-x-2">
                           <button
-                            onClick={() => handleEdit(item, activeTab)}
+                            onClick={() =>
+                              handleEdit(
+                                item,
+                                activeTab === "supporters"
+                                  ? "supporter"
+                                  : "keyfunder"
+                              )
+                            }
                             disabled={
                               isAddingNew ||
                               editingSupporter !== null ||
@@ -637,7 +644,14 @@ export default function SupportersManagementPage() {
                             <Edit className="w-4 h-4" />
                           </button>
                           <button
-                            onClick={() => handleDelete(item._id!, activeTab)}
+                            onClick={() =>
+                              handleDelete(
+                                item._id!,
+                                activeTab === "supporters"
+                                  ? "supporter"
+                                  : "keyfunder"
+                              )
+                            }
                             disabled={deleting === item._id}
                             className="p-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors disabled:opacity-50"
                             title="Delete"

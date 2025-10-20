@@ -3,14 +3,14 @@ import * as dotenv from "dotenv";
 import * as path from "path";
 import { existsSync } from "fs";
 
-// Load environment variables from .env.local or .env
-const envLocalPath = path.resolve(process.cwd(), ".env.local");
+// Load environment variables from .env or .env.local
 const envPath = path.resolve(process.cwd(), ".env");
+const envLocalPath = path.resolve(process.cwd(), ".env.local");
 
-if (existsSync(envLocalPath)) {
-  dotenv.config({ path: envLocalPath });
-} else if (existsSync(envPath)) {
+if (existsSync(envPath)) {
   dotenv.config({ path: envPath });
+} else if (existsSync(envLocalPath)) {
+  dotenv.config({ path: envLocalPath });
 }
 
 const MONGODB_URI = process.env.MONGODB_URI;

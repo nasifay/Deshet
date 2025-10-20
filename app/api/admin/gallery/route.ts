@@ -22,6 +22,7 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get("search");
     const category = searchParams.get("category");
     const type = searchParams.get("type");
+    const featured = searchParams.get("featured");
 
     // Build query
     const query: Record<string, unknown> = {};
@@ -42,11 +43,15 @@ export async function GET(request: NextRequest) {
       query.type = type;
     }
 
+    if (featured !== null && featured !== undefined && featured !== "") {
+      query.featured = featured === "true";
+    }
+
     // Execute query with pagination
     const skip = (page - 1) * limit;
     const [items, total] = await Promise.all([
       Gallery.find(query)
-        .sort({ createdAt: -1 })
+        .sort({ position: 1, createdAt: -1 })
         .skip(skip)
         .limit(limit)
         .populate("category", "_id name slug color icon")
@@ -99,6 +104,9 @@ export async function POST(request: NextRequest) {
       alt,
       caption,
       customClass,
+      section = "general",
+      position = 0,
+      featured = false,
       category,
     } = body;
 
@@ -122,6 +130,9 @@ export async function POST(request: NextRequest) {
       alt,
       caption,
       customClass,
+      section,
+      position,
+      featured,
       category,
       uploadedBy: session.userId,
     });

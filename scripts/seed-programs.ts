@@ -1,14 +1,14 @@
-import { MongoClient } from 'mongodb';
-import * as dotenv from 'dotenv';
-import * as path from 'path';
+import { MongoClient } from "mongodb";
+import * as dotenv from "dotenv";
+import * as path from "path";
 
 // Load environment variables
-dotenv.config({ path: path.resolve(process.cwd(), '.env.local') });
+dotenv.config({ path: path.resolve(process.cwd(), ".env") });
 
 const MONGODB_URI = process.env.MONGODB_URI;
 
 if (!MONGODB_URI) {
-  throw new Error('Please define MONGODB_URI in your .env.local file');
+  throw new Error("Please define MONGODB_URI in your .env file");
 }
 
 // Program data based on organizational chart structure
@@ -52,7 +52,8 @@ const programsData = [
       {
         id: 1,
         name: "YCI YNSD",
-        description: "Youth Challenge Initiative implemented by Youth Network for Sustainable Development",
+        description:
+          "Youth Challenge Initiative implemented by Youth Network for Sustainable Development",
         status: "active",
         partner: "YNSD",
       },
@@ -99,7 +100,8 @@ const programsData = [
       {
         id: 1,
         name: "Peace - NORAD",
-        description: "Peacebuilding project funded by Norwegian Agency for Development Cooperation",
+        description:
+          "Peacebuilding project funded by Norwegian Agency for Development Cooperation",
         status: "active",
         partner: "NORAD",
       },
@@ -109,7 +111,8 @@ const programsData = [
     publishedAt: new Date("2024-01-02"),
   },
   {
-    title: "Enhance Resilience Against Online and Offline Violence in the Society of Ethiopia (ERASE)",
+    title:
+      "Enhance Resilience Against Online and Offline Violence in the Society of Ethiopia (ERASE)",
     slug: "erase-ethiopia",
     categoryId: "youth-empowerment",
     categoryLabel: "Youth Empowerment & Peacebuilding",
@@ -185,7 +188,8 @@ const programsData = [
     categoryLabel: "SRH & Gender Development",
     description:
       "The Project Aims To Improve Social Norms And Attitudes Toward Ending Violence Against Women And Girls (VAWG) Within School Communities And Other Targeted Areas In The Intervention Sub-Cities. It Seeks To Engage Men, Boys, And Volunteers In Promoting Positive Masculinity And Contributing To The Transformation Of Harmful Social Norms, While Reaching Communities With Gender-Based Violence (GBV) Messages And Information To Encourage Active Participation In Preventing And Responding To VAWG Issues.",
-    image: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=800&h=600&fit=crop&crop=center",
+    image:
+      "https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=800&h=600&fit=crop&crop=center",
     thumbnails: [
       {
         id: 1,
@@ -219,7 +223,8 @@ const programsData = [
     categoryLabel: "SRH & Gender Development",
     description:
       "The Project Aims To Improve Social Norms And Attitudes Toward Ending Violence Against Women And Girls (VAWG) Within School Communities And Other Target Areas In The Intervention Sub-Cities. It Seeks To Meaningfully Engage Men, Boys, And Volunteers In Promoting Positive Masculinity And Contributing To Equitable Social Norms, While Reaching Communities With Gender-Based Violence (GBV) Messages And Information To Encourage Active Participation In Preventing And Responding To VAWG Issues.",
-    image: "https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?w=800&h=600&fit=crop&crop=center",
+    image:
+      "https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?w=800&h=600&fit=crop&crop=center",
     thumbnails: [
       {
         id: 1,
@@ -253,7 +258,8 @@ const programsData = [
     categoryLabel: "SRH & Gender Development",
     description:
       "The Project Aims To Empower Women, Girls, And Marginalized Groups To Make Informed Decisions And Demand Access To Sexual And Reproductive Health And Rights (SRHR) Information And Services. It Also Seeks To Engage Communities In Challenging Myths And Harmful Practices Related To SRHR By Promoting Shared Responsibility And Mutual Understanding While Strengthening SRHR Service Delivery Through Awareness Creation, Barrier Removal, And Advocacy For Policy Change.",
-    image: "https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=800&h=600&fit=crop&crop=center",
+    image:
+      "https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=800&h=600&fit=crop&crop=center",
     thumbnails: [
       {
         id: 1,
@@ -287,7 +293,8 @@ const programsData = [
     categoryLabel: "SRH & Gender Development",
     description:
       "(2017-2025, Packard Foundation Via YNSD) - SRH Awareness, Entrepreneurship, Reusable Sanitary Pads.",
-    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&h=600&fit=crop&crop=center",
+    image:
+      "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&h=600&fit=crop&crop=center",
     thumbnails: [
       {
         id: 1,
@@ -321,7 +328,8 @@ const programsData = [
     categoryLabel: "SRH & Gender Development",
     description:
       "The Project Aims To Raise Awareness Among Factory Workers, Particularly Women And Girls, On Sexual And Reproductive Health And Rights (SRHR), Including Safe Abortion, Contraception, And The Prevention Of Sexual And Gender-Based Violence (SGBV). It Also Seeks To Promote Gender Equality And Ensure Access To SRHR Services And Rights For Women And Girls Working At Eastern Industrial Park, While Fostering Institutional Commitment Among Factory Managers And Public Stakeholders To Support Gender-Responsive SRHR Initiatives Through Advocacy And Policy Dialogue.",
-    image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&h=600&fit=crop&crop=center",
+    image:
+      "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&h=600&fit=crop&crop=center",
     thumbnails: [
       {
         id: 1,
@@ -357,7 +365,8 @@ const programsData = [
     categoryLabel: "Climate Justice & Livelihoods",
     description:
       "This is a placeholder program for Climate Justice & Livelihoods category. The actual program details will be added here when available.",
-    image: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=600&fit=crop&crop=center",
+    image:
+      "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=600&fit=crop&crop=center",
     thumbnails: [
       {
         id: 1,
@@ -390,40 +399,40 @@ async function seedPrograms() {
   let client: MongoClient | null = null;
 
   try {
-    console.log('🔌 Connecting to MongoDB...');
+    console.log("🔌 Connecting to MongoDB...");
     client = new MongoClient(MONGODB_URI!);
     await client.connect();
-    console.log('✅ Connected to MongoDB');
+    console.log("✅ Connected to MongoDB");
 
     const db = client.db();
-    const programsCollection = db.collection('programs');
+    const programsCollection = db.collection("programs");
 
     // Check if programs already exist
     const existingCount = await programsCollection.countDocuments();
 
     if (existingCount > 0) {
       console.log(`⚠️  Found ${existingCount} existing programs.`);
-      console.log('🗑️  Clearing existing programs...');
+      console.log("🗑️  Clearing existing programs...");
       await programsCollection.deleteMany({});
-      console.log('✅ Cleared existing programs');
+      console.log("✅ Cleared existing programs");
     }
 
     // Add timestamps to each program
-    const programsWithTimestamps = programsData.map(program => ({
+    const programsWithTimestamps = programsData.map((program) => ({
       ...program,
       createdAt: new Date(),
       updatedAt: new Date(),
     }));
 
     // Insert programs
-    console.log('📚 Seeding programs...');
+    console.log("📚 Seeding programs...");
     const result = await programsCollection.insertMany(programsWithTimestamps);
     console.log(`✅ Successfully seeded ${result.insertedCount} programs`);
 
     // Display summary by category
-    console.log('\n📊 Seeding Summary:');
-    console.log('─'.repeat(70));
-    
+    console.log("\n📊 Seeding Summary:");
+    console.log("─".repeat(70));
+
     const categorySummary = programsData.reduce((acc: any, program) => {
       if (!acc[program.categoryLabel]) {
         acc[program.categoryLabel] = 0;
@@ -436,31 +445,33 @@ async function seedPrograms() {
       console.log(`${category}: ${categorySummary[category]} programs`);
     });
 
-    console.log('─'.repeat(70));
+    console.log("─".repeat(70));
     console.log(`Total programs: ${result.insertedCount}`);
-    console.log(`Published programs: ${programsData.filter(p => p.status === 'published').length}`);
-    console.log('─'.repeat(70));
+    console.log(
+      `Published programs: ${
+        programsData.filter((p) => p.status === "published").length
+      }`
+    );
+    console.log("─".repeat(70));
 
-    console.log('\n✨ Programs seeding completed successfully!');
-    console.log('\n📝 Sample programs:');
+    console.log("\n✨ Programs seeding completed successfully!");
+    console.log("\n📝 Sample programs:");
     programsData.slice(0, 3).forEach((program, idx) => {
       console.log(`${idx + 1}. ${program.title}`);
       console.log(`   Category: ${program.categoryLabel}`);
       console.log(`   Slug: ${program.slug}`);
-      console.log('');
+      console.log("");
     });
-
   } catch (error) {
-    console.error('❌ Error seeding programs:', error);
+    console.error("❌ Error seeding programs:", error);
     process.exit(1);
   } finally {
     if (client) {
       await client.close();
-      console.log('🔌 Disconnected from MongoDB');
+      console.log("🔌 Disconnected from MongoDB");
     }
   }
 }
 
 // Run the seed function
 seedPrograms();
-

@@ -80,7 +80,16 @@ export async function PUT(
     }
 
     const body = await request.json();
-    const { originalName, alt, caption, customClass, category } = body;
+    const {
+      originalName,
+      alt,
+      caption,
+      customClass,
+      section,
+      position,
+      featured,
+      category,
+    } = body;
 
     // Check if item exists
     const item = await Gallery.findById(id);
@@ -99,10 +108,86 @@ export async function PUT(
         alt,
         caption,
         customClass,
+        section,
+        position,
+        featured,
         category,
       },
       { new: true, runValidators: true }
     )
+      .populate("category", "_id name slug color icon")
+      .populate("uploadedBy", "_id name email");
+
+    return NextResponse.json({
+      success: true,
+      data: updatedItem,
+      message: "Gallery item updated successfully",
+    });
+  } catch (error) {
+    console.error("Error updating gallery item:", error);
+    const errorMessage =
+      error instanceof Error ? error.message : "Internal server error";
+    return NextResponse.json(
+      { success: false, error: errorMessage },
+      { status: 500 }
+    );
+  }
+}
+
+// PATCH - Quick update (e.g., featured status)
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const session = await getSession();
+    if (!session) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    await connectDB();
+
+    const { id } = await params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return NextResponse.json(
+        { success: false, error: "Invalid gallery item ID" },
+        { status: 400 }
+      );
+    }
+
+    const body = await request.json();
+    const updateData: Record<string, any> = {};
+
+    // Only allow specific fields for PATCH
+    if (body.featured !== undefined) updateData.featured = body.featured;
+    if (body.section !== undefined) updateData.section = body.section;
+    if (body.position !== undefined) updateData.position = body.position;
+
+    if (Object.keys(updateData).length === 0) {
+      return NextResponse.json(
+        { success: false, error: "No valid fields to update" },
+        { status: 400 }
+      );
+    }
+
+    // Check if item exists
+    const item = await Gallery.findById(id);
+    if (!item) {
+      return NextResponse.json(
+        { success: false, error: "Gallery item not found" },
+        { status: 404 }
+      );
+    }
+
+    // Update item
+    const updatedItem = await Gallery.findByIdAndUpdate(id, updateData, {
+      new: true,
+      runValidators: true,
+    })
       .populate("category", "_id name slug color icon")
       .populate("uploadedBy", "_id name email");
 

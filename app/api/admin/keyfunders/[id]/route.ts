@@ -6,7 +6,7 @@ import mongoose from "mongoose";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await getUserFromRequest(request);
@@ -17,7 +17,9 @@ export async function GET(
       );
     }
 
-    if (!mongoose.Types.ObjectId.isValid(params.id)) {
+    const { id } = await params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json(
         { success: false, error: "Invalid key funder ID" },
         { status: 400 }
@@ -26,7 +28,7 @@ export async function GET(
 
     await connectDB();
 
-    const keyFunder = await KeyFunder.findById(params.id).lean();
+    const keyFunder = await KeyFunder.findById(id).lean();
 
     if (!keyFunder) {
       return NextResponse.json(
@@ -50,7 +52,7 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await getUserFromRequest(request);
@@ -61,7 +63,9 @@ export async function PUT(
       );
     }
 
-    if (!mongoose.Types.ObjectId.isValid(params.id)) {
+    const { id } = await params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json(
         { success: false, error: "Invalid key funder ID" },
         { status: 400 }
@@ -81,7 +85,7 @@ export async function PUT(
 
     await connectDB();
 
-    const keyFunder = await KeyFunder.findById(params.id);
+    const keyFunder = await KeyFunder.findById(id);
 
     if (!keyFunder) {
       return NextResponse.json(
@@ -117,7 +121,7 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await getUserFromRequest(request);
@@ -128,7 +132,9 @@ export async function DELETE(
       );
     }
 
-    if (!mongoose.Types.ObjectId.isValid(params.id)) {
+    const { id } = await params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json(
         { success: false, error: "Invalid key funder ID" },
         { status: 400 }
@@ -137,7 +143,7 @@ export async function DELETE(
 
     await connectDB();
 
-    const keyFunder = await KeyFunder.findById(params.id);
+    const keyFunder = await KeyFunder.findById(id);
 
     if (!keyFunder) {
       return NextResponse.json(
@@ -146,7 +152,7 @@ export async function DELETE(
       );
     }
 
-    await KeyFunder.findByIdAndDelete(params.id);
+    await KeyFunder.findByIdAndDelete(id);
 
     return NextResponse.json({
       success: true,

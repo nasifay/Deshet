@@ -185,6 +185,22 @@ export default function Footer() {
             </li>
             <li>
               <Link
+                href="/history"
+                className="hover:text-[#4EB778] transition-colors"
+              >
+                History
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/programs"
+                className="hover:text-[#4EB778] transition-colors"
+              >
+                Programs
+              </Link>
+            </li>
+            <li>
+              <Link
                 href="/news"
                 className="hover:text-[#4EB778] transition-colors"
               >
@@ -201,18 +217,18 @@ export default function Footer() {
             </li>
             <li>
               <Link
-                href="/contact-us"
-                className="hover:text-[#4EB778] transition-colors"
-              >
-                Contact
-              </Link>
-            </li>
-            <li>
-              <Link
                 href="/volunteer"
                 className="hover:text-[#4EB778] transition-colors"
               >
                 Volunteer
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/contact-us"
+                className="hover:text-[#4EB778] transition-colors"
+              >
+                Contact us
               </Link>
             </li>
             <li>

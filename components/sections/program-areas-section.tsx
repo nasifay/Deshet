@@ -3,8 +3,10 @@ import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import ScrollStack from "~/components/ui/ScrollStack";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ProgramAreasSkeleton } from "./landing-page-skeleton";
+import Lenis from "lenis";
+import "lenis/dist/lenis.css";
 
 export default function ProgramAreasSection() {
   const [programs, setPrograms] = useState<
@@ -32,6 +34,32 @@ export default function ProgramAreasSection() {
     },
   ]);
   const [loading, setLoading] = useState(true);
+  const lenisRef = useRef<Lenis | null>(null);
+
+  // Initialize Lenis smooth scrolling
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      orientation: "vertical",
+      smoothWheel: true,
+      wheelMultiplier: 1,
+      touchMultiplier: 2,
+    });
+
+    lenisRef.current = lenis;
+
+    function raf(time: number) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+
+    return () => {
+      lenis.destroy();
+    };
+  }, []);
 
   // Fetch data
   useEffect(() => {
@@ -66,15 +94,15 @@ export default function ProgramAreasSection() {
   const stackItems = programs.map((program, index) => ({
     id: `program-${index}`,
     content: (
-      <div className="relative w-full h-[70vh] md:h-[80vh] px-6 md:px-16 lg:px-20 xl:px-28 2xl:px-36">
-        <div className="relative w-full h-full overflow-hidden rounded-2xl shadow-2xl group">
+      <div className="relative w-full h-auto sm:h-[70vh] md:h-[80vh] px-6 md:px-16 lg:px-20 xl:px-28 2xl:px-36">
+        <div className="relative w-full h-[400px] sm:h-full overflow-hidden rounded-2xl shadow-2xl group">
           {/* Background Image */}
           <div className="absolute inset-0">
             <Image
               src={program.image}
               alt={program.title.replace(/<br \/>/g, " ")}
               fill
-              className="object-cover transition-transform duration-700 group-hover:scale-105"
+              className="object-cover sm:object-cover transition-transform duration-700 group-hover:scale-105"
               priority={index === 0}
             />
             {/* Gradient Overlay */}
@@ -82,10 +110,10 @@ export default function ProgramAreasSection() {
           </div>
 
           {/* Content Container */}
-          <div className="relative h-full flex flex-col justify-end p-8 md:p-12 lg:p-16">
+          <div className="relative h-[400px] sm:h-full flex flex-col justify-end p-6 md:p-12 lg:p-16">
             {/* Title */}
             <h2
-              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl 2xl:text-7xl font-black leading-tight uppercase tracking-tight text-white mb-6 md:mb-8 drop-shadow-lg"
+              className="text-lg sm:text-xl md:text-4xl lg:text-5xl 2xl:text-7xl font-black leading-tight uppercase tracking-tight text-white mb-6 md:mb-8 drop-shadow-lg"
               dangerouslySetInnerHTML={{
                 __html: program.title,
               }}
@@ -119,11 +147,7 @@ export default function ProgramAreasSection() {
       {/* Section Header */}
 
       {/* Scroll Stack */}
-      <ScrollStack
-        items={stackItems}
-        className="min-h-[400vh]"
-        opacityAnimation={false}
-      />
+      <ScrollStack items={stackItems} className="" opacityAnimation={false} />
     </div>
   );
 }

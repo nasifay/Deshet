@@ -3,7 +3,7 @@ import { resolve } from "path";
 import mongoose from "mongoose";
 
 // Load environment variables
-dotenv.config({ path: resolve(process.cwd(), ".env.local") });
+dotenv.config({ path: resolve(process.cwd(), ".env") });
 
 async function testConnection() {
   try {

@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 import React, { useState, useEffect } from "react";
 
@@ -14,6 +13,8 @@ interface Project {
   description?: string;
   featuredImage?: string;
   galleryThumbnails?: Thumbnail[];
+  status?: string;
+  partner?: string;
 }
 
 interface Program {
@@ -389,9 +390,11 @@ const ProgramItem: React.FC<{ program: Program }> = ({ program }) => {
               className="font-roboto font-black text-primary-green text-lg md:text-2xl lg:text-5xl xl:text-6xl  leading-[101%] tracking-[0] uppercase w-full mb-4"
             >
               <span className="">{program.title.split("(")[0].trim()} </span>
-              <span className="text-primary-orange">
-                ({program.title.split("(")[1]?.replace(")", "")})
-              </span>
+              {program.title.includes("(") && (
+                <span className="text-primary-orange">
+                  ({program.title.split("(")[1]?.replace(")", "")})
+                </span>
+              )}
             </h2>
 
             {/* Program Description */}
@@ -454,6 +457,12 @@ const ProgramItem: React.FC<{ program: Program }> = ({ program }) => {
                 {project.name.split("(")[1] && (
                   <span className="text-primary-orange">
                     ({project.name.split("(")[1]?.replace(")", "")})
+                  </span>
+                )}
+                {project.partner && (
+                  <span className="text-primary-orange">
+                    {" "}
+                    ({project.partner})
                   </span>
                 )}
               </h3>
@@ -519,9 +528,11 @@ const ProgramItem: React.FC<{ program: Program }> = ({ program }) => {
           className="font-roboto font-black text-primary-green text-lg md:text-2xl lg:text-5xl xl:text-6xl  leading-[101%] tracking-[0] uppercase w-full mb-4"
         >
           <span className="">{program.title.split("(")[0].trim()} </span>
-          <span className="text-primary-orange">
-            ({program.title.split("(")[1]?.replace(")", "")})
-          </span>
+          {program.title.includes("(") && (
+            <span className="text-primary-orange">
+              ({program.title.split("(")[1]?.replace(")", "")})
+            </span>
+          )}
         </h2>
 
         {/* Description */}

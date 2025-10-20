@@ -73,7 +73,7 @@ export default function StatisticsSection() {
     return (
       <section className="w-full bg-white py-10 md:py-12">
         <div className=" mx-auto px-6 md:px-16 lg:px-20 xl:28 2xl:px-36">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-y-8 gap-x-6 md:gap-x-10 lg:gap-x-16  place-content-start md:place-content-center place-items-start md:place-items-center">
+          <div className="grid grid-cols-2  lg:grid-cols-4 gap-y-8 gap-x-6 md:gap-x-10 lg:gap-x-16  place-content-start  place-items-start ">
             {stats.map((item, index) => (
               <div
                 key={index}

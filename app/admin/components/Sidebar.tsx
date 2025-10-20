@@ -19,6 +19,8 @@ import {
   UsersRound,
   Handshake,
   Link as LinkIcon,
+  Clock,
+  Quote,
 } from "lucide-react";
 
 interface MenuItem {
@@ -53,6 +55,11 @@ export default function Sidebar({
       title: "Landing Page",
       url: "/admin/landing",
       icon: <Home className="w-5 h-5" />,
+    },
+    {
+      title: "History",
+      url: "/admin/history",
+      icon: <Clock className="w-5 h-5" />,
     },
     {
       title: "Pages",
@@ -100,6 +107,11 @@ export default function Sidebar({
       icon: <Handshake className="w-5 h-5" />,
     },
     {
+      title: "Testimonials",
+      url: "/admin/testimonials",
+      icon: <Quote className="w-5 h-5" />,
+    },
+    {
       title: "Footer",
       url: "/admin/footer",
       icon: <LinkIcon className="w-5 h-5" />,
@@ -110,11 +122,11 @@ export default function Sidebar({
       icon: <Users className="w-5 h-5" />,
       roles: ["admin", "superadmin"],
     },
-    {
-      title: "Analytics",
-      url: "/admin/analytics",
-      icon: <BarChart3 className="w-5 h-5" />,
-    },
+    // {
+    //   title: "Analytics",
+    //   url: "/admin/analytics",
+    //   icon: <BarChart3 className="w-5 h-5" />,
+    // },
     {
       title: "Settings",
       url: "/admin/settings",
@@ -168,7 +180,7 @@ export default function Sidebar({
         </div>
 
         {/* Navigation */}
-        <nav className="p-3 space-y-1">
+        <nav className="p-3 space-y-1 overflow-y-auto h-[calc(100vh-4rem)] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-gray-200/30 dark:[&::-webkit-scrollbar-track]:bg-gray-700/30 [&::-webkit-scrollbar-thumb]:bg-gray-400/60 dark:[&::-webkit-scrollbar-thumb]:bg-gray-500/60 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-gray-400/80 dark:hover:[&::-webkit-scrollbar-thumb]:bg-gray-500/80">
           {filteredMenuItems.map((item) => (
             <Link
               key={item.url}
@@ -219,7 +231,7 @@ export default function Sidebar({
         </div>
 
         {/* Navigation */}
-        <nav className="p-3 space-y-1">
+        <nav className="p-3 space-y-1 overflow-y-auto h-[calc(100vh-4rem)] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-gray-200/30 dark:[&::-webkit-scrollbar-track]:bg-gray-700/30 [&::-webkit-scrollbar-thumb]:bg-gray-400/60 dark:[&::-webkit-scrollbar-thumb]:bg-gray-500/60 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-gray-400/80 dark:hover:[&::-webkit-scrollbar-thumb]:bg-gray-500/80">
           {filteredMenuItems.map((item) => (
             <Link
               key={item.url}

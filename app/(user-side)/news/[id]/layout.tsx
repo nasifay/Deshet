@@ -48,11 +48,17 @@ async function fetchNewsData(slug: string): Promise<NewsPostData | null> {
     }
 
     // Convert MongoDB _id to string for serialization
+    // Handle author - it could be an ObjectId or a populated object
+    const author = post.author as any;
+
     return {
       ...post,
       _id: post._id.toString(),
       publishedAt: post.publishedAt?.toISOString() || new Date().toISOString(),
       updatedAt: post.updatedAt?.toISOString(),
+      author: {
+        name: author?.name || "Unknown Author",
+      },
     } as NewsPostData;
   } catch (error) {
     console.error("Error fetching news for metadata:", error);

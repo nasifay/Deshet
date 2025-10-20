@@ -46,9 +46,9 @@ export default function NewsAndEvents() {
     >
       <main className="relative">
         {/* Header Section */}
-        <div className="flex items-center justify-center gap-8 px-4 py-12 translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:200ms]">
+        <div className="md:mt-8 md:mb-8 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 px-4  translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:200ms]">
           <Image
-            className="w-[71px] h-[73px] object-cover"
+            className="w-12 h-12 sm:w-16 md:w-[71px] md:h-[73px] object-cover"
             alt="News icon"
             src={
               pageData?.headerIcon ||
@@ -58,14 +58,14 @@ export default function NewsAndEvents() {
             height={73}
           />
 
-          <h1 className="[text-shadow:0px_4px_4px_#00000040] [font-family:'Roboto',Helvetica] font-black text-[#128341] text-4xl md:text-6xl lg:text-[90px] tracking-[0] leading-tight lg:leading-[90.9px] whitespace-nowrap">
+          <h1 className="primary-title text-center text-primary-green">
             {pageData?.title || "NEWS AND EVENTS"}
           </h1>
         </div>
 
         {/* Subtitle Section */}
         <div className="flex justify-center px-4 mb-12 translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:400ms]">
-          <div className="flex flex-col w-full max-w-[1595px] h-auto md:h-[104px] items-center justify-center gap-[65px] px-4 py-8 md:px-0 md:py-[88px] bg-white rounded-[46px] shadow-[0px_4px_26.5px_#0000000d]">
+          <div className="flex flex-col w-full max-w-[1595px] h-auto md:h-[104px] items-center justify-center gap-[65px] px-4 py-8 md:px-0 md:py-8 bg-white rounded-[46px] shadow-[0px_4px_26.5px_#0000000d]">
             <div className="relative w-full max-w-[905px] md:mt-[-69.00px] md:mb-[-67.00px] [font-family:'Roboto',Helvetica] font-normal text-[#ff9700] text-xl md:text-2xl lg:text-[32px] text-center tracking-[0] leading-relaxed md:leading-[32.3px]">
               {pageData?.subtitle ||
                 "Stay informed with our latest stories, milestones, and community events."}

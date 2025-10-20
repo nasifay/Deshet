@@ -66,8 +66,8 @@ export default function SupportersSection() {
       <div className="mx-auto px-4">
         {/* Title */}
         <div className="flex items-center justify-center gap-2 mx-6 md:mx-20">
-          <span className="font-roboto font-medium text-[16px] leading-[100%] tracking-[2px] text-nowrap text-[#00a878] uppercase">
-            OUR SUPPORTERS
+          <span className=" font-roboto font-medium text-[16px] leading-[100%] tracking-[2px] text-nowrap text-[#00a878] uppercase">
+            Our Networks & Memberships
           </span>
           <div className="h-[1px] w-full bg-primary-orange" />
         </div>

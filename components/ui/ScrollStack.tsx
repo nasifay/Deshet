@@ -77,7 +77,7 @@ function ScrollStackCard({
 
   return (
     <motion.div
-      className="sticky top-0 h-screen flex items-center justify-center will-change-transform"
+      className="sticky top-0 h-auto sm:h-screen flex items-center justify-center will-change-transform py-4 sm:py-0"
       style={{
         y,
         scale,
@@ -93,7 +93,7 @@ function ScrollStackCard({
 export default function ScrollStack({
   items,
   className = "",
-  stackDistance = 100,
+  stackDistance = 40,
   scaleAnimation = true,
   opacityAnimation = true,
 }: ScrollStackProps) {
@@ -103,8 +103,15 @@ export default function ScrollStack({
     offset: ["start start", "end end"],
   });
 
+  // Calculate dynamic height: each item needs 100vh, with some buffer
+  const dynamicHeight = `${items.length - 1 * 100}vh`;
+
   return (
-    <div ref={containerRef} className={`relative ${className}`}>
+    <div
+      ref={containerRef}
+      className={`relative ${className}`}
+      style={{ minHeight: dynamicHeight }}
+    >
       {items.map((item, index) => (
         <ScrollStackCard
           key={item.id}

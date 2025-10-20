@@ -1,425 +1,222 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import Card, { CardContent } from "~/components/ui/Card";
-import GalleryPageSkeleton from "~/components/sections/gallery-page-skeleton";
+import Image from "next/image";
 
-export default function Gallery() {
-  return (
-    <main className="relative">
-      <section className="relative w-full flex flex-col items-center pt-[104px] pb-0">
-        <div className="flex items-center justify-center gap-4 translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:200ms]">
-          <img
-            className="w-[71px] h-[73px] object-cover"
-            alt="Asset"
-            src="https://c.animaapp.com/mgda0b0iChwFy2/img/asset-2-1.png"
-          />
+// --- Data for the galleries ---
+// Using Unsplash images that are configured in next.config.ts
+const clmImages = {
+  main: "https://images.unsplash.com/photo-1607746882042-944635dfe10e?auto=format&fit=crop&w=1260&h=750&q=80",
+  topRight1:
+    "https://images.unsplash.com/photo-1573164574572-cb89e39749b4?auto=format&fit=crop&w=1260&h=750&q=80",
+  topRight2:
+    "https://images.unsplash.com/photo-1581091215367-59ab6c99d1a9?auto=format&fit=crop&w=1260&h=750&q=80",
+  middleWide:
+    "https://images.unsplash.com/photo-1590608897129-79da98d159ab?auto=format&fit=crop&w=1260&h=750&q=80",
+  bottom1:
+    "https://images.unsplash.com/photo-1551836022-4c4c79ecde16?auto=format&fit=crop&w=1260&h=750&q=80",
+  bottom2:
+    "https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&w=1260&h=750&q=80",
+  bottom3:
+    "https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=1260&h=750&q=80",
+  bottom4:
+    "https://images.unsplash.com/photo-1573497019563-e16a48a7e42f?auto=format&fit=crop&w=1260&h=750&q=80",
+};
 
-          <h1 className="mb-8 md:mb-16 [text-shadow:0px_4px_4px_#00000040] [font-family:'Roboto',Helvetica] font-black text-[#128341] text-[90px] tracking-[0] leading-[90.9px] whitespace-nowrap">
-            GALLERY
-          </h1>
-        </div>
-      </section>
+const crpvfImages = {
+  left1:
+    "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1260&h=750&q=80",
+  left2:
+    "https://images.unsplash.com/photo-1531379410502-63bfe8cdaf6f?auto=format&fit=crop&w=1260&h=750&q=80",
+  left3:
+    "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1260&h=750&q=80",
+  left4:
+    "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=1260&h=750&q=80",
+  main: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1260&h=750&q=80",
+};
 
-      <section className="relative w-full translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:600ms]">
-        <ImageGallerySection />
-      </section>
-    </main>
-  );
-}
+// --- Reusable Image Card Component ---
+const ImageCard = ({
+  src,
+  alt,
+  className = "",
+  imgClassName = "",
+}: {
+  src: string;
+  alt: string;
+  className?: string;
+  imgClassName?: string;
+}) => (
+  <div
+    className={`bg-white p-2 rounded-3xl shadow-lg hover:shadow-xl transition-shadow duration-300 ${className}`}
+  >
+    <div className={`relative w-full h-full ${imgClassName}`}>
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        className="object-cover rounded-2xl"
+      />
+    </div>
+  </div>
+);
 
-interface GalleryCategory {
-  _id: string;
-  name: string;
-  slug: string;
-  description?: string;
-  color?: string;
-  icon?: string;
-  order: number;
-  featuredImage?: string;
-  hasBackground?: boolean;
-  backgroundImage?: string;
-  gap?: string;
-  isActive: boolean;
-}
-
-interface GalleryItem {
-  _id: string;
-  originalName: string;
-  url: string;
-  alt?: string;
-  caption?: string;
-  customClass?: string;
-  category: {
-    _id: string;
-    name: string;
-    slug: string;
-  };
-}
-
-// Fallback data in case API fails
-const fallbackGalleryData = [
-  {
-    title: "CLM",
-    imageSrc:
-      "https://c.animaapp.com/mgda0b0iChwFy2/img/frame-1000002120-7.svg",
-    hasBackground: true,
-    backgroundImage: "https://c.animaapp.com/mgda0b0iChwFy2/img/frame-48.png",
-  },
-  {
-    title: "CRPVF",
-    imageSrc:
-      "https://c.animaapp.com/mgda0b0iChwFy2/img/frame-1000002120-6.svg",
-    hasBackground: false,
-  },
-  {
-    title: "CSPW",
-    imageSrc:
-      "https://c.animaapp.com/mgda0b0iChwFy2/img/frame-1000002120-2.svg",
-    hasBackground: false,
-  },
-  {
-    title: "Events",
-    imageSrc:
-      "https://c.animaapp.com/mgda0b0iChwFy2/img/frame-1000002120-1.svg",
-    hasBackground: false,
-    gap: "gap-[15px]",
-  },
-  {
-    title: "Exhibition",
-    imageSrc:
-      "https://c.animaapp.com/mgda0b0iChwFy2/img/frame-1000002120-9.svg",
-    hasBackground: false,
-  },
-  {
-    title: "GESI",
-    imageSrc:
-      "https://c.animaapp.com/mgda0b0iChwFy2/img/frame-1000002120-4.svg",
-    hasBackground: false,
-  },
-  {
-    title: "SRHR",
-    imageSrc:
-      "https://c.animaapp.com/mgda0b0iChwFy2/img/frame-1000002120-8.svg",
-    hasBackground: false,
-  },
-  {
-    title: "Meetings",
-    imageSrc:
-      "https://c.animaapp.com/mgda0b0iChwFy2/img/frame-1000002120-5.svg",
-    hasBackground: false,
-  },
-  {
-    title: "Training",
-    imageSrc: "https://c.animaapp.com/mgda0b0iChwFy2/img/frame-1000002120.svg",
-    hasBackground: false,
-  },
-];
-
-const fallbackRecognitionImages = [
-  {
-    src: "https://c.animaapp.com/mgda0b0iChwFy2/img/rectangle-19.png",
-    className:
-      "w-full md:w-[314px] max-w-[314px] md:ml-[-6.00px] relative h-auto md:h-80",
-  },
-  {
-    src: "https://c.animaapp.com/mgda0b0iChwFy2/img/rectangle-20.png",
-    className: "w-full md:w-[314px] max-w-[314px] relative h-auto md:h-80",
-  },
-  {
-    src: "https://c.animaapp.com/mgda0b0iChwFy2/img/rectangle-21.png",
-    className:
-      "w-full md:w-[703px] max-w-[703px] md:mr-[-6.00px] rounded-[31px] object-cover relative h-auto md:h-80",
-  },
-];
-
-function ImageGallerySection() {
-  const [categories, setCategories] = useState<GalleryCategory[]>([]);
-  const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchGalleryData();
-  }, []);
-
-  const fetchGalleryData = async () => {
-    try {
-      setLoading(true);
-
-      // Fetch categories and gallery items in parallel
-      const [categoriesRes, itemsRes] = await Promise.all([
-        fetch("/api/public/gallery/categories"),
-        fetch("/api/public/gallery?limit=1000"), // Increased limit to get all images
-      ]);
-
-      if (!categoriesRes.ok || !itemsRes.ok) {
-        throw new Error("Failed to fetch gallery data");
-      }
-
-      const categoriesData = await categoriesRes.json();
-      const itemsData = await itemsRes.json();
-
-      if (categoriesData.success && categoriesData.data) {
-        // Sort by order and filter active categories
-        const sortedCategories = (categoriesData.data || [])
-          .filter((cat: GalleryCategory) => cat.isActive)
-          .sort((a: GalleryCategory, b: GalleryCategory) => a.order - b.order);
-        setCategories(sortedCategories);
-      }
-
-      if (itemsData.success && itemsData.data) {
-        setGalleryItems(itemsData.data || []);
-      }
-    } catch (error) {
-      console.error("Error fetching gallery data:", error);
-      // Fallback data will be used automatically when categories.length === 0
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Get items for a specific category
-  const getItemsForCategory = (categoryId: string) => {
-    return galleryItems.filter((item) => item.category._id === categoryId);
-  };
-
-  // Get recognition category and its items
-  const recognitionCategory = categories.find(
-    (cat) => cat.slug === "recognition"
-  );
-  const recognitionItems = recognitionCategory
-    ? getItemsForCategory(recognitionCategory._id)
-    : [];
-
-  // Get all categories except recognition
-  const mainCategories = categories.filter((cat) => cat.slug !== "recognition");
-
-  // Use fallback data if no data loaded
-  const shouldUseFallback = !loading && categories.length === 0;
-  const displayCategories = shouldUseFallback
-    ? fallbackGalleryData
-    : mainCategories;
-
-  if (loading) {
-    return <GalleryPageSkeleton />;
-  }
-
-  return (
-    <section className="flex flex-col w-full max-w-[1595px] mx-auto items-start gap-10 relative px-4">
-      <Card className="w-full bg-white border-0 rounded-[46px] shadow-[0px_4px_26.5px_#0000000d] translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:0ms]">
-        <CardContent className="flex flex-col items-center justify-center gap-[65px] px-0 py-[88px]">
-          <p className="max-w-[805px] [text-shadow:0px_4px_4px_#00000040] [font-family:'Roboto',Helvetica] font-normal text-[#ff9700] text-[32px] text-center tracking-[0] leading-[32.3px]">
-            A visual journey of our people, projects, and the change we create.
-          </p>
-        </CardContent>
-      </Card>
-
-      {/* Render main categories with featured images */}
-      {shouldUseFallback
-        ? // Fallback rendering
-          fallbackGalleryData.map((gallery, index) => (
-            <article
-              key={`fallback-gallery-${index}`}
-              className="flex flex-col items-center gap-[55px] relative w-full translate-y-[-1rem] animate-fade-in opacity-0"
-              style={
-                {
-                  "--animation-delay": `${(index + 1) * 100}ms`,
-                } as React.CSSProperties
-              }
-            >
-              <Card
-                className={`w-full border-0 rounded-[46px] shadow-[0px_4px_26.5px_#0000000d] ${
-                  gallery.hasBackground
-                    ? "bg-white relative overflow-hidden"
-                    : "bg-white"
-                }`}
-                style={
-                  gallery.hasBackground
-                    ? {
-                        backgroundImage: `url(${gallery.backgroundImage})`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "center center",
-                        backgroundRepeat: "no-repeat",
-                      }
-                    : undefined
-                }
-              >
-                {gallery.hasBackground && (
-                  <div
-                    className="absolute inset-0 bg-white opacity-[0.95] rounded-[46px]"
-                    style={{ zIndex: 1 }}
-                  />
-                )}
-                <CardContent
-                  className="flex flex-col items-start justify-center gap-[65px] px-[65px] py-[88px] relative"
-                  style={{ zIndex: 2 }}
-                >
-                  <div
-                    className={`inline-flex flex-col items-start justify-center ${
-                      gallery.gap || "gap-[54px]"
-                    }`}
-                  >
-                    <div className="inline-flex items-center gap-[15px]">
-                      <h2 className="[text-shadow:0px_4px_4px_#00000040] [font-family:'Roboto',Helvetica] font-bold text-[#128341] text-5xl text-center tracking-[0] leading-[48.5px] whitespace-nowrap">
-                        {gallery.title}
-                      </h2>
-                    </div>
-                    <img
-                      className="w-full max-w-[1456px]"
-                      alt={`${gallery.title} gallery`}
-                      src={gallery.imageSrc}
-                    />
-                  </div>
-                </CardContent>
-              </Card>
-            </article>
-          ))
-        : // Database-driven rendering
-          mainCategories.map((category, index) => (
-            <article
-              key={`gallery-${category._id}`}
-              className="flex flex-col items-center gap-[55px] relative w-full translate-y-[-1rem] animate-fade-in opacity-0"
-              style={
-                {
-                  "--animation-delay": `${(index + 1) * 100}ms`,
-                } as React.CSSProperties
-              }
-            >
-              <Card
-                className={`w-full border-0 rounded-[46px] shadow-[0px_4px_26.5px_#0000000d] ${
-                  category.hasBackground
-                    ? "bg-white relative overflow-hidden"
-                    : "bg-white"
-                }`}
-                style={
-                  category.hasBackground && category.backgroundImage
-                    ? {
-                        backgroundImage: `url(${category.backgroundImage})`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "center center",
-                        backgroundRepeat: "no-repeat",
-                      }
-                    : undefined
-                }
-              >
-                {category.hasBackground && (
-                  <div
-                    className="absolute inset-0 bg-white opacity-[0.95] rounded-[46px]"
-                    style={{ zIndex: 1 }}
-                  />
-                )}
-                <CardContent
-                  className="flex flex-col items-start justify-center gap-[65px] px-[65px] py-[88px] relative"
-                  style={{ zIndex: 2 }}
-                >
-                  <div
-                    className={`inline-flex flex-col items-start justify-center ${
-                      category.gap || "gap-[54px]"
-                    }`}
-                  >
-                    <div className="inline-flex items-center gap-[15px]">
-                      {category.icon && (
-                        <span className="text-4xl">{category.icon}</span>
-                      )}
-                      <h2 className="[text-shadow:0px_4px_4px_#00000040] [font-family:'Roboto',Helvetica] font-bold text-[#128341] text-5xl text-center tracking-[0] leading-[48.5px] whitespace-nowrap">
-                        {category.name}
-                      </h2>
-                    </div>
-
-                    {category.featuredImage && (
-                      <img
-                        className="w-full max-w-[1456px]"
-                        alt={`${category.name} gallery`}
-                        src={category.featuredImage}
-                      />
-                    )}
-
-                    {/* Display additional images if any */}
-                    {!category.featuredImage &&
-                      getItemsForCategory(category._id).length > 0 && (
-                        <div className="flex flex-col md:flex-row md:flex-wrap gap-4 md:gap-6 w-full">
-                          {getItemsForCategory(category._id).map((item) => (
-                            <img
-                              key={item._id}
-                              src={item.url}
-                              alt={item.alt || item.originalName}
-                              className={
-                                item.customClass ||
-                                "w-full md:w-auto md:max-w-[300px] rounded-lg shadow-md object-cover"
-                              }
-                              title={item.caption}
-                            />
-                          ))}
-                        </div>
-                      )}
-                  </div>
-                </CardContent>
-              </Card>
-            </article>
-          ))}
-
-      {/* Recognition Section */}
-      {(recognitionCategory || shouldUseFallback) && (
-        <article
-          className="flex flex-col items-center gap-[55px] relative w-full translate-y-[-1rem] animate-fade-in opacity-0"
-          style={
-            {
-              "--animation-delay": `${(displayCategories.length + 1) * 100}ms`,
-            } as React.CSSProperties
-          }
+// --- Background SVG Pattern ---
+const BackgroundPattern = () => (
+  <div className="absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
+    <svg
+      width="100%"
+      height="100%"
+      xmlns="http://www.w3.org/2000/svg"
+      className="absolute top-0 left-0"
+    >
+      <defs>
+        <pattern
+          id="pattern-swoosh"
+          x="0"
+          y="0"
+          width="200"
+          height="200"
+          patternUnits="userSpaceOnUse"
+          patternTransform="rotate(45)"
         >
-          <Card className="w-full bg-white border-0 rounded-[46px] shadow-[0px_4px_26.5px_#0000000d]">
-            <CardContent className="flex flex-col items-start justify-center gap-[65px] px-[65px] py-[88px]">
-              <div className="inline-flex flex-col items-start justify-center gap-[15px]">
-                <div className="inline-flex items-center gap-[15px]">
-                  {recognitionCategory?.icon && (
-                    <span className="text-4xl">{recognitionCategory.icon}</span>
-                  )}
-                  <h2 className="[text-shadow:0px_4px_4px_#00000040] [font-family:'Roboto',Helvetica] font-bold text-[#128341] text-5xl text-center tracking-[0] leading-[48.5px] whitespace-nowrap">
-                    {recognitionCategory?.name || "Recognition"}
-                  </h2>
-                </div>
+          <path
+            d="M 50 0 C 20 50, 20 150, 50 200"
+            stroke="#E8F5E9"
+            strokeWidth="15"
+            fill="none"
+            strokeLinecap="round"
+            opacity="0.6"
+          />
+          <path
+            d="M 150 0 C 180 50, 180 150, 150 200"
+            stroke="#E8F5E9"
+            strokeWidth="15"
+            fill="none"
+            strokeLinecap="round"
+            opacity="0.6"
+          />
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#pattern-swoosh)" />
+    </svg>
+  </div>
+);
 
-                <div className="flex flex-col w-full max-w-[1445px] items-start gap-[55px]">
-                  <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-[63px] w-full">
-                    {shouldUseFallback
-                      ? // Fallback recognition images
-                        fallbackRecognitionImages.map((image, index) => (
-                          <img
-                            key={`fallback-recognition-${index}`}
-                            className={image.className}
-                            alt={`Recognition ${index + 1}`}
-                            src={image.src}
-                          />
-                        ))
-                      : // Database recognition images
-                      recognitionItems.length > 0
-                      ? recognitionItems.map((item) => (
-                          <img
-                            key={item._id}
-                            className={
-                              item.customClass ||
-                              "w-full md:w-[314px] max-w-[314px] relative h-auto md:h-80"
-                            }
-                            alt={item.alt || item.originalName}
-                            src={item.url}
-                            title={item.caption}
-                          />
-                        ))
-                      : fallbackRecognitionImages.map((image, index) => (
-                          <img
-                            key={`fallback-recognition-${index}`}
-                            className={image.className}
-                            alt={`Recognition ${index + 1}`}
-                            src={image.src}
-                          />
-                        ))}
-                  </div>
-                </div>
+export default function GalleryPage() {
+  return (
+    <div className="relative bg-[#FCFFFD] font-sans overflow-hidden">
+      <BackgroundPattern />
+      <div className="relative z-10 container mx-auto px-4 py-16 sm:px-6 lg:px-8">
+        <p className="text-center text-lg text-[#F57C00] mb-12">
+          A visual journey of our people, projects, and the change we create.
+        </p>
+
+        {/* CLM Section */}
+        <section id="clm">
+          <h2 className="text-center text-4xl font-bold text-[#388E3C] mb-8">
+            CLM
+          </h2>
+          <div className="flex flex-col gap-6">
+            {/* Top part: Large image left, smaller images right */}
+            <div className="flex flex-col lg:flex-row gap-6">
+              <div className="lg:w-1/2">
+                <ImageCard
+                  src={clmImages.main}
+                  alt="CLM main presentation"
+                  className="h-[30rem] md:h-[38rem]"
+                />
               </div>
-            </CardContent>
-          </Card>
-        </article>
-      )}
-    </section>
+              <div className="lg:w-1/2 flex flex-col gap-6">
+                <div className="grid grid-cols-2 gap-6">
+                  <ImageCard
+                    src={clmImages.topRight1}
+                    alt="CLM meeting participants"
+                    className="h-52"
+                  />
+                  <ImageCard
+                    src={clmImages.topRight2}
+                    alt="CLM collaborative session"
+                    className="h-52"
+                  />
+                </div>
+                <ImageCard
+                  src={clmImages.middleWide}
+                  alt="CLM group discussion"
+                  className="h-52"
+                />
+              </div>
+            </div>
+            {/* Bottom part: Four images in a row */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              <ImageCard
+                src={clmImages.bottom1}
+                alt="Presenter at CLM event"
+                className="h-52"
+              />
+              <ImageCard
+                src={clmImages.bottom2}
+                alt="CLM attendees networking"
+                className="h-52"
+              />
+              <ImageCard
+                src={clmImages.bottom3}
+                alt="Team working at CLM event"
+                className="h-52"
+              />
+              <ImageCard
+                src={clmImages.bottom4}
+                alt="Speaker addressing audience at CLM"
+                className="h-52"
+              />
+            </div>
+          </div>
+        </section>
+
+        <hr className="my-16 border-t-2 border-transparent" />
+
+        {/* CRPVF Section */}
+        <section id="crpvf">
+          <h2 className="text-center text-4xl font-bold text-[#388E3C] mb-8">
+            CRPVF
+          </h2>
+          <div className="flex flex-col lg:flex-row gap-6">
+            {/* Left side: four smaller images */}
+            <div className="lg:w-[60%] grid grid-cols-2 gap-6">
+              <div className="flex flex-col gap-6">
+                <ImageCard
+                  src={crpvfImages.left1}
+                  alt="CRPVF community gathering"
+                  className="h-52"
+                />
+                <ImageCard
+                  src={crpvfImages.left3}
+                  alt="CRPVF children in a group"
+                  className="h-52"
+                />
+              </div>
+              <div className="flex flex-col gap-6">
+                <ImageCard
+                  src={crpvfImages.left2}
+                  alt="CRPVF training session"
+                  className="h-52"
+                />
+                <ImageCard
+                  src={crpvfImages.left4}
+                  alt="CRPVF parenting skill workshop"
+                  className="h-52"
+                />
+              </div>
+            </div>
+            {/* Right side: large image */}
+            <div className="lg:w-[40%]">
+              <ImageCard
+                src={crpvfImages.main}
+                alt="CRPVF parenting skill training group photo"
+                className="h-full min-h-[30rem]"
+              />
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
   );
 }

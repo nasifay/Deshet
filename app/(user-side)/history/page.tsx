@@ -1,38 +1,40 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import React, { useEffect, useState } from "react";
 import { HistoryPageSkeleton } from "~/components/sections/history-page-skeleton";
 
-interface PageData {
-  title?: string;
-  slug?: string;
-  content?: string;
-  sections?: Array<{
-    type: string;
-    data: Record<string, unknown>;
+interface HistoryData {
+  title: string;
+  subtitle: string;
+  heroImages: string[];
+  introductionParagraphs: string[];
+  milestonesImage?: string;
+  timelineSections: Array<{
+    title: string;
+    description: string;
     order: number;
   }>;
+  closingQuote?: string;
 }
 
 export default function History() {
-  const [pageData, setPageData] = useState<PageData | null>(null);
+  const [historyData, setHistoryData] = useState<HistoryData | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchPageData();
+    fetchHistoryData();
   }, []);
 
-  const fetchPageData = async () => {
+  const fetchHistoryData = async () => {
     try {
-      const response = await fetch("/api/public/pages/history");
+      const response = await fetch("/api/public/history");
       const data = await response.json();
 
       if (data.success) {
-        setPageData(data.data);
+        setHistoryData(data.data);
       }
     } catch (error) {
-      console.error("Error fetching page data:", error);
+      console.error("Error fetching history data:", error);
     } finally {
       setLoading(false);
     }
@@ -42,77 +44,106 @@ export default function History() {
     return <HistoryPageSkeleton />;
   }
 
+  if (!historyData) {
+    return (
+      <div className="min-h-[50vh] flex items-center justify-center">
+        <p className="text-gray-600">No history content available</p>
+      </div>
+    );
+  }
+
   return (
-    <div
-      className="bg-white w-full relative flex flex-col pb-12 pb:mb-20 pb:mb-40"
-      data-model-id="932:11162"
-    >
+    <div className="bg-white w-full relative flex flex-col pb-12 md:pb-20 lg:pb-40">
+      {/* Hero Section */}
       <section className="flex flex-col items-center justify-center gap-6 sm:gap-8 md:gap-20 lg:gap-24 px-6 md:px-16 lg:px-24 xl:px-36">
-        <h1 className="primary-title text-primary-green">HISTORY</h1>
-        <p className="w-full   font-roboto font-normal text-lg md:text-xl lg:text-[32px] leading-[101%] text-center text-[#ff9700]">
-          Tracing our journey of growth, impact, and commitment to communities
-          across Ethiopia.
+        <h1 className="primary-title text-primary-green">
+          {historyData.title}
+        </h1>
+        <p className="w-full font-roboto font-normal text-lg md:text-xl lg:text-[32px] leading-[101%] text-center text-[#ff9700]">
+          {historyData.subtitle}
         </p>
-        <img
-          className="w-full h-auto"
-          alt="Conference room with attendees"
-          src="https://c.animaapp.com/mgcmuny5RiWnl8/img/rectangle-921.svg"
-        />
-        <div className="space-y-4 text-gray-800 font-roboto font-normal text-sm md:text-xl lg:text-2xl leading-[126%] tracking-[0.8px] text-justify">
-          <p>
-            Since its establishment, Tamra Social Development has been committed
-            to empowering communities and driving sustainable change across
-            Ethiopia. What began as a small initiative has grown into a trusted
-            organization working in diverse thematic areas, building
-            partnerships, and touching countless lives.
-          </p>
-          <p>
-            Our history reflects not only the milestones we have achieved but
-            also the resilience, collaboration, and vision that continue to
-            guide us toward a more inclusive and equitable future.
-          </p>
-        </div>
+
+        {/* Hero Images */}
+        {historyData.heroImages.length > 0 && (
+          <div className="w-full">
+            {historyData.heroImages.length === 1 ? (
+              <img
+                className="w-full h-auto rounded-lg"
+                alt="History hero"
+                src={historyData.heroImages[0]}
+              />
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {historyData.heroImages.map((image, index) => (
+                  <img
+                    key={index}
+                    className="w-full h-auto rounded-lg"
+                    alt={`History hero ${index + 1}`}
+                    src={image}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Introduction Paragraphs */}
+        {historyData.introductionParagraphs.length > 0 && (
+          <div className="space-y-4 text-gray-800 font-roboto font-normal text-sm md:text-xl lg:text-2xl leading-[126%] tracking-[0.8px] text-justify">
+            {historyData.introductionParagraphs.map((paragraph, index) => (
+              <p key={index}>{paragraph}</p>
+            ))}
+          </div>
+        )}
       </section>
 
-      <div className=" mt-6 sm:mt-14 lg:mt-24 inline-flex flex-col items-center justify-center gap-[50px] w-full px-2  md:px-6 lg:px-20 mb-8 md:mb-20">
-        <h2 className="font-roboto font-black text-2xl md:text-4xl lg:text-[90px] leading-[101%] tracking-[0] uppercase text-primary-green">
-          MILESTONES
-        </h2>
-
-        <div className="w-full h-[40vh] md:h-auto overflow-x-auto overflow-y-hidden [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ">
-          <img
-            src="/milestones.png"
-            alt="Milestones"
-            className="h-full min-w-[200vw] md:min-w-0 md:h-auto w-auto md:w-full object-contain object-left"
-          />
-        </div>
-      </div>
-
-      <section className="flex flex-col items-center justify-center gap-6 sm:gap-8 md:gap-20 lg:gap-24 px-6 md:px-16 lg:px-24 xl:px-36 mb-6 md:mb-20">
-        <div className="flex flex-col items-start justify-center gap-4 md:gap-7 w-full md:px-6">
-          <h2 className="font-roboto font-black text-lg md:text-4xl lg:text-6xl leading-[101%] tracking-[0] text-center uppercase text-primary-green">
-            2025 – TODAY
+      {/* Milestones Section */}
+      {historyData.milestonesImage && (
+        <div className="mt-6 sm:mt-14 lg:mt-24 inline-flex flex-col items-center justify-center gap-[50px] w-full px-2 md:px-6 lg:px-20 mb-8 md:mb-20">
+          <h2 className="font-roboto font-black text-2xl md:text-4xl lg:text-[90px] leading-[101%] tracking-[0] uppercase text-primary-green">
+            MILESTONES
           </h2>
 
-          <p className="w-full  font-roboto font-medium text-sm md:text-lg lg:text-xl xl:text-3xl leading-[101%] tracking-[0] capitalize text-black">
-            Continuing To Create Inclusive, People-centered, And Accountable
-            Programs Aligned With Tamra&apos;s Mission And Vision.
-          </p>
+          <div className="w-full h-[40vh] md:h-auto overflow-x-auto overflow-y-hidden [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+            <img
+              src={historyData.milestonesImage}
+              alt="Milestones"
+              className="h-full min-w-[200vw] md:min-w-0 md:h-auto w-auto md:w-full object-contain object-left"
+            />
+          </div>
         </div>
-      </section>
+      )}
 
-      <blockquote className="w-full px-6 md:px-20 lg:px-36 text-center font-roboto font-light italic text-sm md:text-3xl lg:text-4xl- leading-[126%] tracking-[0.8px] capitalize">
-        <span className="italic text-black tracking-[0.38px]">
-          &quot; From Our Beginnings To Today,{" "}
-        </span>
-        <span className="italic text-[#128341] tracking-[0.38px]">
-          Tamra Social Development
-        </span>
-        <span className="italic text-black tracking-[0.38px]">
-          Stands Firm In Its Mission, Carrying Forward The Vision Of An
-          Inclusive, Just, And Empowered Society. &quot;
-        </span>
-      </blockquote>
+      {/* Timeline Sections */}
+      {historyData.timelineSections.length > 0 && (
+        <div className="space-y-6 sm:space-y-8 md:space-y-20 lg:space-y-24 px-6 md:px-16 lg:px-24 xl:px-36 mb-6 md:mb-20">
+          {historyData.timelineSections
+            .sort((a, b) => a.order - b.order)
+            .map((section, index) => (
+              <section
+                key={index}
+                className="flex flex-col items-start justify-center gap-4 md:gap-7 w-full md:px-6"
+              >
+                <h2 className="font-roboto font-black text-lg md:text-4xl lg:text-6xl leading-[101%] tracking-[0] uppercase text-primary-green">
+                  {section.title}
+                </h2>
+
+                <p className="w-full font-roboto font-medium text-sm md:text-lg lg:text-xl xl:text-3xl leading-[101%] tracking-[0] capitalize text-black">
+                  {section.description}
+                </p>
+              </section>
+            ))}
+        </div>
+      )}
+
+      {/* Closing Quote */}
+      {historyData.closingQuote && (
+        <blockquote className="w-full px-6 md:px-20 lg:px-36 text-center font-roboto font-light italic text-sm md:text-3xl lg:text-4xl leading-[126%] tracking-[0.8px]">
+          <span className="italic text-black tracking-[0.38px]">
+            &quot; {historyData.closingQuote} &quot;
+          </span>
+        </blockquote>
+      )}
     </div>
   );
 }
