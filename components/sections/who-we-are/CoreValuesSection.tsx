@@ -45,8 +45,11 @@ export function CoreValuesSection({ coreValues }: CoreValuesSectionProps) {
               return (
                 <div
                   key={index}
-                  className={`flex flex-col items-center justify-between p-4 sm:p-6 md:p-8 lg:p-4 bg-cover bg-center rounded-2xl sm:rounded-none ${roundedClass} min-h-[40vh] sm:min-h-[40vh] md:min-h-[50vh] lg:min-h-[82vh] cursor-pointer transition-all duration-300 hover:border-4 hover:border-[#FF9700] hover:border-opacity-50`}
-                  style={{ backgroundImage: `url(${bgUrl})` }}
+                  className={
+                    `flex flex-col items-center justify-between p-4 sm:p-6 md:p-8 lg:p-4 bg-cover bg-center rounded-2xl sm:rounded-none ${roundedClass} min-h-[40vh] sm:min-h-[40vh] md:min-h-[50vh] lg:min-h-[82vh] cursor-pointer transition-all duration-300 hover:border-4 hover:border-[#FF9700] hover:border-opacity-50` +
+                    (index % 2 === 0 ? " bg-[#B1EFCA]" : "")
+                  }
+                  // style={{ backgroundImage: `url(${bgUrl})` }}
                 >
                   <div className="flex flex-col items-center justify-center flex-1">
                     {/* Scaled text sizes */}

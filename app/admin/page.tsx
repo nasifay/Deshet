@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { FileText, Newspaper, Images, Users, Eye, TrendingUp } from 'lucide-react';
-import Link from 'next/link';
+import { useEffect, useState } from "react";
+import { FileText, Newspaper, Images, Users, TrendingUp } from "lucide-react";
+import Link from "next/link";
 
 interface DashboardStats {
   pages: number;
@@ -10,7 +10,6 @@ interface DashboardStats {
   programs: number;
   media: number;
   users: number;
-  totalViews: number;
 }
 
 export default function AdminDashboard() {
@@ -20,7 +19,6 @@ export default function AdminDashboard() {
     programs: 0,
     media: 0,
     users: 0,
-    totalViews: 0,
   });
   const [loading, setLoading] = useState(true);
 
@@ -28,13 +26,13 @@ export default function AdminDashboard() {
     // Fetch dashboard stats
     const fetchStats = async () => {
       try {
-        const response = await fetch('/api/admin/dashboard/stats');
+        const response = await fetch("/api/admin/dashboard/stats");
         if (response.ok) {
           const data = await response.json();
           setStats(data.stats);
         }
       } catch (error) {
-        console.error('Error fetching stats:', error);
+        console.error("Error fetching stats:", error);
       } finally {
         setLoading(false);
       }
@@ -45,46 +43,39 @@ export default function AdminDashboard() {
 
   const statCards = [
     {
-      title: 'Total Pages',
+      title: "Total Pages",
       value: stats.pages,
       icon: <FileText className="w-8 h-8" />,
-      color: 'bg-blue-500',
-      link: '/admin/pages',
+      color: "bg-blue-500",
+      link: "/admin/pages",
     },
     {
-      title: 'News & Events',
+      title: "News & Events",
       value: stats.news,
       icon: <Newspaper className="w-8 h-8" />,
-      color: 'bg-green-500',
-      link: '/admin/news',
+      color: "bg-green-500",
+      link: "/admin/news",
     },
     {
-      title: 'Programs',
+      title: "Programs",
       value: stats.programs,
       icon: <TrendingUp className="w-8 h-8" />,
-      color: 'bg-purple-500',
-      link: '/admin/programs',
+      color: "bg-purple-500",
+      link: "/admin/programs",
     },
     {
-      title: 'Media Files',
+      title: "Media Files",
       value: stats.media,
       icon: <Images className="w-8 h-8" />,
-      color: 'bg-orange-500',
-      link: '/admin/media',
+      color: "bg-orange-500",
+      link: "/admin/media",
     },
     {
-      title: 'Users',
+      title: "Users",
       value: stats.users,
       icon: <Users className="w-8 h-8" />,
-      color: 'bg-pink-500',
-      link: '/admin/users',
-    },
-    {
-      title: 'Total Views',
-      value: stats.totalViews,
-      icon: <Eye className="w-8 h-8" />,
-      color: 'bg-indigo-500',
-      link: '/admin/analytics',
+      color: "bg-pink-500",
+      link: "/admin/users",
     },
   ];
 
@@ -99,11 +90,11 @@ export default function AdminDashboard() {
           Manage your website content, users, and analytics from here.
         </p>
         <div className="mt-4 text-sm text-gray-500 dark:text-gray-400">
-          {new Date().toLocaleDateString('en-US', {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
+          {new Date().toLocaleDateString("en-US", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
           })}
         </div>
       </div>
@@ -141,7 +132,9 @@ export default function AdminDashboard() {
 
       {/* Quick Actions */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Quick Actions</h2>
+        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
+          Quick Actions
+        </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <Link
             href="/admin/news/new"
@@ -164,49 +157,8 @@ export default function AdminDashboard() {
             <Images className="w-5 h-5" />
             <span>Upload Media</span>
           </Link>
-          <Link
-            href="/admin/analytics"
-            className="flex items-center justify-center space-x-2 px-4 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
-          >
-            <Eye className="w-5 h-5" />
-            <span>View Analytics</span>
-          </Link>
-        </div>
-      </div>
-
-      {/* Recent Activity Placeholder */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
-          Recent Activity
-        </h2>
-        <div className="space-y-4">
-          {loading ? (
-            <>
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="flex items-center space-x-4 animate-pulse">
-                  <div className="w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
-                  <div className="flex-1">
-                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-2"></div>
-                    <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
-                  </div>
-                </div>
-              ))}
-            </>
-          ) : (
-            <p className="text-gray-500 dark:text-gray-400 text-center py-8">
-              No recent activity to display
-            </p>
-          )}
         </div>
       </div>
     </div>
   );
 }
-
-
-
-
-
-
-
-
