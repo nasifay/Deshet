@@ -1,11 +1,16 @@
 import { Metadata } from "next";
-import { PAGE_METADATA, BASE_URL } from "~/lib/seo/metadata-config";
+import { generatePageMetadata } from "~/lib/seo/metadata-config";
 import {
   generateWebPageSchema,
   generateBreadcrumbSchema,
 } from "~/lib/seo/json-ld";
+import { BASE_URL } from "~/lib/seo/metadata-config";
+import { getLocale } from "~/lib/i18n/server";
 
-export const metadata: Metadata = PAGE_METADATA.history;
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  return generatePageMetadata("/history", locale);
+}
 
 export default function HistoryLayout({
   children,
@@ -13,9 +18,9 @@ export default function HistoryLayout({
   children: React.ReactNode;
 }) {
   const webPageSchema = generateWebPageSchema({
-    name: "Our History",
+    name: "Our History | Journey of Impact",
     description:
-      "Trace Tamra's journey from establishment to today. Explore our milestones, growth, and unwavering commitment to communities across Ethiopia.",
+      "Trace Tamra's journey from establishment to today. Explore our milestones, growth, and unwavering commitment to communities across Ethiopia since inception.",
     url: `${BASE_URL}/history`,
   });
 

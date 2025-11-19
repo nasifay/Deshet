@@ -1,53 +1,62 @@
 import type { Metadata } from "next";
-import { Roboto } from "next/font/google";
+import { Inter, Poppins, Cormorant_Garamond, Noto_Serif_Ethiopic } from "next/font/google";
 import "./globals.css";
-import { BASE_URL, ORGANIZATION } from "~/lib/seo/metadata-config";
+import { generateRootMetadata } from "~/lib/seo/metadata-config";
 import { generateOrganizationSchema } from "~/lib/seo/json-ld";
+import { getLocale } from "~/lib/i18n/server";
+import { TranslationProviderWrapper } from "~/components/providers/TranslationProviderWrapper";
+import { localeFonts } from "~/lib/i18n/config";
 
-const roboto = Roboto({
+// Body text font - Inter (modern, clean)
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-roboto",
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  variable: "--font-inter",
+  weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL(BASE_URL),
-  title: {
-    default: ORGANIZATION.name,
-    template: `%s | ${ORGANIZATION.shortName}`,
-  },
-  description: ORGANIZATION.description,
-  keywords: [
-    "NGO Ethiopia",
-    "youth empowerment",
-    "peacebuilding",
-    "gender development",
-    "SRHR",
-    "community development",
-    "Tamra",
-  ],
-  authors: [{ name: ORGANIZATION.name }],
-  creator: ORGANIZATION.name,
-  publisher: ORGANIZATION.name,
-  formatDetection: {
-    email: false,
-    address: false,
-    telephone: false,
-  },
-  verification: {
-    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
-  },
-};
+// Alternative body font - Poppins (friendly, readable)
+const poppins = Poppins({
+  subsets: ["latin"],
+  variable: "--font-poppins",
+  weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
+});
 
-export default function RootLayout({
+// Heading font - Cormorant Garamond (elegant, traditional)
+const cormorantGaramond = Cormorant_Garamond({
+  subsets: ["latin"],
+  variable: "--font-heading",
+  weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
+});
+
+// Amharic font - Noto Serif Ethiopic (for Amharic text)
+const notoSerifEthiopic = Noto_Serif_Ethiopic({
+  subsets: ["ethiopic"],
+  variable: "--font-amharic",
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
+
+// Metadata is generated dynamically based on locale via generateMetadata function below
+
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   const organizationSchema = generateOrganizationSchema();
+  const locale = await getLocale();
 
   return (
-    <html lang="en" className={roboto.className}>
+    <html 
+      lang={locale}
+      className={`${inter.variable} ${poppins.variable} ${cormorantGaramond.variable} ${notoSerifEthiopic.variable}`}
+      style={{
+        fontFamily: localeFonts[locale],
+      } as React.CSSProperties}
+    >
       <head>
         <script
           type="application/ld+json"
@@ -56,9 +65,17 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="antialiased bg-white">
-        <main className=" bg-white">{children}</main>
+      <body className="antialiased bg-white font-sans">
+        <TranslationProviderWrapper locale={locale}>
+          <main className=" bg-white">{children}</main>
+        </TranslationProviderWrapper>
       </body>
     </html>
   );
+}
+
+// Generate metadata dynamically based on locale
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  return generateRootMetadata(locale);
 }

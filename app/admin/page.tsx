@@ -1,13 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { FileText, Newspaper, Images, Users, TrendingUp } from "lucide-react";
+import { FileText, Newspaper, Images, Users, TrendingUp, Calendar, Package } from "lucide-react";
 import Link from "next/link";
 
 interface DashboardStats {
   pages: number;
-  news: number;
-  programs: number;
+  blog: number;
+  services: number;
+  bookings: number;
+  products: number;
   media: number;
   users: number;
 }
@@ -15,8 +17,10 @@ interface DashboardStats {
 export default function AdminDashboard() {
   const [stats, setStats] = useState<DashboardStats>({
     pages: 0,
-    news: 0,
-    programs: 0,
+    blog: 0,
+    services: 0,
+    bookings: 0,
+    products: 0,
     media: 0,
     users: 0,
   });
@@ -50,18 +54,32 @@ export default function AdminDashboard() {
       link: "/admin/pages",
     },
     {
-      title: "News & Events",
-      value: stats.news,
+      title: "Blog Posts",
+      value: stats.blog,
       icon: <Newspaper className="w-8 h-8" />,
       color: "bg-green-500",
-      link: "/admin/news",
+      link: "/admin/blog",
     },
     {
-      title: "Programs",
-      value: stats.programs,
+      title: "Services",
+      value: stats.services,
       icon: <TrendingUp className="w-8 h-8" />,
       color: "bg-purple-500",
-      link: "/admin/programs",
+      link: "/admin/services",
+    },
+    {
+      title: "Bookings",
+      value: stats.bookings,
+      icon: <Calendar className="w-8 h-8" />,
+      color: "bg-teal-500",
+      link: "/admin/bookings",
+    },
+    {
+      title: "Products",
+      value: stats.products,
+      icon: <Package className="w-8 h-8" />,
+      color: "bg-indigo-500",
+      link: "/admin/products",
     },
     {
       title: "Media Files",
@@ -84,10 +102,10 @@ export default function AdminDashboard() {
       {/* Welcome Section */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
         <h1 className="text-3xl font-black text-gray-900 dark:text-white mb-2">
-          Welcome to TSD Admin Dashboard
+          Welcome to Deshet Medical Center Admin Dashboard
         </h1>
         <p className="text-gray-600 dark:text-gray-400">
-          Manage your website content, users, and analytics from here.
+          Manage your medical center content, bookings, products, and services from here.
         </p>
         <div className="mt-4 text-sm text-gray-500 dark:text-gray-400">
           {new Date().toLocaleDateString("en-US", {
@@ -137,18 +155,25 @@ export default function AdminDashboard() {
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <Link
-            href="/admin/news/new"
+            href="/admin/blog/new"
             className="flex items-center justify-center space-x-2 px-4 py-3 bg-primary-green text-white rounded-lg hover:bg-green-700 transition-colors"
           >
             <Newspaper className="w-5 h-5" />
-            <span>New Post</span>
+            <span>New Blog Post</span>
           </Link>
           <Link
-            href="/admin/pages/new"
-            className="flex items-center justify-center space-x-2 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            href="/admin/services/new"
+            className="flex items-center justify-center space-x-2 px-4 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
           >
-            <FileText className="w-5 h-5" />
-            <span>New Page</span>
+            <TrendingUp className="w-5 h-5" />
+            <span>New Service</span>
+          </Link>
+          <Link
+            href="/admin/products/new"
+            className="flex items-center justify-center space-x-2 px-4 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+          >
+            <Package className="w-5 h-5" />
+            <span>New Product</span>
           </Link>
           <Link
             href="/admin/media"

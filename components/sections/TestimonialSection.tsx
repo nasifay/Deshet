@@ -5,6 +5,8 @@ import { FaQuoteLeft, FaUser } from "react-icons/fa";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
 import Image from "next/image";
+import { useTranslation } from "~/lib/i18n/hooks";
+import { getBilingualText } from "~/lib/i18n/utils";
 
 // Import Swiper styles
 import "swiper/css";
@@ -12,20 +14,20 @@ import "swiper/css/pagination";
 
 interface Testimonial {
   _id: string;
-  quote: string;
+  quote: string | { en: string; am: string };
   name: string;
-  title: string;
-  organization?: string;
+  title: string | { en: string; am: string };
+  organization?: string | { en: string; am: string };
   image?: string;
   featured: boolean;
   order: number;
 }
 
 interface TestimonialCardProps {
-  quote: string;
+  quote: string | { en: string; am: string };
   name: string;
-  title: string;
-  organization?: string;
+  title: string | { en: string; am: string };
+  organization?: string | { en: string; am: string };
   image?: string;
   isCenter?: boolean;
 }
@@ -38,6 +40,26 @@ const TestimonialCard = ({
   image,
   isCenter = false,
 }: TestimonialCardProps) => {
+  const { locale } = useTranslation();
+  
+  const quoteText = getBilingualText(
+    quote as string | { en: string; am: string } | undefined,
+    locale,
+    ""
+  );
+  const titleText = getBilingualText(
+    title as string | { en: string; am: string } | undefined,
+    locale,
+    ""
+  );
+  const organizationText = organization
+    ? getBilingualText(
+        organization as string | { en: string; am: string } | undefined,
+        locale,
+        ""
+      )
+    : "";
+
   return (
     <div
       className={`relative flex flex-col items-center text-center rounded-xl transition-all duration-300 h-full ${
@@ -55,9 +77,9 @@ const TestimonialCard = ({
       <p
         className={`text-sm md:text-[14px] leading-relaxed font-medium ${
           isCenter ? "text-gray-100" : "text-gray-600"
-        }`}
+        } ${locale === "am" ? "font-amharic" : ""}`}
       >
-        {quote}
+        {quoteText}
       </p>
 
       {/* Avatar */}
@@ -93,10 +115,12 @@ const TestimonialCard = ({
           {name}
         </h3>
         <p
-          className={`text-xs ${isCenter ? "text-gray-600" : "text-gray-500"}`}
+          className={`text-xs ${isCenter ? "text-gray-600" : "text-gray-500"} ${
+            locale === "am" ? "font-amharic" : ""
+          }`}
         >
-          {title}
-          {organization && ` / ${organization}`}
+          {titleText}
+          {organizationText && ` / ${organizationText}`}
         </p>
       </div>
     </div>
@@ -104,49 +128,95 @@ const TestimonialCard = ({
 };
 
 export default function TestimonialsSection() {
+  const { t, locale } = useTranslation();
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [loading, setLoading] = useState(true);
+  const [sectionTitle, setSectionTitle] = useState("");
 
   useEffect(() => {
     fetchTestimonials();
-  }, []);
+  }, [locale]);
 
   const fetchTestimonials = async () => {
     try {
+      // Try to get section title from landing page CMS
+      const landingResponse = await fetch("/api/public/landing");
+      const landingResult = await landingResponse.json();
+
+      if (landingResult.success) {
+        const section = landingResult.data?.sections?.find(
+          (s: any) => s.type === "TestimonialsSection"
+        );
+        if (section?.data?.title) {
+          setSectionTitle(
+            getBilingualText(
+              section.data.title,
+              locale,
+              locale === "am" ? "የደንበኞች አስተያየቶች" : "TESTIMONIALS"
+            )
+          );
+        }
+      }
+
       const response = await fetch("/api/public/testimonials?featured=true");
       const data = await response.json();
 
       if (data.success && data.data.length > 0) {
         setTestimonials(data.data);
       } else {
-        // Fallback to default testimonials if none in database
+        // Fallback to Deshet Medical Center testimonials if none in database
         setTestimonials([
           {
             _id: "1",
-            quote:
-              "I Envision For Tamra, In The Future, A Leadership And Empowerment Hub, A Youth-Focused Resource Center In Ethiopia And Beyond.",
-            name: "Kidist Belayneh",
-            title: "County Program Manager",
-            organization: "Norwegian Church Aid",
+            quote: {
+              en: "Deshet Medical Center has been a blessing for my family. The traditional medicine treatments have helped us in ways modern medicine couldn't. The practitioners are knowledgeable and truly care about their patients.",
+              am: "ደሸት የሕክምና ማዕከል ለቤተሰቤ በረከት ነው። የባህላዊ ሕክምና ሕክምናዎች ዘመናዊ ሕክምና ያልቻለውን በሁኔታዎች ረድተናል። ሐኪሞቹ የተማሩ እና ስለ ታካሚዎቻቸው በእውነት ይጨነቃሉ።",
+            },
+            name: "Alemayehu Bekele",
+            title: {
+              en: "Patient",
+              am: "ታካሚ",
+            },
+            organization: {
+              en: "Addis Ababa",
+              am: "አዲስ አበባ",
+            },
             featured: true,
             order: 0,
           },
           {
             _id: "2",
-            quote:
-              "I Hope To See More Of Them In Various Regions Around The World. I Wish Them Success Over The Next 25 Years, Strengthening Their Institutional Efforts And Continuing The Successful Journey That Started To Enhance The Lives Of Many Young People.",
-            name: "Ephrem Burhan",
-            title: "Executive Director",
-            organization: "Tilant Youth Association",
+            quote: {
+              en: "I have been coming to Deshet for over 5 years. The herbal remedies and spiritual healing services have transformed my health. The center combines traditional wisdom with modern care, which is exactly what we need.",
+              am: "ከ5 ዓመታት በላይ ወደ ደሸት እየመጣሁ ነው። የአመዳድብ መድሃኒቶች እና የመንፈሳዊ ሕክምና አገልግሎቶች ጤናዬን ለወጡ። ማዕከሉ ባህላዊ ጥበብን ከዘመናዊ እንክብካቤ ጋር ያጣምራል።",
+            },
+            name: "Mulugeta Tadesse",
+            title: {
+              en: "Regular Patient",
+              am: "የተለመደ ታካሚ",
+            },
+            organization: {
+              en: "Traditional Medicine Advocate",
+              am: "የባህላዊ ሕክምና ደጋፊ",
+            },
             featured: true,
             order: 1,
           },
           {
             _id: "3",
-            quote:
-              "I Want To Express My Gratitude To The Integrated Social Development Organization, Which Has Been A Valuable Resource For Mothers, Youth, And Our Community Since It Was Founded.",
-            name: "Adane T/georgis",
-            title: "Shashemene City Administration",
+            quote: {
+              en: "The expertise and care at Deshet Medical Center is unmatched. They have helped me with chronic conditions using traditional Ethiopian medicine. I highly recommend their services to anyone seeking authentic traditional healing.",
+              am: "በደሸት የሕክምና ማዕከል ያለው ሙያ እና እንክብካቤ ማነጻጸር የለውም። የኢትዮጵያ ባህላዊ ሕክምናን በመጠቀም ከረዥም ጊዜ የቆዩ ሁኔታዎች ረድተዋል። እውነተኛ ባህላዊ ሕክምና ለሚፈልጉ ሁሉ አገልግሎታቸውን በጣም እመክራለሁ።",
+            },
+            name: "Tigist Hailu",
+            title: {
+              en: "Satisfied Patient",
+              am: "የተደሰተ ታካሚ",
+            },
+            organization: {
+              en: "Health & Wellness Enthusiast",
+              am: "የጤና እና ደህንነት ተከታታይ",
+            },
             featured: true,
             order: 2,
           },
@@ -154,34 +224,47 @@ export default function TestimonialsSection() {
       }
     } catch (error) {
       console.error("Error fetching testimonials:", error);
-      // Use fallback testimonials on error
+      // Use fallback Deshet testimonials on error
       setTestimonials([
         {
           _id: "1",
-          quote:
-            "I Envision For Tamra, In The Future, A Leadership And Empowerment Hub, A Youth-Focused Resource Center In Ethiopia And Beyond.",
-          name: "Kidist Belayneh",
-          title: "County Program Manager",
-          organization: "Norwegian Church Aid",
+          quote: {
+            en: "Deshet Medical Center has been a blessing for my family. The traditional medicine treatments have helped us in ways modern medicine couldn't.",
+            am: "ደሸት የሕክምና ማዕከል ለቤተሰቤ በረከት ነው። የባህላዊ ሕክምና ሕክምናዎች ዘመናዊ ሕክምና ያልቻለውን በሁኔታዎች ረድተናል።",
+          },
+          name: "Alemayehu Bekele",
+          title: {
+            en: "Patient",
+            am: "ታካሚ",
+          },
           featured: true,
           order: 0,
         },
         {
           _id: "2",
-          quote:
-            "I Hope To See More Of Them In Various Regions Around The World. I Wish Them Success Over The Next 25 Years, Strengthening Their Institutional Efforts And Continuing The Successful Journey That Started To Enhance The Lives Of Many Young People.",
-          name: "Ephrem Burhan",
-          title: "Executive Director",
-          organization: "Tilant Youth Association",
+          quote: {
+            en: "I have been coming to Deshet for over 5 years. The herbal remedies and spiritual healing services have transformed my health.",
+            am: "ከ5 ዓመታት በላይ ወደ ደሸት እየመጣሁ ነው። የአመዳድብ መድሃኒቶች እና የመንፈሳዊ ሕክምና አገልግሎቶች ጤናዬን ለወጡ።",
+          },
+          name: "Mulugeta Tadesse",
+          title: {
+            en: "Regular Patient",
+            am: "የተለመደ ታካሚ",
+          },
           featured: true,
           order: 1,
         },
         {
           _id: "3",
-          quote:
-            "I Want To Express My Gratitude To The Integrated Social Development Organization, Which Has Been A Valuable Resource For Mothers, Youth, And Our Community Since It Was Founded.",
-          name: "Adane T/georgis",
-          title: "Shashemene City Administration",
+          quote: {
+            en: "The expertise and care at Deshet Medical Center is unmatched. They have helped me with chronic conditions using traditional Ethiopian medicine.",
+            am: "በደሸት የሕክምና ማዕከል ያለው ሙያ እና እንክብካቤ ማነጻጸር የለውም። የኢትዮጵያ ባህላዊ ሕክምናን በመጠቀም ከረዥም ጊዜ የቆዩ ሁኔታዎች ረድተዋል።",
+          },
+          name: "Tigist Hailu",
+          title: {
+            en: "Satisfied Patient",
+            am: "የተደሰተ ታካሚ",
+          },
           featured: true,
           order: 2,
         },
@@ -210,8 +293,17 @@ export default function TestimonialsSection() {
   return (
     <section className="w-full bg-white  overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="text-center text-3xl md:text-4xl font-extrabold text-primary-green uppercase tracking-wider mb-16">
-          TESTIMONIALS
+        <h1
+          className={`text-center text-3xl md:text-4xl font-extrabold text-primary-green uppercase tracking-wider mb-16 ${
+            locale === "am" ? "font-amharic" : ""
+          }`}
+        >
+          {sectionTitle ||
+            getBilingualText(
+              undefined,
+              locale,
+              locale === "am" ? "የደንበኞች አስተያየቶች" : "TESTIMONIALS"
+            )}
         </h1>
 
         <div className="mt-8 pb-20 -mx-4 sm:mx-0">

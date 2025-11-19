@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { HistoryPageSkeleton } from "~/components/sections/history-page-skeleton";
+import { useTranslation } from "~/lib/i18n/hooks";
 
 interface HistoryData {
   title: string;
@@ -18,6 +19,7 @@ interface HistoryData {
 }
 
 export default function History() {
+  const { t } = useTranslation();
   const [historyData, setHistoryData] = useState<HistoryData | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -47,7 +49,7 @@ export default function History() {
   if (!historyData) {
     return (
       <div className="min-h-[50vh] flex items-center justify-center">
-        <p className="text-gray-600">No history content available</p>
+        <p className="text-gray-600">{t("pages.history.noContent")}</p>
       </div>
     );
   }
@@ -101,7 +103,7 @@ export default function History() {
       {historyData.milestonesImage && (
         <div className="mt-6 sm:mt-14 lg:mt-24 inline-flex flex-col items-center justify-center gap-[50px] w-full px-2 md:px-6 lg:px-20 mb-8 md:mb-20">
           <h2 className="font-roboto font-black text-2xl md:text-4xl lg:text-[90px] leading-[101%] tracking-[0] uppercase text-primary-green">
-            MILESTONES
+            {t("pages.history.milestones")}
           </h2>
 
           <div className="w-full h-[40vh] md:h-auto overflow-x-auto overflow-y-hidden [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">

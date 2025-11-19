@@ -39,8 +39,8 @@ export default function NotFound() {
         {/* Logo */}
         <div className="flex justify-center mb-8">
           <Image
-            src="/logo.svg"
-            alt="Tamra for Social Development"
+            src="/logo.png"
+            alt="Deshet Medical Center"
             width={100}
             height={100}
             className="object-contain opacity-80"
@@ -49,7 +49,7 @@ export default function NotFound() {
 
         {/* 404 Text */}
         <div className="space-y-4">
-          <h1 className="text-[120px] sm:text-[160px] lg:text-[200px] font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#ff7a00] to-[#128341] leading-none">
+          <h1 className="text-[120px] sm:text-[160px] lg:text-[200px] font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary-green to-secondary-green leading-none">
             404
           </h1>
           <div className="space-y-2">
@@ -66,9 +66,9 @@ export default function NotFound() {
 
         {/* Decorative Pattern */}
         <div className="flex justify-center items-center gap-2 py-6">
-          <div className="w-2 h-2 rounded-full bg-[#ff7a00] animate-pulse"></div>
-          <div className="w-2 h-2 rounded-full bg-[#128341] animate-pulse delay-75"></div>
-          <div className="w-2 h-2 rounded-full bg-[#ff7a00] animate-pulse delay-150"></div>
+          <div className="w-2 h-2 rounded-full bg-primary-green animate-pulse"></div>
+          <div className="w-2 h-2 rounded-full bg-secondary-green animate-pulse delay-75"></div>
+          <div className="w-2 h-2 rounded-full bg-primary-green animate-pulse delay-150"></div>
         </div>
 
         {/* Quick Links Grid */}
@@ -77,14 +77,14 @@ export default function NotFound() {
             <Link
               key={link.href}
               href={link.href}
-              className="group bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-[#ff7a00]/30 hover:-translate-y-1"
+              className="group bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-primary-green/30 hover:-translate-y-1"
             >
               <div className="flex flex-col items-center space-y-3">
-                <div className="p-3 bg-gradient-to-br from-[#ff7a00]/10 to-[#128341]/10 rounded-lg group-hover:from-[#ff7a00]/20 group-hover:to-[#128341]/20 transition-colors">
-                  <link.icon className="w-6 h-6 text-[#128341] group-hover:text-[#ff7a00] transition-colors" />
+                <div className="p-3 bg-gradient-to-br from-primary-green/10 to-secondary-green/10 rounded-lg group-hover:from-primary-green/20 group-hover:to-secondary-green/20 transition-colors">
+                  <link.icon className="w-6 h-6 text-primary-green group-hover:text-secondary-green transition-colors" />
                 </div>
                 <div className="space-y-1">
-                  <h3 className="font-semibold text-gray-800 group-hover:text-[#ff7a00] transition-colors">
+                  <h3 className="font-semibold text-gray-800 group-hover:text-primary-green transition-colors">
                     {link.label}
                   </h3>
                   <p className="text-xs text-gray-500">{link.description}</p>
@@ -105,7 +105,7 @@ export default function NotFound() {
           </button>
           <Link
             href="/"
-            className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-[#ff7a00] to-[#ff9700] text-white rounded-lg hover:from-[#ff9700] hover:to-[#ff7a00] transition-all duration-300 font-medium shadow-lg hover:shadow-xl"
+            className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-primary-green to-secondary-green text-white rounded-lg hover:from-secondary-green hover:to-primary-green transition-all duration-300 font-medium shadow-lg hover:shadow-xl"
           >
             <Home className="w-4 h-4" />
             Go to Homepage
@@ -118,7 +118,7 @@ export default function NotFound() {
             Need help? Feel free to{" "}
             <Link
               href="/contact-us"
-              className="text-[#ff7a00] hover:text-[#128341] font-medium underline underline-offset-2 transition-colors"
+              className="text-primary-green hover:text-secondary-green font-medium underline underline-offset-2 transition-colors"
             >
               contact our team
             </Link>

@@ -1,18 +1,29 @@
 import { Metadata } from "next";
-import { PAGE_METADATA } from "~/lib/seo/metadata-config";
-import { generateWebPageSchema } from "~/lib/seo/json-ld";
+import { generatePageMetadata } from "~/lib/seo/metadata-config";
+import {
+  generateOrganizationSchema,
+  generateWebPageSchema,
+  generateBreadcrumbSchema,
+} from "~/lib/seo/json-ld";
+import { BASE_URL } from "~/lib/seo/metadata-config";
+import { getLocale } from "~/lib/i18n/server";
 
-export const metadata: Metadata = PAGE_METADATA.home;
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  return generatePageMetadata("/", locale);
+}
 
 export default function LandingLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const organizationSchema = generateOrganizationSchema();
   const webPageSchema = generateWebPageSchema({
-    name: "Tamra for Social Development - Home",
-    description: "Leading NGO in Ethiopia empowering youth through holistic programs in health, education, livelihoods, peacebuilding, and civic engagement.",
-    url: process.env.NEXT_PUBLIC_BASE_URL || "https://tamra-sdt.org",
+    name: "Home - Tamra for Social Development",
+    description:
+      "Leading NGO in Ethiopia empowering youth through holistic programs in health, education, livelihoods, peacebuilding, and civic engagement.",
+    url: BASE_URL,
   });
 
   return (
@@ -23,7 +34,7 @@ export default function LandingLayout({
           __html: JSON.stringify(webPageSchema),
         }}
       />
-      <div className="">{children}</div>
+      {children}
     </>
   );
 }

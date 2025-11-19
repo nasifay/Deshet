@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Save, Eye } from "lucide-react";
+import { ArrowLeft, Save, Eye, ExternalLink } from "lucide-react";
 import LandingSectionEditor from "~/app/admin/components/LandingSectionEditor";
 
 interface LandingPage {
@@ -47,16 +47,20 @@ export default function LandingPageAdmin() {
     }>,
     seo: {
       metaTitle:
-        "TSD - Serving Ethiopian Youth | Social Development Organization",
+        "Deshet Indigenous Medical Center | Premium Ethiopian Traditional Medicine",
       metaDescription:
-        "Tamra for Social Development (TSD) is an Ethiopian NGO working in youth empowerment, peacebuilding, SRH & gender equality, and climate justice since 1998.",
+        "Deshet Indigenous Medical Center delivers premium Ethiopian traditional medicine, herbal healing, spiritual therapy, and cultural healing services in Addis Ababa, Ethiopia.",
       keywords: [
-        "TSD",
+        "Deshet Medical Center",
+        "Ethiopian traditional medicine",
+        "indigenous medicine Ethiopia",
+        "herbal medicine",
+        "traditional healing",
+        "Ethiopian herbal remedies",
+        "cultural healing",
+        "spiritual healing",
+        "Addis Ababa",
         "Ethiopia",
-        "youth empowerment",
-        "peacebuilding",
-        "social development",
-        "NGO",
       ],
     },
   });
@@ -96,17 +100,21 @@ export default function LandingPageAdmin() {
           seo: {
             metaTitle:
               data.data.seo?.metaTitle ||
-              "TSD - Serving Ethiopian Youth | Social Development Organization",
+              "Deshet Indigenous Medical Center | Premium Ethiopian Traditional Medicine",
             metaDescription:
               data.data.seo?.metaDescription ||
-              "Tamra for Social Development (TSD) is an Ethiopian NGO working in youth empowerment, peacebuilding, SRH & gender equality, and climate justice since 1998.",
+              "Deshet Indigenous Medical Center delivers premium Ethiopian traditional medicine, herbal healing, spiritual therapy, and cultural healing services in Addis Ababa, Ethiopia.",
             keywords: data.data.seo?.keywords || [
-              "TSD",
+              "Deshet Medical Center",
+              "Ethiopian traditional medicine",
+              "indigenous medicine Ethiopia",
+              "herbal medicine",
+              "traditional healing",
+              "Ethiopian herbal remedies",
+              "cultural healing",
+              "spiritual healing",
+              "Addis Ababa",
               "Ethiopia",
-              "youth empowerment",
-              "peacebuilding",
-              "social development",
-              "NGO",
             ],
           },
         });
@@ -128,26 +136,35 @@ export default function LandingPageAdmin() {
         id: "hero-section",
         type: "HeroSection",
         data: {
-          title: "SERVING",
-          subtitle: "ETHIOPIAN YOUTH",
+          title: "DESHET",
+          subtitle: "INDIGENOUS MEDICAL CENTER",
+          description: {
+            en: "Premium Ethiopian Indigenous Medical Center delivering herbal, spiritual, and cultural healing",
+            am: "የኢትዮጵያ ባህላዊ የሕክምና ማዕከል የአመዳድብ ሕክምና፣ መንፈሳዊ እና ባህላዊ ሕክምና እንሰጣለን",
+          },
           landscapeImage: "/home-hero.png",
           leftImages: [
             "/landing-left.png",
-            "https://images.unsplash.com/photo-1543269865-cbf427effbad?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-            "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            "https://images.unsplash.com/photo-1543269865-cbf427effbad?q=80&w=2070&auto=format&fit=crop",
           ],
           middleImages: [
             "/landing-middle.png",
-            "https://images.unsplash.com/photo-1573496773905-f5b17e76b254?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-            "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=2232&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            "https://images.unsplash.com/photo-1573496773905-f5b17e76b254?q=80&w=2070&auto=format&fit=crop",
           ],
           rightImages: [
             "/landing-right.png",
-            "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-            "https://images.unsplash.com/photo-1600880292210-f7615b5978e5?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=2070&auto=format&fit=crop",
           ],
-          ctaText: "Contact Us",
-          ctaLink: "/contact-us",
+          ctaText: {
+            en: "Book Appointment",
+            am: "ቀጠሮ ይውሰዱ",
+          },
+          ctaLink: "/booking",
+          ctaSecondaryText: {
+            en: "Learn More",
+            am: "ተጨማሪ ይማሩ",
+          },
+          ctaSecondaryLink: "/who-we-are",
         },
         order: 0,
       },
@@ -155,10 +172,18 @@ export default function LandingPageAdmin() {
         id: "about-section",
         type: "AboutSection",
         data: {
-          title: "ABOUT US",
-          description:
-            "Tamra for social development organization (tsd) is an Ethiopian NGO legally registered since 1998. Founded as an anti-aids club in shashemene, it now operates across Oromia, Sidama, South & Central Ethiopia, and Addis Ababa. TSD works in youth empowerment, peacebuilding, SRH & gender equality, and climate justice & livelihoods. With 25+ years of impact, we drive change through grassroots engagement, advocacy, and community-driven solutions.",
-          ctaText: "Read More",
+          title: {
+            en: "ABOUT DESHET",
+            am: "ስለ ደሸት",
+          },
+          description: {
+            en: "Deshet Indigenous Medical Center is a premium Ethiopian traditional medical facility dedicated to preserving and promoting indigenous healing practices. We combine ancient wisdom with modern understanding to provide comprehensive traditional medical services including herbal medicine preparation, traditional diagnostic techniques, detox therapy, and spiritual healing.",
+            am: "ደሸት ባህላዊ የሕክምና ማዕከል የኢትዮጵያ ባህላዊ ሕክምናን ማስቀጠል እና ማበረታታት የሚገዛ የሕክምና ተቋም ነው። የጥንት ጥበብን ከዘመናዊ ግንዛቤ ጋር በማዋሃድ የአመዳድብ ሕክምና አዘገጃጀት፣ ባህላዊ የመመርመር ዘዴዎች፣ የሰውነት ማጽዳት ሕክምና እና መንፈሳዊ ሕክምና ጨምሮ ሁሉንም የባህላዊ ሕክምና አገልግሎቶችን እንሰጣለን።",
+          },
+          ctaText: {
+            en: "Read More",
+            am: "ተጨማሪ ያንብቡ",
+          },
           ctaLink: "/who-we-are",
           images: [
             "/images/about/1.png",
@@ -285,7 +310,13 @@ export default function LandingPageAdmin() {
   };
 
   const handlePreview = () => {
+    // Open the public landing page in a new tab
     window.open("/", "_blank");
+  };
+
+  const handleViewLive = () => {
+    // Open the public landing page in the same tab
+    window.location.href = "/";
   };
 
   if (loading) {
@@ -313,6 +344,14 @@ export default function LandingPageAdmin() {
           </div>
         </div>
         <div className="flex items-center space-x-2">
+          <Link
+            href="/"
+            target="_blank"
+            className="flex items-center space-x-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors text-sm"
+          >
+            <ExternalLink className="w-4 h-4" />
+            <span>View Live</span>
+          </Link>
           <button
             onClick={handlePreview}
             className="flex items-center space-x-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors text-sm"

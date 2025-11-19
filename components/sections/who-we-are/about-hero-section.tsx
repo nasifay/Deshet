@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "~/lib/i18n/hooks";
 
 // It's a good practice to use an SVG component for icons.
 
@@ -15,8 +16,9 @@ export function AboutHeroSection({
   subtitle = "Working hand in hand with communities for a brighter future.",
   mainImage = "https://i.imgur.com/u0bHpvy.png",
   contentImage = "https://i.imgur.com/7D7ERa6.png",
-  content = "Tarra-For Social Development Organization (TSD) Is An Ethiopian Civil Society Organization Founded in 1998 by Ten Visionary Youths As An Anti-AIDS Club At Shashemene High School. It Was Re-Registered As A Local CSO By The Authority For Civil Society Organizations (ACSO) On June 7, 2019, With Registration No. 0184. TSD Focuses On Youth Empowerment, Peacebuilding, Sexual And Reproductive Health, Gender Development, And Climate Justice. Operating Across Addis Ababa, Oromia, Sidama, South Ethiopia, And Central Ethiopia Regions, It Coordinates Efforts Through Regional Offices In Shashemene And Wolayita Sodo, As Well As Project Coordination Offices In Towns Like Hawassa.",
+  content = "Deshet Indigenous Medical Center is a premier traditional medicine facility dedicated to preserving and promoting Ethiopian indigenous healing practices. We provide comprehensive traditional medical consultation, herbal medicine preparation, detox therapy, and healing treatments rooted in centuries-old wisdom.",
 }: AboutHeroSectionProps) {
+  const { locale } = useTranslation();
   // A subtle leaf pattern that matches the reference image background
   const leafPattern = `url("/pattern-1.png")`;
 
@@ -24,10 +26,22 @@ export function AboutHeroSection({
     <section className="w-full mx-auto ">
       <div className="bg-white pt-16 pb-8 px-6 sm:px-8 md:px-16 2xl:px-20">
         <div className=" mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="primary-title text-primary-green">{title}</h1>
+          <h1
+            className={`primary-title text-primary-green ${
+              locale === "am" ? "font-amharic" : ""
+            }`}
+          >
+            {title}
+          </h1>
           <div className="mt-6 md:mt-12 inline-block">
             <div className="bg-white shadow-sm rounded-full py-3 px-8 ">
-              <p className="subtitle text-primary-orange">{subtitle}</p>
+              <p
+                className={`subtitle text-primary-orange ${
+                  locale === "am" ? "font-amharic" : ""
+                }`}
+              >
+                {subtitle}
+              </p>
             </div>
           </div>
         </div>
@@ -52,7 +66,13 @@ export function AboutHeroSection({
         <div className="relative z-10 w-full   flex flex-col lg:flex-row items-center gap-12 lg:gap-16 px-6 sm:px-8 md:px-16 2xl:px-20">
           {/* Left: Text Block */}
           <div className="w-full lg:w-3/5">
-            <p className="description text-white ">{content}</p>
+            <p
+              className={`description text-white ${
+                locale === "am" ? "font-amharic" : ""
+              }`}
+            >
+              {content}
+            </p>
           </div>
 
           {/* Right: Image Block */}

@@ -2,17 +2,28 @@
 
 import HeroSection from "~/components/sections/hero-section";
 import AboutSection from "~/components/sections/about-section";
-import ProgramAreasSection from "~/components/sections/program-areas-section";
+import ServicesSection from "~/components/sections/services-section";
 import StatisticsSection from "~/components/sections/statistics-section";
 import AchievementsSection from "~/components/sections/achievements-section";
-import NewsEventsSection from "~/components/sections/news-events-section";
-import KeyFundersSection from "~/components/sections/key-funders-section";
-import SupportersSection from "~/components/sections/supporters-section";
-import VolunteerBanner from "~/components/sections/volunteerBanner";
+import BlogSection from "~/components/sections/blog-section";
+import PartnersCertificationsSection from "~/components/sections/partners-certifications-section";
 import TestimonialsSection from "~/components/sections/TestimonialSection";
 
 /**
- * Landing page component
+ * Landing Page Component
+ * 
+ * This page displays the public-facing landing page at http://localhost:3000/
+ * 
+ * Data Source:
+ * - Each section component fetches data from /api/public/landing
+ * - The landing page data is managed in the admin panel at /admin/landing
+ * - Changes made in the admin panel are saved to the database and reflected here
+ * 
+ * Connection:
+ * - Admin Editor: http://localhost:3000/admin/landing
+ * - Public Page: http://localhost:3000/
+ * - API Endpoint: /api/public/landing (reads from Page model with slug "landing")
+ * 
  * Each section component fetches its own data independently
  * This improves separation of concerns and component independence
  */
@@ -22,12 +33,10 @@ export default function Home() {
       <HeroSection />
       <AboutSection />
       <StatisticsSection />
-      <ProgramAreasSection />
-      <KeyFundersSection />
-      <SupportersSection />
+      <ServicesSection />
+      <PartnersCertificationsSection />
       <AchievementsSection />
-      <NewsEventsSection />
-      <VolunteerBanner />
+      <BlogSection />
       <TestimonialsSection />
     </div>
   );

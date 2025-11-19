@@ -1,9 +1,18 @@
 "use client";
 
-import { Facebook, Instagram, Linkedin, Twitter, Music4 } from "lucide-react";
+import {
+  Facebook,
+  Instagram,
+  Linkedin,
+  Twitter,
+  Music4,
+  Youtube,
+  Link2,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useTranslation } from "~/lib/i18n/hooks";
 
 interface FooterData {
   socialLinks: Array<{
@@ -31,16 +40,45 @@ interface FooterData {
 }
 
 const iconMap: { [key: string]: any } = {
+  // primary keys
   Facebook: Facebook,
   Instagram: Instagram,
   Linkedin: Linkedin,
   Twitter: Twitter,
+  Youtube: Youtube,
+  YouTube: Youtube,
+  TikTok: Music4,
   Music4: Music4,
 };
+
+function getIconByName(name?: string) {
+  if (!name) return undefined;
+  const key = name.trim().toLowerCase();
+  switch (key) {
+    case "facebook":
+      return Facebook;
+    case "instagram":
+      return Instagram;
+    case "linkedin":
+      return Linkedin;
+    case "twitter":
+      return Twitter;
+    case "youtube":
+    case "youtu.be":
+      return Youtube;
+    case "tiktok":
+    case "tik tok":
+    case "music4":
+      return Music4;
+    default:
+      return iconMap[name];
+  }
+}
 
 export default function Footer() {
   const [footerData, setFooterData] = useState<FooterData | null>(null);
   const [loading, setLoading] = useState(true);
+  const { t, locale } = useTranslation();
 
   useEffect(() => {
     async function fetchFooterData() {
@@ -85,14 +123,14 @@ export default function Footer() {
             href={data.termsAndConditions.fileUrl || "#"}
             className="flex items-center gap-1 hover:text-[#4EB778] transition-colors"
           >
-            TERMS CONDITIONS
+            {t("footer.termsConditions")}
             <span className="text-[#4EB778] text-lg font-bold">›</span>
           </Link>
           <Link
             href={data.privacyPolicy.fileUrl || "#"}
             className="flex items-center gap-1 hover:text-[#4EB778] transition-colors"
           >
-            PRIVACY POLICY
+            {t("footer.privacyPolicy")}
             <span className="text-[#4EB778] text-lg font-bold">›</span>
           </Link>
         </div>
@@ -102,18 +140,18 @@ export default function Footer() {
           {/* --- Left: Logo + Info --- */}
           <div className="flex items-start gap-6 min-w-[280px] max-w-[360px]">
             <Image
-              src="/logo.svg"
-              alt="Tamra for Social Development Logo"
+              src="/logo.png"
+              alt="Deshet Medical Center Logo"
               width={70}
               height={70}
               className="object-contain"
             />
             <div className="text-[#666] text-[12.5px] leading-[19px] font-medium">
-              <p>©Tamra for Social Development Organization.com</p>
-              <p>A legally registered local NGO.</p>
-              <p>Location: {data.contactInfo.address}</p>
-              <p>Customer Feedback: {data.contactInfo.email}</p>
-              {data.contactInfo.phone && <p>Phone: {data.contactInfo.phone}</p>}
+              <p>©{t("footer.organizationName")}</p>
+              <p>{t("footer.tagline")}</p>
+              <p>{t("footer.location")}: {data.contactInfo.address}</p>
+              <p>{t("footer.customerFeedback")}: {data.contactInfo.email}</p>
+              {data.contactInfo.phone && <p>{t("footer.phone")}: {data.contactInfo.phone}</p>}
             </div>
           </div>
 
@@ -121,7 +159,7 @@ export default function Footer() {
           {data.keyFunders.length > 0 && (
             <div className="min-w-[160px]">
               <h3 className="text-[#128341] text-[12.5px] font-bold mb-1">
-                Key Funders
+                {t("footer.keyFunders")}
               </h3>
               <ul className="space-y-1 text-[#666] text-[12.5px] font-medium leading-[18px]">
                 {data.keyFunders.map((funder, index) => (
@@ -135,7 +173,7 @@ export default function Footer() {
           {data.networks.length > 0 && (
             <div className="min-w-[210px]">
               <h3 className="text-[#128341] text-[12.5px] font-bold mb-1">
-                Networks & Memberships
+                {t("footer.networksMemberships")}
               </h3>
               <ul className="space-y-1 text-[#666] text-[12.5px] font-medium leading-[18px]">
                 {data.networks.map((network, index) => (
@@ -146,10 +184,14 @@ export default function Footer() {
           )}
 
           {/* --- Right: Social Media --- */}
-          {data.socialLinks.length > 0 && (
-            <div className="flex items-center gap-4 text-[#20A44D] ml-auto">
-              {data.socialLinks.map((link, index) => {
-                const IconComponent = iconMap[link.icon] || Facebook;
+          <div className="flex items-center gap-4 text-[#20A44D] ml-auto">
+            {data.socialLinks && data.socialLinks.length > 0 ? (
+              data.socialLinks.map((link, index) => {
+                // Prefer platform first (source of truth), then explicit icon value
+                const IconComponent =
+                  getIconByName(link.platform) ||
+                  getIconByName(link.icon) ||
+                  Link2;
                 return (
                   <Link
                     key={index}
@@ -162,9 +204,40 @@ export default function Footer() {
                     <IconComponent className="w-5 h-5" />
                   </Link>
                 );
-              })}
-            </div>
-          )}
+              })
+            ) : (
+              // Placeholder social media icons if none configured
+              <>
+                <Link
+                  href="#"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:scale-110 transition-transform opacity-50"
+                  aria-label="Facebook"
+                >
+                  <Facebook className="w-5 h-5" />
+                </Link>
+                <Link
+                  href="#"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:scale-110 transition-transform opacity-50"
+                  aria-label="Instagram"
+                >
+                  <Instagram className="w-5 h-5" />
+                </Link>
+                <Link
+                  href="#"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:scale-110 transition-transform opacity-50"
+                  aria-label="LinkedIn"
+                >
+                  <Linkedin className="w-5 h-5" />
+                </Link>
+              </>
+            )}
+          </div>
         </div>
 
         {/* --- Bottom Navigation --- */}
@@ -172,7 +245,7 @@ export default function Footer() {
           <ul className="flex flex-wrap justify-center items-center gap-8 text-[#666] text-[12.5px] font-medium">
             <li>
               <Link href="/" className="hover:text-[#4EB778] transition-colors">
-                Home
+                {t("nav.home")}
               </Link>
             </li>
             <li>
@@ -180,15 +253,7 @@ export default function Footer() {
                 href="/who-we-are"
                 className="hover:text-[#4EB778] transition-colors"
               >
-                Who we are
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/history"
-                className="hover:text-[#4EB778] transition-colors"
-              >
-                History
+                {t("nav.whoWeAre")}
               </Link>
             </li>
             <li>
@@ -196,15 +261,15 @@ export default function Footer() {
                 href="/programs"
                 className="hover:text-[#4EB778] transition-colors"
               >
-                Programs
+                {locale === "am" ? "አገልግሎቶች" : "Services"}
               </Link>
             </li>
             <li>
               <Link
-                href="/news"
+                href="/blog"
                 className="hover:text-[#4EB778] transition-colors"
               >
-                News
+                {t("nav.blog")}
               </Link>
             </li>
             <li>
@@ -212,15 +277,7 @@ export default function Footer() {
                 href="/gallery"
                 className="hover:text-[#4EB778] transition-colors"
               >
-                Gallery
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/volunteer"
-                className="hover:text-[#4EB778] transition-colors"
-              >
-                Volunteer
+                {t("nav.gallery")}
               </Link>
             </li>
             <li>
@@ -228,15 +285,15 @@ export default function Footer() {
                 href="/contact-us"
                 className="hover:text-[#4EB778] transition-colors"
               >
-                Contact us
+                {t("nav.contactUs")}
               </Link>
             </li>
             <li>
               <Link
-                href="/donate"
+                href="/booking"
                 className="hover:text-[#4EB778] transition-colors"
               >
-                Donate
+                {t("nav.booking")}
               </Link>
             </li>
           </ul>

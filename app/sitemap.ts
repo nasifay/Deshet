@@ -23,7 +23,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.9,
     },
     {
-      url: `${BASE_URL}/news`,
+      url: `${BASE_URL}/blog`,
       lastModified: new Date(),
       changeFrequency: "daily",
       priority: 0.8,
@@ -41,13 +41,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.6,
     },
     {
-      url: `${BASE_URL}/volunteer`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${BASE_URL}/donate`,
+      url: `${BASE_URL}/booking`,
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.8,
@@ -85,17 +79,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     const newsData = await newsResponse.json();
 
-    const newsRoutes: MetadataRoute.Sitemap =
+    const blogRoutes: MetadataRoute.Sitemap =
       newsData.success && newsData.data
         ? newsData.data.map((post: { slug: string; updatedAt: string }) => ({
-            url: `${BASE_URL}/news/${post.slug}`,
+            url: `${BASE_URL}/blog/${post.slug}`,
             lastModified: new Date(post.updatedAt),
             changeFrequency: "weekly" as const,
             priority: 0.7,
           }))
         : [];
 
-    return [...staticRoutes, ...newsRoutes];
+    return [...staticRoutes, ...blogRoutes];
   } catch (error) {
     console.error("Error generating sitemap:", error);
     // Return static routes on error

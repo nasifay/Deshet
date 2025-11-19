@@ -5,6 +5,8 @@ import Page from "~/lib/db/models/Page";
 import NewsPost from "~/lib/db/models/NewsPost";
 import Program from "~/lib/db/models/Program";
 import Gallery from "~/lib/db/models/Gallery";
+import Booking from "~/lib/db/models/Booking";
+import Product from "~/lib/db/models/Product";
 import { getSession } from "~/lib/auth/session";
 
 export async function GET() {
@@ -22,15 +24,19 @@ export async function GET() {
     // Fetch all stats in parallel
     const [
       pagesCount,
-      newsCount,
-      programsCount,
+      blogCount,
+      servicesCount,
+      bookingsCount,
+      productsCount,
       mediaCount,
       usersCount,
       totalViews,
     ] = await Promise.all([
       Page.countDocuments(),
-      NewsPost.countDocuments(),
-      Program.countDocuments(),
+      NewsPost.countDocuments(), // Using NewsPost model for blog (will be renamed later)
+      Program.countDocuments(), // Using Program model for services (will be renamed later)
+      Booking.countDocuments(),
+      Product.countDocuments(),
       Gallery.countDocuments(),
       User.countDocuments(),
       NewsPost.aggregate([
@@ -42,8 +48,10 @@ export async function GET() {
       success: true,
       stats: {
         pages: pagesCount,
-        news: newsCount,
-        programs: programsCount,
+        blog: blogCount,
+        services: servicesCount,
+        bookings: bookingsCount,
+        products: productsCount,
         media: mediaCount,
         users: usersCount,
         totalViews: totalViews[0]?.total || 0,

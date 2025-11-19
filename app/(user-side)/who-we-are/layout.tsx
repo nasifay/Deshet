@@ -1,8 +1,16 @@
 import { Metadata } from "next";
-import { PAGE_METADATA, BASE_URL } from "~/lib/seo/metadata-config";
-import { generateWebPageSchema, generateBreadcrumbSchema } from "~/lib/seo/json-ld";
+import { generatePageMetadata } from "~/lib/seo/metadata-config";
+import {
+  generateWebPageSchema,
+  generateBreadcrumbSchema,
+} from "~/lib/seo/json-ld";
+import { BASE_URL } from "~/lib/seo/metadata-config";
+import { getLocale } from "~/lib/i18n/server";
 
-export const metadata: Metadata = PAGE_METADATA["who-we-are"];
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  return generatePageMetadata("/who-we-are", locale);
+}
 
 export default function WhoWeAreLayout({
   children,
@@ -11,7 +19,8 @@ export default function WhoWeAreLayout({
 }) {
   const webPageSchema = generateWebPageSchema({
     name: "About Us | Who We Are",
-    description: "Learn about Tamra's mission, vision, core values, leadership team, and our commitment to empowering communities across Ethiopia.",
+    description:
+      "Learn about Tamra's mission, vision, core values, leadership team, and our commitment to empowering communities across Ethiopia through inclusive development programs.",
     url: `${BASE_URL}/who-we-are`,
   });
 
@@ -38,4 +47,3 @@ export default function WhoWeAreLayout({
     </>
   );
 }
-

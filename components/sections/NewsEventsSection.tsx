@@ -5,17 +5,20 @@ import Link from "next/link";
 import Image from "next/image";
 import { Card, CardContent } from "~/components/ui/Card";
 import { NewsEventsSectionSkeleton } from "~/components/sections/news-page-skeleton";
+import { useTranslation } from "~/lib/i18n/hooks";
+import { getBilingualText } from "~/lib/i18n/utils";
 
 interface NewsPost {
   _id: string;
-  title: string;
+  title: string | { en: string; am: string };
   slug: string;
-  excerpt: string;
+  excerpt: string | { en: string; am: string };
   featuredImage?: string;
   category: string;
 }
 
 export const NewsEventsSection = () => {
+  const { locale } = useTranslation();
   const [eventsData, setEventsData] = useState<NewsPost[]>([]);
   const [recentNewsData, setRecentNewsData] = useState<NewsPost[]>([]);
   const [loading, setLoading] = useState(true);
@@ -24,16 +27,29 @@ export const NewsEventsSection = () => {
     const fetchNews = async () => {
       try {
         // Fetch events (category = "Events")
-        const eventsResponse = await fetch(
-          "/api/public/news?category=Events&limit=2&sort=-publishedAt"
+        // Try blog endpoint first, fallback to news for backward compatibility
+        let eventsResponse = await fetch(
+          "/api/public/blog?category=Events&limit=2&sort=-publishedAt"
         );
-        const eventsData = await eventsResponse.json();
+        let eventsData = await eventsResponse.json();
+        if (!eventsData.success) {
+          eventsResponse = await fetch(
+            "/api/public/news?category=Events&limit=2&sort=-publishedAt"
+          );
+          eventsData = await eventsResponse.json();
+        }
 
         // Fetch recent news (all categories, limit 3)
-        const recentResponse = await fetch(
-          "/api/public/news?limit=3&sort=-publishedAt"
+        let recentResponse = await fetch(
+          "/api/public/blog?limit=3&sort=-publishedAt"
         );
-        const recentData = await recentResponse.json();
+        let recentData = await recentResponse.json();
+        if (!recentData.success) {
+          recentResponse = await fetch(
+            "/api/public/news?limit=3&sort=-publishedAt"
+          );
+          recentData = await recentResponse.json();
+        }
 
         if (eventsData.success) {
           setEventsData(eventsData.data);
@@ -70,7 +86,7 @@ export const NewsEventsSection = () => {
 
                 <div className="flex flex-col gap-2.5 w-full">
                   {eventsData.map((event) => (
-                    <Link key={event._id} href={`/news/${event.slug}`}>
+                    <Link key={event._id} href={`/blog/${event.slug}`}>
                       <Card className="border-0 shadow-none bg-transparent p-0 hover:bg-gray-50 transition-colors cursor-pointer">
                         <CardContent className="p-0 flex flex-col gap-2.5">
                           <Image
@@ -82,7 +98,7 @@ export const NewsEventsSection = () => {
                           />
                           <div className="w-full [font-family:'Roboto',Helvetica] font-normal text-sm text-justify tracking-[0.80px] leading-[17.6px]">
                             <span className="font-light text-black tracking-[0.11px]">
-                              {event.excerpt}
+                              {getBilingualText(event.excerpt as string | { en: string; am: string } | undefined, locale, "")}
                               <br />
                             </span>
                             <span className="text-[#4eb778] tracking-[0.11px] hover:underline transition-colors cursor-pointer">
@@ -105,7 +121,7 @@ export const NewsEventsSection = () => {
             {/* Featured Article Section */}
             <div className="flex flex-col w-full lg:w-[656px] h-auto lg:h-[539px] gap-[13px] translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:400ms]">
               {recentNewsData.length > 0 && (
-                <Link href={`/news/${recentNewsData[0].slug}`}>
+                <Link href={`/blog/${recentNewsData[0].slug}`}>
                   <Card className="border-0 shadow-none bg-transparent p-0 rounded-[24px] h-full hover:bg-gray-50 transition-colors cursor-pointer">
                     <CardContent className="p-0 pb-[35px] h-full flex flex-col">
                       <Image
@@ -119,13 +135,13 @@ export const NewsEventsSection = () => {
                       />
                       <div className="flex flex-col gap-[13px] px-2.5 py-0 pt-[13px]">
                         <h2 className="w-full [font-family:'Roboto',Helvetica] font-medium text-black text-xl sm:text-2xl lg:text-[32px] tracking-[0] leading-[32.3px]">
-                          {recentNewsData[0].title}
+                          {getBilingualText(recentNewsData[0].title as string | { en: string; am: string } | undefined, locale, "")}
                         </h2>
                         <div className="[font-family:'Roboto',Helvetica] font-medium text-black text-sm sm:text-base tracking-[0] leading-[16.2px]">
                           Featured Article
                         </div>
                         <p className="font-light text-black text-justify [font-family:'Roboto',Helvetica] text-sm sm:text-base tracking-[0.80px] leading-[20.2px]">
-                          {recentNewsData[0].excerpt}
+                          {getBilingualText(recentNewsData[0].excerpt as string | { en: string; am: string } | undefined, locale, "")}
                         </p>
                       </div>
                     </CardContent>
@@ -142,7 +158,7 @@ export const NewsEventsSection = () => {
 
               <div className="flex flex-col gap-0">
                 {recentNewsData.map((news) => (
-                  <Link key={news._id} href={`/news/${news.slug}`}>
+                  <Link key={news._id} href={`/blog/${news.slug}`}>
                     <Card className="border-0 shadow-none bg-transparent p-0 hover:bg-gray-50 transition-colors cursor-pointer">
                       <CardContent className="flex items-start gap-2.5 px-0 py-2.5 border-b border-[#a19e9d]">
                         <Image
@@ -153,7 +169,7 @@ export const NewsEventsSection = () => {
                           height={97}
                         />
                         <div className="w-full sm:w-[120px] lg:w-[140px] [font-family:'Roboto',Helvetica] font-medium text-black text-sm sm:text-base tracking-[0] leading-[16.2px]">
-                          {news.title}
+                          {getBilingualText(news.title as string | { en: string; am: string } | undefined, locale, "")}
                         </div>
                       </CardContent>
                     </Card>

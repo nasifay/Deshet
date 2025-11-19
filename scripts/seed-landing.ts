@@ -1,13 +1,33 @@
-import connectDB from "~/lib/db/mongodb";
-import Page from "~/lib/db/models/Page";
-import User from "~/lib/db/models/User";
+/**
+ * Seed Landing Page for Deshet Indigenous Medical Center
+ * Creates bilingual landing page content (English and Amharic)
+ */
+
+import dotenv from "dotenv";
+import { resolve } from "path";
+import mongoose from "mongoose";
+import { hashPassword } from "../lib/auth/password";
+
+// Load environment variables
+dotenv.config({ path: resolve(process.cwd(), ".env.local") });
+dotenv.config({ path: resolve(process.cwd(), ".env") });
+
+const MONGODB_URI =
+  process.env.MONGODB_URI || "mongodb://localhost:27017/tamra_sdt";
 
 async function seedLandingPage() {
   try {
-    console.log("🌱 Starting landing page seed...");
+    console.log("🌱 Starting Deshet Medical Center landing page seed...\n");
 
-    await connectDB();
-    console.log("✅ Connected to MongoDB");
+    // Connect to MongoDB
+    await mongoose.connect(MONGODB_URI, {
+      bufferCommands: false,
+    });
+    console.log("✅ Connected to MongoDB\n");
+
+    // Import models after connection
+    const User = (await import("../lib/db/models/User")).default;
+    const Page = (await import("../lib/db/models/Page")).default;
 
     // Find an admin user to set as author
     let adminUser = await User.findOne({
@@ -16,17 +36,16 @@ async function seedLandingPage() {
 
     if (!adminUser) {
       console.log("⚠️  No admin user found, creating default admin...");
-      const bcrypt = require("bcryptjs");
-      const hashedPassword = await bcrypt.hash("admin123", 10);
-
+      const hashedPassword = await hashPassword("Admin@123456");
       adminUser = await User.create({
         name: "Admin User",
-        email: "admin@tsd.org",
+        email: "admin@deshetmed.com",
         password: hashedPassword,
-        role: "admin",
+        role: "superadmin",
+        isActive: true,
       });
       console.log(
-        "✅ Created default admin user (email: admin@tsd.org, password: admin123)"
+        "✅ Created default admin user (email: admin@deshetmed.com, password: Admin@123456)\n"
       );
     }
 
@@ -38,7 +57,8 @@ async function seedLandingPage() {
       await Page.findByIdAndDelete(existingLanding._id);
     }
 
-    // Create landing page with current data
+    // Create landing page with Deshet Medical Center content
+    // Bilingual content structure
     const landingPageData = {
       title: "Landing Page",
       slug: "landing",
@@ -46,19 +66,22 @@ async function seedLandingPage() {
       author: adminUser._id,
       seo: {
         metaTitle:
-          "TSD - Serving Ethiopian Youth | Social Development Organization",
+          "Deshet Indigenous Medical Center | Premium Ethiopian Traditional Medicine",
         metaDescription:
-          "Tamra for Social Development (TSD) is an Ethiopian NGO working in youth empowerment, peacebuilding, SRH & gender equality, and climate justice since 1998.",
+          "Deshet Indigenous Medical Center delivers premium Ethiopian traditional medicine, herbal healing, spiritual therapy, and cultural healing services in Addis Ababa, Ethiopia.",
         keywords: [
-          "TSD",
+          "Deshet Medical Center",
+          "Ethiopian traditional medicine",
+          "indigenous medicine Ethiopia",
+          "herbal medicine",
+          "traditional healing",
+          "Ethiopian herbal remedies",
+          "cultural healing",
+          "spiritual healing",
+          "traditional medical consultation",
+          "herbal medicine preparation",
+          "Addis Ababa",
           "Ethiopia",
-          "youth empowerment",
-          "peacebuilding",
-          "social development",
-          "NGO",
-          "Tamra",
-          "gender equality",
-          "climate justice",
         ],
       },
       sections: [
@@ -66,25 +89,35 @@ async function seedLandingPage() {
           id: "hero-section-1",
           type: "HeroSection",
           data: {
-            title: "SERVING",
-            subtitle: "ETHIOPIAN YOUTH",
+            // English content
+            title: "DESHET",
+            subtitle: "INDIGENOUS MEDICAL CENTER",
+            description: {
+              en: "Premium Ethiopian Indigenous Medical Center delivering herbal, spiritual, and cultural healing",
+              am: "የኢትዮጵያ ባህላዊ የሕክምና ማዕከል የአመዳድብ ሕክምና፣ መንፈሳዊ እና ባህላዊ ሕክምና እንሰጣለን",
+            },
             leftImages: [
               "/landing-left.png",
-              "https://images.unsplash.com/photo-1543269865-cbf427effbad?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-              "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+              "https://images.unsplash.com/photo-1543269865-cbf427effbad?q=80&w=2070&auto=format&fit=crop",
             ],
             middleImages: [
               "/landing-middle.png",
-              "https://images.unsplash.com/photo-1573496773905-f5b17e76b254?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-              "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=2232&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+              "https://images.unsplash.com/photo-1573496773905-f5b17e76b254?q=80&w=2070&auto=format&fit=crop",
             ],
             rightImages: [
               "/landing-right.png",
-              "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-              "https://images.unsplash.com/photo-1600880292210-f7615b5978e5?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+              "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=2070&auto=format&fit=crop",
             ],
-            ctaText: "Contact Us",
-            ctaLink: "/contact-us",
+            ctaText: {
+              en: "Book Appointment",
+              am: "ቀጠሮ ይውሰዱ",
+            },
+            ctaLink: "/booking",
+            ctaSecondaryText: {
+              en: "Learn More",
+              am: "ተጨማሪ ይማሩ",
+            },
+            ctaSecondaryLink: "/who-we-are",
           },
           order: 0,
         },
@@ -92,10 +125,18 @@ async function seedLandingPage() {
           id: "about-section-1",
           type: "AboutSection",
           data: {
-            title: "ABOUT US",
-            description:
-              "Tamra for social development organization (tsd) is an Ethiopian NGO legally registered since 1998. Founded as an anti-aids club in shashemene, it now operates across Oromia, Sidama, South & Central Ethiopia, and Addis Ababa. TSD works in youth empowerment, peacebuilding, SRH & gender equality, and climate justice & livelihoods. With 25+ years of impact, we drive change through grassroots engagement, advocacy, and community-driven solutions.",
-            ctaText: "Read More",
+            title: {
+              en: "ABOUT DESHET",
+              am: "ስለ ደሸት",
+            },
+            description: {
+              en: "Deshet Indigenous Medical Center is a premium Ethiopian traditional medical facility dedicated to preserving and promoting indigenous healing practices. We combine ancient wisdom with modern understanding to provide comprehensive traditional medical services including herbal medicine preparation, traditional diagnostic techniques, detox therapy, and spiritual healing. Our experienced practitioners have deep knowledge of Ethiopian traditional medicine and are committed to delivering authentic, culturally-rooted healing experiences.",
+              am: "ደሸት ባህላዊ የሕክምና ማዕከል የኢትዮጵያ ባህላዊ ሕክምናን ማስቀጠል እና ማበረታታት የሚገዛ የሕክምና ተቋም ነው። የጥንት ጥበብን ከዘመናዊ ግንዛቤ ጋር በማዋሃድ የአመዳድብ ሕክምና አዘገጃጀት፣ ባህላዊ የመመርመር ዘዴዎች፣ የሰውነት ማጽዳት ሕክምና እና መንፈሳዊ ሕክምና ጨምሮ ሁሉንም የባህላዊ ሕክምና አገልግሎቶችን እንሰጣለን።",
+            },
+            ctaText: {
+              en: "Read More",
+              am: "ተጨማሪ ያንብቡ",
+            },
             ctaLink: "/who-we-are",
             images: [
               "/images/about/1.png",
@@ -111,41 +152,72 @@ async function seedLandingPage() {
           type: "StatisticsSection",
           data: {
             stats: [
-              { number: "58", label: "Staffs" },
-              { number: "5", label: "Offices in 4 Regions" },
-              { number: "250+", label: "Volunteers" },
-              { number: "15", label: "Protocols" },
+              {
+                number: "15+",
+                label: {
+                  en: "Years of Experience",
+                  am: "ዓመታት ልምድ",
+                },
+              },
+              {
+                number: "5000+",
+                label: {
+                  en: "Patients Served",
+                  am: "ታካሚዎች",
+                },
+              },
+              {
+                number: "50+",
+                label: {
+                  en: "Herbal Remedies",
+                  am: "የአመዳድብ መድሃኒቶች",
+                },
+              },
+              {
+                number: "10+",
+                label: {
+                  en: "Expert Practitioners",
+                  am: "ባለሙያዎች",
+                },
+              },
             ],
           },
           order: 2,
         },
         {
-          id: "program-areas-section-1",
-          type: "ProgramAreasSection",
+          id: "services-section-1",
+          type: "ServicesSection",
           data: {
-            title: "Program Areas",
-            description:
-              "Explore our key program areas focused on empowering Ethiopian youth and communities.",
+            title: {
+              en: "Our Medical Services",
+              am: "የሕክምና አገልግሎቶቻችን",
+            },
+            subtitle: {
+              en: "Comprehensive Traditional Medical Services",
+              am: "ሁሉንም የባህላዊ ሕክምና አገልግሎቶች",
+            },
+            description: {
+              en: "We offer a wide range of traditional medical services rooted in Ethiopian healing traditions.",
+              am: "የኢትዮጵያ የሕክምና ባህሎች ላይ የተመሰረቱ የባህላዊ ሕክምና አገልግሎቶችን እንሰጣለን።",
+            },
           },
           order: 3,
         },
         {
-          id: "supporters-section-1",
-          type: "SupportersSection",
+          id: "medical-partners-section-1",
+          type: "MedicalPartnersSection",
           data: {
-            title: "Our Partners",
-            supporters: [
+            title: {
+              en: "Certifications & Recognition",
+              am: "የምስክር ወረቀቶች እና እውቅና",
+            },
+            partners: [
               "/suporters/usaid.png",
               "/suporters/pepfar.png",
               "/suporters/gac.png",
               "/suporters/ipas.png",
               "/suporters/norwegian-church.png",
               "/suporters/sonke-gender-justice.png",
-              "/suporters/build-up.png",
-              "/suporters/children-rights.png",
-              "/suporters/search-for-common-ground.png",
-              "/suporters/youth-network.png",
-              "/suporters/zeleman.png",
             ],
           },
           order: 4,
@@ -154,63 +226,90 @@ async function seedLandingPage() {
           id: "achievements-section-1",
           type: "AchievementsSection",
           data: {
-            title: "Our Achievements",
+            title: {
+              en: "Our Achievements",
+              am: "የእኛ ስኬቶች",
+            },
             achievements: [
               {
-                title: "25+ Years of Impact",
-                description:
-                  "Over two decades of dedicated service to Ethiopian communities, driving sustainable change and empowerment.",
+                title: {
+                  en: "15+ Years of Excellence",
+                  am: "15+ ዓመታት የምርጥ አገልግሎት",
+                },
+                description: {
+                  en: "Over a decade and a half of dedicated service in preserving and promoting Ethiopian traditional medicine.",
+                  am: "ከአስራ አምስት ዓመታት በላይ የኢትዮጵያ ባህላዊ ሕክምናን ማስቀጠል እና ማበረታታት ውስጥ የተገዛ አገልግሎት።",
+                },
               },
               {
-                title: "Multi-Regional Presence",
-                description:
-                  "Operating across 5 offices in 4 regions of Ethiopia, reaching diverse communities with tailored programs.",
+                title: {
+                  en: "5000+ Patients Served",
+                  am: "5000+ ታካሚዎች ተጠቅመዋል",
+                },
+                description: {
+                  en: "Successfully treated thousands of patients using traditional healing methods and herbal remedies.",
+                  am: "ባህላዊ የሕክምና ዘዴዎች እና የአመዳድብ መድሃኒቶችን በመጠቀም በሺዎች የሚቆጠሩ ታካሚዎችን በተሳካ ሁኔታ ሕክምና ሰጥተናል።",
+                },
               },
               {
-                title: "Youth-Centered Approach",
-                description:
-                  "Empowering thousands of young people through education, skills training, and leadership development.",
+                title: {
+                  en: "Expert Practitioners",
+                  am: "ባለሙያ ሐኪሞች",
+                },
+                description: {
+                  en: "Our team consists of highly experienced traditional medicine practitioners with deep knowledge of Ethiopian healing traditions.",
+                  am: "የእኛ ቡድን የኢትዮጵያ የሕክምና ባህሎች ጥልቅ እውቀት ያላቸው በጣም ተሞክሮ ያላቸው የባህላዊ ሕክምና ሐኪሞችን ያቀፈ ነው።",
+                },
               },
               {
-                title: "Community-Driven Solutions",
-                description:
-                  "Working hand-in-hand with local communities to create lasting positive change through grassroots engagement.",
+                title: {
+                  en: "Authentic Herbal Remedies",
+                  am: "እውነተኛ የአመዳድብ መድሃኒቶች",
+                },
+                description: {
+                  en: "We prepare traditional herbal medicines using authentic Ethiopian plants and traditional preparation methods.",
+                  am: "እውነተኛ የኢትዮጵያ አትክንሶችን እና ባህላዊ የአዘገጃጀት ዘዴዎችን በመጠቀም ባህላዊ የአመዳድብ መድሃኒቶችን እናዘጋጃለን።",
+                },
               },
               {
-                title: "Strong Partnerships",
-                description:
-                  "Collaborating with international organizations and local stakeholders to maximize impact and reach.",
+                title: {
+                  en: "Cultural Preservation",
+                  am: "ባህላዊ ጥበብ ማስቀጠል",
+                },
+                description: {
+                  en: "Committed to preserving and promoting Ethiopian traditional healing knowledge for future generations.",
+                  am: "የኢትዮጵያ ባህላዊ የሕክምና እውቀትን ለወደፊት ትውልዶች ማስቀጠል እና ማበረታታት ውስጥ ተገዝተናል።",
+                },
               },
               {
-                title: "Holistic Development",
-                description:
-                  "Addressing multiple dimensions of development including health, education, livelihoods, and climate justice.",
+                title: {
+                  en: "Holistic Healing Approach",
+                  am: "ሁሉንም የሚያካትት የሕክምና አቀራረብ",
+                },
+                description: {
+                  en: "We provide comprehensive healing that addresses physical, spiritual, and emotional well-being through traditional methods.",
+                  am: "ባህላዊ ዘዴዎችን በመጠቀም አካላዊ፣ መንፈሳዊ እና ስሜታዊ ደህንነትን የሚያካትት ሁሉንም የሚያካትት ሕክምና እንሰጣለን።",
+                },
               },
             ],
           },
           order: 5,
         },
         {
-          id: "news-events-section-1",
+          id: "blog-section-1",
           type: "NewsEventsSection",
           data: {
-            title: "Latest News & Events",
+            title: {
+              en: "Latest News & Updates",
+              am: "የቅርብ ጊዜ ዜና እና ማሻሻያዎች",
+            },
+            subtitle: {
+              en: "Stay informed about traditional medicine",
+              am: "ስለ ባህላዊ ሕክምና ይታወቁ",
+            },
             showLimit: 3,
           },
           order: 6,
-        },
-        {
-          id: "volunteer-banner-1",
-          type: "VolunteerBanner",
-          data: {
-            title: "Join Our Mission",
-            description:
-              "Become a volunteer and make a difference in your community. Together, we can create lasting change and empower Ethiopian youth.",
-            ctaText: "Volunteer Now",
-            ctaLink: "/volunteer",
-            backgroundImage: "/images/cta.jpg",
-          },
-          order: 7,
         },
       ],
       content: "",
@@ -223,13 +322,18 @@ async function seedLandingPage() {
     console.log(`🔗 Slug: ${landingPage.slug}`);
     console.log(`📊 Sections: ${landingPage.sections?.length || 0}`);
     console.log(`👤 Author: ${adminUser.name} (${adminUser.email})`);
+    console.log(`🌍 Languages: English & Amharic (አማርኛ)`);
 
     console.log("\n✨ Seed completed successfully!");
     console.log("\n📝 You can now edit the landing page at: /admin/landing");
+    console.log("🌐 View the landing page at: http://localhost:3000\n");
 
+    await mongoose.disconnect();
+    console.log("🔌 Disconnected from MongoDB");
     process.exit(0);
   } catch (error) {
     console.error("❌ Error seeding landing page:", error);
+    await mongoose.disconnect();
     process.exit(1);
   }
 }

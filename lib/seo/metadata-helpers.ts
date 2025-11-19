@@ -1,5 +1,14 @@
 import { Metadata } from "next";
 import { BASE_URL, ORGANIZATION, DEFAULT_OG_IMAGE } from "./metadata-config";
+import type { Locale } from "~/lib/i18n/config";
+import { locales } from "~/lib/i18n/config";
+
+/**
+ * Get locale code for OpenGraph (e.g., "en_US", "am_ET")
+ */
+function getOpenGraphLocale(locale: Locale): string {
+  return locale === "am" ? "am_ET" : "en_US";
+}
 
 /**
  * Generate metadata for dynamic news detail pages
@@ -14,6 +23,7 @@ export function generateNewsMetadata({
   tags,
   publishedAt,
   author,
+  locale = "en",
 }: {
   title: string;
   excerpt?: string;
@@ -24,28 +34,30 @@ export function generateNewsMetadata({
   tags?: string[];
   publishedAt?: string;
   author?: { name: string };
+  locale?: Locale;
 }): Metadata {
-  const pageUrl = `${BASE_URL}/news/${slug}`;
+  const pageUrl = `${BASE_URL}/blog/${slug}`;
   const ogImage = featuredImage || DEFAULT_OG_IMAGE;
+  const ogLocale = getOpenGraphLocale(locale);
 
   // Extract first 155 characters from content if excerpt is not available
   const description =
     excerpt ||
     (content
       ? content.replace(/<[^>]*>/g, "").substring(0, 155) + "..."
-      : "Read the latest news and updates from Tamra for Social Development.");
+      : "Read the latest articles and updates from Deshet Indigenous Medical Center.");
 
   // Create optimized title (under 60 chars)
   const shortTitle = title.length > 50 ? title.substring(0, 50) + "..." : title;
-  const metaTitle = `${shortTitle} | TSD News`;
+  const metaTitle = `${shortTitle} | Deshet Blog`;
 
   return {
     title: metaTitle,
     description,
     keywords: [
       ...(tags || []),
-      "Tamra news",
-      "NGO news Ethiopia",
+      "Deshet blog",
+      "medical center blog Ethiopia",
       category || "news",
       "community updates",
       "social development news",
@@ -64,7 +76,8 @@ export function generateNewsMetadata({
           alt: title,
         },
       ],
-      locale: "en_US",
+      locale: ogLocale,
+      alternateLocale: locales.filter((l) => l !== locale).map(getOpenGraphLocale),
       type: "article",
       publishedTime: publishedAt,
       authors: author ? [author.name] : undefined,
@@ -75,10 +88,14 @@ export function generateNewsMetadata({
       title,
       description,
       images: [ogImage],
-      creator: "@tamra_sdt",
+      creator: "@deshetmed",
     },
     alternates: {
       canonical: pageUrl,
+      languages: {
+        en: pageUrl,
+        am: pageUrl,
+      },
     },
   };
 }
@@ -91,17 +108,20 @@ export function generateProgramMetadata({
   description,
   image,
   category,
+  locale = "en",
 }: {
   title: string;
   description: string;
   image?: string;
   category?: string;
+  locale?: Locale;
 }): Metadata {
   const ogImage = image || DEFAULT_OG_IMAGE;
+  const ogLocale = getOpenGraphLocale(locale);
 
   // Create optimized title
   const shortTitle = title.length > 45 ? title.substring(0, 45) + "..." : title;
-  const metaTitle = `${shortTitle} | TSD Programs`;
+  const metaTitle = `${shortTitle} | Deshet Programs`;
 
   // Truncate description to 155 chars
   const metaDescription =
@@ -115,10 +135,10 @@ export function generateProgramMetadata({
     keywords: [
       title,
       category || "programs",
-      "youth empowerment",
-      "community development",
+      "traditional medicine",
+      "indigenous healthcare",
       "Ethiopia programs",
-      "NGO programs",
+      "medical services",
     ],
     openGraph: {
       title,
@@ -132,7 +152,8 @@ export function generateProgramMetadata({
           alt: title,
         },
       ],
-      locale: "en_US",
+      locale: ogLocale,
+      alternateLocale: locales.filter((l) => l !== locale).map(getOpenGraphLocale),
       type: "website",
     },
     twitter: {
@@ -140,6 +161,12 @@ export function generateProgramMetadata({
       title,
       description: metaDescription,
       images: [ogImage],
+    },
+    alternates: {
+      languages: {
+        en: BASE_URL,
+        am: BASE_URL,
+      },
     },
   };
 }

@@ -2,10 +2,10 @@ import mongoose, { Schema, Document, Model } from 'mongoose';
 
 export interface ITestimonial extends Document {
   _id: mongoose.Types.ObjectId;
-  quote: string;
+  quote: string | { en: string; am: string };
   name: string;
-  title: string;
-  organization?: string;
+  title: string | { en: string; am: string };
+  organization?: string | { en: string; am: string };
   image?: string;
   featured: boolean;
   order: number;
@@ -17,9 +17,8 @@ export interface ITestimonial extends Document {
 const TestimonialSchema: Schema<ITestimonial> = new Schema(
   {
     quote: {
-      type: String,
+      type: Schema.Types.Mixed, // Supports both string and {en, am} object
       required: [true, 'Quote is required'],
-      trim: true,
     },
     name: {
       type: String,
@@ -27,13 +26,11 @@ const TestimonialSchema: Schema<ITestimonial> = new Schema(
       trim: true,
     },
     title: {
-      type: String,
+      type: Schema.Types.Mixed, // Supports both string and {en, am} object
       required: [true, 'Title/Position is required'],
-      trim: true,
     },
     organization: {
-      type: String,
-      trim: true,
+      type: Schema.Types.Mixed, // Supports both string and {en, am} object
       default: '',
     },
     image: {

@@ -19,7 +19,7 @@ export interface LeadershipMember {
   email?: string;
   phone?: string;
   order?: number;
-  type?: "leadership" | "team_member";
+  type?: "board_member" | "leadership" | "team_member";
 }
 
 interface LeadershipSectionProps {

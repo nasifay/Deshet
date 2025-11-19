@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import { useTranslation } from "~/lib/i18n/hooks";
 
 interface VisionMissionProps {
   visionText?: string;
@@ -9,11 +10,23 @@ interface VisionMissionProps {
 }
 
 export default function VisionMission({
-  visionText = '"TSD Envisioned A Developed Ethiopia With Empowered Youth And Women".',
-  missionText = "TSD Strives To Realize The Human Right Of Youth And Women Through Evidence-Based Advocacy And Empowerment Works.",
-  visionImage = "/images/Mask group.png",
-  missionImage = "/images/Mask group (1).png",
+  visionText,
+  missionText,
+  visionImage = "https://images.unsplash.com/photo-1505576391880-b3f9d713dc4f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
+  missionImage = "https://images.unsplash.com/photo-1559757175-0eb30cd8c063?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
 }: VisionMissionProps) {
+  const { locale } = useTranslation();
+  
+  const defaultVision = locale === "am" 
+    ? "በኢትዮጵያ ውስጥ በተፈጥሯዊ እና ባህላዊ ሕክምና መስክ የተለየ ቅንነት ያለው የመጀመሪያ ማዕከል መሆን።"
+    : "To be Ethiopia's leading center for natural and traditional healthcare, recognized for professionalism, authenticity, and exceptional healing outcomes.";
+    
+  const defaultMission = locale === "am"
+    ? "የህብረተሰቡን ጤናና ደህንነት በተፈጥሯዊ ዘዴ፣ በባህላዊ ፍላጎት እና በሙያዊ ስራ ማሻሻል።"
+    : "To enhance the well-being of our community through natural medicine, expert care, and ancestral wisdom blended with modern standards.";
+
+  const finalVisionText = visionText || defaultVision;
+  const finalMissionText = missionText || defaultMission;
   return (
     <section className="relative w-full mx-auto py-12 md:py-16 px-4 sm:px-6 md:max-w-3xl overflow-hidden flex justify-center items-center">
       {/* Reduced vertical padding on mobile for compact layout */}
@@ -41,13 +54,13 @@ export default function VisionMission({
           </div>
 
           <div className="flex-1 mt-0">
-            <h3 className="text-[#FF7A00] text-[24px] sm:text-[28px] md:text-[32px] font-extrabold uppercase tracking-wide leading-tight mb-2">
+            <h3 className="text-primary-green text-[24px] sm:text-[28px] md:text-[32px] font-extrabold uppercase tracking-wide leading-tight mb-2">
               {/* Scaled heading text size responsively for readability on smaller screens */}
               VISION
             </h3>
-            <p className="text-black description">
+            <p className={`text-black description ${locale === "am" ? "font-amharic" : ""}`}>
               {/* Scaled paragraph text size for mobile readability */}
-              {visionText}
+              {finalVisionText}
             </p>
           </div>
         </div>
@@ -65,10 +78,12 @@ export default function VisionMission({
           </div>
 
           <div className="flex-1 mt-0">
-            <h3 className="text-[#FF7A00] text-[24px] sm:text-[28px] md:text-[32px] font-extrabold uppercase tracking-wide leading-tight mb-2">
+            <h3 className="text-primary-green text-[24px] sm:text-[28px] md:text-[32px] font-extrabold uppercase tracking-wide leading-tight mb-2">
               MISSION
             </h3>
-            <p className="text-black description">{missionText}</p>
+            <p className={`text-black description ${locale === "am" ? "font-amharic" : ""}`}>
+              {finalMissionText}
+            </p>
           </div>
         </div>
       </div>

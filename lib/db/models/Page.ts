@@ -3,10 +3,10 @@ import User from "./User"; // Import User model to register it for population
 
 export interface IPage extends Document {
   _id: mongoose.Types.ObjectId;
-  title: string;
+  title: string | { en: string; am: string };
   slug: string;
-  content: string;
-  excerpt?: string;
+  content: string | { en: string; am: string };
+  excerpt?: string | { en: string; am: string };
   featuredImage?: string;
   status: "draft" | "published" | "archived";
   author: mongoose.Types.ObjectId;
@@ -28,9 +28,8 @@ export interface IPage extends Document {
 const PageSchema: Schema<IPage> = new Schema(
   {
     title: {
-      type: String,
+      type: Schema.Types.Mixed, // Supports both string and {en, am} object
       required: [true, "Title is required"],
-      trim: true,
     },
     slug: {
       type: String,
@@ -40,12 +39,11 @@ const PageSchema: Schema<IPage> = new Schema(
       trim: true,
     },
     content: {
-      type: String,
+      type: Schema.Types.Mixed, // Supports both string and {en, am} object
       default: "",
     },
     excerpt: {
-      type: String,
-      trim: true,
+      type: Schema.Types.Mixed, // Supports both string and {en, am} object
     },
     featuredImage: {
       type: String,

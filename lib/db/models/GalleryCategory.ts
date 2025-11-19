@@ -2,9 +2,9 @@ import mongoose, { Schema, Document, Model } from 'mongoose';
 
 export interface IGalleryCategory extends Document {
   _id: mongoose.Types.ObjectId;
-  name: string;
+  name: string | { en: string; am: string };
   slug: string;
-  description?: string;
+  description?: string | { en: string; am: string };
   color?: string; // Hex color for category display (e.g., #128341)
   icon?: string; // Icon name or emoji
   order: number;
@@ -20,10 +20,10 @@ export interface IGalleryCategory extends Document {
 const GalleryCategorySchema: Schema<IGalleryCategory> = new Schema(
   {
     name: {
-      type: String,
+      type: Schema.Types.Mixed, // Supports both string and {en, am} object
       required: [true, 'Category name is required'],
-      unique: true,
-      trim: true,
+      // Note: unique constraint removed since Mixed type doesn't support it well
+      // Slug is used as the unique identifier instead
     },
     slug: {
       type: String,
@@ -33,8 +33,7 @@ const GalleryCategorySchema: Schema<IGalleryCategory> = new Schema(
       trim: true,
     },
     description: {
-      type: String,
-      trim: true,
+      type: Schema.Types.Mixed, // Supports both string and {en, am} object
     },
     color: {
       type: String,
@@ -81,7 +80,7 @@ const GalleryCategorySchema: Schema<IGalleryCategory> = new Schema(
 );
 
 // Indexes
-GalleryCategorySchema.index({ slug: 1 });
+// Note: slug index is automatically created by unique: true on line 31
 GalleryCategorySchema.index({ order: 1 });
 GalleryCategorySchema.index({ isActive: 1 });
 

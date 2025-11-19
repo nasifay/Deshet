@@ -36,7 +36,7 @@ export interface ISiteSettings extends Document {
     order: number;
     email?: string;
     phone?: string;
-    type: "leadership" | "team_member"; // Categorize members
+    type: "board_member" | "leadership" | "team_member"; // Categorize members: Board Members, Leaders, Team Members
   }>;
   // Target Groups
   targetGroups: Array<{
@@ -85,6 +85,12 @@ export interface ISiteSettings extends Document {
       name: string;
     }>;
   };
+  // Contact map/location settings
+  contactLocation?: {
+    latitude: number;
+    longitude: number;
+    zoom?: number;
+  };
   updatedAt: Date;
   createdAt: Date;
 }
@@ -126,7 +132,7 @@ const SiteSettingsSchema: Schema<ISiteSettings> = new Schema(
         phone: { type: String, default: "" },
         type: {
           type: String,
-          enum: ["leadership", "team_member"],
+          enum: ["board_member", "leadership", "team_member"],
           default: "leadership",
         },
       },
@@ -192,6 +198,11 @@ const SiteSettingsSchema: Schema<ISiteSettings> = new Schema(
           name: String,
         },
       ],
+    },
+    contactLocation: {
+      latitude: { type: Number, default: 9.0192 },
+      longitude: { type: Number, default: 38.7578 },
+      zoom: { type: Number, default: 13 },
     },
   },
   {

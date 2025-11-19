@@ -1,0 +1,91 @@
+"use client";
+
+import { useTranslation } from "~/lib/i18n/hooks";
+import { getBilingualText } from "~/lib/i18n/utils";
+import { Card, CardContent } from "~/components/ui/Card";
+
+interface Principle {
+  title?: string | { en: string; am: string };
+  description?: string | { en: string; am: string };
+  icon?: string;
+}
+
+interface OurPhilosophySectionProps {
+  title?: string | { en: string; am: string };
+  principles?: Principle[];
+}
+
+export function OurPhilosophySection({
+  title,
+  principles = [],
+}: OurPhilosophySectionProps) {
+  const { locale } = useTranslation();
+
+  const titleText = getBilingualText(
+    title,
+    locale,
+    locale === "am" ? "የስነ-ልቦናችን መሠረት" : "Our Philosophy"
+  );
+
+  return (
+    <section className="relative w-full flex justify-center py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8 lg:px-16">
+      <Card className="w-full bg-white rounded-2xl sm:rounded-3xl md:rounded-[40px] lg:rounded-[46px] shadow-[0px_2px_13px_#0000000d] sm:shadow-[0px_4px_26.5px_#0000000d] border-0">
+        <CardContent className="flex flex-col items-center justify-center gap-6 sm:gap-8 md:gap-10 lg:gap-12 px-4 sm:px-6 md:px-8 lg:px-12 py-6 sm:py-8 md:py-10 lg:py-12">
+          <h2
+            className={`w-full primary-title text-primary-green text-center ${
+              locale === "am" ? "font-amharic" : ""
+            }`}
+          >
+            {titleText}
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 w-full">
+            {principles.map((principle, index) => {
+              const principleTitle = getBilingualText(
+                principle.title,
+                locale,
+                ""
+              );
+              const principleDesc = getBilingualText(
+                principle.description,
+                locale,
+                ""
+              );
+
+              return (
+                <div
+                  key={index}
+                  className={`flex flex-col items-center justify-between p-4 sm:p-6 md:p-8 bg-cover bg-center rounded-2xl min-h-[30vh] sm:min-h-[35vh] md:min-h-[40vh] cursor-pointer transition-all duration-300 hover:border-4 hover:border-[#FF9700] hover:border-opacity-50 ${
+                    index % 2 === 0 ? "bg-[#B1EFCA]" : "bg-white"
+                  }`}
+                >
+                  <div className="flex flex-col items-center justify-center flex-1">
+                    <div className="text-4xl sm:text-5xl md:text-6xl mb-4">
+                      {principle.icon || "🌿"}
+                    </div>
+                    <h3
+                      className={`[font-family:'Roboto',Helvetica] font-black text-[#4f4f4f] text-sm sm:text-base md:text-lg lg:text-xl 2xl:text-2xl text-center tracking-[0] leading-tight mb-2 sm:mb-3 md:mb-4 ${
+                        locale === "am" ? "font-amharic" : ""
+                      }`}
+                    >
+                      {principleTitle}
+                    </h3>
+                    <div className="flex flex-col items-center gap-2 sm:gap-4 w-full px-2">
+                      <p
+                        className={`[font-family:'Roboto',Helvetica] font-normal text-[#4f4f4f] text-xs sm:text-sm md:text-base lg:text-lg text-center tracking-[0] leading-relaxed ${
+                          locale === "am" ? "font-amharic" : ""
+                        }`}
+                      >
+                        {principleDesc}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </CardContent>
+      </Card>
+    </section>
+  );
+}
+

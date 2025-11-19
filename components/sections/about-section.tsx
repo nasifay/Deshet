@@ -4,6 +4,8 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { AboutSkeleton } from "./landing-page-skeleton";
+import { useTranslation } from "~/lib/i18n/hooks";
+import { getBilingualText } from "~/lib/i18n/utils";
 
 interface AboutSectionProps {
   title?: string;
@@ -14,18 +16,19 @@ interface AboutSectionProps {
 }
 
 export default function AboutSection() {
+  const { t, locale } = useTranslation();
+  
   // State for data
   const [aboutData, setAboutData] = useState<AboutSectionProps>({
-    title: "ABOUT US",
-    content:
-      "Tamra for social development organization (tsd) is an Ethiopian NGO legally registered since 1998. Founded as an anti-aids club in shashemene, it now operates across Oromia, Sidama, South & Central Ethiopia, and Addis Ababa. TSD works in youth empowerment, peacebuilding, SRH & gender equality, and climate justice & livelihoods. With 25+ years of impact, we drive change through grassroots engagement, advocacy, and community-driven solutions.",
+    title: "",
+    content: "",
     images: [
       "/images/about/1.png",
       "/images/about/2.png",
       "/images/about/3.png",
       "/images/about/4.png",
     ],
-    ctaText: "Read More",
+    ctaText: "",
     ctaLink: "/who-we-are",
   });
   const [loading, setLoading] = useState(true);
@@ -43,27 +46,54 @@ export default function AboutSection() {
             (s: any) => s.type === "AboutSection"
           );
           if (section?.data) {
-            setAboutData({
-              title: section.data.title || "ABOUT US",
-              content:
-                section.data.description ||
-                section.data.content ||
-                aboutData.content,
-              images: section.data.images || aboutData.images,
-              ctaText: section.data.ctaText || "Read More",
+            setAboutData((prev) => ({
+              title: getBilingualText(section.data.title, locale, t("home.about.title")),
+              content: getBilingualText(
+                section.data.description || section.data.content,
+                locale,
+                t("home.about.description")
+              ),
+              images: section.data.images || prev.images,
+              ctaText: getBilingualText(section.data.ctaText, locale, t("common.readMore")),
               ctaLink: section.data.ctaLink || "/who-we-are",
-            });
+            }));
+          } else {
+            // Set default values from translations if no API data
+            setAboutData((prev) => ({
+              title: t("home.about.title"),
+              content: t("home.about.description"),
+              images: prev.images,
+              ctaText: t("common.readMore"),
+              ctaLink: "/who-we-are",
+            }));
           }
+        } else {
+          // Set default values from translations if API call fails
+          setAboutData((prev) => ({
+            title: t("home.about.title"),
+            content: t("home.about.description"),
+            images: prev.images,
+            ctaText: t("common.readMore"),
+            ctaLink: "/who-we-are",
+          }));
         }
       } catch (error) {
         console.error("Error fetching about data:", error);
+        // Set default values from translations on error
+        setAboutData((prev) => ({
+          title: t("home.about.title"),
+          content: t("home.about.description"),
+          images: prev.images,
+          ctaText: t("common.readMore"),
+          ctaLink: "/who-we-are",
+        }));
       } finally {
         setLoading(false);
       }
     };
 
     fetchData();
-  }, []);
+  }, [locale, t]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -77,24 +107,24 @@ export default function AboutSection() {
   }
 
   return (
-    <section className="relative w-full bg-white py-20 px-6 md:px-12 lg:px-24 font-['Roboto']">
+    <section className="relative w-full bg-white bg-nature-texture py-20 px-6 md:px-12 lg:px-24 font-['Roboto']">
       <div className="w-full flex flex-col lg:flex-row items-center justify-center gap-12 xl:gap-[118px]">
         {/* Left Column */}
         <div className="w-full lg:flex-1 lg:max-w-[50%]">
           <h2 className="primary-title text-primary-green uppercase mb-6 ">
-            {aboutData.title}
+            {aboutData.title || t("home.about.title")}
           </h2>
 
           <div
             className="description   mb-8 max-w-[620px] text-justify tracking-normal leading-4 md:leading-7"
-            dangerouslySetInnerHTML={{ __html: aboutData.content || "" }}
+            dangerouslySetInnerHTML={{ __html: aboutData.content || t("home.about.description") }}
           />
 
           <Link
             href={aboutData.ctaLink || "/who-we-are"}
             className="inline-block bg-primary-green text-white text-sm md:text-lg lg:text-2xl font-medium px-10 2xl:px-14 py-2 2xl:py-4 rounded-full  transition-all duration-300"
           >
-            {aboutData.ctaText}
+            {aboutData.ctaText || t("common.readMore")}
           </Link>
         </div>
 

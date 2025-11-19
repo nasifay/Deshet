@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
-import { Mail, Phone } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { Mail, Phone, Clock, MapPin } from "lucide-react";
 import { Card, CardContent } from "~/components/ui/Card";
+import { useTranslation } from "~/lib/i18n/hooks";
 
 interface FormData {
   name: string;
@@ -61,6 +62,7 @@ const countryCodes = [
 ];
 
 export default function ContactUs() {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
@@ -73,6 +75,42 @@ export default function ContactUs() {
     type: "success" | "error" | null;
     message: string;
   }>({ type: null, message: "" });
+
+  const [mapConfig, setMapConfig] = useState<{
+    latitude: number;
+    longitude: number;
+    zoom: number;
+  } | null>(null);
+  const [mapSrc, setMapSrc] = useState<string>(
+    "https://www.google.com/maps?q=9.0192,38.7578&z=13&output=embed"
+  );
+
+  useEffect(() => {
+    let isMounted = true;
+    const loadConfig = async () => {
+      try {
+        const res = await fetch("/api/public/contact/config", {
+          cache: "no-store",
+        });
+        const data = await res.json();
+        if (data?.success && data?.data && isMounted) {
+          const { latitude, longitude, zoom } = data.data;
+          setMapConfig({ latitude, longitude, zoom });
+          setMapSrc(
+            `https://www.google.com/maps?q=${latitude},${longitude}&z=${
+              zoom || 13
+            }&output=embed`
+          );
+        }
+      } catch (e) {
+        // silently fall back to default
+      }
+    };
+    loadConfig();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const handleInputChange = (
     e: React.ChangeEvent<
@@ -111,8 +149,7 @@ export default function ContactUs() {
       if (data.success) {
         setSubmitStatus({
           type: "success",
-          message:
-            "Thank you! Your message has been sent successfully. We'll get back to you soon.",
+          message: t("contact.form.success"),
         });
         setFormData({
           name: "",
@@ -124,14 +161,14 @@ export default function ContactUs() {
       } else {
         setSubmitStatus({
           type: "error",
-          message: data.error || "Something went wrong. Please try again.",
+          message: data.error || t("contact.form.error"),
         });
       }
     } catch (error) {
       console.error("Form submission error:", error);
       setSubmitStatus({
         type: "error",
-        message: "Something went wrong. Please try again.",
+        message: t("contact.form.error"),
       });
     } finally {
       setIsSubmitting(false);
@@ -143,10 +180,10 @@ export default function ContactUs() {
       {/* Page Title */}
       <div className="mb-6 md:mb-20">
         <h1 className="text-4xl md:text-[55px] font-black text-[#388E3C] tracking-tight text-center">
-          CONTACT US
+          {t("contact.title").toUpperCase()}
         </h1>
         <p className="mx-2 md:mx-6 mt-2 w-full rounded-3xl py-2  text-center text-base md:text-lg font-medium text-gray-600 leading-relaxed tracking-wide md:shadow-sm">
-          Get in touch and be part of our journey of transformation.
+          {t("contact.subtitle")}
         </p>
       </div>
 
@@ -162,25 +199,62 @@ export default function ContactUs() {
               <div className="flex flex-col gap-6 max-w-md">
                 <div>
                   <h4 className="font-roboto pt-4 font-light text-xl sm:text-2xl md:text-4xl leading-[1.01] tracking-[0px] capitalize text-[#333333] mb-2 md:mb-4">
-                    <span className="font-black">Let&apos;s Explore</span> how
-                    we can work together for a better future
+                    <span className="font-black">{t("contact.letsExplore")}</span> {t("contact.workTogether")}
                   </h4>
                   <p className="text-black font-roboto font-light text-sm md:text-base lg:text-2xl leading-[1.01] tracking-[0px] capitalize">
-                    Together, we can turn challenges into opportunities,
-                    let&apos;s talk.
+                    {t("contact.together")}
                   </p>
                 </div>
 
                 <div className="flex flex-col text-primary-green gap-4 mt-2 font-roboto font-normal text-lg md:text-[24px] leading-[1.01] tracking-[0px] capitalize">
                   <div className="flex items-center gap-3">
                     <Phone className="w-6 h-6" />
-                    <span>+251 911 121314</span>
+                    <span>+251 XXX XXX XXX</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Mail className="w-6 h-6" />
-                    <span>hello@tsd.com</span>
+                    <span>info@deshetmed.com</span>
                   </div>
                 </div>
+
+                 {/* Working Hours Section */}
+                 <div className="flex flex-col gap-3 mt-4">
+                   <div className="flex items-center gap-2">
+                     <Clock className="w-5 h-5 text-primary-green" />
+                     <h5 className="font-roboto font-semibold text-lg md:text-xl text-[#333333]">
+                       {t("contact.info.workingHours")}
+                     </h5>
+                   </div>
+                   <div className="flex flex-col gap-2 text-[#666666] font-roboto font-normal text-sm md:text-base ml-7">
+                     <div className="flex justify-between">
+                       <span>{t("contact.info.mondayFriday")}</span>
+                       <span>8:00 AM - 6:00 PM</span>
+                     </div>
+                     <div className="flex justify-between">
+                       <span>{t("contact.info.saturday")}</span>
+                       <span>9:00 AM - 4:00 PM</span>
+                     </div>
+                     <div className="flex justify-between">
+                       <span>{t("contact.info.sunday")}</span>
+                       <span>{t("contact.info.closed")}</span>
+                     </div>
+                   </div>
+                 </div>
+
+                 {/* Address Section */}
+                 <div className="flex flex-col gap-2 mt-4">
+                   <div className="flex items-center gap-2">
+                     <MapPin className="w-5 h-5 text-primary-green" />
+                     <h5 className="font-roboto font-semibold text-lg md:text-xl text-[#333333]">
+                       {t("contact.info.address")}
+                     </h5>
+                   </div>
+                   <p className="text-[#666666] font-roboto font-normal text-sm md:text-base leading-relaxed ml-7">
+                     {t("contact.info.addressDetails")}
+                     <br />
+                     {t("contact.info.addressNote")}
+                   </p>
+                 </div>
               </div>{" "}
             </div>
 
@@ -195,12 +269,12 @@ export default function ContactUs() {
                         htmlFor="name"
                         className="block text-[#333333] text-base font-normal"
                       >
-                        Name
+                        {t("contact.form.name")}
                       </label>
                       <input
                         id="name"
                         type="text"
-                        placeholder="enter here"
+                        placeholder={t("contact.form.enterHere")}
                         value={formData.name}
                         onChange={handleInputChange}
                         required
@@ -215,12 +289,12 @@ export default function ContactUs() {
                         htmlFor="email"
                         className="block text-[#333333] text-base font-normal "
                       >
-                        Email
+                        {t("contact.form.email")}
                       </label>
                       <input
                         id="email"
                         type="email"
-                        placeholder="enter here"
+                        placeholder={t("contact.form.enterHere")}
                         value={formData.email}
                         onChange={handleInputChange}
                         required
@@ -232,7 +306,7 @@ export default function ContactUs() {
                     {/* Phone */}
                     <div className="flex flex-col gap-1">
                       <label className="block text-[#333333] text-base font-normal">
-                        Phone number
+                        {t("contact.form.phone")}
                       </label>
                       <div className="flex gap-2">
                         <select
@@ -243,7 +317,7 @@ export default function ContactUs() {
                           disabled={isSubmitting}
                           className="w-[110px] h-11 bg-white rounded-xl border-none px-2 text-[#333333] text-sm focus:outline-none focus:ring-1 focus:ring-[#4EB778] disabled:opacity-[0.6]"
                         >
-                          <option value="">Code</option>
+                          <option value="">{t("contact.form.phoneCode")}</option>
                           {countryCodes.map((country, index) => (
                             <option
                               key={`${country.code}-${country.country}-${index}`}
@@ -256,7 +330,7 @@ export default function ContactUs() {
                         <input
                           id="phone"
                           type="tel"
-                          placeholder="enter here"
+                          placeholder={t("contact.form.enterHere")}
                           value={formData.phone}
                           onChange={handleInputChange}
                           required
@@ -272,12 +346,12 @@ export default function ContactUs() {
                         htmlFor="message"
                         className="block text-[#333333] text-base font-normal"
                       >
-                        Message
+                        {t("contact.form.message")}
                       </label>
                       <textarea
                         id="message"
                         rows={4}
-                        placeholder="Type your message"
+                        placeholder={t("contact.form.typeMessage")}
                         value={formData.message}
                         onChange={handleInputChange}
                         required
@@ -305,7 +379,7 @@ export default function ContactUs() {
                       disabled={isSubmitting}
                       className="w-[110px] h-10 bg-[#4EB778] text-white font-normal text-base rounded-lg hover:bg-[#3fa76a] transition-all duration-200 mt-2 disabled:opacity-[0.6] disabled:cursor-not-allowed"
                     >
-                      {isSubmitting ? "Sending..." : "Submit"}
+                      {isSubmitting ? t("contact.form.sending") : t("contact.form.submit")}
                     </button>
                   </form>
                 </CardContent>
@@ -319,14 +393,14 @@ export default function ContactUs() {
           <div className="lg:p-4">
             <div className="w-full h-64 md:h-96 rounded-xl overflow-hidden">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3940.5!2d38.7578!3d9.0192!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x164b85c1a4e69197%3A0x8c5b5b5b5b5b5b5b!2sAddis%20Ababa%2C%20Ethiopia!5e0!3m2!1sen!2set!4v1234567890123!5m2!1sen!2set"
+                src={mapSrc}
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                title="Location Map - Addis Ababa, Ethiopia"
+                title="Location Map"
               />
             </div>
           </div>

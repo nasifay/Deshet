@@ -3,10 +3,10 @@ import User from './User'; // Ensure User model is registered for population
 
 export interface INewsPost extends Document {
   _id: mongoose.Types.ObjectId;
-  title: string;
+  title: string | { en: string; am: string };
   slug: string;
-  content: string;
-  excerpt: string;
+  content: string | { en: string; am: string };
+  excerpt: string | { en: string; am: string };
   featuredImage?: string;
   category: string;
   tags: string[];
@@ -22,9 +22,8 @@ export interface INewsPost extends Document {
 const NewsPostSchema: Schema<INewsPost> = new Schema(
   {
     title: {
-      type: String,
+      type: Schema.Types.Mixed, // Supports both string and {en, am} object
       required: [true, 'Title is required'],
-      trim: true,
     },
     slug: {
       type: String,
@@ -34,13 +33,12 @@ const NewsPostSchema: Schema<INewsPost> = new Schema(
       trim: true,
     },
     content: {
-      type: String,
+      type: Schema.Types.Mixed, // Supports both string and {en, am} object
       required: [true, 'Content is required'],
     },
     excerpt: {
-      type: String,
+      type: Schema.Types.Mixed, // Supports both string and {en, am} object
       required: [true, 'Excerpt is required'],
-      trim: true,
     },
     featuredImage: {
       type: String,
@@ -95,3 +93,8 @@ const NewsPost: Model<INewsPost> =
   mongoose.models.NewsPost || mongoose.model<INewsPost>('NewsPost', NewsPostSchema);
 
 export default NewsPost;
+
+// Alias for BlogPost (used in Phase 7 transformation)
+// BlogPost and NewsPost refer to the same model/collection
+export const BlogPost = NewsPost;
+export type IBlogPost = INewsPost;

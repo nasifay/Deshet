@@ -1,11 +1,16 @@
 import { Metadata } from "next";
-import { PAGE_METADATA, BASE_URL } from "~/lib/seo/metadata-config";
+import { generatePageMetadata } from "~/lib/seo/metadata-config";
 import {
   generateWebPageSchema,
   generateBreadcrumbSchema,
 } from "~/lib/seo/json-ld";
+import { BASE_URL } from "~/lib/seo/metadata-config";
+import { getLocale } from "~/lib/i18n/server";
 
-export const metadata: Metadata = PAGE_METADATA.gallery;
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  return generatePageMetadata("/gallery", locale);
+}
 
 export default function GalleryLayout({
   children,
@@ -13,9 +18,9 @@ export default function GalleryLayout({
   children: React.ReactNode;
 }) {
   const webPageSchema = generateWebPageSchema({
-    name: "Gallery",
+    name: "Gallery | Visual Stories of Impact",
     description:
-      "Explore our photo gallery showcasing programs, projects, events, and the communities we serve.",
+      "Explore our photo gallery showcasing programs, projects, events, and the communities we serve. A visual journey of change, empowerment, and hope across Ethiopia.",
     url: `${BASE_URL}/gallery`,
   });
 

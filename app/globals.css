@@ -88,24 +88,35 @@
   overflow: visible !important;
 }
 
-/* Design tokens aligned to the NGO theme */
+/* Design tokens aligned to Deshet Medical Center theme */
 :root {
-  --font-sans: var(--font-roboto), ui-sans-serif, system-ui, -apple-system,
+  /* Typography - Deshet Medical Center */
+  --font-sans: var(--font-inter), var(--font-poppins), ui-sans-serif, system-ui, -apple-system,
     Segoe UI, Noto Sans, Ubuntu, Cantarell, Helvetica Neue, Arial, sans-serif;
+  --font-heading: var(--font-heading), Georgia, serif;
+  --font-body: var(--font-inter), var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+  --font-amharic: var(--font-amharic), serif;
 
-  /* slate-800 */
-  --primary: oklch(0.205 0 0); /* brand green */
-  --primary-600: #197a35;
-  --primary-50: #eef8f2;
-  --accent: oklch(0.97 0 0); /* Orange-Main */
+  /* Deshet Medical Center - Primary Green Palette */
+  --primary: #128341; /* Primary green - main brand color */
+  --primary-green: #128341; /* Primary green */
+  --primary-600: #0e6a32; /* Darker green for hover states */
+  --primary-50: #eef8f2; /* Light green background */
+  
+  /* Secondary Colors */
+  --secondary-green: #4F7C57; /* Leaf Green - secondary buttons, highlights */
+  --forest-shadow: #1C2F26; /* Forest Shadow - footer, deep sections */
+  --soft-cream: #FFF9E8; /* Soft Cream - cards, section backgrounds */
+  
+  --accent: oklch(0.97 0 0); /* Light accent */
   --muted: oklch(0.97 0 0); /* gray-100 */
   --card: oklch(1 0 0);
 
   --border: oklch(0.922 0 0); /* gray-200 */
-  --primary-orange: #ff7a00; /* Orange text color */
-  --primary-green: #128341; /* Green donate button */
-
-  --secondary-orange: #ffdeb3; /* Orange text color */
+  
+  /* Deprecated - keeping for backward compatibility during transition */
+  --primary-orange: #128341; /* Replaced with primary green */
+  --secondary-orange: #4F7C57; /* Replaced with secondary green */
 
   --radius: 0.625rem;
   --background: oklch(1 0 0);
@@ -140,14 +151,19 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-primary: var(--primary);
+  --color-primary-green: var(--primary-green);
   --color-primary-600: var(--primary-600);
   --color-primary-50: var(--primary-50);
+  --color-secondary-green: var(--secondary-green);
+  --color-forest-shadow: var(--forest-shadow);
+  --color-soft-cream: var(--soft-cream);
   --color-accent: var(--accent);
   --color-muted: var(--muted);
   --color-card: var(--card);
   --color-border: var(--border);
+  
+  /* Deprecated - keeping for backward compatibility */
   --color-primary-orange: var(--primary-orange);
-  --color-primary-green: var(--primary-green);
   --color-secondary-orange: var(--secondary-orange);
 
   /* --font-sans: ui-sans-serif, system-ui, -apple-system, Segoe UI Noto Sans,
@@ -444,7 +460,7 @@ body {
 }
 
 .text-highlight {
-  color: #ff9700 !important;
+  color: var(--primary-green) !important;
 }
 
 /* Hide scrollbar for horizontal scrolling sections */
@@ -615,12 +631,12 @@ body {
 }
 
 .ProseMirror a {
-  color: #128341;
+  color: var(--primary-green);
   text-decoration: underline;
 }
 
 .ProseMirror a:hover {
-  color: #0e6a32;
+  color: var(--primary-600);
 }
 
 .dark .ProseMirror a {
@@ -639,8 +655,173 @@ body {
 }
 
 .ProseMirror:focus {
-  border-color: #128341;
+  border-color: var(--primary-green);
   box-shadow: 0 0 0 2px rgba(18, 131, 65, 0.1);
+}
+
+/* ============================================
+   Phase 10: Cultural Design Patterns & Styling
+   ============================================ */
+
+/* Ethiopian Cultural Border Patterns */
+.cultural-border {
+  position: relative;
+  padding: 1rem;
+}
+
+.cultural-border::before,
+.cultural-border::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--primary-green) 0px,
+    var(--primary-green) 8px,
+    transparent 8px,
+    transparent 16px
+  );
+}
+
+.cultural-border::before {
+  top: 0;
+}
+
+.cultural-border::after {
+  bottom: 0;
+}
+
+/* Subtle Ethiopian-inspired geometric pattern */
+.cultural-pattern {
+  background-image: 
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 10px,
+      rgba(18, 131, 65, 0.03) 10px,
+      rgba(18, 131, 65, 0.03) 20px
+    );
+}
+
+/* Section divider with cultural elements */
+.section-divider {
+  position: relative;
+  height: 2px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--primary-green) 20%,
+    var(--primary-green) 80%,
+    transparent
+  );
+  margin: 2rem 0;
+}
+
+.section-divider::before,
+.section-divider::after {
+  content: "✦";
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--primary-green);
+  font-size: 1rem;
+  background: white;
+  padding: 0 0.5rem;
+}
+
+.section-divider::before {
+  left: 20%;
+}
+
+.section-divider::after {
+  right: 20%;
+}
+
+/* Premium card styling with subtle texture */
+.premium-card {
+  background: var(--soft-cream);
+  border: 1px solid rgba(18, 131, 65, 0.1);
+  box-shadow: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.5);
+  position: relative;
+  overflow: hidden;
+}
+
+.premium-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--primary-green),
+    transparent
+  );
+}
+
+/* Gold outline style for icons */
+.icon-gold-outline {
+  filter: drop-shadow(0 0 2px rgba(255, 215, 0, 0.5))
+          drop-shadow(0 0 4px rgba(255, 215, 0, 0.3));
+  stroke: var(--primary-green);
+  stroke-width: 1.5;
+}
+
+.icon-medical {
+  color: var(--primary-green);
+  stroke-width: 2;
+}
+
+/* Herbal/Medical theme background textures */
+.bg-herbal-texture {
+  background-image: 
+    radial-gradient(circle at 20% 50%, rgba(18, 131, 65, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(79, 124, 87, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 40% 20%, rgba(18, 131, 65, 0.03) 0%, transparent 50%);
+  background-size: 100% 100%;
+}
+
+.bg-nature-texture {
+  background-image: 
+    linear-gradient(135deg, rgba(18, 131, 65, 0.02) 0%, transparent 50%),
+    linear-gradient(45deg, rgba(79, 124, 87, 0.02) 0%, transparent 50%);
+}
+
+/* Modern premium feel enhancements */
+.premium-shadow {
+  box-shadow: 
+    0 10px 25px -5px rgba(18, 131, 65, 0.1),
+    0 4px 6px -2px rgba(18, 131, 65, 0.05);
+}
+
+.premium-shadow-lg {
+  box-shadow: 
+    0 20px 50px -10px rgba(18, 131, 65, 0.15),
+    0 10px 20px -5px rgba(18, 131, 65, 0.1);
+}
+
+/* Smooth transitions for premium feel */
+.premium-transition {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Cultural accent elements */
+.cultural-accent {
+  position: relative;
+}
+
+.cultural-accent::before {
+  content: "❋";
+  position: absolute;
+  color: var(--primary-green);
+  opacity: 0.3;
+  font-size: 0.75rem;
 }
 
 /* @layer utilities {

@@ -4,6 +4,8 @@ import Link from "next/link";
 
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import { useTranslation } from "~/lib/i18n/hooks";
+import { getBilingualText } from "~/lib/i18n/utils";
 
 interface HeroSectionProps {
   title?: string;
@@ -16,17 +18,36 @@ interface HeroSectionProps {
   ctaLink?: string;
 }
 
+// Placeholder images for Deshet Medical Center
+const PLACEHOLDER_IMAGES = {
+  landscape: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
+  left: [
+    "https://images.unsplash.com/photo-1505576391880-b3f9d713dc4f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
+    "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
+  ],
+  middle: [
+    "https://images.unsplash.com/photo-1559757175-0eb30cd8c063?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
+    "https://images.unsplash.com/photo-1573496773905-f5b17e76b254?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
+  ],
+  right: [
+    "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
+    "https://images.unsplash.com/photo-1543269865-cbf427effbad?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
+  ],
+};
+
 const Hero = () => {
+  const { t, locale } = useTranslation();
+  
   // State for data
   const [heroData, setHeroData] = useState<HeroSectionProps>({
-    title: "SERVING",
-    subtitle: "ETHIOPIAN YOUTH",
+    title: "",
+    subtitle: "",
     landscapeImage: "",
     leftImages: [],
     middleImages: [],
     rightImages: [],
-    ctaText: "Contact Us",
-    ctaLink: "/contact-us",
+    ctaText: "",
+    ctaLink: "/booking",
   });
   const [loading, setLoading] = useState(true);
   const [showLandscape, setShowLandscape] = useState(true);
@@ -48,27 +69,58 @@ const Hero = () => {
             (s: any) => s.type === "HeroSection"
           );
           if (section?.data) {
+            // Extract bilingual content based on current locale
+            // Use placeholder images if none provided
             setHeroData({
-              title: section.data.title || "SERVING",
-              subtitle: section.data.subtitle || "ETHIOPIAN YOUTH",
-              landscapeImage: section.data.landscapeImage || "",
-              leftImages: section.data.leftImages || [],
-              middleImages: section.data.middleImages || [],
-              rightImages: section.data.rightImages || [],
-              ctaText: section.data.ctaText || "Contact Us",
-              ctaLink: section.data.ctaLink || "/contact-us",
+              title: getBilingualText(section.data.title, locale, t("home.hero.title")),
+              subtitle: getBilingualText(section.data.subtitle, locale, t("home.hero.subtitle")),
+              landscapeImage: section.data.landscapeImage || PLACEHOLDER_IMAGES.landscape,
+              leftImages: section.data.leftImages?.length > 0 
+                ? section.data.leftImages 
+                : PLACEHOLDER_IMAGES.left,
+              middleImages: section.data.middleImages?.length > 0 
+                ? section.data.middleImages 
+                : PLACEHOLDER_IMAGES.middle,
+              rightImages: section.data.rightImages?.length > 0 
+                ? section.data.rightImages 
+                : PLACEHOLDER_IMAGES.right,
+              ctaText: getBilingualText(section.data.ctaText, locale, t("home.hero.cta")),
+              ctaLink: section.data.ctaLink || "/booking",
+            });
+          } else {
+            // Use placeholder images if no section data
+            setHeroData({
+              title: t("home.hero.title"),
+              subtitle: t("home.hero.subtitle"),
+              landscapeImage: PLACEHOLDER_IMAGES.landscape,
+              leftImages: PLACEHOLDER_IMAGES.left,
+              middleImages: PLACEHOLDER_IMAGES.middle,
+              rightImages: PLACEHOLDER_IMAGES.right,
+              ctaText: t("home.hero.cta"),
+              ctaLink: "/booking",
             });
           }
         }
       } catch (error) {
         console.error("Error fetching hero data:", error);
+        // Use placeholder images on error
+        setHeroData({
+          title: t("home.hero.title"),
+          subtitle: t("home.hero.subtitle"),
+          landscapeImage: PLACEHOLDER_IMAGES.landscape,
+          leftImages: PLACEHOLDER_IMAGES.left,
+          middleImages: PLACEHOLDER_IMAGES.middle,
+          rightImages: PLACEHOLDER_IMAGES.right,
+          ctaText: t("home.hero.cta"),
+          ctaLink: "/booking",
+        });
       } finally {
         setLoading(false);
       }
     };
 
     fetchData();
-  }, []);
+  }, [locale, t]);
 
   // --- LANDSCAPE IMAGE DISPLAY LOGIC ---
   useEffect(() => {
@@ -201,7 +253,7 @@ const Hero = () => {
                 {currentImage && (
                   <Image
                     src={currentImage}
-                    alt={`Ethiopian youth in a dynamic setting - ${section.layout} section`}
+                    alt={`Deshet Medical Center - ${section.layout} section`}
                     fill
                     style={{ objectFit: "cover" }}
                     priority={index === 0}
@@ -214,7 +266,7 @@ const Hero = () => {
                   className={`absolute inset-0
                     ${
                       section.layout === "middle"
-                        ? "bg-[#f1a840] opacity-[0.7]" // Gold/Orange
+                        ? "bg-primary-green/70 opacity-[0.7]" // Primary Green
                         : "bg-[#1f532a] opacity-[0.7]" // Dark Green
                     }
                   `}
@@ -234,8 +286,8 @@ const Hero = () => {
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="text-white primary-title  uppercase drop-shadow-[0_3px_6px_rgba(0,0,0,0.5)]"
           >
-            {heroData.title} <br />
-            <span className=" text-nowrap block">{heroData.subtitle}</span>
+            {heroData.title || t("home.hero.title")} <br />
+            <span className=" text-nowrap block">{heroData.subtitle || t("home.hero.subtitle")}</span>
           </motion.h1>
 
           <motion.div
@@ -245,10 +297,10 @@ const Hero = () => {
             className="mt-10"
           >
             <Link
-              href={heroData.ctaLink || "/contact-us"}
+              href={heroData.ctaLink || "/booking"}
               className="inline-flex items-center justify-center px-6 py-2 md:px-12 md:py-4 rounded-full bg-[#128341] hover:bg-[#0e6a32] transition-all duration-300 font-roboto font-medium text-sm md:text-lg text-white shadow-[0_6px_20px_-5px_rgba(18,131,65,0.4)] hover:shadow-[0_10px_25px_-5px_rgba(18,131,65,0.6)] backdrop-blur-sm"
             >
-              {heroData.ctaText}
+              {heroData.ctaText || t("home.hero.cta")}
             </Link>
           </motion.div>
         </div>

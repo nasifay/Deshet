@@ -13,6 +13,8 @@ import "~/lib/db/models/Contact";
 import "~/lib/db/models/BankOption";
 import "~/lib/db/models/KeyFunder";
 import "~/lib/db/models/Supporter";
+import "~/lib/db/models/Booking";
+import "~/lib/db/models/Product";
 
 const MONGODB_URI =
   process.env.MONGODB_URI || "mongodb://localhost:27017/tamra_sdt";
@@ -50,8 +52,13 @@ async function connectDB() {
   if (!cached.promise) {
     const opts = {
       bufferCommands: false,
-      serverSelectionTimeoutMS: 10000,
-      socketTimeoutMS: 45000,
+      serverSelectionTimeoutMS: 30000, // Increased from 10s to 30s
+      socketTimeoutMS: 60000, // Increased from 45s to 60s
+      connectTimeoutMS: 30000, // Add connection timeout
+      maxPoolSize: 10, // Maintain up to 10 socket connections
+      minPoolSize: 1, // Maintain at least 1 socket connection
+      retryWrites: true,
+      retryReads: true,
     };
 
     cached.promise = mongoose
@@ -62,6 +69,14 @@ async function connectDB() {
       })
       .catch((error) => {
         console.error("❌ MongoDB Connection Error:", error.message);
+        // Log more details for debugging
+        if (error.code === 'ETIMEOUT') {
+          console.error("   This is a network timeout. Check:");
+          console.error("   1. Your internet connection");
+          console.error("   2. MongoDB Atlas cluster status");
+          console.error("   3. IP whitelist in MongoDB Atlas");
+          console.error("   4. Firewall/VPN settings");
+        }
         cached.promise = null;
         throw error;
       });

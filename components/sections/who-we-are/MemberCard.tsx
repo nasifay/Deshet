@@ -12,11 +12,13 @@ export interface MemberCardProps {
     email?: string;
     phone?: string;
     order?: number;
-    type?: "leadership" | "team_member";
+    type?: "board_member" | "leadership" | "team_member";
   };
 }
 
-export const MemberCard: React.FC<MemberCardProps> = ({ member }) => {
+export const MemberCard: React.FC<MemberCardProps> = ({
+  member,
+}: MemberCardProps) => {
   const nameParts = member.name.split(" ");
   const firstName = nameParts[0] || "";
   const lastName = nameParts.slice(1).join(" ");

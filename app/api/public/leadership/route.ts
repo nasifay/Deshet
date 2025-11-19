@@ -22,7 +22,9 @@ export async function GET(request: NextRequest) {
     // Filter leadership by type if specified
     let members = settings.leadership || [];
 
-    if (type === "leadership") {
+    if (type === "board_member") {
+      members = members.filter((member: any) => member.type === "board_member");
+    } else if (type === "leadership") {
       members = members.filter((member: any) => member.type === "leadership");
     } else if (type === "team_member") {
       members = members.filter((member: any) => member.type === "team_member");

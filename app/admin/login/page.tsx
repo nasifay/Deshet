@@ -72,13 +72,13 @@ function LoginForm() {
           <div className="text-center mb-8">
             <div className="flex justify-center mb-4">
               <div className="w-20 h-20 bg-primary-green rounded-full flex items-center justify-center">
-                <span className="text-white text-3xl font-black">TSD</span>
+                <span className="text-white text-3xl font-black">DIMC</span>
               </div>
             </div>
             <h1 className="text-3xl font-black text-gray-800 mb-2">
               Admin Login
             </h1>
-            <p className="text-gray-600">Tamra for Social Development</p>
+            <p className="text-gray-600">Deshet Indigenous Medical Center</p>
           </div>
 
           {/* Error Message */}
@@ -105,7 +105,7 @@ function LoginForm() {
                 autoComplete="email"
                 autoFocus
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-green focus:border-transparent transition-all"
-                placeholder="admin@tamra-sdt.org"
+                placeholder="admin@deshetmed.com"
                 disabled={isLoading}
               />
               {errors.email && (
@@ -235,7 +235,7 @@ function LoginForm() {
           {/* Footer */}
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
-              Powered by TSD Admin Dashboard
+              Powered by Deshet Medical Center Admin Dashboard
             </p>
           </div>
         </div>
@@ -243,7 +243,7 @@ function LoginForm() {
         {/* Info Box */}
         <div className="mt-6 bg-white/10 backdrop-blur-sm rounded-lg p-4 text-white text-sm">
           <p className="font-semibold mb-2">Default Admin Credentials:</p>
-          <p>Email: admin@tamra-sdt.org</p>
+          <p>Email: admin@deshetmed.com</p>
           <p>Password: Admin@123456</p>
           <p className="mt-2 text-xs opacity-[0.75]">
             (Change these credentials immediately after first login)

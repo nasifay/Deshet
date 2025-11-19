@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import { StatisticsSkeleton } from "./landing-page-skeleton";
+import { useTranslation } from "~/lib/i18n/hooks";
+import { getBilingualText } from "~/lib/i18n/utils";
 
 interface StatItem {
   number: string;
@@ -22,6 +24,7 @@ interface StatsSectionProps {
 }
 
 export default function StatisticsSection() {
+  const { t, locale } = useTranslation();
   const [stats, setStats] = useState<StatsSectionProps["stats"]>();
   const [loading, setLoading] = useState(true);
 
@@ -62,7 +65,7 @@ export default function StatisticsSection() {
     };
 
     fetchData();
-  }, []);
+  }, [locale]);
 
   if (loading) {
     return <StatisticsSkeleton />;
@@ -74,19 +77,27 @@ export default function StatisticsSection() {
       <section className="w-full bg-white py-10 md:py-12">
         <div className=" mx-auto px-6 md:px-16 lg:px-20 xl:28 2xl:px-36">
           <div className="grid grid-cols-2  lg:grid-cols-4 gap-y-8 gap-x-6 md:gap-x-10 lg:gap-x-16  place-content-start  place-items-start ">
-            {stats.map((item, index) => (
-              <div
-                key={index}
-                className="flex flex-col items-start justify-center font-roboto text-2xl md:text-3xl 2xl:text-4xl"
-              >
-                <span className="font-semibold  text-primary-orange leading-tight">
-                  {item.number}
-                </span>
-                <p className="font-light  text-[#1a1a1a] mt-[2px] md:text-nowrap">
-                  {item.label}
-                </p>
-              </div>
-            ))}
+            {stats.map((item, index) => {
+              // Handle bilingual labels
+              const label = getBilingualText(
+                item.label as string | { en: string; am: string } | undefined,
+                locale,
+                ""
+              );
+              return (
+                <div
+                  key={index}
+                  className="flex flex-col items-start justify-center font-roboto text-2xl md:text-3xl 2xl:text-4xl"
+                >
+                  <span className="font-semibold  text-primary-orange leading-tight">
+                    {item.number}
+                  </span>
+                  <p className="font-light  text-[#1a1a1a] mt-[2px] md:text-nowrap">
+                    {label}
+                  </p>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -105,27 +116,27 @@ export default function StatisticsSection() {
   const statsData = [
     {
       number: legacyStats?.staffCount || "58",
-      label: "Staffs",
+      label: t("home.statistics.staffs"),
     },
     {
       number: legacyStats?.officesCount || "5",
       label: (
         <>
-          Offices in{" "}
+          {t("home.statistics.officesIn")}{" "}
           <span className="text-[#4EB778] font-normal">
             {legacyStats?.regionsCount || "4"}
           </span>{" "}
-          Regions
+          {t("home.statistics.regions")}
         </>
       ),
     },
     {
       number: legacyStats?.volunteersCount || "250+",
-      label: "Volunteers",
+      label: t("home.statistics.volunteers"),
     },
     {
       number: legacyStats?.protocolsCount || "15",
-      label: "Protocols",
+      label: t("home.statistics.protocols"),
     },
   ];
 

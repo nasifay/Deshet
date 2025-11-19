@@ -86,8 +86,8 @@ export function ProgramAreasSkeleton() {
   );
 }
 
-// Supporters Section Skeleton
-export function SupportersSkeleton() {
+// Medical Partners Section Skeleton
+export function MedicalPartnersSkeleton() {
   return (
     <section className="bg-white py-12 md:py-16 relative w-full overflow-hidden">
       <div className="mx-auto px-4">
@@ -220,7 +220,7 @@ export default function LandingPageSkeleton() {
       <AboutSkeleton />
       <StatisticsSkeleton />
       <ProgramAreasSkeleton />
-      <SupportersSkeleton />
+      <MedicalPartnersSkeleton />
       <AchievementsSkeleton />
       <NewsEventsSkeleton />
       <VolunteerBannerSkeleton />

@@ -44,7 +44,6 @@ const SECTION_TYPES = [
   { value: "HeroSection", label: "Hero Section", icon: "🦸" },
   { value: "StatisticsSection", label: "Statistics Section", icon: "📊" },
   { value: "AchievementsSection", label: "Achievements Section", icon: "🏆" },
-  { value: "VolunteerBanner", label: "Volunteer Banner", icon: "🙋" },
   { value: "ContentSection", label: "Content Section", icon: "📝" },
 ];
 
@@ -612,7 +611,6 @@ function SectionEditor({
     case "HeroSection":
     case "StatisticsSection":
     case "AchievementsSection":
-    case "VolunteerBanner":
       return (
         <div className="space-y-4">
           <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">

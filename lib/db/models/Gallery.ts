@@ -14,8 +14,8 @@ export interface IGallery extends Document {
     width: number;
     height: number;
   };
-  alt?: string;
-  caption?: string;
+  alt?: string | { en: string; am: string };
+  caption?: string | { en: string; am: string };
   customClass?: string; // Custom CSS class for special layouts (e.g., Recognition images)
   section: "CLM" | "CRPVF" | "general"; // Gallery section for organization
   position: number; // Order within section
@@ -58,12 +58,10 @@ const GallerySchema: Schema<IGallery> = new Schema(
       height: Number,
     },
     alt: {
-      type: String,
-      trim: true,
+      type: Schema.Types.Mixed, // Supports both string and {en, am} object
     },
     caption: {
-      type: String,
-      trim: true,
+      type: Schema.Types.Mixed, // Supports both string and {en, am} object
     },
     customClass: {
       type: String,

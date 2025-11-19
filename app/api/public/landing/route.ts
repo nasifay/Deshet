@@ -16,12 +16,14 @@ export async function GET(request: NextRequest) {
       .lean();
 
     if (!landingPage) {
+      // Return 200 with success: false so components can handle gracefully
       return NextResponse.json(
         {
           success: false,
+          data: null,
           error: "Landing page not found",
         },
-        { status: 404 }
+        { status: 200 }
       );
     }
 

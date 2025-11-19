@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "~/lib/i18n/hooks";
 
 interface Thumbnail {
   id: number;
@@ -28,32 +29,42 @@ interface Program {
 }
 
 export default function ProgramsListSection() {
-  const [activeTab, setActiveTab] = useState("youth-empowerment");
+  const { t } = useTranslation();
+  const [activeTab, setActiveTab] = useState("traditional-consultation");
   const [programsList, setProgramsList] = useState<Program[]>([]);
   const [loading, setLoading] = useState(true);
 
   const programCategories = [
     {
-      id: "youth-empowerment",
-      label: "Youth Empowerment &\nPeacebuilding",
+      id: "traditional-consultation",
+      label: "Traditional Medical\nConsultation",
     },
     {
-      id: "srh-gender",
-      label: "SRH & Gender\nDevelopment",
+      id: "herbal-medicine",
+      label: "Herbal Medicine\nPreparation",
     },
     {
-      id: "climate-justice",
-      label: "Climate Justice &\nLivelihoods",
+      id: "detox-therapy",
+      label: "Detox & Cleansing\nTherapy",
+    },
+    {
+      id: "diagnostic-techniques",
+      label: "Traditional Diagnostic\nTechniques",
+    },
+    {
+      id: "healing-treatments",
+      label: "Healing\nTreatments",
     },
   ];
 
   const handleTabClick = (id: string) => setActiveTab(id);
 
-  // Fetch programs from database
+  // Fetch services from database
   useEffect(() => {
-    const fetchPrograms = async () => {
+    const fetchServices = async () => {
       try {
         setLoading(true);
+        // Note: API endpoint will be updated in Phase 8, using /api/public/programs for now
         const response = await fetch("/api/public/programs");
         const data = await response.json();
 
@@ -61,22 +72,22 @@ export default function ProgramsListSection() {
           setProgramsList(data.data);
         }
       } catch (error) {
-        console.error("Error fetching programs:", error);
+        console.error("Error fetching services:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchPrograms();
+    fetchServices();
   }, []);
 
   // Fallback data in case API fails or returns empty
   const fallbackPrograms: Program[] = [
     {
-      title: "Youth Challenge Initiative (yci)",
-      categoryId: "youth-empowerment",
+      title: "Traditional Medical Consultation",
+      categoryId: "traditional-consultation",
       description:
-        "The project focuses on increasing Sexual and Reproductive Health (SRH) awareness among youth, improving their health-seeking behavior, and enhancing access to youth-friendly SRH services. It also aims to build the entrepreneurship skills of young people and implement a sustainable business model for producing and distributing reusable sanitary pads.",
+        "Experience personalized consultations with our experienced traditional medicine practitioners. Our consultations combine ancient Ethiopian healing wisdom with modern understanding to provide comprehensive health assessments and treatment plans tailored to your unique needs.",
       image: "https://c.animaapp.com/mgdags98aKA6oC/img/rectangle-904-1.png",
       thumbnails: [
         {
@@ -98,10 +109,10 @@ export default function ProgramsListSection() {
       ],
     },
     {
-      title: "Peace (norad)",
-      categoryId: "youth-empowerment",
+      title: "Herbal Medicine Preparation",
+      categoryId: "herbal-medicine",
       description:
-        "The project aims to raise awareness among communities, particularly women and youth, on peacebuilding, conflict prevention, and social cohesion. It seeks to promote dialogue, tolerance, and mutual respect among diverse groups, while strengthening community resilience to prevent violence and discrimination. The project also strives to foster institutional commitment among public stakeholders and community leaders to support peacebuilding initiatives through advocacy, capacity building, and inclusive policy dialogue.",
+        "Our expert practitioners prepare custom herbal medicines using traditional Ethiopian recipes passed down through generations. Each preparation is carefully crafted using locally sourced, organic herbs and plants, following ancient methods that preserve the natural healing properties of each ingredient.",
       image: "https://c.animaapp.com/mgdags98aKA6oC/img/rectangle-904.png",
       thumbnails: [
         {
@@ -123,11 +134,10 @@ export default function ProgramsListSection() {
       ],
     },
     {
-      title:
-        "Enhance resilience against online and offline violence in the society of Ethiopia. (ERASE)",
-      categoryId: "youth-empowerment",
+      title: "Detox & Cleansing Therapy",
+      categoryId: "detox-therapy",
       description:
-        "The project aims to foster trust and empathy through open dialogue and mutual understanding while establishing community monitoring and volunteer networks to detect and respond to conflicts early using technology. It engages local leaders, youth, women, and persons with disabilities (PWDs) in mediating disputes and promoting peace, and mobilizes communities to advocate for peace and inclusive policies.",
+        "Experience our comprehensive detox and cleansing therapies designed to purify the body and restore natural balance. Our traditional methods help eliminate toxins, improve digestion, boost energy levels, and enhance overall wellness through natural herbal treatments and therapeutic practices.",
       image: "https://c.animaapp.com/mgdags98aKA6oC/img/rectangle-904-2.png",
       thumbnails: [
         {
@@ -149,10 +159,10 @@ export default function ProgramsListSection() {
       ],
     },
     {
-      title: "Children’s Rights and Violence Prevention Find (CRPVF)",
-      categoryId: "youth-empowerment",
+      title: "Traditional Diagnostic Techniques",
+      categoryId: "diagnostic-techniques",
       description:
-        "The project aims to strengthen parenting skills and spousal relationships to create a supportive family environment in Woreda 2, Kirkos Sub-City. It seeks to empower families through effective saving practices that reduce stress and socio-economic challenges affecting children’s well-being, while also promoting safe and supportive school environments that enhance access to education and overall well-being for children and youth.",
+        "Our practitioners use time-honored diagnostic methods including pulse reading, tongue examination, and comprehensive health assessment techniques. These traditional approaches allow us to understand the root causes of health issues and develop personalized treatment plans that address both symptoms and underlying imbalances.",
       image: "https://c.animaapp.com/mgdags98aKA6oC/img/rectangle-904-3.png",
       thumbnails: [
         {
@@ -174,10 +184,10 @@ export default function ProgramsListSection() {
       ],
     },
     {
-      title: "GBV (NCA)",
-      categoryId: "srh-gender",
+      title: "Healing Treatments",
+      categoryId: "healing-treatments",
       description:
-        "The Project Aims To Improve Social Norms And Attitudes Toward Ending Violence Against Women And Girls (VAWG) Within School Communities And Other Targeted Areas In The Intervention Sub-Cities. It Seeks To Engage Men, Boys, And Volunteers In Promoting Positive Masculinity And Contributing To The Transformation Of Harmful Social Norms, While Reaching Communities With Gender-Based Violence (GBV) Messages And Information To Encourage Active Participation In Preventing And Responding To VAWG Issues.",
+        "Our comprehensive healing treatments combine traditional Ethiopian medicine practices with modern therapeutic approaches. From massage therapy and energy healing to specialized treatments for chronic conditions, we offer a range of services designed to promote physical, mental, and spiritual wellness.",
       image:
         "https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=800&h=600&fit=crop&crop=center",
       thumbnails: [
@@ -196,136 +206,6 @@ export default function ProgramsListSection() {
         {
           id: 4,
           src: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&h=400&fit=crop&crop=center",
-        },
-      ],
-    },
-    {
-      title: "Safe City (NCA)",
-      categoryId: "srh-gender",
-      description:
-        "The Project Aims To Improve Social Norms And Attitudes Toward Ending Violence Against Women And Girls (VAWG) Within School Communities And Other Target Areas In The Intervention Sub-Cities. It Seeks To Meaningfully Engage Men, Boys, And Volunteers In Promoting Positive Masculinity And Contributing To Equitable Social Norms, While Reaching Communities With Gender-Based Violence (GBV) Messages And Information To Encourage Active Participation In Preventing And Responding To VAWG Issues.",
-      image:
-        "https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?w=800&h=600&fit=crop&crop=center",
-      thumbnails: [
-        {
-          id: 1,
-          src: "https://images.unsplash.com/photo-1573164574572-cb89e39749b4?w=400&h=400&fit=crop&crop=center",
-        },
-        {
-          id: 2,
-          src: "https://images.unsplash.com/photo-1544717297-fa95b6ee9643?w=400&h=400&fit=crop&crop=center",
-        },
-        {
-          id: 3,
-          src: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400&h=400&fit=crop&crop=center",
-        },
-        {
-          id: 4,
-          src: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=400&h=400&fit=crop&crop=center",
-        },
-      ],
-    },
-    {
-      title: "SONKE (SRHR)",
-      categoryId: "srh-gender",
-      description:
-        "The Project Aims To Empower Women, Girls, And Marginalized Groups To Make Informed Decisions And Demand Access To Sexual And Reproductive Health And Rights (SRHR) Information And Services. It Also Seeks To Engage Communities In Challenging Myths And Harmful Practices Related To SRHR By Promoting Shared Responsibility And Mutual Understanding While Strengthening SRHR Service Delivery Through Awareness Creation, Barrier Removal, And Advocacy For Policy Change.",
-      image:
-        "https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=800&h=600&fit=crop&crop=center",
-      thumbnails: [
-        {
-          id: 1,
-          src: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop&crop=center",
-        },
-        {
-          id: 2,
-          src: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&h=400&fit=crop&crop=center",
-        },
-        {
-          id: 3,
-          src: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=center",
-        },
-        {
-          id: 4,
-          src: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&h=400&fit=crop&crop=center",
-        },
-      ],
-    },
-    {
-      title: "GESI (GIZ)",
-      categoryId: "srh-gender",
-      description:
-        "(2017-2025, Packard Foundation Via YNSD) - SRH Awareness, Entrepreneurship, Reusable Sanitary Pads.",
-      image:
-        "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&h=600&fit=crop&crop=center",
-      thumbnails: [
-        {
-          id: 1,
-          src: "https://images.unsplash.com/photo-1573164574572-cb89e39749b4?w=400&h=400&fit=crop&crop=center",
-        },
-        {
-          id: 2,
-          src: "https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?w=400&h=400&fit=crop&crop=center",
-        },
-        {
-          id: 3,
-          src: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&h=400&fit=crop&crop=center",
-        },
-        {
-          id: 4,
-          src: "https://images.unsplash.com/photo-1544717297-fa95b6ee9643?w=400&h=400&fit=crop&crop=center",
-        },
-      ],
-    },
-    {
-      title: "SRHR (IPAS)",
-      categoryId: "srh-gender",
-      description:
-        "The Project Aims To Raise Awareness Among Factory Workers, Particularly Women And Girls, On Sexual And Reproductive Health And Rights (SRHR), Including Safe Abortion, Contraception, And The Prevention Of Sexual And Gender-Based Violence (SGBV). It Also Seeks To Promote Gender Equality And Ensure Access To SRHR Services And Rights For Women And Girls Working At Eastern Industrial Park, While Fostering Institutional Commitment Among Factory Managers And Public Stakeholders To Support Gender-Responsive SRHR Initiatives Through Advocacy And Policy Dialogue.",
-      image:
-        "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&h=600&fit=crop&crop=center",
-      thumbnails: [
-        {
-          id: 1,
-          src: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop&crop=center",
-        },
-        {
-          id: 2,
-          src: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&h=400&fit=crop&crop=center",
-        },
-        {
-          id: 3,
-          src: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=center",
-        },
-        {
-          id: 4,
-          src: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&h=400&fit=crop&crop=center",
-        },
-      ],
-    },
-    {
-      title: "Climate Resilience (PLACEHOLDER)",
-      categoryId: "climate-justice",
-      description:
-        "This is a placeholder program for Climate Justice & Livelihoods category. The actual program details will be added here when available.",
-      image:
-        "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=600&fit=crop&crop=center",
-      thumbnails: [
-        {
-          id: 1,
-          src: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=400&fit=crop&crop=center",
-        },
-        {
-          id: 2,
-          src: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=400&fit=crop&crop=center",
-        },
-        {
-          id: 3,
-          src: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&h=400&fit=crop&crop=center",
-        },
-        {
-          id: 4,
-          src: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=400&fit=crop&crop=center",
         },
       ],
     },
@@ -372,6 +252,7 @@ export default function ProgramsListSection() {
 }
 
 const ProgramItem: React.FC<{ program: Program }> = ({ program }) => {
+  const { t } = useTranslation();
   // If program has projects, display program header first, then each project
   if (program.projects && program.projects.length > 0) {
     return (
@@ -432,10 +313,10 @@ const ProgramItem: React.FC<{ program: Program }> = ({ program }) => {
           </div>
         </section>
 
-        {/* Projects Section */}
+            {/* Service Details Section */}
         <div className="px-6 md:px-20 xl:px-24 2xl:px-40">
           <h3 className="font-roboto font-black text-primary-green text-lg md:text-xl lg:text-2xl xl:text-3xl leading-[101%] tracking-[0] uppercase text-center mb-8">
-            Projects Under This Program
+            {t("pages.programs.serviceDetails")}
           </h3>
         </div>
 

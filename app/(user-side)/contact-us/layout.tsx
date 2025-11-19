@@ -1,36 +1,55 @@
 import { Metadata } from "next";
-import { PAGE_METADATA, BASE_URL } from "~/lib/seo/metadata-config";
+import { generatePageMetadata } from "~/lib/seo/metadata-config";
 import {
-  generateContactPageSchema,
+  generateWebPageSchema,
   generateBreadcrumbSchema,
+  generateContactPageSchema,
 } from "~/lib/seo/json-ld";
+import { BASE_URL } from "~/lib/seo/metadata-config";
+import { getLocale } from "~/lib/i18n/server";
 
-export const metadata: Metadata = PAGE_METADATA["contact-us"];
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  return generatePageMetadata("/contact-us", locale);
+}
 
 export default function ContactUsLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const contactPageSchema = generateContactPageSchema();
+  const webPageSchema = generateWebPageSchema({
+    name: "Contact Us | Deshet Medical Center",
+    description:
+      "Get in touch with Deshet Indigenous Medical Center. Schedule a consultation, ask questions about our traditional medical services, or visit our facility in Addis Ababa, Ethiopia.",
+    url: `${BASE_URL}/contact-us`,
+  });
 
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: "Home", url: BASE_URL },
     { name: "Contact Us", url: `${BASE_URL}/contact-us` },
   ]);
 
+  const contactPageSchema = generateContactPageSchema();
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(contactPageSchema),
+          __html: JSON.stringify(webPageSchema),
         }}
       />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(breadcrumbSchema),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(contactPageSchema),
         }}
       />
       {children}

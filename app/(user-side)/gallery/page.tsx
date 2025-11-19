@@ -1,60 +1,77 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Image from "next/image";
+import { useTranslation } from "~/lib/i18n/hooks";
+import { getBilingualText } from "~/lib/i18n/utils";
+import GalleryPageSkeleton from "~/components/sections/gallery-page-skeleton";
 
-// --- Data for the galleries ---
-// Using Unsplash images that are configured in next.config.ts
-const clmImages = {
-  main: "https://images.unsplash.com/photo-1607746882042-944635dfe10e?auto=format&fit=crop&w=1260&h=750&q=80",
-  topRight1:
-    "https://images.unsplash.com/photo-1573164574572-cb89e39749b4?auto=format&fit=crop&w=1260&h=750&q=80",
-  topRight2:
-    "https://images.unsplash.com/photo-1581091215367-59ab6c99d1a9?auto=format&fit=crop&w=1260&h=750&q=80",
-  middleWide:
-    "https://images.unsplash.com/photo-1590608897129-79da98d159ab?auto=format&fit=crop&w=1260&h=750&q=80",
-  bottom1:
-    "https://images.unsplash.com/photo-1551836022-4c4c79ecde16?auto=format&fit=crop&w=1260&h=750&q=80",
-  bottom2:
-    "https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&w=1260&h=750&q=80",
-  bottom3:
-    "https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=1260&h=750&q=80",
-  bottom4:
-    "https://images.unsplash.com/photo-1573497019563-e16a48a7e42f?auto=format&fit=crop&w=1260&h=750&q=80",
-};
+interface GalleryItem {
+  _id: string;
+  filename: string;
+  originalName: string;
+  url: string;
+  alt?: string;
+  caption?: string;
+  category?: {
+    _id: string;
+    name: string;
+    slug: string;
+    color?: string;
+    icon?: string;
+  };
+}
 
-const crpvfImages = {
-  left1:
-    "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1260&h=750&q=80",
-  left2:
-    "https://images.unsplash.com/photo-1531379410502-63bfe8cdaf6f?auto=format&fit=crop&w=1260&h=750&q=80",
-  left3:
-    "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1260&h=750&q=80",
-  left4:
-    "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=1260&h=750&q=80",
-  main: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1260&h=750&q=80",
-};
+interface GalleryCategory {
+  _id: string;
+  name: string;
+  slug: string;
+  color?: string;
+  icon?: string;
+}
+
+// Placeholder medical/traditional medicine images
+const placeholderImages = [
+  "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
+  "https://images.unsplash.com/photo-1505576391880-b3f9d713dc4f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
+  "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
+  "https://images.unsplash.com/photo-1559757175-0eb30cd8c063?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
+  "https://images.unsplash.com/photo-1573496773905-f5b17e76b254?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
+  "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
+  "https://images.unsplash.com/photo-1543269865-cbf427effbad?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
+  "https://images.unsplash.com/photo-1573164574572-cb89e39749b4?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
+];
 
 // --- Reusable Image Card Component ---
 const ImageCard = ({
   src,
   alt,
+  caption,
   className = "",
   imgClassName = "",
 }: {
   src: string;
   alt: string;
+  caption?: string;
   className?: string;
   imgClassName?: string;
 }) => (
   <div
-    className={`bg-white p-2 rounded-3xl shadow-lg hover:shadow-xl transition-shadow duration-300 ${className}`}
+    className={`bg-white p-2 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 group ${className}`}
   >
-    <div className={`relative w-full h-full ${imgClassName}`}>
+    <div className={`relative w-full h-full overflow-hidden ${imgClassName}`}>
       <Image
         src={src}
         alt={alt}
         fill
         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-        className="object-cover rounded-2xl"
+        className="object-cover rounded-2xl transition-transform duration-300 group-hover:scale-105"
       />
+      {caption && (
+        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4 rounded-b-2xl">
+          <p className="text-white text-sm font-medium line-clamp-2">{caption}</p>
+        </div>
+      )}
     </div>
   </div>
 );
@@ -102,120 +119,259 @@ const BackgroundPattern = () => (
 );
 
 export default function GalleryPage() {
+  const { t, locale } = useTranslation();
+  const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
+  const [categories, setCategories] = useState<GalleryCategory[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  useEffect(() => {
+    fetchGalleryItems();
+  }, [selectedCategory, page, locale]);
+
+  const fetchCategories = async () => {
+    try {
+      const response = await fetch("/api/public/gallery/categories");
+      const data = await response.json();
+
+      if (data.success) {
+        setCategories(data.data);
+      }
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  };
+
+  const fetchGalleryItems = async () => {
+    try {
+      setLoading(true);
+      const params = new URLSearchParams({
+        page: page.toString(),
+        limit: "24",
+        ...(selectedCategory !== "all" && { category: selectedCategory }),
+      });
+
+      const url = `/api/public/gallery?${params}`;
+      console.log("Gallery - Fetching:", {
+        selectedCategory,
+        url,
+        params: params.toString(),
+      });
+
+      const response = await fetch(url);
+      const data = await response.json();
+      
+      console.log("Gallery - Response:", {
+        success: data.success,
+        itemCount: data.data?.length || 0,
+        total: data.pagination?.total || 0,
+        category: selectedCategory,
+      });
+
+      if (data.success) {
+        if (page === 1) {
+          setGalleryItems(data.data);
+        } else {
+          setGalleryItems((prev) => [...prev, ...data.data]);
+        }
+        setHasMore(data.pagination.page < data.pagination.pages);
+      } else {
+        // Fallback to placeholder images if no data
+        if (page === 1) {
+          setGalleryItems(
+            placeholderImages.map((url, index) => ({
+              _id: `placeholder-${index}`,
+              filename: `placeholder-${index}.jpg`,
+              originalName: `Medical Image ${index + 1}`,
+              url,
+              alt: `Medical and traditional medicine image ${index + 1}`,
+            }))
+          );
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching gallery items:", error);
+      // Fallback to placeholder images on error
+      if (page === 1) {
+        setGalleryItems(
+          placeholderImages.map((url, index) => ({
+            _id: `placeholder-${index}`,
+            filename: `placeholder-${index}.jpg`,
+            originalName: `Medical Image ${index + 1}`,
+            url,
+            alt: `Medical and traditional medicine image ${index + 1}`,
+          }))
+        );
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleLoadMore = () => {
+    if (!loading && hasMore) {
+      setPage((prev) => prev + 1);
+    }
+  };
+
+  const handleCategoryChange = (categoryId: string) => {
+    setSelectedCategory(categoryId);
+    setPage(1);
+    setGalleryItems([]);
+  };
+
+  if (loading && galleryItems.length === 0) {
+    return <GalleryPageSkeleton />;
+  }
+
   return (
-    <div className="relative bg-[#FCFFFD] font-sans overflow-hidden">
+    <div className="relative bg-[#FCFFFD] font-sans overflow-hidden min-h-screen">
       <BackgroundPattern />
       <div className="relative z-10 container mx-auto px-4 py-16 sm:px-6 lg:px-8">
-        <p className="text-center text-lg text-[#F57C00] mb-12">
-          A visual journey of our people, projects, and the change we create.
-        </p>
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h1
+            className={`text-4xl md:text-5xl font-bold text-primary-green mb-4 ${
+              locale === "am" ? "font-amharic" : ""
+            }`}
+          >
+            {locale === "am" ? "ፎቶ ማዕከል" : "GALLERY"}
+          </h1>
+          <p
+            className={`text-lg text-[#F57C00] max-w-2xl mx-auto ${
+              locale === "am" ? "font-amharic" : ""
+            }`}
+          >
+            {locale === "am"
+              ? "የእኛን የሕክምና ማዕከል፣ የባህላዊ ሕክምና ልምዶች እና የአገልግሎቶቻችንን የምስል መግለጫ"
+              : "A visual journey of our medical center, traditional medicine practices, and services"}
+          </p>
+        </div>
 
-        {/* CLM Section */}
-        <section id="clm">
-          <h2 className="text-center text-4xl font-bold text-[#388E3C] mb-8">
-            CLM
-          </h2>
-          <div className="flex flex-col gap-6">
-            {/* Top part: Large image left, smaller images right */}
-            <div className="flex flex-col lg:flex-row gap-6">
-              <div className="lg:w-1/2">
-                <ImageCard
-                  src={clmImages.main}
-                  alt="CLM main presentation"
-                  className="h-[30rem] md:h-[38rem]"
-                />
-              </div>
-              <div className="lg:w-1/2 flex flex-col gap-6">
-                <div className="grid grid-cols-2 gap-6">
-                  <ImageCard
-                    src={clmImages.topRight1}
-                    alt="CLM meeting participants"
-                    className="h-52"
-                  />
-                  <ImageCard
-                    src={clmImages.topRight2}
-                    alt="CLM collaborative session"
-                    className="h-52"
-                  />
-                </div>
-                <ImageCard
-                  src={clmImages.middleWide}
-                  alt="CLM group discussion"
-                  className="h-52"
-                />
-              </div>
-            </div>
-            {/* Bottom part: Four images in a row */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              <ImageCard
-                src={clmImages.bottom1}
-                alt="Presenter at CLM event"
-                className="h-52"
-              />
-              <ImageCard
-                src={clmImages.bottom2}
-                alt="CLM attendees networking"
-                className="h-52"
-              />
-              <ImageCard
-                src={clmImages.bottom3}
-                alt="Team working at CLM event"
-                className="h-52"
-              />
-              <ImageCard
-                src={clmImages.bottom4}
-                alt="Speaker addressing audience at CLM"
-                className="h-52"
-              />
-            </div>
+        {/* Category Filter */}
+        {categories.length > 0 && (
+          <div className="mb-8 flex flex-wrap justify-center gap-3">
+            <button
+              onClick={() => handleCategoryChange("all")}
+              className={`px-6 py-2 rounded-full font-medium transition-all duration-200 ${
+                selectedCategory === "all"
+                  ? "bg-primary-green text-white shadow-lg"
+                  : "bg-white text-gray-700 hover:bg-gray-100"
+              }`}
+            >
+              {locale === "am" ? "ሁሉም" : "All"}
+            </button>
+            {categories.map((category) => (
+              <button
+                key={category._id}
+                onClick={() => handleCategoryChange(category._id)}
+                className={`px-6 py-2 rounded-full font-medium transition-all duration-200 ${
+                  selectedCategory === category._id
+                    ? "bg-primary-green text-white shadow-lg"
+                    : "bg-white text-gray-700 hover:bg-gray-100"
+                }`}
+                style={
+                  selectedCategory === category._id && category.color
+                    ? { backgroundColor: category.color }
+                    : undefined
+                }
+              >
+                {getBilingualText(
+                  category.name as string | { en: string; am: string } | undefined,
+                  locale,
+                  category.name
+                )}
+              </button>
+            ))}
           </div>
-        </section>
+        )}
 
-        <hr className="my-16 border-t-2 border-transparent" />
+        {/* Gallery Grid */}
+        {galleryItems.length > 0 ? (
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-8">
+              {galleryItems.map((item, index) => {
+                // Create a masonry-like layout with varying heights
+                const isLarge = index % 7 === 0 || index % 7 === 3;
+                const isWide = index % 7 === 6;
 
-        {/* CRPVF Section */}
-        <section id="crpvf">
-          <h2 className="text-center text-4xl font-bold text-[#388E3C] mb-8">
-            CRPVF
-          </h2>
-          <div className="flex flex-col lg:flex-row gap-6">
-            {/* Left side: four smaller images */}
-            <div className="lg:w-[60%] grid grid-cols-2 gap-6">
-              <div className="flex flex-col gap-6">
-                <ImageCard
-                  src={crpvfImages.left1}
-                  alt="CRPVF community gathering"
-                  className="h-52"
-                />
-                <ImageCard
-                  src={crpvfImages.left3}
-                  alt="CRPVF children in a group"
-                  className="h-52"
-                />
-              </div>
-              <div className="flex flex-col gap-6">
-                <ImageCard
-                  src={crpvfImages.left2}
-                  alt="CRPVF training session"
-                  className="h-52"
-                />
-                <ImageCard
-                  src={crpvfImages.left4}
-                  alt="CRPVF parenting skill workshop"
-                  className="h-52"
-                />
-              </div>
+                return (
+                  <div
+                    key={item._id}
+                    className={
+                      isLarge
+                        ? "sm:col-span-2 sm:row-span-2"
+                        : isWide
+                        ? "sm:col-span-2"
+                        : ""
+                    }
+                  >
+                    <ImageCard
+                      src={item.url || placeholderImages[index % placeholderImages.length]}
+                      alt={
+                        getBilingualText(
+                          item.alt as string | { en: string; am: string } | undefined,
+                          locale,
+                          item.alt || item.originalName
+                        ) || item.originalName
+                      }
+                      caption={
+                        item.caption
+                          ? getBilingualText(
+                              item.caption as
+                                | string
+                                | { en: string; am: string }
+                                | undefined,
+                              locale,
+                              item.caption
+                            )
+                          : undefined
+                      }
+                      className={isLarge ? "h-[30rem] md:h-[38rem]" : "h-52 md:h-64"}
+                    />
+                  </div>
+                );
+              })}
             </div>
-            {/* Right side: large image */}
-            <div className="lg:w-[40%]">
-              <ImageCard
-                src={crpvfImages.main}
-                alt="CRPVF parenting skill training group photo"
-                className="h-full min-h-[30rem]"
-              />
-            </div>
+
+            {/* Load More Button */}
+            {hasMore && (
+              <div className="text-center mt-8">
+                <button
+                  onClick={handleLoadMore}
+                  disabled={loading}
+                  className="px-8 py-3 bg-primary-green text-white rounded-full font-medium hover:bg-green-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {loading
+                    ? locale === "am"
+                      ? "በመጫን ላይ..."
+                      : "Loading..."
+                    : locale === "am"
+                    ? "ተጨማሪ ይጫኑ"
+                    : "Load More"}
+                </button>
+              </div>
+            )}
+          </>
+        ) : (
+          <div className="text-center py-16">
+            <p
+              className={`text-gray-600 text-lg ${
+                locale === "am" ? "font-amharic" : ""
+              }`}
+            >
+              {locale === "am"
+                ? "አሁን ምንም ምስሎች የሉም"
+                : "No images available at the moment"}
+            </p>
           </div>
-        </section>
+        )}
       </div>
     </div>
   );

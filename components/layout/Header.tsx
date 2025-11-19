@@ -5,11 +5,14 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronDown, Menu, X } from "lucide-react";
 import Image from "next/image";
+import { useTranslation } from "~/lib/i18n/hooks";
+import LanguageSwitcher from "~/components/ui/LanguageSwitcher";
 
 export default function Header() {
   const [openDropdown, setOpenDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
+  const { t, locale } = useTranslation();
 
   // Helper function to check if a route is active
   const isActiveRoute = (href: string) => {
@@ -20,9 +23,8 @@ export default function Header() {
   };
 
   const whoWeAreItems = [
-    { href: "/who-we-are", label: "About Us" },
-    { href: "/history", label: "History" },
-    { href: "/programs", label: "Programs" },
+    { href: "/who-we-are", label: t("nav.aboutUs") },
+    { href: "/programs", label: locale === "am" ? "አገልግሎቶች" : "Services" },
   ];
 
   // Close dropdown when clicking outside
@@ -46,8 +48,8 @@ export default function Header() {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3 group">
           <Image
-            src="/logo.svg"
-            alt="Logo"
+            src="/logo.png"
+            alt="Deshet Medical Center Logo"
             width={60}
             height={60}
             className="max-sm:size-12 object-contain transition-transform duration-300 group-hover:scale-105"
@@ -62,11 +64,11 @@ export default function Header() {
             href="/"
             className={`transition-colors ${
               isActiveRoute("/")
-                ? "text-[#ff7a00] font-semibold"
-                : "hover:text-[#ff7a00]"
+                ? "text-primary-green font-semibold"
+                : "hover:text-primary-green"
             }`}
           >
-            Home
+            {t("nav.home")}
           </Link>
 
           <div className="relative" ref={dropdownRef}>
@@ -74,11 +76,11 @@ export default function Header() {
               onClick={() => setOpenDropdown(!openDropdown)}
               className={`flex items-center gap-1 transition-colors ${
                 whoWeAreItems.some((item) => isActiveRoute(item.href))
-                  ? "text-[#ff7a00] font-semibold"
-                  : "hover:text-[#ff7a00]"
+                  ? "text-primary-green font-semibold"
+                  : "hover:text-primary-green"
               }`}
             >
-              Who we are
+              {t("nav.whoWeAre")}
               <ChevronDown
                 className={`w-4 h-4 transition-transform duration-300 ${
                   openDropdown ? "rotate-180" : ""
@@ -96,8 +98,8 @@ export default function Header() {
                     onClick={() => setOpenDropdown(false)}
                     className={`block md:px-3 md:py-2 lg:px-5 lg:py-2.5 text-xs md:text-sm transition-all duration-200 ${
                       isActiveRoute(item.href)
-                        ? "text-[#ff7a00] font-semibold bg-orange-50"
-                        : "text-gray-700 hover:bg-orange-50 hover:text-[#ff7a00]"
+                        ? "text-primary-green font-semibold bg-primary-50"
+                        : "text-gray-700 hover:bg-primary-50 hover:text-primary-green"
                     }`}
                   >
                     {/* Scaled dropdown item text and padding for tablets: md:text-xs md:px-3 md:py-2 lg: originals */}
@@ -109,55 +111,47 @@ export default function Header() {
           </div>
 
           <Link
-            href="/news"
+            href="/blog"
             className={`transition-colors ${
-              isActiveRoute("/news")
-                ? "text-[#ff7a00] font-semibold"
-                : "hover:text-[#ff7a00]"
+              isActiveRoute("/blog")
+                ? "text-primary-green font-semibold"
+                : "hover:text-primary-green"
             }`}
           >
-            News
+            {t("nav.blog")}
           </Link>
           <Link
             href="/gallery"
             className={`transition-colors ${
               isActiveRoute("/gallery")
-                ? "text-[#ff7a00] font-semibold"
-                : "hover:text-[#ff7a00]"
+                ? "text-primary-green font-semibold"
+                : "hover:text-primary-green"
             }`}
           >
-            Gallery
-          </Link>
-          <Link
-            href="/volunteer"
-            className={`transition-colors ${
-              isActiveRoute("/volunteer")
-                ? "text-[#ff7a00] font-semibold"
-                : "hover:text-[#ff7a00]"
-            }`}
-          >
-            Volunteer
+            {t("nav.gallery")}
           </Link>
           <Link
             href="/contact-us"
             className={`transition-colors ${
               isActiveRoute("/contact-us")
-                ? "text-[#ff7a00] font-semibold"
-                : "hover:text-[#ff7a00]"
+                ? "text-primary-green font-semibold"
+                : "hover:text-primary-green"
             }`}
           >
-            Contact us
+            {t("nav.contactUs")}
           </Link>
         </nav>
 
-        {/* Desktop Donate Button */}
-        <Link
-          href="/donate"
-          className="hidden md:inline-block bg-primary-green text-white text-sm md:text-base lg:text-2xl font-medium md:px-4 lg:px-8 py-1 2xl:py-3 rounded-lg transition-all duration-300"
-        >
-          {/* Extended visibility to md:inline-block for tablets; adjusted text size md:text-base lg:text-2xl and padding md:px-4 lg:px-8 to fit tablets */}
-          Donate
-        </Link>
+        {/* Desktop Language Switcher & Booking Button */}
+        <div className="hidden md:flex items-center gap-4">
+          <LanguageSwitcher />
+          <Link
+            href="/booking"
+            className="bg-primary-green text-white text-sm md:text-base lg:text-2xl font-medium md:px-4 lg:px-8 py-1 2xl:py-3 rounded-lg transition-all duration-300"
+          >
+            {t("nav.booking")}
+          </Link>
+        </div>
 
         {/* Mobile Menu Button */}
         <MobileHeader />
@@ -173,11 +167,11 @@ function MobileHeader() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const pathname = usePathname();
+  const { t, locale } = useTranslation();
 
   const whoWeAreItems = [
-    { href: "/who-we-are", label: "About Us" },
-    { href: "/history", label: "History" },
-    { href: "/programs", label: "Programs" },
+    { href: "/who-we-are", label: t("nav.aboutUs") },
+    { href: "/programs", label: locale === "am" ? "አገልግሎቶች" : "Services" },
   ];
 
   // Helper function to check if a route is active
@@ -205,12 +199,13 @@ function MobileHeader() {
         <>
           <div className="fixed top-16 right-0 w-[85%] sm:w-[70%] md:w-[60%] h-fit rounded-bl-lg bg-white shadow-2xl z-40 p-4 flex flex-col gap-4 animate-slideIn md:hidden">
             {/* Added md:hidden to hide drawer on tablets where horizontal nav is used */}
-            {/* Header with close button only */}
-            <div className="flex items-center justify-end border-b pb-4">
+            {/* Header with close button and language switcher */}
+            <div className="flex items-center justify-between border-b pb-4">
+              <LanguageSwitcher />
               <button
                 onClick={() => setIsMenuOpen(false)}
                 className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
-                aria-label="Close menu"
+                aria-label={t("common.close")}
               >
                 <X size={26} className="text-gray-700" />
               </button>
@@ -223,12 +218,11 @@ function MobileHeader() {
                 onClick={() => setIsMenuOpen(false)}
                 className={`px-4 py-3 rounded-lg transition-all duration-200 ${
                   isActiveRoute("/")
-                    ? "bg-orange-50 text-[#ff7a00] font-semibold"
-                    : "hover:bg-orange-50 hover:text-[#ff7a00]"
+                    ? "bg-primary-50 text-primary-green font-semibold"
+                    : "hover:bg-primary-50 hover:text-primary-green"
                 }`}
               >
-                {/* Increased py-2 to py-3 for better tap target size on mobile (minimum 48px) */}
-                Home
+                {t("nav.home")}
               </Link>
 
               {/* Dropdown */}
@@ -237,12 +231,11 @@ function MobileHeader() {
                   onClick={() => setDropdownOpen(!dropdownOpen)}
                   className={`flex items-center justify-between w-full px-4 py-3 rounded-lg transition-all duration-200 ${
                     whoWeAreItems.some((item) => isActiveRoute(item.href))
-                      ? "bg-orange-50 text-[#ff7a00] font-semibold"
-                      : "hover:bg-orange-50 hover:text-[#ff7a00]"
+                      ? "bg-primary-50 text-primary-green font-semibold"
+                      : "hover:bg-primary-50 hover:text-primary-green"
                   }`}
                 >
-                  {/* Increased py-2 to py-3 for better tap targets */}
-                  Who we are
+                  {t("nav.whoWeAre")}
                   <ChevronDown
                     className={`w-5 h-5 transition-transform duration-300 ${
                       dropdownOpen ? "rotate-180" : ""
@@ -258,8 +251,8 @@ function MobileHeader() {
                         onClick={() => setIsMenuOpen(false)}
                         className={`py-3 text-sm transition-all duration-200 ${
                           isActiveRoute(item.href)
-                            ? "text-[#ff7a00] font-semibold"
-                            : "text-gray-600 hover:text-[#ff7a00]"
+                            ? "text-primary-green font-semibold"
+                            : "text-gray-600 hover:text-primary-green"
                         }`}
                       >
                         {/* Increased py-2.5 to py-3 for better tap targets on mobile sub-items */}
@@ -271,60 +264,49 @@ function MobileHeader() {
               </div>
 
               <Link
-                href="/news"
+                href="/blog"
                 onClick={() => setIsMenuOpen(false)}
                 className={`px-4 py-3 rounded-lg transition-all duration-200 ${
-                  isActiveRoute("/news")
-                    ? "bg-orange-50 text-[#ff7a00] font-semibold"
-                    : "hover:bg-orange-50 hover:text-[#ff7a00]"
+                  isActiveRoute("/blog")
+                    ? "bg-primary-50 text-primary-green font-semibold"
+                    : "hover:bg-primary-50 hover:text-primary-green"
                 }`}
               >
-                News
+                {t("nav.blog")}
               </Link>
               <Link
                 href="/gallery"
                 onClick={() => setIsMenuOpen(false)}
                 className={`px-4 py-3 rounded-lg transition-all duration-200 ${
                   isActiveRoute("/gallery")
-                    ? "bg-orange-50 text-[#ff7a00] font-semibold"
-                    : "hover:bg-orange-50 hover:text-[#ff7a00]"
+                    ? "bg-primary-50 text-primary-green font-semibold"
+                    : "hover:bg-primary-50 hover:text-primary-green"
                 }`}
               >
-                Gallery
-              </Link>
-              <Link
-                href="/volunteer"
-                onClick={() => setIsMenuOpen(false)}
-                className={`px-4 py-3 rounded-lg transition-all duration-200 ${
-                  isActiveRoute("/volunteer")
-                    ? "bg-orange-50 text-[#ff7a00] font-semibold"
-                    : "hover:bg-orange-50 hover:text-[#ff7a00]"
-                }`}
-              >
-                Volunteer
+                {t("nav.gallery")}
               </Link>
               <Link
                 href="/contact-us"
                 onClick={() => setIsMenuOpen(false)}
                 className={`px-4 py-3 rounded-lg transition-all duration-200 ${
                   isActiveRoute("/contact-us")
-                    ? "bg-orange-50 text-[#ff7a00] font-semibold"
-                    : "hover:bg-orange-50 hover:text-[#ff7a00]"
+                    ? "bg-primary-50 text-primary-green font-semibold"
+                    : "hover:bg-primary-50 hover:text-primary-green"
                 }`}
               >
-                Contact us
+                {t("nav.contactUs")}
               </Link>
 
               <Link
-                href="/donate"
+                href="/booking"
                 onClick={() => setIsMenuOpen(false)}
                 className={`mt-4 text-center py-3 rounded-xl font-semibold transition-all duration-300 hover:shadow-lg ${
-                  isActiveRoute("/donate")
+                  isActiveRoute("/booking")
                     ? "bg-[#0f6d35] text-white"
                     : "bg-primary-green hover:bg-[#0f6d35] text-white"
                 }`}
               >
-                Donate
+                {t("nav.booking")}
               </Link>
             </nav>
           </div>

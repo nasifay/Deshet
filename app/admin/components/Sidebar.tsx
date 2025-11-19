@@ -13,6 +13,7 @@ import {
   Settings,
   X,
   Heart,
+  MapPin,
   Home,
   MessageSquare,
   Building2,
@@ -21,6 +22,8 @@ import {
   Link as LinkIcon,
   Clock,
   Quote,
+  Calendar,
+  Package,
 } from "lucide-react";
 
 interface MenuItem {
@@ -67,14 +70,24 @@ export default function Sidebar({
       icon: <FileText className="w-5 h-5" />,
     },
     {
-      title: "News & Events",
-      url: "/admin/news",
+      title: "Blog",
+      url: "/admin/blog",
       icon: <Newspaper className="w-5 h-5" />,
     },
     {
-      title: "Programs",
-      url: "/admin/programs",
+      title: "Services",
+      url: "/admin/services",
       icon: <FolderKanban className="w-5 h-5" />,
+    },
+    {
+      title: "Bookings",
+      url: "/admin/bookings",
+      icon: <Calendar className="w-5 h-5" />,
+    },
+    {
+      title: "Products",
+      url: "/admin/products",
+      icon: <Package className="w-5 h-5" />,
     },
     {
       title: "Gallery",
@@ -82,19 +95,9 @@ export default function Sidebar({
       icon: <Images className="w-5 h-5" />,
     },
     {
-      title: "Volunteers",
-      url: "/admin/volunteers",
-      icon: <Heart className="w-5 h-5" />,
-    },
-    {
       title: "Contacts",
       url: "/admin/contacts",
       icon: <MessageSquare className="w-5 h-5" />,
-    },
-    {
-      title: "Bank Options",
-      url: "/admin/bank-options",
-      icon: <Building2 className="w-5 h-5" />,
     },
     {
       title: "Leadership",
@@ -128,9 +131,9 @@ export default function Sidebar({
     //   icon: <BarChart3 className="w-5 h-5" />,
     // },
     {
-      title: "Settings",
-      url: "/admin/settings",
-      icon: <Settings className="w-5 h-5" />,
+      title: "Map Configuration",
+      url: "/admin/map-configuration",
+      icon: <MapPin className="w-5 h-5" />,
       roles: ["admin", "superadmin"],
     },
   ];
@@ -161,11 +164,11 @@ export default function Sidebar({
           {isOpen ? (
             <div className="flex items-center space-x-2">
               <div className="w-10 h-10 bg-primary-green rounded-lg flex items-center justify-center">
-                <span className="text-white text-xl font-black">TSD</span>
+                <span className="text-white text-xl font-black">DIMC</span>
               </div>
               <div className="flex flex-col">
                 <span className="text-sm font-black text-gray-800 dark:text-white">
-                  TSD
+                  Deshet
                 </span>
                 <span className="text-xs text-gray-500 dark:text-gray-400">
                   Admin
@@ -174,7 +177,7 @@ export default function Sidebar({
             </div>
           ) : (
             <div className="w-10 h-10 bg-primary-green rounded-lg flex items-center justify-center">
-              <span className="text-white text-xl font-black">T</span>
+              <span className="text-white text-xl font-black">D</span>
             </div>
           )}
         </div>
@@ -211,11 +214,11 @@ export default function Sidebar({
         <div className="h-16 flex items-center justify-between px-4 border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center space-x-2">
             <div className="w-10 h-10 bg-primary-green rounded-lg flex items-center justify-center">
-              <span className="text-white text-xl font-black">TSD</span>
+              <span className="text-white text-xl font-black">DIMC</span>
             </div>
             <div className="flex flex-col">
               <span className="text-sm font-black text-gray-800 dark:text-white">
-                TSD
+                Deshet
               </span>
               <span className="text-xs text-gray-500 dark:text-gray-400">
                 Admin

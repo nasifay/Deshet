@@ -13,22 +13,22 @@ export default function ProgramAreasSection() {
     Array<{ title: string; image: string; link?: string }>
   >([
     {
-      title: "Youth <br /> Empowerment & <br /> Peacebuilding",
+      title: "Traditional Medical <br /> Consultation",
       image: "/overview/1.png",
       link: "/programs",
     },
     {
-      title: "Sexual <br /> & Reproductive Health & <br /> Gender Equality",
+      title: "Herbal Medicine <br /> Preparation",
       image: "/overview/2.png",
       link: "/programs",
     },
     {
-      title: "Climate Justice & <br /> Livelihoods",
+      title: "Detox & Cleansing <br /> Therapy",
       image: "/overview/3.png",
       link: "/programs",
     },
     {
-      title: "Children's Rights <br /> Protection",
+      title: "Traditional Diagnostic <br /> Techniques",
       image: "/overview/4.png",
       link: "/programs",
     },

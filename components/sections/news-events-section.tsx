@@ -6,6 +6,7 @@ import Button from "../ui/Button";
 import { cn } from "~/lib/utils";
 import { useState, useEffect } from "react";
 import { NewsEventsSkeleton } from "./landing-page-skeleton";
+import { useTranslation } from "~/lib/i18n/hooks";
 
 interface NewsItem {
   _id?: string;
@@ -21,6 +22,7 @@ interface NewsEventsSectionProps {
 }
 
 export default function NewsAndEvents() {
+  const { t } = useTranslation();
   const [news, setNews] = useState<NewsItem[]>([
     {
       featuredImage: "/news-and-events/1.png",
@@ -48,7 +50,6 @@ export default function NewsAndEvents() {
     },
   ]);
   const [loading, setLoading] = useState(true);
-  const title = "NEWS AND EVENTS";
 
   // Fetch data
   useEffect(() => {
@@ -80,13 +81,13 @@ export default function NewsAndEvents() {
         {/* Header */}
         <div className="flex items-center justify-between mb-12">
           <h2 className="primary-title text-primary-green justify-self-center self-center text-center ">
-            {title}
+            {t("home.blog.sectionTitle")}
           </h2>
           <Link
-            href="/news"
+            href="/blog"
             className=" hidden sm:block text-gray-500 hover:text-[#268246] text-sm font-medium transition-colors duration-200"
           >
-            See More
+            {t("home.blog.seeMore")}
           </Link>
         </div>
 
@@ -106,7 +107,7 @@ export default function NewsAndEvents() {
           {news.map((item, index) => (
             <Link
               key={item._id || index}
-              href={`/news/${item.slug || "#"}`}
+              href={`/blog/${item.slug || "#"}`}
               className="relative group overflow-hidden rounded-2xl bg-black block"
             >
               <div className="relative w-auto h-60 md:h-96 ">
@@ -133,12 +134,12 @@ export default function NewsAndEvents() {
         </div>
 
         <div className="flex items-center justify-center mt-4">
-          <Link href="/news">
+          <Link href="/blog">
             <Button
               variant="outline"
               className="bg-transparent text-black block sm:hidden  hover:text-[#268246] text-sm font-medium transition-colors duration-200"
             >
-              See More
+              {t("home.blog.seeMore")}
             </Button>
           </Link>
         </div>

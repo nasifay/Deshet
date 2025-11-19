@@ -1,30 +1,34 @@
 import { Metadata } from "next";
+import type { Locale } from "~/lib/i18n/config";
+import { locales } from "~/lib/i18n/config";
+import { en } from "~/lib/i18n/translations/en";
+import { am } from "~/lib/i18n/translations/am";
 
 // Base URL for the site
 export const BASE_URL =
-  process.env.NEXT_PUBLIC_BASE_URL || "https://tamra-sdt.org";
+  process.env.NEXT_PUBLIC_BASE_URL || "https://deshetmed.com";
 
 // Default organization info
 export const ORGANIZATION = {
-  name: "Tamra for Social Development",
-  shortName: "TSD",
+  name: "Deshet Indigenous Medical Center",
+  shortName: "Deshet",
   description:
-    "Empowering young people through holistic development in health, education, livelihoods, and civic engagement across Ethiopia.",
-  email: "hello@tsd.com",
-  phone: "+251 911 121314",
+    "Premium Ethiopian Indigenous Medical Center delivering herbal, spiritual, and cultural healing",
+  email: "info@deshetmed.com",
+  phone: "+251 XXX XXX XXX",
   address: {
     streetAddress: "Addis Ababa",
     addressLocality: "Addis Ababa",
     addressRegion: "Addis Ababa",
     addressCountry: "Ethiopia",
   },
-  logo: `${BASE_URL}/logo.svg`,
+  logo: `${BASE_URL}/logo.png`,
   image: `${BASE_URL}/images/hero.jpg`,
   socialMedia: {
-    facebook: "https://facebook.com/tamra-sdt",
-    twitter: "https://twitter.com/tamra_sdt",
-    linkedin: "https://linkedin.com/company/tamra-sdt",
-    instagram: "https://instagram.com/tamra_sdt",
+    facebook: "https://facebook.com/deshetmed",
+    twitter: "https://twitter.com/deshetmed",
+    linkedin: "https://linkedin.com/company/deshetmed",
+    instagram: "https://instagram.com/deshetmed",
   },
 };
 
@@ -34,21 +38,24 @@ export const DEFAULT_TWITTER_IMAGE = `${BASE_URL}/images/hero.jpg`;
 
 // SEO Keywords (general)
 export const DEFAULT_KEYWORDS = [
-  "NGO Ethiopia",
-  "youth empowerment",
-  "peacebuilding",
-  "gender development",
-  "SRHR",
-  "sexual reproductive health",
-  "climate justice",
-  "community development",
-  "social development Ethiopia",
-  "Tamra",
-  "nonprofit organization",
-  "Addis Ababa NGO",
-  "women empowerment",
-  "vulnerable populations",
-  "sustainable development",
+  "Deshet Medical Center",
+  "Ethiopian traditional medicine",
+  "indigenous medicine Ethiopia",
+  "herbal medicine",
+  "traditional healing",
+  "Ethiopian herbal remedies",
+  "cultural healing",
+  "spiritual healing",
+  "traditional medical consultation",
+  "herbal medicine preparation",
+  "detox therapy",
+  "traditional diagnostic techniques",
+  "medical center Addis Ababa",
+  "Deshet",
+  "DIMC",
+  "indigenous healthcare",
+  "Ethiopian medicine",
+  "natural healing Ethiopia",
 ];
 
 /**
@@ -57,20 +64,21 @@ export const DEFAULT_KEYWORDS = [
 export const PAGE_METADATA: Record<string, Metadata> = {
   // Home / Landing Page
   home: {
-    title: "Tamra for Social Development | Empowering Communities in Ethiopia",
+    title: "Deshet Indigenous Medical Center | Premium Traditional Healing in Ethiopia",
     description:
-      "Leading NGO in Ethiopia empowering youth through holistic programs in health, education, livelihoods, peacebuilding, and civic engagement. Creating lasting social change.",
+      "Premium Ethiopian Indigenous Medical Center delivering herbal, spiritual, and cultural healing. Experience traditional medicine, herbal remedies, and holistic wellness in Addis Ababa.",
     keywords: [
       ...DEFAULT_KEYWORDS,
-      "Ethiopian NGO",
-      "youth development programs",
-      "community empowerment",
-      "social impact Ethiopia",
+      "medical center Ethiopia",
+      "traditional medicine center",
+      "herbal healing center",
+      "wellness center Addis Ababa",
+      "indigenous healthcare services",
     ],
     openGraph: {
-      title: "Tamra for Social Development | Empowering Communities",
+      title: "Deshet Indigenous Medical Center | Premium Traditional Healing",
       description:
-        "Leading NGO in Ethiopia empowering youth through holistic programs in health, education, livelihoods, peacebuilding, and civic engagement.",
+        "Premium Ethiopian Indigenous Medical Center delivering herbal, spiritual, and cultural healing. Experience traditional medicine and holistic wellness.",
       url: BASE_URL,
       siteName: ORGANIZATION.name,
       images: [
@@ -78,7 +86,7 @@ export const PAGE_METADATA: Record<string, Metadata> = {
           url: DEFAULT_OG_IMAGE,
           width: 1200,
           height: 630,
-          alt: "Tamra for Social Development - Empowering Communities",
+          alt: "Deshet Indigenous Medical Center - Premium Traditional Healing",
         },
       ],
       locale: "en_US",
@@ -86,11 +94,11 @@ export const PAGE_METADATA: Record<string, Metadata> = {
     },
     twitter: {
       card: "summary_large_image",
-      title: "Tamra for Social Development | Empowering Communities",
+      title: "Deshet Indigenous Medical Center | Premium Traditional Healing",
       description:
-        "Leading NGO in Ethiopia empowering youth through holistic programs in health, education, livelihoods, and civic engagement.",
+        "Premium Ethiopian Indigenous Medical Center delivering herbal, spiritual, and cultural healing. Experience traditional medicine and holistic wellness.",
       images: [DEFAULT_TWITTER_IMAGE],
-      creator: "@tamra_sdt",
+      creator: "@deshetmed",
     },
     alternates: {
       canonical: BASE_URL,
@@ -99,22 +107,23 @@ export const PAGE_METADATA: Record<string, Metadata> = {
 
   // About / Who We Are Page
   "who-we-are": {
-    title: "About Us | Who We Are | Tamra for Social Development",
+    title: "About Us | Who We Are | Deshet Indigenous Medical Center",
     description:
-      "Learn about Tamra's mission, vision, core values, leadership team, and our commitment to empowering communities across Ethiopia through inclusive development programs.",
+      "Learn about Deshet's mission, vision, core values, and our commitment to preserving and delivering Ethiopian indigenous medicine. Discover our practitioners and healing philosophy.",
     keywords: [
       ...DEFAULT_KEYWORDS,
-      "about Tamra",
+      "about Deshet",
       "mission vision",
       "core values",
-      "leadership team",
-      "NGO Ethiopia about",
-      "organization history",
+      "medical practitioners",
+      "healing philosophy",
+      "medical center history",
+      "traditional medicine practitioners",
     ],
     openGraph: {
-      title: "About Us | Who We Are | Tamra for Social Development",
+      title: "About Us | Who We Are | Deshet Indigenous Medical Center",
       description:
-        "Learn about Tamra's mission, vision, core values, and our commitment to empowering communities across Ethiopia.",
+        "Learn about Deshet's mission, vision, core values, and our commitment to preserving and delivering Ethiopian indigenous medicine.",
       url: `${BASE_URL}/who-we-are`,
       siteName: ORGANIZATION.name,
       images: [
@@ -122,7 +131,7 @@ export const PAGE_METADATA: Record<string, Metadata> = {
           url: `${BASE_URL}/images/about.jpg`,
           width: 1200,
           height: 630,
-          alt: "Tamra Team and Community",
+          alt: "Deshet Medical Center - Our Team and Mission",
         },
       ],
       locale: "en_US",
@@ -130,9 +139,9 @@ export const PAGE_METADATA: Record<string, Metadata> = {
     },
     twitter: {
       card: "summary_large_image",
-      title: "About Us | Who We Are | Tamra for Social Development",
+      title: "About Us | Who We Are | Deshet Indigenous Medical Center",
       description:
-        "Learn about Tamra's mission, vision, and our commitment to empowering communities across Ethiopia.",
+        "Learn about Deshet's mission, vision, and our commitment to preserving and delivering Ethiopian indigenous medicine.",
       images: [`${BASE_URL}/images/about.jpg`],
     },
     alternates: {
@@ -140,25 +149,25 @@ export const PAGE_METADATA: Record<string, Metadata> = {
     },
   },
 
-  // Programs Page
+  // Programs Page (Services)
   programs: {
-    title: "Our Programs | Youth Empowerment & Community Development | TSD",
+    title: "Our Services | Traditional Medical Services | Deshet Medical Center",
     description:
-      "Explore Tamra's comprehensive programs: Youth Empowerment & Peacebuilding, Sexual Reproductive Health & Gender Development, and Climate Justice & Livelihoods initiatives.",
+      "Explore Deshet's comprehensive medical services: Traditional Medical Consultation, Herbal Medicine Preparation, Detox & Cleansing Therapy, Traditional Diagnostic Techniques, and Healing Treatments.",
     keywords: [
       ...DEFAULT_KEYWORDS,
-      "youth programs Ethiopia",
-      "peacebuilding programs",
-      "SRHR programs",
-      "gender equality programs",
-      "climate justice",
-      "livelihoods programs",
-      "community programs",
+      "medical services Ethiopia",
+      "traditional consultation",
+      "herbal medicine services",
+      "detox therapy",
+      "traditional diagnostics",
+      "healing treatments",
+      "medical services Addis Ababa",
     ],
     openGraph: {
-      title: "Our Programs | Youth Empowerment & Community Development",
+      title: "Our Services | Traditional Medical Services | Deshet Medical Center",
       description:
-        "Explore Tamra's programs in Youth Empowerment, Peacebuilding, SRHR, Gender Development, and Climate Justice.",
+        "Explore Deshet's medical services: Traditional Consultation, Herbal Medicine, Detox Therapy, Traditional Diagnostics, and Healing Treatments.",
       url: `${BASE_URL}/programs`,
       siteName: ORGANIZATION.name,
       images: [
@@ -166,7 +175,7 @@ export const PAGE_METADATA: Record<string, Metadata> = {
           url: `${BASE_URL}/programs/hero.png`,
           width: 1200,
           height: 630,
-          alt: "Tamra Programs - Youth Empowerment",
+          alt: "Deshet Medical Services - Traditional Healing",
         },
       ],
       locale: "en_US",
@@ -174,9 +183,9 @@ export const PAGE_METADATA: Record<string, Metadata> = {
     },
     twitter: {
       card: "summary_large_image",
-      title: "Our Programs | Youth Empowerment & Community Development",
+      title: "Our Services | Traditional Medical Services | Deshet Medical Center",
       description:
-        "Explore Tamra's programs in Youth Empowerment, Peacebuilding, SRHR, and Climate Justice.",
+        "Explore Deshet's medical services: Traditional Consultation, Herbal Medicine, Detox Therapy, and Healing Treatments.",
       images: [`${BASE_URL}/programs/hero.png`],
     },
     alternates: {
@@ -184,32 +193,33 @@ export const PAGE_METADATA: Record<string, Metadata> = {
     },
   },
 
-  // News & Events Page
-  news: {
-    title: "News & Events | Latest Updates | Tamra for Social Development",
+  // Blog Page
+  blog: {
+    title: "Blog | Latest Updates | Deshet Indigenous Medical Center",
     description:
-      "Stay informed with the latest news, stories, milestones, and community events from Tamra for Social Development. Discover our impact and upcoming initiatives.",
+      "Stay informed with the latest articles, health tips, traditional medicine insights, and updates from Deshet Indigenous Medical Center. Discover healing wisdom and wellness guidance.",
     keywords: [
       ...DEFAULT_KEYWORDS,
-      "Tamra news",
-      "NGO events Ethiopia",
-      "community events",
-      "social development news",
-      "latest updates",
-      "success stories",
+      "Deshet blog",
+      "medical center news",
+      "health articles",
+      "traditional medicine blog",
+      "wellness tips",
+      "healing insights",
+      "medical updates",
     ],
     openGraph: {
-      title: "News & Events | Latest Updates | Tamra for Social Development",
+      title: "Blog | Latest Updates | Deshet Indigenous Medical Center",
       description:
-        "Stay informed with our latest stories, milestones, and community events.",
-      url: `${BASE_URL}/news`,
+        "Stay informed with our latest articles, health tips, and traditional medicine insights.",
+      url: `${BASE_URL}/blog`,
       siteName: ORGANIZATION.name,
       images: [
         {
           url: `${BASE_URL}/images/news.jpg`,
           width: 1200,
           height: 630,
-          alt: "Tamra News and Events",
+          alt: "Deshet Medical Center Blog and Updates",
         },
       ],
       locale: "en_US",
@@ -217,34 +227,35 @@ export const PAGE_METADATA: Record<string, Metadata> = {
     },
     twitter: {
       card: "summary_large_image",
-      title: "News & Events | Tamra for Social Development",
+      title: "Blog | Deshet Indigenous Medical Center",
       description:
-        "Stay informed with our latest stories, milestones, and community events.",
+        "Stay informed with our latest articles, health tips, and traditional medicine insights.",
       images: [`${BASE_URL}/images/news.jpg`],
     },
     alternates: {
-      canonical: `${BASE_URL}/news`,
+      canonical: `${BASE_URL}/blog`,
     },
   },
 
   // Gallery Page
   gallery: {
-    title: "Gallery | Visual Stories of Impact | Tamra for Social Development",
+    title: "Gallery | Visual Journey of Healing | Deshet Indigenous Medical Center",
     description:
-      "Explore our photo gallery showcasing programs, projects, events, and the communities we serve. A visual journey of change, empowerment, and hope across Ethiopia.",
+      "Explore our photo gallery showcasing our medical center, healing practices, herbal preparations, and the traditional medicine journey. A visual story of wellness, healing, and cultural medicine.",
     keywords: [
       ...DEFAULT_KEYWORDS,
       "photo gallery",
-      "Tamra photos",
-      "community photos",
-      "program photos",
-      "Ethiopia NGO gallery",
+      "Deshet photos",
+      "medical center photos",
+      "healing photos",
+      "herbal medicine gallery",
+      "traditional medicine images",
       "visual stories",
     ],
     openGraph: {
-      title: "Gallery | Visual Stories of Impact",
+      title: "Gallery | Visual Journey of Healing",
       description:
-        "A visual journey of our people, projects, and the change we create across Ethiopia.",
+        "A visual journey of our medical center, healing practices, and traditional medicine.",
       url: `${BASE_URL}/gallery`,
       siteName: ORGANIZATION.name,
       images: [
@@ -252,7 +263,7 @@ export const PAGE_METADATA: Record<string, Metadata> = {
           url: DEFAULT_OG_IMAGE,
           width: 1200,
           height: 630,
-          alt: "Tamra Gallery - Visual Stories",
+          alt: "Deshet Gallery - Visual Journey of Healing",
         },
       ],
       locale: "en_US",
@@ -260,9 +271,9 @@ export const PAGE_METADATA: Record<string, Metadata> = {
     },
     twitter: {
       card: "summary_large_image",
-      title: "Gallery | Visual Stories of Impact",
+      title: "Gallery | Visual Journey of Healing",
       description:
-        "A visual journey of our people, projects, and the change we create.",
+        "A visual journey of our medical center, healing practices, and traditional medicine.",
       images: [DEFAULT_OG_IMAGE],
     },
     alternates: {
@@ -272,22 +283,22 @@ export const PAGE_METADATA: Record<string, Metadata> = {
 
   // History Page
   history: {
-    title: "Our History | Journey of Impact | Tamra for Social Development",
+    title: "Our History | Journey of Healing | Deshet Indigenous Medical Center",
     description:
-      "Trace Tamra's journey from establishment to today. Explore our milestones, growth, and unwavering commitment to communities across Ethiopia since inception.",
+      "Trace Deshet's journey from establishment to today. Explore our milestones, growth, and unwavering commitment to preserving and delivering Ethiopian indigenous medicine since inception.",
     keywords: [
       ...DEFAULT_KEYWORDS,
-      "Tamra history",
-      "organization timeline",
+      "Deshet history",
+      "medical center timeline",
       "milestones",
-      "NGO history Ethiopia",
+      "traditional medicine history Ethiopia",
       "our journey",
       "establishment",
     ],
     openGraph: {
-      title: "Our History | Journey of Impact",
+      title: "Our History | Journey of Healing",
       description:
-        "Tracing our journey of growth, impact, and commitment to communities across Ethiopia.",
+        "Tracing our journey of growth, impact, and commitment to preserving Ethiopian indigenous medicine.",
       url: `${BASE_URL}/history`,
       siteName: ORGANIZATION.name,
       images: [
@@ -295,7 +306,7 @@ export const PAGE_METADATA: Record<string, Metadata> = {
           url: `${BASE_URL}/images/since.jpg`,
           width: 1200,
           height: 630,
-          alt: "Tamra History and Milestones",
+          alt: "Deshet History and Milestones",
         },
       ],
       locale: "en_US",
@@ -303,9 +314,9 @@ export const PAGE_METADATA: Record<string, Metadata> = {
     },
     twitter: {
       card: "summary_large_image",
-      title: "Our History | Journey of Impact",
+      title: "Our History | Journey of Healing",
       description:
-        "Tracing our journey of growth, impact, and commitment to communities across Ethiopia.",
+        "Tracing our journey of growth, impact, and commitment to preserving Ethiopian indigenous medicine.",
       images: [`${BASE_URL}/images/since.jpg`],
     },
     alternates: {
@@ -313,34 +324,33 @@ export const PAGE_METADATA: Record<string, Metadata> = {
     },
   },
 
-  // Volunteer Page
-  volunteer: {
-    title:
-      "Join as a Volunteer | Make a Difference | Tamra for Social Development",
+  // Booking Page
+  booking: {
+    title: "Book Appointment | Schedule Your Visit | Deshet Indigenous Medical Center",
     description:
-      "Join Tamra's volunteer network and become part of the change. Contribute to equality, empowerment, and sustainable development across Ethiopia. Apply now!",
+      "Book your appointment at Deshet Indigenous Medical Center. Schedule a consultation for traditional medical services, herbal medicine, or healing treatments. Experience premium indigenous healthcare.",
     keywords: [
       ...DEFAULT_KEYWORDS,
-      "volunteer Ethiopia",
-      "volunteer opportunities",
-      "NGO volunteer",
-      "join Tamra",
-      "volunteer work",
-      "community volunteer",
-      "make a difference",
+      "book appointment",
+      "schedule visit",
+      "medical consultation booking",
+      "appointment booking",
+      "book consultation",
+      "schedule appointment",
+      "medical center booking",
     ],
     openGraph: {
-      title: "Join as a Volunteer | Make a Difference",
+      title: "Book Appointment | Schedule Your Visit",
       description:
-        "Join a network of people committed to equality, empowerment, and sustainable change.",
-      url: `${BASE_URL}/volunteer`,
+        "Book your appointment for traditional medical services, herbal medicine, or healing treatments at Deshet.",
+      url: `${BASE_URL}/booking`,
       siteName: ORGANIZATION.name,
       images: [
         {
           url: DEFAULT_OG_IMAGE,
           width: 1200,
           height: 630,
-          alt: "Volunteer with Tamra",
+          alt: "Book Appointment at Deshet Medical Center",
         },
       ],
       locale: "en_US",
@@ -348,79 +358,36 @@ export const PAGE_METADATA: Record<string, Metadata> = {
     },
     twitter: {
       card: "summary_large_image",
-      title: "Join as a Volunteer | Make a Difference",
+      title: "Book Appointment | Schedule Your Visit",
       description:
-        "Join a network of people committed to equality, empowerment, and sustainable change.",
+        "Book your appointment for traditional medical services, herbal medicine, or healing treatments at Deshet.",
       images: [DEFAULT_OG_IMAGE],
     },
     alternates: {
-      canonical: `${BASE_URL}/volunteer`,
-    },
-  },
-
-  // Donate Page
-  donate: {
-    title: "Donate | Support Our Mission | Tamra for Social Development",
-    description:
-      "Your donation creates lasting change. Support youth empowerment, women's rights, and vulnerable populations in Ethiopia. Every contribution makes a difference.",
-    keywords: [
-      ...DEFAULT_KEYWORDS,
-      "donate Ethiopia",
-      "support NGO",
-      "donation",
-      "contribute",
-      "charitable giving",
-      "support youth",
-      "fund programs",
-    ],
-    openGraph: {
-      title: "Donate | Support Our Mission",
-      description:
-        "Your support creates lasting change. Empowering youth, uplifting women, and protecting the vulnerable.",
-      url: `${BASE_URL}/donate`,
-      siteName: ORGANIZATION.name,
-      images: [
-        {
-          url: DEFAULT_OG_IMAGE,
-          width: 1200,
-          height: 630,
-          alt: "Support Tamra - Donate Now",
-        },
-      ],
-      locale: "en_US",
-      type: "website",
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: "Donate | Support Our Mission",
-      description:
-        "Your support creates lasting change. Empowering youth and uplifting communities.",
-      images: [DEFAULT_OG_IMAGE],
-    },
-    alternates: {
-      canonical: `${BASE_URL}/donate`,
+      canonical: `${BASE_URL}/booking`,
     },
   },
 
   // Contact Us Page
   "contact-us": {
-    title: "Contact Us | Get in Touch | Tamra for Social Development",
+    title: "Contact Us | Get in Touch | Deshet Indigenous Medical Center",
     description:
-      "Get in touch with Tamra for Social Development. Let's explore how we can work together for a better future. Contact us for partnerships, inquiries, or support.",
+      "Get in touch with Deshet Indigenous Medical Center. Contact us for appointments, inquiries about our services, or to learn more about traditional medicine. We're here to help you on your healing journey.",
     keywords: [
       ...DEFAULT_KEYWORDS,
-      "contact Tamra",
+      "contact Deshet",
       "get in touch",
-      "contact NGO Ethiopia",
+      "contact medical center Ethiopia",
       "reach us",
       "office location",
       "email address",
       "phone number",
+      "medical center contact",
     ],
     openGraph: {
       title: "Contact Us | Get in Touch",
       description:
-        "Get in touch and be part of our journey of transformation. Let's work together for a better future.",
+        "Get in touch with Deshet Indigenous Medical Center. Contact us for appointments, inquiries, or to learn more about traditional medicine.",
       url: `${BASE_URL}/contact-us`,
       siteName: ORGANIZATION.name,
       images: [
@@ -428,7 +395,7 @@ export const PAGE_METADATA: Record<string, Metadata> = {
           url: DEFAULT_OG_IMAGE,
           width: 1200,
           height: 630,
-          alt: "Contact Tamra",
+          alt: "Contact Deshet Medical Center",
         },
       ],
       locale: "en_US",
@@ -437,7 +404,7 @@ export const PAGE_METADATA: Record<string, Metadata> = {
     twitter: {
       card: "summary_large_image",
       title: "Contact Us | Get in Touch",
-      description: "Get in touch and be part of our journey of transformation.",
+      description: "Get in touch with Deshet Indigenous Medical Center for appointments and inquiries.",
       images: [DEFAULT_OG_IMAGE],
     },
     alternates: {
@@ -445,3 +412,169 @@ export const PAGE_METADATA: Record<string, Metadata> = {
     },
   },
 };
+
+/**
+ * Get locale-specific metadata translations
+ */
+function getMetadataTranslations(locale: Locale) {
+  return locale === "am" ? am.meta : en.meta;
+}
+
+/**
+ * Get locale code for OpenGraph (e.g., "en_US", "am_ET")
+ */
+function getOpenGraphLocale(locale: Locale): string {
+  return locale === "am" ? "am_ET" : "en_US";
+}
+
+/**
+ * Generate alternate language links for a given route
+ */
+function generateAlternateLanguages(route: string): Metadata["alternates"] {
+  // Since we're using cookie-based locale, all routes are the same
+  // but we still provide alternate links for SEO
+  const baseUrl = route === "/" ? BASE_URL : `${BASE_URL}${route}`;
+  
+  return {
+    canonical: baseUrl,
+    languages: {
+      en: baseUrl,
+      am: baseUrl,
+    },
+  };
+}
+
+/**
+ * Get page metadata key from route
+ */
+function getPageKeyFromRoute(route: string): string {
+  const normalizedRoute = route === "/" ? "home" : route.replace(/^\//, "").replace(/\//g, "-");
+  
+  // Map route to page key
+  const routeMap: Record<string, string> = {
+    home: "home",
+    "who-we-are": "whoWeAre",
+    programs: "programs",
+    blog: "blog",
+    gallery: "gallery",
+    history: "history",
+    booking: "booking",
+    "contact-us": "contactUs",
+  };
+  
+  return routeMap[normalizedRoute] || normalizedRoute;
+}
+
+/**
+ * Generate locale-aware metadata for a page
+ * @param route - The route path (e.g., "/", "/who-we-are")
+ * @param locale - The locale ("en" or "am")
+ * @param customMetadata - Optional custom metadata to merge
+ */
+export function generatePageMetadata(
+  route: string,
+  locale: Locale = "en",
+  customMetadata?: Partial<Metadata>
+): Metadata {
+  const pageKey = getPageKeyFromRoute(route);
+  const translations = getMetadataTranslations(locale);
+  const pageMeta = translations.pages[pageKey as keyof typeof translations.pages];
+  
+  // Fallback to English if translation not found
+  const fallbackMeta = en.meta.pages[pageKey as keyof typeof en.meta.pages];
+  const meta = pageMeta || fallbackMeta || translations.pages.home;
+  
+  const pageUrl = route === "/" ? BASE_URL : `${BASE_URL}${route}`;
+  const ogLocale = getOpenGraphLocale(locale);
+  
+  // Get default metadata from PAGE_METADATA for keywords and images
+  const defaultMeta = PAGE_METADATA[pageKey] || PAGE_METADATA.home;
+  
+  const metadata: Metadata = {
+    title: meta.title,
+    description: meta.description,
+    keywords: defaultMeta.keywords,
+    openGraph: {
+      title: meta.title,
+      description: meta.description,
+      url: pageUrl,
+      siteName: translations.siteName,
+      images: defaultMeta.openGraph?.images || [
+        {
+          url: DEFAULT_OG_IMAGE,
+          width: 1200,
+          height: 630,
+          alt: meta.title,
+        },
+      ],
+      locale: ogLocale,
+      type: "website",
+      alternateLocale: locales.filter((l) => l !== locale).map(getOpenGraphLocale),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: meta.title,
+      description: meta.description,
+      images: defaultMeta.twitter?.images || [DEFAULT_TWITTER_IMAGE],
+      creator: "@deshetmed",
+    },
+    alternates: generateAlternateLanguages(route),
+  };
+  
+  // Merge with custom metadata if provided
+  if (customMetadata) {
+    return {
+      ...metadata,
+      ...customMetadata,
+      openGraph: {
+        ...metadata.openGraph,
+        ...customMetadata.openGraph,
+      },
+      twitter: {
+        ...metadata.twitter,
+        ...customMetadata.twitter,
+      },
+      alternates: {
+        ...metadata.alternates,
+        ...customMetadata.alternates,
+      },
+    };
+  }
+  
+  return metadata;
+}
+
+/**
+ * Generate root layout metadata with locale support
+ * @param locale - The locale ("en" or "am")
+ */
+export function generateRootMetadata(locale: Locale = "en"): Metadata {
+  const translations = getMetadataTranslations(locale);
+  
+  return {
+    metadataBase: new URL(BASE_URL),
+    title: {
+      default: translations.siteName,
+      template: `%s | ${ORGANIZATION.shortName}`,
+    },
+    description: translations.siteDescription,
+    keywords: DEFAULT_KEYWORDS,
+    authors: [{ name: ORGANIZATION.name }],
+    creator: ORGANIZATION.name,
+    publisher: ORGANIZATION.name,
+    formatDetection: {
+      email: false,
+      address: false,
+      telephone: false,
+    },
+    verification: {
+      google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+    },
+    alternates: {
+      languages: {
+        en: BASE_URL,
+        am: BASE_URL,
+      },
+    },
+  };
+}

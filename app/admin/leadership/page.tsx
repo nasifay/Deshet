@@ -25,7 +25,7 @@ interface LeadershipMember {
 
   phone?: string;
 
-  type: "leadership" | "team_member";
+  type: "board_member" | "leadership" | "team_member";
 }
 
 export default function LeadershipManagementPage() {
@@ -44,7 +44,7 @@ export default function LeadershipManagementPage() {
   const [isAddingNew, setIsAddingNew] = useState(false);
 
   const [filterType, setFilterType] = useState<
-    "all" | "leadership" | "team_member"
+    "all" | "board_member" | "leadership" | "team_member"
   >("all");
 
   const [formData, setFormData] = useState<LeadershipMember>({
@@ -348,6 +348,17 @@ export default function LeadershipManagementPage() {
             All ({members.length})
           </button>
           <button
+            onClick={() => setFilterType("board_member")}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              filterType === "board_member"
+                ? "bg-primary-green text-white"
+                : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
+            }`}
+          >
+            Board Members (
+            {members.filter((m) => m.type === "board_member").length})
+          </button>
+          <button
             onClick={() => setFilterType("leadership")}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               filterType === "leadership"
@@ -472,11 +483,15 @@ export default function LeadershipManagementPage() {
                     onChange={(e) =>
                       setFormData((prev) => ({
                         ...prev,
-                        type: e.target.value as "leadership" | "team_member",
+                        type: e.target.value as
+                          | "board_member"
+                          | "leadership"
+                          | "team_member",
                       }))
                     }
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green"
                   >
+                    <option value="board_member">Board Member</option>
                     <option value="leadership">Leadership</option>
                     <option value="team_member">Team Member</option>
                   </select>
@@ -625,7 +640,9 @@ export default function LeadershipManagementPage() {
           <div className="p-8 text-center">
             <p className="text-gray-600 dark:text-gray-400">
               No{" "}
-              {filterType === "leadership"
+              {filterType === "board_member"
+                ? "board members"
+                : filterType === "leadership"
                 ? "leadership members"
                 : "team members"}{" "}
               found
@@ -662,12 +679,16 @@ export default function LeadershipManagementPage() {
                   <div className="mb-2">
                     <span
                       className={`text-xs px-2 py-1 rounded-full ${
-                        member.type === "leadership"
+                        member.type === "board_member"
+                          ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300"
+                          : member.type === "leadership"
                           ? "bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300"
                           : "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300"
                       }`}
                     >
-                      {member.type === "leadership"
+                      {member.type === "board_member"
+                        ? "Board Member"
+                        : member.type === "leadership"
                         ? "Leadership"
                         : "Team Member"}
                     </span>

@@ -12,7 +12,8 @@
 import dotenv from "dotenv";
 import { resolve } from "path";
 
-// Load environment variables from .env
+// Load environment variables from .env.local first, then .env
+dotenv.config({ path: resolve(process.cwd(), ".env.local") });
 dotenv.config({ path: resolve(process.cwd(), ".env") });
 
 import mongoose from "mongoose";
@@ -26,7 +27,7 @@ import {
 
 const MONGODB_URI =
   process.env.MONGODB_URI || "mongodb://localhost:27017/tamra_sdt";
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "admin@tamra-sdt.org";
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "admin@deshetmed.com";
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "Admin@123456";
 
 async function seed() {

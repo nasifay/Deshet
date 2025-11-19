@@ -164,3 +164,8 @@ const Program: Model<IProgram> =
 
 export default Program;
 
+// Alias for Service (used in Phase 7 transformation)
+// Service and Program refer to the same model/collection
+export const Service = Program;
+export type IService = IProgram;
+

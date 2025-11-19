@@ -1,6 +1,13 @@
+/**
+ * @deprecated This model is deprecated as of Phase 7 transformation.
+ * The Deshet Medical Center website no longer uses volunteer functionality.
+ * This model is kept for backward compatibility but should not be used in new code.
+ * It may be removed in a future version.
+ */
 import mongoose, { Schema, Document, Model } from "mongoose";
 import User from "./User"; // Import User model to register it for population
 
+/** @deprecated Use Booking model instead for appointment management */
 export interface IVolunteer extends Document {
   _id: mongoose.Types.ObjectId;
   fullName: string;

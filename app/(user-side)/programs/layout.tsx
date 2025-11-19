@@ -1,29 +1,36 @@
 import { Metadata } from "next";
-import { PAGE_METADATA, BASE_URL } from "~/lib/seo/metadata-config";
+import { generatePageMetadata } from "~/lib/seo/metadata-config";
 import {
   generateWebPageSchema,
   generateBreadcrumbSchema,
 } from "~/lib/seo/json-ld";
+import { BASE_URL } from "~/lib/seo/metadata-config";
+import { getLocale } from "~/lib/i18n/server";
 
-export const metadata: Metadata = PAGE_METADATA.programs;
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  return generatePageMetadata("/programs", locale);
+}
 
 export default function ProgramsLayout({
+  children,
   hero,
   programsList,
 }: {
+  children: React.ReactNode;
   hero: React.ReactNode;
   programsList: React.ReactNode;
 }) {
   const webPageSchema = generateWebPageSchema({
-    name: "Our Programs",
+    name: "Our Services | Traditional Medical Services | Deshet Medical Center",
     description:
-      "Explore Tamra's comprehensive programs: Youth Empowerment & Peacebuilding, Sexual Reproductive Health & Gender Development, and Climate Justice & Livelihoods.",
+      "Explore Deshet Indigenous Medical Center's comprehensive traditional medical services: Traditional Medical Consultation, Herbal Medicine Preparation, Detox & Cleansing Therapy, Traditional Diagnostic Techniques, and Healing Treatments.",
     url: `${BASE_URL}/programs`,
   });
 
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: "Home", url: BASE_URL },
-    { name: "Programs", url: `${BASE_URL}/programs` },
+    { name: "Services", url: `${BASE_URL}/programs` },
   ]);
 
   return (
@@ -40,10 +47,9 @@ export default function ProgramsLayout({
           __html: JSON.stringify(breadcrumbSchema),
         }}
       />
-      <div className="flex flex-col gap-y-20">
-        {hero}
-        {programsList}
-      </div>
+      {hero}
+      {programsList}
+      {children}
     </>
   );
 }
