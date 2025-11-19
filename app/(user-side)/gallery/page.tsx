@@ -172,6 +172,7 @@ export default function GalleryPage() {
         itemCount: data.data?.length || 0,
         total: data.pagination?.total || 0,
         category: selectedCategory,
+        debug: data.debug, // Show debug info if available
       });
 
       if (data.success) {

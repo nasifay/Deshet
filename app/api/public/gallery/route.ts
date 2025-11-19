@@ -55,6 +55,7 @@ export async function GET(request: NextRequest) {
             });
           }
           
+          // Query category as ObjectId (Mongoose should handle this automatically)
           query.category = categoryObjectId;
         } catch (error) {
           console.error("Error processing category:", error);
@@ -120,18 +121,54 @@ export async function GET(request: NextRequest) {
       console.log("Images with category as string:", totalAsString);
     }
     
-    const [gallery, total] = await Promise.all([
-      Gallery.find(query)
-        .sort(sort)
-        .skip(skip)
-        .limit(limit)
-        .populate("category", "_id name slug color icon")
-        .select(
-          "_id filename originalName url alt caption customClass category createdAt"
-        )
-        .lean(),
-      Gallery.countDocuments(query),
-    ]);
+    // Try to find gallery items - use aggregation to handle potential type mismatches
+    let gallery, total;
+    
+    if (category && category !== "all" && query.category) {
+      // For category queries, try both ObjectId and string matching
+      const categoryObjectId = query.category as mongoose.Types.ObjectId;
+      const categoryString = category;
+      
+      // Try querying with ObjectId first
+      const queryWithObjectId = { ...query, category: categoryObjectId };
+      const queryWithString = { ...query, category: categoryString };
+      
+      // Use $or to match either format
+      const flexibleQuery = {
+        type: "image",
+        $or: [
+          { category: categoryObjectId },
+          { category: categoryString },
+        ],
+      };
+      
+      [gallery, total] = await Promise.all([
+        Gallery.find(flexibleQuery)
+          .sort(sort)
+          .skip(skip)
+          .limit(limit)
+          .populate("category", "_id name slug color icon")
+          .select(
+            "_id filename originalName url alt caption customClass category createdAt"
+          )
+          .lean(),
+        Gallery.countDocuments(flexibleQuery),
+      ]);
+    } else {
+      // For "all" or no category, use normal query
+      [gallery, total] = await Promise.all([
+        Gallery.find(query)
+          .sort(sort)
+          .skip(skip)
+          .limit(limit)
+          .populate("category", "_id name slug color icon")
+          .select(
+            "_id filename originalName url alt caption customClass category createdAt"
+          )
+          .lean(),
+        Gallery.countDocuments(query),
+      ]);
+    }
 
     // Log results for debugging
     console.log("Gallery API - Results:", {
@@ -145,6 +182,23 @@ export async function GET(request: NextRequest) {
       })),
     });
 
+    // Get all unique category IDs from images for debugging (only if category filter is used)
+    let debugInfo = undefined;
+    if (category && category !== "all") {
+      const allImages = await Gallery.find({ type: "image" })
+        .select("category")
+        .lean();
+      const uniqueCategoryIds = [...new Set(allImages.map((img: any) => 
+        img.category?.toString() || img.category || "null"
+      ))];
+      debugInfo = {
+        requestedCategory: category,
+        actualCategoryIdsInImages: uniqueCategoryIds,
+        totalImagesWithCategories: allImages.filter((img: any) => img.category).length,
+      };
+      console.log("Debug info:", debugInfo);
+    }
+
     return NextResponse.json({
       success: true,
       data: gallery,
@@ -154,6 +208,7 @@ export async function GET(request: NextRequest) {
         total,
         pages: Math.ceil(total / limit),
       },
+      ...(debugInfo && { debug: debugInfo }),
     });
   } catch (error) {
     console.error("Error fetching gallery:", error);
