@@ -6,15 +6,13 @@
 import dotenv from "dotenv";
 import { resolve } from "path";
 import mongoose from "mongoose";
-import Gallery from "~/lib/db/models/Gallery";
-import GalleryCategory from "~/lib/db/models/GalleryCategory";
-import User from "~/lib/db/models/User";
 
 // Load environment variables
 dotenv.config({ path: resolve(process.cwd(), ".env.local") });
 dotenv.config({ path: resolve(process.cwd(), ".env") });
 
-const MONGODB_URI = process.env.MONGODB_URI;
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/tamra_sdt";
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "admin@tamra-sdt.org";
 
 if (!MONGODB_URI) {
   console.error("❌ MONGODB_URI is not defined in environment variables");
@@ -39,14 +37,21 @@ const medicalImages = [
 
 async function seedGallery() {
   try {
-    console.log("🌱 Starting gallery seed for Deshet Medical Center...\n");
+    console.log("🌱 Starting gallery seed for Dashet Medical Center...\n");
 
     // Connect to MongoDB
-    await mongoose.connect(MONGODB_URI);
+    await mongoose.connect(MONGODB_URI, {
+      bufferCommands: false,
+    });
     console.log("✅ Connected to MongoDB\n");
 
+    // Import models after connection is established
+    const User = (await import("../lib/db/models/User")).default;
+    const Gallery = (await import("../lib/db/models/Gallery")).default;
+    const GalleryCategory = (await import("../lib/db/models/GalleryCategory")).default;
+
     // Find or get admin user
-    let adminUser = await User.findOne({ email: "admin@deshetmed.com" });
+    let adminUser = await User.findOne({ email: ADMIN_EMAIL });
     if (!adminUser) {
       adminUser = await User.findOne({ role: "admin" });
     }
@@ -56,10 +61,13 @@ async function seedGallery() {
     }
     console.log(`✅ Using admin user: ${adminUser.email}\n`);
 
-    // Clear existing gallery items (optional - comment out if you want to keep existing)
-    // await Gallery.deleteMany({});
-    // await GalleryCategory.deleteMany({});
-    // console.log("✅ Cleared existing gallery data\n");
+    // Clear existing gallery items and categories to ensure clean data
+    console.log("🗑️  Clearing existing gallery data...");
+    const deletedItems = await Gallery.deleteMany({});
+    console.log(`✅ Cleared ${deletedItems.deletedCount} existing gallery items`);
+    
+    const deletedCategories = await GalleryCategory.deleteMany({});
+    console.log(`✅ Cleared ${deletedCategories.deletedCount} existing gallery categories\n`);
 
     // Create gallery categories for Deshet Medical Center
     const categories = [
@@ -140,47 +148,33 @@ async function seedGallery() {
       },
     ];
 
-    // Create categories
-    const createdCategories = [];
+    // Create categories - always create fresh since we cleared them
+    const createdCategories: any[] = [];
     for (const catData of categories) {
-      const existingCategory = await GalleryCategory.findOne({
-        slug: catData.slug,
-      });
-      if (existingCategory) {
-        console.log(
-          `⏭️  Category "${catData.slug}" already exists, skipping...`
-        );
-        createdCategories.push(existingCategory);
-        continue;
-      }
-
       const category = await GalleryCategory.create(catData);
       createdCategories.push(category);
-      console.log(`✅ Created category: ${catData.slug}`);
+      console.log(`✅ Created category: ${catData.slug} (ID: ${category._id})`);
     }
 
     console.log(`\n✅ Created ${createdCategories.length} categories\n`);
 
     // Create gallery items with placeholder images
-    const galleryItems = [];
+    const galleryItems: any[] = [];
     let position = 0;
 
     for (const category of createdCategories) {
-      // Create 3-4 images per category
-      const itemsPerCategory = category.slug === "medical-center" ? 4 : 3;
+      // Create 4-5 images per category for better testing
+      const itemsPerCategory = category.slug === "medical-center" ? 5 : 4;
+      
+      console.log(`\n📸 Creating ${itemsPerCategory} images for category: ${category.slug}...`);
       
       for (let i = 0; i < itemsPerCategory; i++) {
         const imageIndex = (position + i) % medicalImages.length;
         const imageUrl = medicalImages[imageIndex];
 
-        const existingItem = await Gallery.findOne({
-          url: imageUrl,
-          category: category._id,
-        });
-
-        if (existingItem) {
-          continue;
-        }
+        // Get category name for alt/caption (handle bilingual)
+        const categoryNameEn = typeof category.name === 'object' ? category.name.en : category.name;
+        const categoryNameAm = typeof category.name === 'object' ? category.name.am : category.name;
 
         const item = await Gallery.create({
           filename: `medical-image-${category.slug}-${i + 1}.jpg`,
@@ -188,29 +182,43 @@ async function seedGallery() {
           url: imageUrl,
           type: "image",
           mimeType: "image/jpeg",
-          size: 0,
+          size: Math.floor(Math.random() * 500000) + 100000, // Random size 100KB-600KB
+          dimensions: {
+            width: 800,
+            height: 600,
+          },
           alt: {
-            en: `${category.name.en || category.name} - Image ${i + 1}`,
-            am: `${category.name.am || category.name} - ምስል ${i + 1}`,
+            en: `${categoryNameEn} - Image ${i + 1}`,
+            am: `${categoryNameAm} - ምስል ${i + 1}`,
           },
           caption: {
-            en: `Deshet Medical Center - ${category.name.en || category.name}`,
-            am: `ደሸት የሕክምና ማዕከል - ${category.name.am || category.name}`,
+            en: `Dashet Medical Center - ${categoryNameEn}`,
+            am: `ደሸት የሕክምና ማዕከል - ${categoryNameAm}`,
           },
           section: "general",
           position: position + i,
           featured: i === 0, // First item in each category is featured
-          category: category._id,
+          category: category._id, // Use ObjectId reference
           uploadedBy: adminUser._id,
         });
 
         galleryItems.push(item);
+        console.log(`   ✅ Created image ${i + 1}/${itemsPerCategory} for ${category.slug} (Category ID: ${category._id})`);
       }
       position += itemsPerCategory;
     }
 
-    console.log(`✅ Created ${galleryItems.length} gallery items\n`);
-    console.log(`✅ Gallery seed completed!`);
+    console.log(`\n✅ Created ${galleryItems.length} gallery items total`);
+    
+    // Verify the data
+    console.log("\n🔍 Verifying data...");
+    for (const category of createdCategories) {
+      const count = await Gallery.countDocuments({ category: category._id });
+      const categoryName = typeof category.name === 'object' ? category.name.en : category.name;
+      console.log(`   ${categoryName}: ${count} images (Category ID: ${category._id})`);
+    }
+    
+    console.log(`\n✅ Gallery seed completed successfully!`);
 
     // Close connection
     await mongoose.disconnect();
@@ -223,6 +231,7 @@ async function seedGallery() {
 
 // Run seed
 seedGallery();
+
 
 
 
