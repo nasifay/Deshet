@@ -28,8 +28,12 @@ export async function GET(request: NextRequest) {
     if (search) {
       query.$or = [
         { name: { $regex: search, $options: "i" } },
+        { "name.en": { $regex: search, $options: "i" } },
+        { "name.am": { $regex: search, $options: "i" } },
         { slug: { $regex: search, $options: "i" } },
         { description: { $regex: search, $options: "i" } },
+        { "description.en": { $regex: search, $options: "i" } },
+        { "description.am": { $regex: search, $options: "i" } },
       ];
     }
 
