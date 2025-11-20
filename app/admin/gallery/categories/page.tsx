@@ -12,7 +12,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { getBilingualText } from "~/lib/i18n/utils";
-import { useTranslation } from "~/lib/i18n/hooks";
+import type { Locale } from "~/lib/i18n/config";
 
 interface GalleryCategory {
   _id: string;
@@ -33,11 +33,22 @@ interface GalleryCategory {
 }
 
 export default function GalleryCategoriesPage() {
-  const { locale } = useTranslation();
   const [categories, setCategories] = useState<GalleryCategory[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
+  const [locale, setLocale] = useState<Locale>("en");
+
+  // Get locale from cookie
+  useEffect(() => {
+    const cookieLocale = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("deshet_lang="))
+      ?.split("=")[1];
+    if (cookieLocale === "en" || cookieLocale === "am") {
+      setLocale(cookieLocale as Locale);
+    }
+  }, []);
 
   useEffect(() => {
     fetchCategories();
