@@ -74,7 +74,6 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
     return null;
   }
 
-  console.log('AdminLayoutClient rendering sidebar for user:', user);
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Sidebar */}

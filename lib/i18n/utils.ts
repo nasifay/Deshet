@@ -9,16 +9,45 @@ import type { Locale } from './config';
  * Handles both string values (backward compatibility) and bilingual objects
  */
 export function getBilingualText(
-  value: string | { en: string; am: string } | undefined,
+  value: string | { en: string; am: string } | undefined | null,
   locale: Locale,
   fallback: string = ""
 ): string {
-  if (!value) return fallback;
+  // Handle null/undefined
+  if (value === null || value === undefined) return fallback;
+  
+  // Handle string values
   if (typeof value === "string") return value;
-  if (typeof value === "object" && "en" in value && "am" in value) {
-    return value[locale] || value.en || fallback;
+  
+  // Handle bilingual objects
+  if (typeof value === "object") {
+    // Check if it's a bilingual object with en and am keys
+    if ("en" in value && "am" in value) {
+      const bilingualValue = value as { en: string; am: string };
+      // Ensure the locale value is a string
+      const localeValue = bilingualValue[locale];
+      if (typeof localeValue === "string" && localeValue) {
+        return localeValue;
+      }
+      // Fallback to English
+      if (typeof bilingualValue.en === "string" && bilingualValue.en) {
+        return bilingualValue.en;
+      }
+      // Fallback to Amharic if English is not available
+      if (typeof bilingualValue.am === "string" && bilingualValue.am) {
+        return bilingualValue.am;
+      }
+    }
+    // If it's an object but not a bilingual object, return fallback
+    return fallback;
   }
-  return fallback;
+  
+  // For any other type, convert to string or return fallback
+  try {
+    return String(value);
+  } catch {
+    return fallback;
+  }
 }
 
 /**
