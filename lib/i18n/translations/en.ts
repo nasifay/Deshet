@@ -45,7 +45,7 @@ export const en = {
 
   // Footer
   footer: {
-    organizationName: 'Deshet Indigenous Medical Center',
+    organizationName: 'ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል',
     tagline: 'Premium Ethiopian Indigenous Medical Center',
     description: 'Delivering herbal, spiritual, and cultural healing',
     quickLinks: 'Quick Links',
@@ -66,7 +66,7 @@ export const en = {
   // Homepage sections
   home: {
     hero: {
-      title: 'Deshet Indigenous Medical Center',
+      title: 'ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል',
       subtitle: 'Premium Ethiopian Indigenous Medical Center',
       description: 'Delivering herbal, spiritual, and cultural healing',
       cta: 'Book Appointment',
@@ -88,7 +88,7 @@ export const en = {
     blog: {
       title: 'Latest News & Updates',
       subtitle: 'Stay informed about traditional medicine',
-      sectionTitle: 'BLOG & UPDATES',
+      sectionTitle: 'ዜና እና አዳዲስ መረጃዎች',
       seeMore: 'See More',
     },
     statistics: {
@@ -148,8 +148,8 @@ export const en = {
       saturday: 'Saturday:',
       sunday: 'Sunday:',
       closed: 'Closed',
-      addressDetails: 'Addis Ababa, Ethiopia',
-      addressNote: '(Address details to be updated)',
+      addressDetails: 'Gergi Unity University, Near British School, Dashet',
+      addressNote: '',
     },
   },
 
@@ -210,7 +210,7 @@ export const en = {
       heroImageAlt: 'Traditional medical services',
     },
     blog: {
-      title: 'BLOG & UPDATES',
+      title: 'ዜና እና አዳዲስ መረጃዎች',
       subtitle: 'Stay informed with our latest articles, health tips, and medical center updates.',
       iconAlt: 'Blog icon',
     },
@@ -223,15 +223,15 @@ export const en = {
 
   // Meta
   meta: {
-    siteName: 'Deshet Indigenous Medical Center',
+    siteName: 'ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል',
     siteDescription: 'Premium Ethiopian Indigenous Medical Center delivering herbal, spiritual, and cultural healing',
     pages: {
       home: {
-        title: 'Deshet Indigenous Medical Center | Premium Traditional Healing in Ethiopia',
+        title: 'ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል | Premium Traditional Healing in Ethiopia',
         description: 'Premium Ethiopian Indigenous Medical Center delivering herbal, spiritual, and cultural healing. Experience traditional medicine, herbal remedies, and holistic wellness in Addis Ababa.',
       },
       whoWeAre: {
-        title: 'About Us | Who We Are | Deshet Indigenous Medical Center',
+        title: 'About Us | Who We Are | ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል',
         description: 'Learn about Deshet\'s mission, vision, core values, and our commitment to preserving and delivering Ethiopian indigenous medicine. Discover our practitioners and healing philosophy.',
       },
       programs: {
@@ -239,24 +239,24 @@ export const en = {
         description: 'Explore Deshet\'s comprehensive medical services: Traditional Medical Consultation, Herbal Medicine Preparation, Detox & Cleansing Therapy, Traditional Diagnostic Techniques, and Healing Treatments.',
       },
       blog: {
-        title: 'Blog | Latest Updates | Deshet Indigenous Medical Center',
-        description: 'Stay informed with the latest articles, health tips, traditional medicine insights, and updates from Deshet Indigenous Medical Center. Discover healing wisdom and wellness guidance.',
+        title: 'Blog | Latest Updates | ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል',
+        description: 'Stay informed with the latest articles, health tips, traditional medicine insights, and updates from ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል. Discover healing wisdom and wellness guidance.',
       },
       gallery: {
-        title: 'Gallery | Visual Journey of Healing | Deshet Indigenous Medical Center',
+        title: 'Gallery | Visual Journey of Healing | ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል',
         description: 'Explore our photo gallery showcasing our medical center, healing practices, herbal preparations, and the traditional medicine journey. A visual story of wellness, healing, and cultural medicine.',
       },
       history: {
-        title: 'Our History | Journey of Healing | Deshet Indigenous Medical Center',
+        title: 'Our History | Journey of Healing | ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል',
         description: 'Trace Deshet\'s journey from establishment to today. Explore our milestones, growth, and unwavering commitment to preserving and delivering Ethiopian indigenous medicine since inception.',
       },
       booking: {
-        title: 'Book Appointment | Schedule Your Visit | Deshet Indigenous Medical Center',
-        description: 'Book your appointment at Deshet Indigenous Medical Center. Schedule a consultation for traditional medical services, herbal medicine, or healing treatments. Experience premium indigenous healthcare.',
+        title: 'Book Appointment | Schedule Your Visit | ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል',
+        description: 'Book your appointment at ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል. Schedule a consultation for traditional medical services, herbal medicine, or healing treatments. Experience premium indigenous healthcare.',
       },
       contactUs: {
-        title: 'Contact Us | Get in Touch | Deshet Indigenous Medical Center',
-        description: 'Get in touch with Deshet Indigenous Medical Center. Contact us for appointments, inquiries about our services, or to learn more about traditional medicine. We\'re here to help you on your healing journey.',
+        title: 'Contact Us | Get in Touch | ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል',
+        description: 'Get in touch with ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል. Contact us for appointments, inquiries about our services, or to learn more about traditional medicine. We\'re here to help you on your healing journey.',
       },
     },
   },

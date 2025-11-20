@@ -19,6 +19,7 @@ interface SupporterItem {
 interface PartnersCertificationsData {
   title?: string | { en: string; am: string };
   items?: SupporterItem[];
+  isVisible?: boolean;
 }
 
 export default function PartnersCertificationsSection() {
@@ -29,6 +30,7 @@ export default function PartnersCertificationsSection() {
       am: "ማረጋገጫዎች እና እውቅናዎች",
     },
     items: [],
+    isVisible: true,
   });
   const [loading, setLoading] = useState(true);
 
@@ -49,6 +51,20 @@ export default function PartnersCertificationsSection() {
           );
 
           if (section?.data) {
+            // Check visibility - if explicitly set to false, don't render
+            if (section.data.isVisible === false) {
+              setData({
+                title: section.data.title || {
+                  en: "CERTIFICATIONS & RECOGNITIONS",
+                  am: "ማረጋገጫዎች እና እውቅናዎች",
+                },
+                items: [],
+                isVisible: false,
+              });
+              setLoading(false);
+              return;
+            }
+
             // If CMS has data, use it
             const cmsItems = [
               ...(section.data.partners || []),
@@ -67,6 +83,7 @@ export default function PartnersCertificationsSection() {
                 order: index,
                 isActive: true,
               })),
+              isVisible: section.data.isVisible !== false,
             });
             setLoading(false);
             return;
@@ -129,6 +146,11 @@ export default function PartnersCertificationsSection() {
 
   if (loading) {
     return <MedicalPartnersSkeleton />;
+  }
+
+  // Don't render if visibility is explicitly set to false
+  if (data.isVisible === false) {
+    return null;
   }
 
   const titleText = getBilingualText(

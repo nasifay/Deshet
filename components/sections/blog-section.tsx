@@ -45,7 +45,7 @@ export default function BlogSection() {
               getBilingualText(
                 section.data.title,
                 locale,
-                locale === "am" ? "ብሎግ እና ዝማኔዎች" : "BLOG & UPDATES"
+                locale === "am" ? "ዜና እና አዳዲስ መረጃዎች" : "ዜና እና አዳዲስ መረጃዎች"
               )
             );
           }
@@ -103,7 +103,7 @@ export default function BlogSection() {
               getBilingualText(
                 undefined,
                 locale,
-                locale === "am" ? "ብሎግ እና ዝማኔዎች" : "BLOG & UPDATES"
+                locale === "am" ? "ዜና እና አዳዲስ መረጃዎች" : "ዜና እና አዳዲስ መረጃዎች"
               )}
           </h2>
           <Link

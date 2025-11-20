@@ -454,7 +454,7 @@ function SectionEditor({
             type="textarea"
             rows={6}
             placeholder={{
-              en: "Deshet Indigenous Medical Center is a premium Ethiopian traditional medical facility...",
+              en: "ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል is a premium Ethiopian traditional medical facility...",
               am: "ደሸት ባህላዊ የሕክምና ማዕከል የኢትዮጵያ ባህላዊ ሕክምናን ማስቀጠል...",
             }}
           />
@@ -848,8 +848,8 @@ function SectionEditor({
             value={data.title as string | { en: string; am: string } | undefined}
             onChange={(value) => updateField("title", value)}
             placeholder={{
-              en: "BLOG & UPDATES",
-              am: "ብሎግ እና ዝማኔዎች",
+              en: "ዜና እና አዳዲስ መረጃዎች",
+              am: "ዜና እና አዳዲስ መረጃዎች",
             }}
           />
           
@@ -1190,6 +1190,27 @@ function SectionEditor({
             🤝 Partners & Certifications Settings
           </h4>
 
+          {/* Visibility Toggle */}
+          <div className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800">
+            <div className="flex flex-col">
+              <label className="text-sm font-semibold text-gray-900 dark:text-white mb-1">
+                Show on Public Site
+              </label>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                Toggle to show or hide this section on the public website
+              </p>
+            </div>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                checked={(data.isVisible as boolean) !== false}
+                onChange={(e) => updateField("isVisible", e.target.checked)}
+                className="sr-only peer"
+              />
+              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-green/20 dark:peer-focus:ring-primary-green/30 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary-green"></div>
+            </label>
+          </div>
+
           {/* Section Title - Bilingual */}
           <BilingualField
             label="Section Title"
@@ -1507,7 +1528,7 @@ function getDefaultDataForType(type: string): Record<string, unknown> {
           am: "ስለ ደሸት",
         },
         description: {
-          en: "Deshet Indigenous Medical Center is a premium Ethiopian traditional medical facility dedicated to preserving and promoting indigenous healing practices.",
+          en: "ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል is a premium Ethiopian traditional medical facility dedicated to preserving and promoting indigenous healing practices.",
           am: "ደሸት ባህላዊ የሕክምና ማዕከል የኢትዮጵያ ባህላዊ ሕክምናን ማስቀጠል እና ማበረታታት የሚገዛ የሕክምና ተቋም ነው።",
         },
         ctaText: {
@@ -1589,6 +1610,7 @@ function getDefaultDataForType(type: string): Record<string, unknown> {
       };
     case "PartnersCertificationsSection":
       return {
+        isVisible: true,
         title: {
           en: "Our Medical Partners & Recognition",
           am: "የእኛ የሕክምና አጋሮች እና እውቅና",
@@ -1656,8 +1678,8 @@ function getDefaultDataForType(type: string): Record<string, unknown> {
     case "BlogSection":
       return {
         title: {
-          en: "BLOG & UPDATES",
-          am: "ብሎግ እና ዝማኔዎች",
+          en: "ዜና እና አዳዲስ መረጃዎች",
+          am: "ዜና እና አዳዲስ መረጃዎች",
         },
       };
     case "ProgramAreasSection":
