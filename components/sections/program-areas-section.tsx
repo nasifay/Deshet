@@ -178,8 +178,9 @@ export default function ProgramAreasSection() {
             </div>
           </div>
         </div>
-      );
-    });
+      ),
+    };
+  });
 
   return (
     <div className="w-full py-4 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
