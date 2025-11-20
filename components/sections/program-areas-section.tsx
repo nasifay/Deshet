@@ -72,9 +72,10 @@ export default function ProgramAreasSection() {
           const section = result.data?.sections?.find(
             (s: any) => s.type === "ProgramAreasSection"
           );
-          if (section?.data?.programs) {
+          if (section?.data?.programs && section.data.programs.length > 0) {
             setPrograms(section.data.programs);
           }
+          // If no data in CMS, keep default programs
         }
       } catch (error) {
         console.error("Error fetching programs data:", error);
@@ -86,8 +87,14 @@ export default function ProgramAreasSection() {
     fetchData();
   }, []);
 
+  // Only render if we have programs or are still loading
   if (loading) {
     return <ProgramAreasSkeleton />;
+  }
+
+  // Don't render if no programs exist
+  if (!programs || programs.length === 0) {
+    return null;
   }
 
   // Transform programs into ScrollStack items

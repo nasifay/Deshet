@@ -89,11 +89,11 @@ export default function ServicesSection() {
 
         if (result.success) {
           const section = result.data?.sections?.find(
-            (s: any) => s.type === "ServicesSection" || s.type === "ProgramAreasSection"
+            (s: any) => s.type === "ServicesSection"
           );
-          if (section?.data?.services || section?.data?.programs) {
+          if (section?.data?.services) {
             // Use data from API if available
-            setServices(section.data.services || section.data.programs);
+            setServices(section.data.services);
           }
         }
       } catch (error) {
