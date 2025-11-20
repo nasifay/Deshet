@@ -69,8 +69,10 @@ const TestimonialCard = ({
       }`}
     >
       <FaQuoteLeft
-        className={`text-[#FF8C00] text-3xl md:text-4xl mb-4 ${
-          isCenter ? "opacity-100" : "opacity-90"
+        className={`text-3xl md:text-4xl mb-4 ${
+          isCenter 
+            ? "text-white opacity-100" 
+            : "text-primary-green opacity-90"
         }`}
       />
 

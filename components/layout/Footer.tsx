@@ -131,8 +131,14 @@ export default function Footer() {
               <p>©{t("footer.organizationName")}</p>
               <p>{t("footer.tagline")}</p>
               <p>{t("footer.location")}: {data.contactInfo.address}</p>
-              <p>{t("footer.customerFeedback")}: {data.contactInfo.email}</p>
-              {data.contactInfo.phone && <p>{t("footer.phone")}: {data.contactInfo.phone}</p>}
+              {data.contactInfo.phone && (
+                <>
+                  <p>{t("footer.phone")}: {data.contactInfo.phone.split(", ")[0]}</p>
+                  {data.contactInfo.phone.split(", ")[1] && (
+                    <p className="ml-[60px]">{data.contactInfo.phone.split(", ")[1]}</p>
+                  )}
+                </>
+              )}
             </div>
           </div>
 
