@@ -5,12 +5,13 @@ import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Save, Eye } from "lucide-react";
 import TabbedSectionEditor from "~/app/admin/components/TabbedSectionEditor";
+import BilingualField from "~/app/admin/components/BilingualField";
 
 interface Page {
   _id: string;
-  title: string;
+  title: string | { en: string; am: string };
   slug: string;
-  content: string;
+  content: string | { en: string; am: string };
   status: "draft" | "published" | "archived";
   seo?: {
     metaTitle?: string;
@@ -40,9 +41,9 @@ export default function EditPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [formData, setFormData] = useState({
-    title: "",
+    title: { en: "", am: "" } as string | { en: string; am: string },
     slug: "",
-    content: "",
+    content: { en: "", am: "" } as string | { en: string; am: string },
     status: "draft" as "draft" | "published" | "archived",
     sections: [] as Array<{
       id: string;
@@ -71,10 +72,18 @@ export default function EditPage() {
 
       if (data.success) {
         setPage(data.data);
+        // Handle bilingual title and content
+        const titleValue = typeof data.data.title === 'object' && data.data.title !== null && 'en' in data.data.title
+          ? data.data.title
+          : { en: data.data.title || '', am: '' };
+        const contentValue = typeof data.data.content === 'object' && data.data.content !== null && 'en' in data.data.content
+          ? data.data.content
+          : { en: data.data.content || '', am: '' };
+        
         setFormData({
-          title: data.data.title,
+          title: titleValue,
           slug: data.data.slug,
-          content: data.data.content,
+          content: contentValue,
           status: data.data.status,
           sections: (data.data.sections || []).map(
             (
@@ -146,15 +155,19 @@ export default function EditPage() {
       .trim();
   };
 
-  const handleTitleChange = (title: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      title,
-      slug:
-        prev.slug === generateSlug(prev.title)
-          ? generateSlug(title)
-          : prev.slug,
-    }));
+  const handleTitleChange = (title: string | { en: string; am: string }) => {
+    const titleStr = typeof title === 'string' ? title : title.en || '';
+    setFormData((prev) => {
+      const prevTitleStr = typeof prev.title === 'string' ? prev.title : prev.title?.en || '';
+      return {
+        ...prev,
+        title,
+        slug:
+          prev.slug === generateSlug(prevTitleStr)
+            ? generateSlug(titleStr)
+            : prev.slug,
+      };
+    });
   };
 
   const handleKeywordsChange = (keywordsString: string) => {
@@ -238,15 +251,12 @@ export default function EditPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Page Title *
-              </label>
-              <input
-                type="text"
+              <BilingualField
+                label="Page Title"
                 value={formData.title}
-                onChange={(e) => handleTitleChange(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green text-sm"
-                placeholder="Enter page title"
+                onChange={(value) => handleTitleChange(value)}
+                type="text"
+                placeholder={{ en: "Enter page title", am: "የገጽ ርዕስ ያስገቡ" }}
               />
             </div>
 

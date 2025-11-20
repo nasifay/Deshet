@@ -12,6 +12,7 @@ import {
   X,
 } from "lucide-react";
 import ImageUploadField from "./ImageUploadField";
+import BilingualField from "./BilingualField";
 
 interface Section {
   id: string;
@@ -31,7 +32,14 @@ const SECTION_TYPES = [
   { value: "GroupPhotoSection", label: "Group Photo", icon: "📷" },
   { value: "AboutTSDSection", label: "About TSD", icon: "ℹ️" },
   { value: "VisionMissionSection", label: "Vision & Mission", icon: "🎯" },
+  { value: "OurStorySection", label: "Our Story", icon: "📖" },
+  { value: "OurPhilosophySection", label: "Our Philosophy", icon: "💭" },
+  { value: "HealingApproachSection", label: "Healing Approach", icon: "🌿" },
+  { value: "PractitionerSection", label: "Practitioner", icon: "👨‍⚕️" },
+  { value: "CommitmentSection", label: "Commitment", icon: "🤝" },
+  { value: "CallToActionSection", label: "Call to Action", icon: "📢" },
   { value: "CoreValuesSection", label: "Core Values", icon: "⭐" },
+  { value: "BoardMemberSection", label: "Board Members", icon: "👔" },
   { value: "LeadershipSection", label: "Leadership", icon: "👥" },
   { value: "TargetGroupSection", label: "Target Groups", icon: "🎯" },
   { value: "OperationRegionsSection", label: "Operation Regions", icon: "🗺️" },
@@ -322,16 +330,14 @@ function SectionEditor({
           <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
             ℹ️ About TSD Settings
           </h4>
-          <div>
-            <label className={labelClass}>Description</label>
-            <textarea
-              value={(data.description as string) || ""}
-              onChange={(e) => updateField("description", e.target.value)}
-              rows={6}
-              className={inputClass + " resize-none"}
-              placeholder="About your organization..."
-            />
-          </div>
+          <BilingualField
+            label="Description"
+            value={data.description as string | { en: string; am: string } | undefined}
+            onChange={(value) => updateField("description", value)}
+            type="textarea"
+            rows={6}
+            placeholder={{ en: "About your organization...", am: "ስለ ድርጅትዎ..." }}
+          />
           <ImageUploadField
             label="Background Image"
             value={(data.backImageSrc as string) || ""}
@@ -424,6 +430,261 @@ function SectionEditor({
         </div>
       );
 
+    case "OurStorySection":
+      return (
+        <div className="space-y-4">
+          <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            📖 Our Story Settings
+          </h4>
+          <BilingualField
+            label="Title"
+            value={data.title as string | { en: string; am: string } | undefined}
+            onChange={(value) => updateField("title", value)}
+            type="text"
+          />
+          <BilingualField
+            label="Content"
+            value={data.content as string | { en: string; am: string } | undefined}
+            onChange={(value) => updateField("content", value)}
+            type="textarea"
+            rows={6}
+          />
+          <ImageUploadField
+            label="Image"
+            value={(data.image as string) || ""}
+            onChange={(url) => updateField("image", url)}
+          />
+        </div>
+      );
+
+    case "OurPhilosophySection":
+      return (
+        <div className="space-y-4">
+          <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            💭 Our Philosophy Settings
+          </h4>
+          <BilingualField
+            label="Title"
+            value={data.title as string | { en: string; am: string } | undefined}
+            onChange={(value) => updateField("title", value)}
+            type="text"
+          />
+          <div>
+            <label className={labelClass}>Principles (JSON Array)</label>
+            <textarea
+              value={JSON.stringify(data.principles || [], null, 2)}
+              onChange={(e) => {
+                try {
+                  const parsed = JSON.parse(e.target.value);
+                  updateField("principles", parsed);
+                } catch {
+                  // Invalid JSON, keep as is
+                }
+              }}
+              rows={10}
+              className={inputClass + " resize-none font-mono text-xs"}
+              placeholder='[{"title": "Principle 1", "description": "..."}]'
+            />
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              Enter principles as JSON array with title and description fields
+            </p>
+          </div>
+        </div>
+      );
+
+    case "HealingApproachSection":
+      return (
+        <div className="space-y-4">
+          <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            🌿 Healing Approach Settings
+          </h4>
+          <BilingualField
+            label="Title"
+            value={data.title as string | { en: string; am: string } | undefined}
+            onChange={(value) => updateField("title", value)}
+            type="text"
+          />
+          <BilingualField
+            label="Content"
+            value={data.content as string | { en: string; am: string } | undefined}
+            onChange={(value) => updateField("content", value)}
+            type="textarea"
+            rows={6}
+          />
+          <ImageUploadField
+            label="Image"
+            value={(data.image as string) || ""}
+            onChange={(url) => updateField("image", url)}
+          />
+        </div>
+      );
+
+    case "PractitionerSection":
+      return (
+        <div className="space-y-4">
+          <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            👨‍⚕️ Practitioner Settings
+          </h4>
+          <BilingualField
+            label="Title"
+            value={data.title as string | { en: string; am: string } | undefined}
+            onChange={(value) => updateField("title", value)}
+            type="text"
+          />
+          <BilingualField
+            label="Name"
+            value={data.name as string | { en: string; am: string } | undefined}
+            onChange={(value) => updateField("name", value)}
+            type="text"
+          />
+          <BilingualField
+            label="Position"
+            value={data.position as string | { en: string; am: string } | undefined}
+            onChange={(value) => updateField("position", value)}
+            type="text"
+          />
+          <BilingualField
+            label="Bio"
+            value={data.bio as string | { en: string; am: string } | undefined}
+            onChange={(value) => updateField("bio", value)}
+            type="textarea"
+            rows={4}
+          />
+          <BilingualField
+            label="Mission"
+            value={data.mission as string | { en: string; am: string } | undefined}
+            onChange={(value) => updateField("mission", value)}
+            type="textarea"
+            rows={3}
+          />
+          <ImageUploadField
+            label="Image"
+            value={(data.image as string) || ""}
+            onChange={(url) => updateField("image", url)}
+          />
+        </div>
+      );
+
+    case "CommitmentSection":
+      return (
+        <div className="space-y-4">
+          <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            🤝 Commitment Settings
+          </h4>
+          <BilingualField
+            label="Title"
+            value={data.title as string | { en: string; am: string } | undefined}
+            onChange={(value) => updateField("title", value)}
+            type="text"
+          />
+          <div>
+            <label className={labelClass}>Commitments (JSON Array)</label>
+            <textarea
+              value={JSON.stringify(data.commitments || [], null, 2)}
+              onChange={(e) => {
+                try {
+                  const parsed = JSON.parse(e.target.value);
+                  updateField("commitments", parsed);
+                } catch {
+                  // Invalid JSON, keep as is
+                }
+              }}
+              rows={10}
+              className={inputClass + " resize-none font-mono text-xs"}
+              placeholder='[{"title": "Commitment 1", "description": "..."}]'
+            />
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              Enter commitments as JSON array with title and description fields
+            </p>
+          </div>
+        </div>
+      );
+
+    case "CallToActionSection":
+      return (
+        <div className="space-y-4">
+          <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            📢 Call to Action Settings
+          </h4>
+          <BilingualField
+            label="Title"
+            value={data.title as string | { en: string; am: string } | undefined}
+            onChange={(value) => updateField("title", value)}
+            type="text"
+          />
+          <BilingualField
+            label="Description"
+            value={data.description as string | { en: string; am: string } | undefined}
+            onChange={(value) => updateField("description", value)}
+            type="textarea"
+            rows={4}
+          />
+          <div>
+            <label className={labelClass}>Primary Button (JSON)</label>
+            <textarea
+              value={JSON.stringify(data.primaryButton || {}, null, 2)}
+              onChange={(e) => {
+                try {
+                  const parsed = JSON.parse(e.target.value);
+                  updateField("primaryButton", parsed);
+                } catch {
+                  // Invalid JSON, keep as is
+                }
+              }}
+              rows={4}
+              className={inputClass + " resize-none font-mono text-xs"}
+              placeholder='{"text": {"en": "Button", "am": "..."}, "link": "/path"}'
+            />
+          </div>
+          <div>
+            <label className={labelClass}>Secondary Button (JSON)</label>
+            <textarea
+              value={JSON.stringify(data.secondaryButton || {}, null, 2)}
+              onChange={(e) => {
+                try {
+                  const parsed = JSON.parse(e.target.value);
+                  updateField("secondaryButton", parsed);
+                } catch {
+                  // Invalid JSON, keep as is
+                }
+              }}
+              rows={4}
+              className={inputClass + " resize-none font-mono text-xs"}
+              placeholder='{"text": {"en": "Button", "am": "..."}, "link": "/path"}'
+            />
+          </div>
+        </div>
+      );
+
+    case "BoardMemberSection":
+      return (
+        <div className="space-y-4">
+          <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            👔 Board Members Settings
+          </h4>
+          <div>
+            <label className={labelClass}>Board Members (JSON Array)</label>
+            <textarea
+              value={JSON.stringify(data.boardMembers || [], null, 2)}
+              onChange={(e) => {
+                try {
+                  const parsed = JSON.parse(e.target.value);
+                  updateField("boardMembers", parsed);
+                } catch {
+                  // Invalid JSON, keep as is
+                }
+              }}
+              rows={15}
+              className={inputClass + " resize-none font-mono text-xs"}
+              placeholder='[{"name": "Name", "position": "Position", "image": "url", "bio": "..."}]'
+            />
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              Enter board members as JSON array with name, position, image, and bio fields
+            </p>
+          </div>
+        </div>
+      );
+
     case "LeadershipSection":
       return <LeadershipManager data={data} onChange={onChange} />;
 
@@ -486,6 +747,32 @@ function getDefaultDataForType(type: string): Record<string, unknown> {
         missionImage: "",
         missionText: "",
       };
+    case "OurStorySection":
+      return { title: { en: "", am: "" }, content: { en: "", am: "" }, image: "" };
+    case "OurPhilosophySection":
+      return { title: { en: "", am: "" }, principles: [] };
+    case "HealingApproachSection":
+      return { title: { en: "", am: "" }, content: { en: "", am: "" }, image: "" };
+    case "PractitionerSection":
+      return {
+        title: { en: "", am: "" },
+        name: { en: "", am: "" },
+        position: { en: "", am: "" },
+        bio: { en: "", am: "" },
+        mission: { en: "", am: "" },
+        image: "",
+      };
+    case "CommitmentSection":
+      return { title: { en: "", am: "" }, commitments: [] };
+    case "CallToActionSection":
+      return {
+        title: { en: "", am: "" },
+        description: { en: "", am: "" },
+        primaryButton: { text: { en: "", am: "" }, link: "" },
+        secondaryButton: { text: { en: "", am: "" }, link: "" },
+      };
+    case "BoardMemberSection":
+      return { boardMembers: [] };
     case "ContentSection":
       return { title: "", content: "", image: "" };
     case "LeadershipSection":
