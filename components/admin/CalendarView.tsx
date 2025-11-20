@@ -311,6 +311,8 @@ export default function CalendarView({
             appointments={appointments}
             getStatusColor={getStatusColor}
             onAppointmentClick={onAppointmentClick}
+            selectedAppointments={selectedAppointments}
+            toggleAppointmentSelection={toggleAppointmentSelection}
           />
         ) : (
           <WeeklyView
@@ -318,6 +320,8 @@ export default function CalendarView({
             appointments={appointments}
             getStatusColor={getStatusColor}
             onAppointmentClick={onAppointmentClick}
+            selectedAppointments={selectedAppointments}
+            toggleAppointmentSelection={toggleAppointmentSelection}
           />
         )}
       </div>
@@ -330,11 +334,15 @@ function DailyView({
   appointments,
   getStatusColor,
   onAppointmentClick,
+  selectedAppointments,
+  toggleAppointmentSelection,
 }: {
   date: Date;
   appointments: Appointment[];
   getStatusColor: (status: string) => string;
   onAppointmentClick?: (appointment: Appointment) => void;
+  selectedAppointments: Set<string>;
+  toggleAppointmentSelection: (appointmentId: string) => void;
 }) {
   const timeSlots = [];
   for (let hour = 8; hour < 18; hour++) {
@@ -409,11 +417,15 @@ function WeeklyView({
   appointments,
   getStatusColor,
   onAppointmentClick,
+  selectedAppointments,
+  toggleAppointmentSelection,
 }: {
   startDate: Date;
   appointments: Appointment[];
   getStatusColor: (status: string) => string;
   onAppointmentClick?: (appointment: Appointment) => void;
+  selectedAppointments: Set<string>;
+  toggleAppointmentSelection: (appointmentId: string) => void;
 }) {
   const days = [];
   for (let i = 0; i < 7; i++) {
