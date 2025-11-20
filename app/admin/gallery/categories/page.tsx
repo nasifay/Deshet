@@ -281,11 +281,11 @@ export default function GalleryCategoriesPage() {
                         )}
                         <div>
                           <div className="text-sm font-medium text-gray-900 dark:text-white">
-                            {getBilingualText(category.name, locale, category.slug)}
+                            {String(getBilingualText(category.name, locale, category.slug))}
                           </div>
                           {category.description && (
                             <div className="text-sm text-gray-500 dark:text-gray-400">
-                              {getBilingualText(category.description, locale, "")}
+                              {String(getBilingualText(category.description, locale, ""))}
                             </div>
                           )}
                         </div>
