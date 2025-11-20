@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Save } from "lucide-react";
+import { getBilingualText } from "~/lib/i18n/utils";
+import { useTranslation } from "~/lib/i18n/hooks";
 
 interface GalleryCategory {
   _id: string;
@@ -37,6 +39,7 @@ export default function EditGalleryItemPage() {
   const router = useRouter();
   const params = useParams();
   const id = params.id as string;
+  const { locale } = useTranslation();
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -267,7 +270,7 @@ export default function EditGalleryItemPage() {
             >
               {categories.map((cat) => (
                 <option key={cat._id} value={cat._id}>
-                  {cat.icon} {cat.name}
+                  {typeof cat.icon === 'string' ? cat.icon : '🖼️'} {getBilingualText(cat.name as string | { en: string; am: string } | undefined, locale, cat.slug)}
                 </option>
               ))}
             </select>

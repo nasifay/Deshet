@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "~/lib/auth/session";
-import { writeFile, mkdir } from "fs/promises";
-import path from "path";
-import { existsSync } from "fs";
+import { put } from "@vercel/blob";
 
 export async function POST(request: NextRequest) {
   try {
@@ -40,30 +38,26 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Create uploads directory if it doesn't exist
-    const uploadsDir = path.join(process.cwd(), "public", "uploads");
-    if (!existsSync(uploadsDir)) {
-      await mkdir(uploadsDir, { recursive: true });
-    }
-
     // Generate unique filename
     const timestamp = Date.now();
     const originalName = file.name.replace(/[^a-zA-Z0-9.-]/g, "_");
-    const filename = `${timestamp}-${originalName}`;
-    const filepath = path.join(uploadsDir, filename);
+    const filename = `uploads/${timestamp}-${originalName}`;
 
-    // Convert file to buffer and save
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-    await writeFile(filepath, buffer);
+    // Upload to Vercel Blob Storage
+    const blob = await put(filename, file, {
+      access: "public",
+      contentType: file.type,
+    });
 
     // Return the URL
-    const url = `/uploads/${filename}`;
+    const url = blob.url;
+    // Extract just the filename from the URL for backward compatibility
+    const urlFilename = url.split("/").pop() || filename.split("/").pop() || filename;
 
     return NextResponse.json({
       success: true,
       data: {
-        filename,
+        filename: urlFilename,
         url,
         originalName: file.name,
         size: file.size,
@@ -75,6 +69,23 @@ export async function POST(request: NextRequest) {
     console.error("Error uploading file:", error);
     const errorMessage =
       error instanceof Error ? error.message : "Internal server error";
+    
+    // Provide helpful error message for missing BLOB_READ_WRITE_TOKEN
+    if (
+      errorMessage.includes("BLOB_READ_WRITE_TOKEN") ||
+      errorMessage.includes("token") ||
+      errorMessage.includes("BLOB")
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "Blob storage not configured. Please set BLOB_READ_WRITE_TOKEN in Vercel environment variables. Visit https://vercel.com/docs/storage/vercel-blob/quickstart for setup instructions.",
+        },
+        { status: 500 }
+      );
+    }
+
     return NextResponse.json(
       { success: false, error: errorMessage },
       { status: 500 }

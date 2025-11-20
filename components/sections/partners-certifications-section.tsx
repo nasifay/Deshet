@@ -6,77 +6,37 @@ import { useTranslation } from "~/lib/i18n/hooks";
 import { getBilingualText } from "~/lib/i18n/utils";
 import { MedicalPartnersSkeleton } from "./landing-page-skeleton";
 
-interface Partner {
+interface SupporterItem {
+  _id: string;
   name: string;
   logo: string;
   link?: string;
-}
-
-interface Certification {
-  name: string;
-  logo: string;
-  link?: string;
+  order: number;
+  isActive: boolean;
+  description?: string;
 }
 
 interface PartnersCertificationsData {
   title?: string | { en: string; am: string };
-  partners?: Partner[];
-  certifications?: Certification[];
+  items?: SupporterItem[];
 }
 
 export default function PartnersCertificationsSection() {
   const { t, locale } = useTranslation();
   const [data, setData] = useState<PartnersCertificationsData>({
     title: {
-      en: "Our Medical Partners & Recognition",
-      am: "የእኛ የሕክምና አጋሮች እና እውቅና",
+      en: "CERTIFICATIONS & RECOGNITIONS",
+      am: "ማረጋገጫዎች እና እውቅናዎች",
     },
-    partners: [],
-    certifications: [],
+    items: [],
   });
   const [loading, setLoading] = useState(true);
 
-  // Default placeholder partners (medical/traditional medicine related)
-  const defaultPartners: Partner[] = [
-    {
-      name: "Ethiopian Ministry of Health",
-      logo: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?q=80&w=400&auto=format&fit=crop&ixlib=rb-4.0.3",
-    },
-    {
-      name: "Traditional Medicine Association",
-      logo: "https://images.unsplash.com/photo-1505576391880-b3f9d713dc4f?q=80&w=400&auto=format&fit=crop&ixlib=rb-4.0.3",
-    },
-    {
-      name: "Herbal Medicine Research Center",
-      logo: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?q=80&w=400&auto=format&fit=crop&ixlib=rb-4.0.3",
-    },
-    {
-      name: "Indigenous Healing Network",
-      logo: "https://images.unsplash.com/photo-1559757175-0eb30cd8c063?q=80&w=400&auto=format&fit=crop&ixlib=rb-4.0.3",
-    },
-  ];
-
-  // Default placeholder certifications
-  const defaultCertifications: Certification[] = [
-    {
-      name: "Traditional Medicine Certification",
-      logo: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?q=80&w=400&auto=format&fit=crop&ixlib=rb-4.0.3",
-    },
-    {
-      name: "Herbal Medicine License",
-      logo: "https://images.unsplash.com/photo-1505576391880-b3f9d713dc4f?q=80&w=400&auto=format&fit=crop&ixlib=rb-4.0.3",
-    },
-    {
-      name: "Medical Center Accreditation",
-      logo: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?q=80&w=400&auto=format&fit=crop&ixlib=rb-4.0.3",
-    },
-  ];
-
-  // Fetch data from landing page API first, then fallback to individual APIs
+  // Fetch supporters data from Deshet admin panel
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Try to get data from landing page CMS
+        // First, try to get data from landing page CMS
         const landingResponse = await fetch("/api/public/landing");
         const landingResult = await landingResponse.json();
 
@@ -89,66 +49,75 @@ export default function PartnersCertificationsSection() {
           );
 
           if (section?.data) {
+            // If CMS has data, use it
+            const cmsItems = [
+              ...(section.data.partners || []),
+              ...(section.data.certifications || []),
+            ];
             setData({
               title: section.data.title || {
-                en: "Our Medical Partners & Recognition",
-                am: "የእኛ የሕክምና አጋሮች እና እውቅና",
+                en: "CERTIFICATIONS & RECOGNITIONS",
+                am: "ማረጋገጫዎች እና እውቅናዎች",
               },
-              partners: section.data.partners || [],
-              certifications: section.data.certifications || [],
+              items: cmsItems.map((item: any, index: number) => ({
+                _id: `cms-${index}`,
+                name: item.name,
+                logo: item.logo,
+                link: item.link,
+                order: index,
+                isActive: true,
+              })),
             });
             setLoading(false);
             return;
           }
         }
 
-        // Fallback: Fetch from individual APIs
-        const [partnersResponse, certificationsResponse] = await Promise.all([
-          fetch("/api/public/supporters"),
-          fetch("/api/public/keyfunders"),
-        ]);
+        // Fallback: Fetch from Deshet supporters API (from /admin/supporters)
+        const supportersResponse = await fetch("/api/public/supporters");
+        const supportersResult = await supportersResponse.json();
 
-        const [partnersResult, certificationsResult] = await Promise.all([
-          partnersResponse.json(),
-          certificationsResponse.json(),
-        ]);
+        if (supportersResult.success && supportersResult.data?.length > 0) {
+          // Use supporters data from admin panel
+          const supporters: SupporterItem[] = supportersResult.data
+            .filter((s: SupporterItem) => s.isActive)
+            .sort((a: SupporterItem, b: SupporterItem) => a.order - b.order)
+            .map((s: SupporterItem) => ({
+              _id: s._id,
+              name: s.name,
+              logo: s.logo,
+              link: s.link,
+              order: s.order,
+              isActive: s.isActive,
+              description: s.description,
+            }));
 
-        const partners: Partner[] =
-          partnersResult.success && partnersResult.data?.length > 0
-            ? partnersResult.data.map((p: any) => ({
-                name: p.name,
-                logo: p.logo,
-                link: p.link,
-              }))
-            : defaultPartners;
-
-        const certifications: Certification[] =
-          certificationsResult.success && certificationsResult.data?.length > 0
-            ? certificationsResult.data.map((c: any) => ({
-                name: c.name,
-                logo: c.logo,
-                link: c.link,
-              }))
-            : defaultCertifications;
-
-        setData({
-          title: {
-            en: "Our Medical Partners & Recognition",
-            am: "የእኛ የሕክምና አጋሮች እና እውቅና",
-          },
-          partners,
-          certifications,
-        });
+          setData({
+            title: {
+              en: "CERTIFICATIONS & RECOGNITIONS",
+              am: "ማረጋገጫዎች እና እውቅናዎች",
+            },
+            items: supporters,
+          });
+        } else {
+          // No data available, show empty state
+          setData({
+            title: {
+              en: "CERTIFICATIONS & RECOGNITIONS",
+              am: "ማረጋገጫዎች እና እውቅናዎች",
+            },
+            items: [],
+          });
+        }
       } catch (error) {
         console.error("Error fetching partners/certifications data:", error);
-        // Use defaults on error
+        // On error, show empty state
         setData({
           title: {
-            en: "Our Medical Partners & Recognition",
-            am: "የእኛ የሕክምና አጋሮች እና እውቅና",
+            en: "CERTIFICATIONS & RECOGNITIONS",
+            am: "ማረጋገጫዎች እና እውቅናዎች",
           },
-          partners: defaultPartners,
-          certifications: defaultCertifications,
+          items: [],
         });
       } finally {
         setLoading(false);
@@ -165,13 +134,10 @@ export default function PartnersCertificationsSection() {
   const titleText = getBilingualText(
     data.title,
     locale,
-    "Our Medical Partners & Recognition"
+    "CERTIFICATIONS & RECOGNITIONS"
   );
 
-  const allItems = [
-    ...(data.partners || []),
-    ...(data.certifications || []),
-  ];
+  const allItems = data.items || [];
 
   if (allItems.length === 0) {
     return null;
@@ -205,7 +171,7 @@ export default function PartnersCertificationsSection() {
               <div className="marquee-content-1">
                 {[...row1, ...row1].map((item, i) => (
                   <div
-                    key={`row1-${i}`}
+                    key={`row1-${item._id}-${i}`}
                     className="flex-shrink-0 mx-8 flex items-center justify-center w-[120px] md:w-[140px] lg:w-[160px] h-[60px] md:h-[70px] relative group"
                   >
                     {item.link ? (
@@ -242,7 +208,7 @@ export default function PartnersCertificationsSection() {
               <div className="marquee-content-2">
                 {[...row2, ...row2].map((item, i) => (
                   <div
-                    key={`row2-${i}`}
+                    key={`row2-${item._id}-${i}`}
                     className="flex-shrink-0 mx-8 flex items-center justify-center w-[100px] md:w-[120px] lg:w-[160px] h-[40px] md:h-[50px] lg:h-[60px] relative group"
                   >
                     {item.link ? (

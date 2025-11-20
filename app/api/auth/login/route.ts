@@ -94,10 +94,43 @@ export async function POST(request: NextRequest) {
     });
 
     return response;
-  } catch (error) {
+  } catch (error: any) {
     console.error("Login error:", error);
+    
+    // Provide more detailed error information in development
+    const errorMessage = process.env.NODE_ENV === 'production' 
+      ? "Internal server error" 
+      : error.message || "Internal server error";
+    
+    // Check for specific error types
+    if (error.message?.includes('MongoServerError') || error.message?.includes('MongoNetworkError')) {
+      return NextResponse.json(
+        { 
+          success: false, 
+          error: "Database connection failed. Please check MONGODB_URI environment variable.",
+          details: process.env.NODE_ENV === 'development' ? error.message : undefined
+        },
+        { status: 500 }
+      );
+    }
+    
+    if (error.message?.includes('JWT') || error.message?.includes('secret')) {
+      return NextResponse.json(
+        { 
+          success: false, 
+          error: "Authentication configuration error. Please check JWT_SECRET environment variable.",
+          details: process.env.NODE_ENV === 'development' ? error.message : undefined
+        },
+        { status: 500 }
+      );
+    }
+    
     return NextResponse.json(
-      { success: false, error: "Internal server error" },
+      { 
+        success: false, 
+        error: errorMessage,
+        details: process.env.NODE_ENV === 'development' ? error.message : undefined
+      },
       { status: 500 }
     );
   }

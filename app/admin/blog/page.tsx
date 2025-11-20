@@ -3,12 +3,14 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Plus, Search, Filter, Edit, Trash2, Eye } from "lucide-react";
+import { getBilingualText } from "~/lib/i18n/utils";
+import { useTranslation } from "~/lib/i18n/hooks";
 
 interface BlogPost {
   _id: string;
-  title: string;
+  title: string | { en: string; am: string };
   slug: string;
-  excerpt: string;
+  excerpt: string | { en: string; am: string };
   category: string;
   status: "draft" | "published" | "archived";
   views: number;
@@ -23,6 +25,7 @@ interface BlogPost {
 }
 
 export default function BlogListPage() {
+  const { locale } = useTranslation();
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -232,7 +235,7 @@ export default function BlogListPage() {
                       <div className="flex items-center">
                         <div>
                           <div className="text-sm font-medium text-gray-900 dark:text-white">
-                            {post.title}
+                            {getBilingualText(post.title as string | { en: string; am: string } | undefined, locale, post.slug)}
                             {post.isFeatured && (
                               <span className="ml-2 px-2 py-1 text-xs bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300 rounded">
                                 Featured

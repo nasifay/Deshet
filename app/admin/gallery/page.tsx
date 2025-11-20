@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { getBilingualText } from "~/lib/i18n/utils";
+import { useTranslation } from "~/lib/i18n/hooks";
 import {
   Plus,
   Search,
@@ -38,15 +40,15 @@ interface GalleryItem {
     width: number;
     height: number;
   };
-  alt?: string;
-  caption?: string;
+  alt?: string | { en: string; am: string };
+  caption?: string | { en: string; am: string };
   customClass?: string;
   section: "CLM" | "CRPVF" | "general";
   position: number;
   featured: boolean;
   category: {
     _id: string;
-    name: string;
+    name: string | { en: string; am: string };
     slug: string;
     color?: string;
     icon?: string;
@@ -62,12 +64,13 @@ interface GalleryItem {
 
 interface GalleryCategory {
   _id: string;
-  name: string;
+  name: string | { en: string; am: string };
   slug: string;
   icon?: string;
 }
 
 export default function GalleryManagementPage() {
+  const { locale } = useTranslation();
   const [items, setItems] = useState<GalleryItem[]>([]);
   const [categories, setCategories] = useState<GalleryCategory[]>([]);
   const [loading, setLoading] = useState(true);
@@ -350,7 +353,7 @@ export default function GalleryManagementPage() {
                 <option value="">All Categories</option>
                 {categories.map((cat) => (
                   <option key={cat._id} value={cat._id}>
-                    {cat.icon} {cat.name}
+                    {typeof cat.icon === 'string' ? cat.icon : '🖼️'} {getBilingualText(cat.name as string | { en: string; am: string } | undefined, locale, cat.slug)}
                   </option>
                 ))}
               </select>
@@ -547,7 +550,7 @@ export default function GalleryManagementPage() {
                     {item.type === "image" ? (
                       <Image
                         src={item.url}
-                        alt={item.alt || item.originalName}
+                        alt={getBilingualText(item.alt as string | { en: string; am: string } | undefined, locale, item.originalName)}
                         fill
                         className="object-cover"
                         sizes={
@@ -621,8 +624,8 @@ export default function GalleryManagementPage() {
                         </p>
                         <div className="flex items-center justify-between mt-2 text-xs text-gray-500 dark:text-gray-400">
                           <span className="flex items-center space-x-1">
-                            <span>{item.category.icon}</span>
-                            <span>{item.category.name}</span>
+                            <span>{typeof item.category.icon === 'string' ? item.category.icon : '🖼️'}</span>
+                            <span>{getBilingualText(item.category.name as string | { en: string; am: string } | undefined, locale, item.category.slug)}</span>
                           </span>
                           <span>{formatFileSize(item.size)}</span>
                         </div>
@@ -706,7 +709,7 @@ export default function GalleryManagementPage() {
                         {item.type === "image" ? (
                           <Image
                             src={item.url}
-                            alt={item.alt || item.originalName}
+                            alt={getBilingualText(item.alt as string | { en: string; am: string } | undefined, locale, item.originalName)}
                             fill
                             className="object-cover"
                             sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"

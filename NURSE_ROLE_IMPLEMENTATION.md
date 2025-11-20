@@ -133,3 +133,4 @@ Potential improvements:
 - Add specific nurse permissions for different appointment operations
 - Add nurse-specific dashboard showing only booking/appointment stats
 
+

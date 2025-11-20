@@ -204,21 +204,15 @@ async function seedLandingPage() {
           order: 3,
         },
         {
-          id: "medical-partners-section-1",
-          type: "MedicalPartnersSection",
+          id: "partners-certifications-section-1",
+          type: "PartnersCertificationsSection",
           data: {
             title: {
-              en: "Certifications & Recognition",
-              am: "የምስክር ወረቀቶች እና እውቅና",
+              en: "CERTIFICATIONS & RECOGNITIONS",
+              am: "ማረጋገጫዎች እና እውቅናዎች",
             },
-            partners: [
-              "/suporters/usaid.png",
-              "/suporters/pepfar.png",
-              "/suporters/gac.png",
-              "/suporters/ipas.png",
-              "/suporters/norwegian-church.png",
-              "/suporters/sonke-gender-justice.png",
-            ],
+            // Note: Partners and certifications are now managed via /admin/supporters
+            // This section will automatically fetch from the supporters API
           },
           order: 4,
         },
