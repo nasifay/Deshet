@@ -105,10 +105,9 @@ export default function Footer() {
     termsAndConditions: { fileUrl: "#", fileName: "" },
     privacyPolicy: { fileUrl: "#", fileName: "" },
     contactInfo: {
-      email: "TSD@ngo.com",
-      address:
-        "Friendship Business Center, 7th Floor, Bole, Addis Ababa, Ethiopia",
-      phone: "",
+      email: "yohansshefraw@gmail.com",
+      address: "ገርጂ ዮኒቲ ዮኒቨርስቲ ከብርቲሽ ት/ቤት ወረድ ብሎ ደሸት",
+      phone: "+251 902474828, +251 91 147 1783",
     },
     keyFunders: [],
     networks: [],
@@ -117,24 +116,6 @@ export default function Footer() {
   return (
     <footer className="w-full bg-white border-t border-[#4EB778] font-['Roboto']">
       <div className=" mx-auto px-4 md:px-8 lg:px-16 xl:px-20 2xl:px-32 pt-10 pb-6 flex flex-col gap-10">
-        {/* --- Top Links --- */}
-        <div className="flex flex-wrap items-center gap-6 text-[#666] text-[14px] font-medium tracking-wide">
-          <Link
-            href={data.termsAndConditions.fileUrl || "#"}
-            className="flex items-center gap-1 hover:text-[#4EB778] transition-colors"
-          >
-            {t("footer.termsConditions")}
-            <span className="text-[#4EB778] text-lg font-bold">›</span>
-          </Link>
-          <Link
-            href={data.privacyPolicy.fileUrl || "#"}
-            className="flex items-center gap-1 hover:text-[#4EB778] transition-colors"
-          >
-            {t("footer.privacyPolicy")}
-            <span className="text-[#4EB778] text-lg font-bold">›</span>
-          </Link>
-        </div>
-
         {/* --- Main Content Section --- */}
         <div className="flex flex-wrap justify-between gap-10">
           {/* --- Left: Logo + Info --- */}

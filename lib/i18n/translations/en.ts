@@ -148,7 +148,7 @@ export const en = {
       saturday: 'Saturday:',
       sunday: 'Sunday:',
       closed: 'Closed',
-      addressDetails: 'Gergi Unity University, Near British School, Dashet',
+      addressDetails: 'ገርጂ ዮኒቲ ዮኒቨርስቲ ከብርቲሽ ት/ቤት ወረድ ብሎ ደሸት',
       addressNote: '',
     },
   },

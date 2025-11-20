@@ -19,10 +19,9 @@ export async function GET(request: NextRequest) {
           termsAndConditions: { fileUrl: "", fileName: "" },
           privacyPolicy: { fileUrl: "", fileName: "" },
           contactInfo: {
-            email: "TSD@ngo.com",
-            address:
-              "Friendship Business Center, 7th Floor, Bole, Addis Ababa, Ethiopia",
-            phone: "",
+            email: "yohansshefraw@gmail.com",
+            address: "ገርጂ ዮኒቲ ዮኒቨርስቲ ከብርቲሽ ት/ቤት ወረድ ብሎ ደሸት",
+            phone: "+251 902474828, +251 91 147 1783",
           },
           keyFunders: [],
           networks: [],
