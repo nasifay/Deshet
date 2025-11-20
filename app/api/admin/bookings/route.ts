@@ -26,9 +26,9 @@ export async function GET(request: NextRequest) {
     if (search) {
       query.$or = [
         { name: { $regex: search, $options: 'i' } },
-        { email: { $regex: search, $options: 'i' } },
         { phone: { $regex: search, $options: 'i' } },
         { serviceType: { $regex: search, $options: 'i' } },
+        ...(search.includes('@') ? [{ email: { $regex: search, $options: 'i' } }] : []),
       ];
     }
 
@@ -85,20 +85,22 @@ export async function POST(request: NextRequest) {
     } = body;
 
     // Validation
-    if (!name || !email || !phone || !preferredDate || !preferredTime || !serviceType || !healthConcern) {
+    if (!name || !phone || !preferredDate || !preferredTime || !serviceType || !healthConcern) {
       return NextResponse.json(
         { success: false, error: 'Missing required fields' },
         { status: 400 }
       );
     }
 
-    // Validate email format
-    const emailRegex = /^\S+@\S+\.\S+$/;
-    if (!emailRegex.test(email)) {
-      return NextResponse.json(
-        { success: false, error: 'Invalid email format' },
-        { status: 400 }
-      );
+    // Validate email format if provided
+    if (email) {
+      const emailRegex = /^\S+@\S+\.\S+$/;
+      if (!emailRegex.test(email)) {
+        return NextResponse.json(
+          { success: false, error: 'Invalid email format' },
+          { status: 400 }
+        );
+      }
     }
 
     // Validate date is not in the past
@@ -114,9 +116,19 @@ export async function POST(request: NextRequest) {
     }
 
     // Create booking
-    const booking = await Booking.create({
+    const bookingData: {
+      name: string;
+      email?: string;
+      phone: string;
+      preferredDate: Date;
+      preferredTime: string;
+      serviceType: string;
+      healthConcern: string;
+      requestCallback: boolean;
+      status: string;
+      notes?: string;
+    } = {
       name: name.trim(),
-      email: email.trim().toLowerCase(),
       phone: phone.trim(),
       preferredDate: selectedDate,
       preferredTime: preferredTime.trim(),
@@ -125,7 +137,13 @@ export async function POST(request: NextRequest) {
       requestCallback: requestCallback || false,
       status: status || 'pending',
       notes: notes || '',
-    });
+    };
+
+    if (email) {
+      bookingData.email = email.trim().toLowerCase();
+    }
+
+    const booking = await Booking.create(bookingData);
 
     const populatedBooking = await Booking.findById(booking._id).populate('confirmedBy', 'name email');
 

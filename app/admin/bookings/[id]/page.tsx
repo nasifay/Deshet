@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
+import { toast } from "sonner";
 import {
   ArrowLeft,
   Calendar,
@@ -15,12 +16,14 @@ import {
   XCircle,
   AlertCircle,
   Save,
+  CalendarDays,
+  ExternalLink,
 } from "lucide-react";
 
 interface Booking {
   _id: string;
   name: string;
-  email: string;
+  email?: string;
   phone: string;
   preferredDate: string;
   preferredTime: string;
@@ -34,6 +37,24 @@ interface Booking {
     email: string;
   };
   confirmedAt?: string;
+  appointmentId?: {
+    _id: string;
+    patientName: string;
+    appointmentDate: string;
+    appointmentTime: string;
+    status: string;
+  };
+  appointment?: {
+    _id: string;
+    patientName: string;
+    appointmentDate: string;
+    appointmentTime: string;
+    status: string;
+    assignedTo?: {
+      name: string;
+      email: string;
+    };
+  };
   createdAt: string;
   updatedAt: string;
 }
@@ -48,6 +69,7 @@ export default function BookingDetailPage() {
   const [status, setStatus] = useState<
     "pending" | "confirmed" | "completed" | "cancelled"
   >("pending");
+  const [showAppointmentNotification, setShowAppointmentNotification] = useState(false);
 
   useEffect(() => {
     fetchBooking();
@@ -87,10 +109,26 @@ export default function BookingDetailPage() {
 
       const data = await response.json();
       if (data.success) {
-        alert("Booking updated successfully!");
+        // Show notification if appointment was created
+        if (status === "confirmed" && data.data.appointment) {
+          setShowAppointmentNotification(true);
+          setTimeout(() => setShowAppointmentNotification(false), 10000);
+          toast.success("Booking confirmed and appointment created successfully!", {
+            description: "An appointment has been automatically created from this booking.",
+            duration: 5000,
+          });
+        } else if (data.warning) {
+          // Show warning if appointment creation failed
+          toast.warning(data.warning, {
+            description: "Booking was confirmed but appointment needs to be created manually.",
+            duration: 5000,
+          });
+        } else {
+          toast.success("Booking updated successfully!");
+        }
         fetchBooking();
       } else {
-        alert(data.error || "Failed to update booking");
+        toast.error(data.error || "Failed to update booking");
       }
     } catch (error) {
       console.error("Error updating booking:", error);
@@ -222,15 +260,17 @@ export default function BookingDetailPage() {
                 </label>
                 <p className="text-gray-900 dark:text-white">{booking.name}</p>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 flex items-center space-x-1">
-                  <Mail className="w-4 h-4" />
-                  <span>Email</span>
-                </label>
-                <p className="text-gray-900 dark:text-white">
-                  {booking.email}
-                </p>
-              </div>
+              {booking.email && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 flex items-center space-x-1">
+                    <Mail className="w-4 h-4" />
+                    <span>Email</span>
+                  </label>
+                  <p className="text-gray-900 dark:text-white">
+                    {booking.email}
+                  </p>
+                </div>
+              )}
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 flex items-center space-x-1">
                   <Phone className="w-4 h-4" />
@@ -253,11 +293,91 @@ export default function BookingDetailPage() {
             </div>
           </div>
 
+          {/* Appointment Notification */}
+          {showAppointmentNotification && booking.appointment && (
+            <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
+              <div className="flex items-center space-x-2 mb-2">
+                <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400" />
+                <h3 className="font-bold text-green-900 dark:text-green-300">
+                  Appointment Created Successfully!
+                </h3>
+              </div>
+              <p className="text-sm text-green-700 dark:text-green-400 mb-3">
+                An appointment has been automatically created from this booking.
+              </p>
+              <Link
+                href={`/admin/appointments/${booking.appointment._id}`}
+                className="inline-flex items-center space-x-2 px-3 py-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm"
+              >
+                <CalendarDays className="w-4 h-4" />
+                <span>View Appointment</span>
+              </Link>
+            </div>
+          )}
+
+          {/* Linked Appointment */}
+          {(booking.appointmentId || booking.appointment) && (
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center space-x-2">
+                <CalendarDays className="w-5 h-5" />
+                <span>Linked Appointment</span>
+              </h2>
+              <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                <div className="flex items-center justify-between mb-3">
+                  <div>
+                    <p className="font-medium text-gray-900 dark:text-white">
+                      {booking.appointment?.patientName || booking.appointmentId?.patientName}
+                    </p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                      {formatDate(
+                        booking.appointment?.appointmentDate ||
+                          booking.appointmentId?.appointmentDate ||
+                          ""
+                      )}{" "}
+                      at{" "}
+                      {booking.appointment?.appointmentTime ||
+                        booking.appointmentId?.appointmentTime}
+                    </p>
+                    {booking.appointment?.assignedTo && (
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                        Assigned to: {booking.appointment.assignedTo.name}
+                      </p>
+                    )}
+                  </div>
+                  <div className="flex flex-col items-end space-y-2">
+                    <span
+                      className={`px-3 py-1 text-xs font-semibold rounded-full ${
+                        booking.appointment?.status === "scheduled"
+                          ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300"
+                          : booking.appointment?.status === "in-progress"
+                          ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300"
+                          : booking.appointment?.status === "completed"
+                          ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
+                          : "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300"
+                      }`}
+                    >
+                      {booking.appointment?.status || booking.appointmentId?.status || "scheduled"}
+                    </span>
+                    <Link
+                      href={`/admin/appointments/${
+                        booking.appointment?._id || booking.appointmentId?._id
+                      }`}
+                      className="inline-flex items-center space-x-1 px-3 py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                      <span>View Appointment</span>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Appointment Details */}
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
             <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center space-x-2">
               <Calendar className="w-5 h-5" />
-              <span>Appointment Details</span>
+              <span>Booking Details</span>
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>

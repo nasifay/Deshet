@@ -6,6 +6,7 @@ import NewsPost from "~/lib/db/models/NewsPost";
 import Program from "~/lib/db/models/Program";
 import Gallery from "~/lib/db/models/Gallery";
 import Booking from "~/lib/db/models/Booking";
+import Appointment from "~/lib/db/models/Appointment";
 import Product from "~/lib/db/models/Product";
 import { getSession } from "~/lib/auth/session";
 
@@ -27,6 +28,10 @@ export async function GET() {
       blogCount,
       servicesCount,
       bookingsCount,
+      appointmentsCount,
+      pendingBookingsCount,
+      todayAppointmentsCount,
+      upcomingAppointmentsCount,
       productsCount,
       mediaCount,
       usersCount,
@@ -36,6 +41,19 @@ export async function GET() {
       NewsPost.countDocuments(), // Using NewsPost model for blog (will be renamed later)
       Program.countDocuments(), // Using Program model for services (will be renamed later)
       Booking.countDocuments(),
+      Appointment.countDocuments(),
+      Booking.countDocuments({ status: "pending" }),
+      Appointment.countDocuments({
+        appointmentDate: {
+          $gte: new Date(new Date().setHours(0, 0, 0, 0)),
+          $lt: new Date(new Date().setHours(23, 59, 59, 999)),
+        },
+        status: { $ne: "cancelled" },
+      }),
+      Appointment.countDocuments({
+        appointmentDate: { $gte: new Date() },
+        status: { $in: ["scheduled", "in-progress"] },
+      }),
       Product.countDocuments(),
       Gallery.countDocuments(),
       User.countDocuments(),
@@ -51,6 +69,10 @@ export async function GET() {
         blog: blogCount,
         services: servicesCount,
         bookings: bookingsCount,
+        appointments: appointmentsCount,
+        pendingBookings: pendingBookingsCount,
+        todayAppointments: todayAppointmentsCount,
+        upcomingAppointments: upcomingAppointmentsCount,
         products: productsCount,
         media: mediaCount,
         users: usersCount,

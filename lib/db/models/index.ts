@@ -31,6 +31,9 @@ export { default as Product, type IProduct } from './Product';
 // Booking
 export { default as Booking, type IBooking } from './Booking';
 
+// Appointment
+export { default as Appointment, type IAppointment } from './Appointment';
+
 // Site Settings
 export { default as SiteSettings, type ISiteSettings } from './SiteSettings';
 

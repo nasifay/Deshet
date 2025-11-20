@@ -14,6 +14,7 @@ import "~/lib/db/models/BankOption";
 import "~/lib/db/models/KeyFunder";
 import "~/lib/db/models/Supporter";
 import "~/lib/db/models/Booking";
+import "~/lib/db/models/Appointment";
 import "~/lib/db/models/Product";
 
 const MONGODB_URI =

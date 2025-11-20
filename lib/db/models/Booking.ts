@@ -1,10 +1,11 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
 import User from "./User"; // Import User model to register it for population
+import Appointment from "./Appointment"; // Import Appointment model to register it for population
 
 export interface IBooking extends Document {
   _id: mongoose.Types.ObjectId;
   name: string;
-  email: string;
+  email?: string;
   phone: string;
   preferredDate: Date;
   preferredTime: string;
@@ -15,6 +16,7 @@ export interface IBooking extends Document {
   notes?: string;
   confirmedBy?: mongoose.Types.ObjectId;
   confirmedAt?: Date;
+  appointmentId?: mongoose.Types.ObjectId; // Optional reference to Appointment
   createdAt: Date;
   updatedAt: Date;
 }
@@ -28,7 +30,7 @@ const BookingSchema: Schema<IBooking> = new Schema(
     },
     email: {
       type: String,
-      required: [true, "Email is required"],
+      required: false,
       lowercase: true,
       trim: true,
       match: [/^\S+@\S+\.\S+$/, "Please enter a valid email"],
@@ -79,6 +81,11 @@ const BookingSchema: Schema<IBooking> = new Schema(
       type: Date,
       default: null,
     },
+    appointmentId: {
+      type: Schema.Types.ObjectId,
+      ref: "Appointment",
+      default: null,
+    },
   },
   {
     timestamps: true,
@@ -90,11 +97,13 @@ BookingSchema.index({ email: 1 });
 BookingSchema.index({ status: 1, createdAt: -1 });
 BookingSchema.index({ preferredDate: 1 });
 BookingSchema.index({ createdAt: -1 });
+BookingSchema.index({ appointmentId: 1 });
 
 const Booking: Model<IBooking> =
   mongoose.models.Booking || mongoose.model<IBooking>("Booking", BookingSchema);
 
 export default Booking;
+
 
 
 

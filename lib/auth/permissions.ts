@@ -15,7 +15,15 @@ export type Permission =
   | 'media.delete'
   | 'analytics.view'
   | 'settings.view'
-  | 'settings.edit';
+  | 'settings.edit'
+  | 'bookings.view'
+  | 'bookings.create'
+  | 'bookings.edit'
+  | 'bookings.delete'
+  | 'appointments.view'
+  | 'appointments.create'
+  | 'appointments.edit'
+  | 'appointments.delete';
 
 /**
  * Role to permissions mapping
@@ -63,6 +71,16 @@ export const rolePermissions: Record<UserRole, Permission[]> = {
     'analytics.view',
   ],
   viewer: ['content.view', 'media.view', 'analytics.view'],
+  nurse: [
+    'bookings.view',
+    'bookings.create',
+    'bookings.edit',
+    'bookings.delete',
+    'appointments.view',
+    'appointments.create',
+    'appointments.edit',
+    'appointments.delete',
+  ],
 };
 
 /**

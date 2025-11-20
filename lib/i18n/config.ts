@@ -5,7 +5,7 @@
 
 export type Locale = 'en' | 'am';
 
-export const defaultLocale: Locale = 'en';
+export const defaultLocale: Locale = 'am';
 export const locales: Locale[] = ['en', 'am'];
 
 export const localeNames: Record<Locale, string> = {

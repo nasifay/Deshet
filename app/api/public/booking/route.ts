@@ -21,7 +21,6 @@ export async function POST(req: NextRequest) {
     // Validate required fields
     if (
       !name ||
-      !email ||
       !phone ||
       !preferredDate ||
       !preferredTime ||
@@ -34,13 +33,15 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Validate email format
-    const emailRegex = /^\S+@\S+\.\S+$/;
-    if (!emailRegex.test(email)) {
-      return NextResponse.json(
-        { success: false, error: "Invalid email format" },
-        { status: 400 }
-      );
+    // Validate email format if provided
+    if (email) {
+      const emailRegex = /^\S+@\S+\.\S+$/;
+      if (!emailRegex.test(email)) {
+        return NextResponse.json(
+          { success: false, error: "Invalid email format" },
+          { status: 400 }
+        );
+      }
     }
 
     // Validate date is not in the past
@@ -56,9 +57,18 @@ export async function POST(req: NextRequest) {
     }
 
     // Create booking
-    const booking = await Booking.create({
+    const bookingData: {
+      name: string;
+      email?: string;
+      phone: string;
+      preferredDate: Date;
+      preferredTime: string;
+      serviceType: string;
+      healthConcern: string;
+      requestCallback: boolean;
+      status: string;
+    } = {
       name: name.trim(),
-      email: email.trim().toLowerCase(),
       phone: phone.trim(),
       preferredDate: selectedDate,
       preferredTime: preferredTime.trim(),
@@ -66,7 +76,13 @@ export async function POST(req: NextRequest) {
       healthConcern: healthConcern.trim(),
       requestCallback: requestCallback || false,
       status: "pending",
-    });
+    };
+
+    if (email) {
+      bookingData.email = email.trim().toLowerCase();
+    }
+
+    const booking = await Booking.create(bookingData);
 
     return NextResponse.json(
       {
@@ -97,6 +113,7 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+
 
 
 

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
+import { Toaster } from 'sonner';
 import Sidebar from './Sidebar';
 import TopBar from './TopBar';
 
@@ -112,6 +113,9 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
           onClick={() => setMobileMenuOpen(false)}
         />
       )}
+
+      {/* Toast Notifications */}
+      <Toaster position="top-right" richColors />
     </div>
   );
 }

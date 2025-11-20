@@ -125,35 +125,133 @@ export async function GET(request: NextRequest) {
     let gallery, total;
     
     if (category && category !== "all" && query.category) {
-      // For category queries, try both ObjectId and string matching
+      // For category queries, use aggregation pipeline to handle ObjectId conversion
       const categoryObjectId = query.category as mongoose.Types.ObjectId;
       const categoryString = category;
       
-      // Try querying with ObjectId first
-      const queryWithObjectId = { ...query, category: categoryObjectId };
-      const queryWithString = { ...query, category: categoryString };
+      console.log("Category query - ObjectId:", categoryObjectId.toString());
+      console.log("Category query - String:", categoryString);
       
-      // Use $or to match either format
-      const flexibleQuery = {
+      // First, let's check what format the category is stored in the database
+      const sampleImage = await Gallery.findOne({ type: "image" })
+        .select("category")
+        .lean();
+      console.log("Sample image category type:", typeof sampleImage?.category);
+      console.log("Sample image category value:", sampleImage?.category);
+      console.log("Sample image category toString:", sampleImage?.category?.toString());
+      
+      // Try direct ObjectId query first (most common case)
+      const directQuery = {
         type: "image",
-        $or: [
-          { category: categoryObjectId },
-          { category: categoryString },
-        ],
+        category: categoryObjectId,
       };
       
-      [gallery, total] = await Promise.all([
-        Gallery.find(flexibleQuery)
-          .sort(sort)
-          .skip(skip)
-          .limit(limit)
-          .populate("category", "_id name slug color icon")
-          .select(
-            "_id filename originalName url alt caption customClass category createdAt"
-          )
-          .lean(),
-        Gallery.countDocuments(flexibleQuery),
-      ]);
+      const directCount = await Gallery.countDocuments(directQuery);
+      console.log("Direct ObjectId query count:", directCount);
+      
+      if (directCount > 0) {
+        // Direct query works, use it
+        [gallery, total] = await Promise.all([
+          Gallery.find(directQuery)
+            .sort(sort)
+            .skip(skip)
+            .limit(limit)
+            .populate("category", "_id name slug color icon")
+            .select(
+              "_id filename originalName url alt caption customClass category createdAt"
+            )
+            .lean(),
+          Gallery.countDocuments(directQuery),
+        ]);
+        console.log("Direct query results:", { found: gallery.length, total });
+      } else {
+        // Try with string comparison using aggregation
+        console.log("Direct query returned 0, trying aggregation pipeline...");
+        const aggregationResult = await Gallery.aggregate([
+          {
+            $match: {
+              type: "image",
+            },
+          },
+          {
+            $addFields: {
+              categoryStr: { $toString: "$category" },
+            },
+          },
+          {
+            $match: {
+              categoryStr: categoryString,
+            },
+          },
+          {
+            $sort: sort === "-createdAt" ? { createdAt: -1 } : { createdAt: 1 },
+          },
+          {
+            $skip: skip,
+          },
+          {
+            $limit: limit,
+          },
+          {
+            $lookup: {
+              from: "gallerycategories",
+              localField: "category",
+              foreignField: "_id",
+              as: "categoryPopulated",
+            },
+          },
+          {
+            $unwind: {
+              path: "$categoryPopulated",
+              preserveNullAndEmptyArrays: true,
+            },
+          },
+          {
+            $project: {
+              _id: 1,
+              filename: 1,
+              originalName: 1,
+              url: 1,
+              alt: 1,
+              caption: 1,
+              customClass: 1,
+              createdAt: 1,
+              category: {
+                _id: "$categoryPopulated._id",
+                name: "$categoryPopulated.name",
+                slug: "$categoryPopulated.slug",
+                color: "$categoryPopulated.color",
+                icon: "$categoryPopulated.icon",
+              },
+            },
+          },
+        ]);
+        
+        const totalAggregation = await Gallery.aggregate([
+          {
+            $match: {
+              type: "image",
+            },
+          },
+          {
+            $addFields: {
+              categoryStr: { $toString: "$category" },
+            },
+          },
+          {
+            $match: {
+              categoryStr: categoryString,
+            },
+          },
+          {
+            $count: "total",
+          },
+        ]);
+        
+        gallery = aggregationResult;
+        total = totalAggregation[0]?.total || 0;
+        console.log("Aggregation results:", { found: gallery.length, total });
+      }
     } else {
       // For "all" or no category, use normal query
       [gallery, total] = await Promise.all([

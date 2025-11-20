@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { FileText, Newspaper, Images, Users, TrendingUp, Calendar, Package } from "lucide-react";
+import { FileText, Newspaper, Images, Users, TrendingUp, Calendar, CalendarDays, Package, AlertCircle } from "lucide-react";
 import Link from "next/link";
 
 interface DashboardStats {
@@ -9,6 +9,10 @@ interface DashboardStats {
   blog: number;
   services: number;
   bookings: number;
+  appointments: number;
+  pendingBookings: number;
+  todayAppointments: number;
+  upcomingAppointments: number;
   products: number;
   media: number;
   users: number;
@@ -20,6 +24,10 @@ export default function AdminDashboard() {
     blog: 0,
     services: 0,
     bookings: 0,
+    appointments: 0,
+    pendingBookings: 0,
+    todayAppointments: 0,
+    upcomingAppointments: 0,
     products: 0,
     media: 0,
     users: 0,
@@ -45,7 +53,14 @@ export default function AdminDashboard() {
     fetchStats();
   }, []);
 
-  const statCards = [
+  const statCards: Array<{
+    title: string;
+    value: number;
+    icon: React.ReactNode;
+    color: string;
+    link: string;
+    badge?: number;
+  }> = [
     {
       title: "Total Pages",
       value: stats.pages,
@@ -73,6 +88,15 @@ export default function AdminDashboard() {
       icon: <Calendar className="w-8 h-8" />,
       color: "bg-teal-500",
       link: "/admin/bookings",
+      badge: stats.pendingBookings > 0 ? stats.pendingBookings : undefined,
+    },
+    {
+      title: "Appointments",
+      value: stats.appointments,
+      icon: <CalendarDays className="w-8 h-8" />,
+      color: "bg-blue-500",
+      link: "/admin/appointments",
+      badge: stats.todayAppointments > 0 ? stats.todayAppointments : undefined,
     },
     {
       title: "Products",
@@ -123,8 +147,13 @@ export default function AdminDashboard() {
           <Link
             key={index}
             href={card.link}
-            className="bg-white dark:bg-gray-800 rounded-lg shadow hover:shadow-lg transition-shadow p-6 group"
+            className="bg-white dark:bg-gray-800 rounded-lg shadow hover:shadow-lg transition-shadow p-6 group relative"
           >
+            {card.badge && (
+              <span className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">
+                {card.badge}
+              </span>
+            )}
             <div className="flex items-center justify-between">
               <div className="flex-1">
                 <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">
@@ -137,6 +166,11 @@ export default function AdminDashboard() {
                     card.value
                   )}
                 </p>
+                {card.badge && (
+                  <p className="text-xs text-red-600 dark:text-red-400 mt-1">
+                    {card.title === "Bookings" ? "Pending" : "Today"}
+                  </p>
+                )}
               </div>
               <div
                 className={`${card.color} text-white p-4 rounded-lg group-hover:scale-110 transition-transform`}
@@ -147,6 +181,35 @@ export default function AdminDashboard() {
           </Link>
         ))}
       </div>
+
+      {/* Quick Stats for Appointments */}
+      {!loading && (stats.todayAppointments > 0 || stats.upcomingAppointments > 0) && (
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
+            Appointment Overview
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+              <p className="text-sm text-gray-600 dark:text-gray-400">Today's Appointments</p>
+              <p className="text-2xl font-black text-blue-600 dark:text-blue-400">
+                {stats.todayAppointments}
+              </p>
+            </div>
+            <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
+              <p className="text-sm text-gray-600 dark:text-gray-400">Upcoming</p>
+              <p className="text-2xl font-black text-green-600 dark:text-green-400">
+                {stats.upcomingAppointments}
+              </p>
+            </div>
+            <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
+              <p className="text-sm text-gray-600 dark:text-gray-400">Pending Bookings</p>
+              <p className="text-2xl font-black text-yellow-600 dark:text-yellow-400">
+                {stats.pendingBookings}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Quick Actions */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">

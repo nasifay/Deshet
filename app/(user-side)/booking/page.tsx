@@ -19,7 +19,6 @@ interface PageData {
 
 interface BookingFormData {
   name: string;
-  email: string;
   phone: string;
   preferredDate: string;
   preferredTime: string;
@@ -45,7 +44,6 @@ export default function BookingPage() {
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState<BookingFormData>({
     name: "",
-    email: "",
     phone: "",
     preferredDate: "",
     preferredTime: "",
@@ -115,7 +113,6 @@ export default function BookingPage() {
         });
         setFormData({
           name: "",
-          email: "",
           phone: "",
           preferredDate: "",
           preferredTime: "",
@@ -217,27 +214,6 @@ export default function BookingPage() {
                     type="text"
                     placeholder={t("booking.form.placeholder.name")}
                     value={formData.name}
-                    onChange={handleInputChange}
-                    required
-                    disabled={isSubmitting}
-                    className="w-full h-12 bg-white rounded-xl border border-gray-300 px-4 text-[#333333] text-sm focus:outline-none focus:ring-2 focus:ring-[#128341] focus:border-transparent placeholder:text-gray-400 disabled:opacity-60 disabled:cursor-not-allowed"
-                  />
-                </div>
-
-                {/* Email */}
-                <div className="flex flex-col gap-2">
-                  <label
-                    htmlFor="email"
-                    className="block text-[#333333] text-base font-medium"
-                  >
-                    {t("booking.form.email")} <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    placeholder={t("booking.form.placeholder.email")}
-                    value={formData.email}
                     onChange={handleInputChange}
                     required
                     disabled={isSubmitting}

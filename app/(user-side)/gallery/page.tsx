@@ -221,7 +221,9 @@ export default function GalleryPage() {
     }
   };
 
-  const handleCategoryChange = (categoryId: string) => {
+  const handleCategoryChange = (categoryId: string, e?: React.MouseEvent<HTMLButtonElement>) => {
+    e?.preventDefault();
+    e?.stopPropagation();
     setSelectedCategory(categoryId);
     setPage(1);
     setGalleryItems([]);
@@ -259,7 +261,8 @@ export default function GalleryPage() {
         {categories.length > 0 && (
           <div className="mb-8 flex flex-wrap justify-center gap-3">
             <button
-              onClick={() => handleCategoryChange("all")}
+              type="button"
+              onClick={(e) => handleCategoryChange("all", e)}
               className={`px-6 py-2 rounded-full font-medium transition-all duration-200 ${
                 selectedCategory === "all"
                   ? "bg-primary-green text-white shadow-lg"
@@ -271,7 +274,8 @@ export default function GalleryPage() {
             {categories.map((category) => (
               <button
                 key={category._id}
-                onClick={() => handleCategoryChange(category._id)}
+                type="button"
+                onClick={(e) => handleCategoryChange(category._id, e)}
                 className={`px-6 py-2 rounded-full font-medium transition-all duration-200 ${
                   selectedCategory === category._id
                     ? "bg-primary-green text-white shadow-lg"
