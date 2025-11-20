@@ -44,10 +44,37 @@ export async function POST(request: NextRequest) {
     const filename = `uploads/${timestamp}-${originalName}`;
 
     // Upload to Vercel Blob Storage
-    const blob = await put(filename, file, {
-      access: "public",
-      contentType: file.type,
-    });
+    let blob;
+    try {
+      blob = await put(filename, file, {
+        access: "public",
+        contentType: file.type,
+      });
+    } catch (blobError) {
+      console.error("Vercel Blob Storage error:", blobError);
+      const errorMsg = blobError instanceof Error ? blobError.message : String(blobError);
+      
+      // Check if it's a token/authentication error
+      if (
+        errorMsg.includes("BLOB_READ_WRITE_TOKEN") ||
+        errorMsg.includes("token") ||
+        errorMsg.includes("BLOB") ||
+        errorMsg.includes("Unauthorized") ||
+        errorMsg.includes("authentication")
+      ) {
+        return NextResponse.json(
+          {
+            success: false,
+            error:
+              "Blob storage not configured. Please verify BLOB_READ_WRITE_TOKEN is set in Vercel environment variables and the blob store is linked to your project.",
+          },
+          { status: 500 }
+        );
+      }
+      
+      // Re-throw other errors to be caught by outer catch
+      throw blobError;
+    }
 
     // Return the URL
     const url = blob.url;
