@@ -264,9 +264,12 @@ export default function ProgramsListSection() {
         ) : (
           displayPrograms
             .filter((program) => program.categoryId === activeTab)
-            .map((program) => (
-              <ProgramItem key={program._id || program.title} program={program} />
-            ))
+            .map((program) => {
+              const key = program._id || (typeof program.title === 'string' 
+                ? program.title 
+                : program.title.en || program.title.am || '');
+              return <ProgramItem key={key} program={program} />;
+            })
         )}
       </div>
     </div>

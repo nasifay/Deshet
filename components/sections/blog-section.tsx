@@ -146,7 +146,7 @@ export default function BlogSection() {
               {/* Text Overlay */}
               <div className="absolute bottom-0 left-0 right-0 p-4">
                 <h3
-                  className={`text-[13px] md:text-sm font-semibold text-[#FFB400] leading-snug mb-1 line-clamp-2 ${
+                  className={`text-[13px] md:text-sm font-semibold text-primary-green leading-snug mb-1 line-clamp-2 ${
                     locale === "am" ? "font-amharic" : ""
                   }`}
                 >

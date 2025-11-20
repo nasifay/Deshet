@@ -122,7 +122,7 @@ export default function NewsAndEvents() {
 
               {/* Text Overlay */}
               <div className="absolute bottom-0 left-0 right-0 p-4">
-                <h3 className="text-[13px] md:text-sm font-semibold text-[#FFB400] leading-snug mb-1 line-clamp-2">
+                <h3 className="text-[13px] md:text-sm font-semibold text-primary-green leading-snug mb-1 line-clamp-2">
                   {item.title}
                 </h3>
                 <p className="text-[12px] md:text-sm text-white/85 leading-snug line-clamp-3">

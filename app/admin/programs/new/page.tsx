@@ -5,14 +5,15 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Save, X, Plus, Trash2 } from "lucide-react";
 import ImageUploadField from "~/app/admin/components/ImageUploadField";
+import BilingualField from "~/app/admin/components/BilingualField";
 
 export default function NewProgram() {
   const router = useRouter();
   const [saving, setSaving] = useState(false);
   const [formData, setFormData] = useState({
-    title: "",
+    title: { en: "", am: "" } as { en: string; am: string },
     slug: "",
-    description: "",
+    description: { en: "", am: "" } as { en: string; am: string },
     categoryId: "traditional-consultation",
     image: "",
     thumbnails: [] as Array<{
@@ -83,13 +84,13 @@ export default function NewProgram() {
       .trim();
   };
 
-  const handleTitleChange = (title: string) => {
+  const handleTitleChange = (title: { en: string; am: string }) => {
     setFormData((prev) => ({
       ...prev,
       title,
       slug:
-        prev.slug === generateSlug(prev.title)
-          ? generateSlug(title)
+        prev.slug === generateSlug(prev.title.en)
+          ? generateSlug(title.en)
           : prev.slug,
     }));
   };
@@ -204,7 +205,7 @@ export default function NewProgram() {
         <div className="flex items-center space-x-3">
           <button
             onClick={handleSave}
-            disabled={saving || !formData.title.trim()}
+            disabled={saving || !formData.title.en.trim()}
             className="flex items-center space-x-2 px-4 py-2 bg-primary-green text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-[0.5]"
           >
             <Save className="w-4 h-4" />
@@ -225,15 +226,15 @@ export default function NewProgram() {
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Program Title *
-                </label>
-                <input
-                  type="text"
+                <BilingualField
+                  label="Program Title"
                   value={formData.title}
-                  onChange={(e) => handleTitleChange(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green"
-                  placeholder="Enter program title"
+                  onChange={handleTitleChange}
+                  type="text"
+                  placeholder={{
+                    en: "Enter program title in English",
+                    am: "የፕሮግራም ርዕስ በአማርኛ ያስገቡ",
+                  }}
                 />
               </div>
 
@@ -325,17 +326,21 @@ export default function NewProgram() {
             <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
               Description
             </h2>
-            <textarea
+            <BilingualField
+              label="Program Description"
               value={formData.description}
-              onChange={(e) =>
+              onChange={(value) =>
                 setFormData((prev) => ({
                   ...prev,
-                  description: e.target.value,
+                  description: value,
                 }))
               }
+              type="textarea"
               rows={8}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green resize-none"
-              placeholder="Describe the program in detail..."
+              placeholder={{
+                en: "Describe the program in detail in English...",
+                am: "ፕሮግራሙን በዝርዝር በአማርኛ ይግለጹ...",
+              }}
             />
           </div>
 

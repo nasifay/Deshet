@@ -5,14 +5,15 @@ import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Save, Upload, X, Plus, Trash2, Edit2 } from "lucide-react";
 import ImageUploadField from "~/app/admin/components/ImageUploadField";
+import BilingualField from "~/app/admin/components/BilingualField";
 
 interface Program {
   _id: string;
-  title: string;
+  title: string | { en: string; am: string };
   slug: string;
-  description: string;
+  description: string | { en: string; am: string };
   categoryId: string;
-  categoryLabel: string;
+  categoryLabel: string | { en: string; am: string };
   image: string;
   thumbnails: Array<{
     id: number;
@@ -49,9 +50,9 @@ export default function EditProgram() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [formData, setFormData] = useState({
-    title: "",
+    title: { en: "", am: "" } as { en: string; am: string },
     slug: "",
-    description: "",
+    description: { en: "", am: "" } as { en: string; am: string },
     categoryId: "traditional-consultation",
     image: "",
     thumbnails: [] as Array<{
@@ -92,6 +93,16 @@ export default function EditProgram() {
     }
   }, [programId]);
 
+  // Helper function to normalize bilingual value
+  const normalizeBilingual = (value: string | { en: string; am: string } | undefined): { en: string; am: string } => {
+    if (!value) return { en: "", am: "" };
+    if (typeof value === "string") return { en: value, am: "" };
+    if (typeof value === "object" && "en" in value && "am" in value) {
+      return { en: value.en || "", am: value.am || "" };
+    }
+    return { en: "", am: "" };
+  };
+
   const fetchProgram = async () => {
     try {
       setLoading(true);
@@ -101,15 +112,15 @@ export default function EditProgram() {
       if (data.success) {
         setProgram(data.data);
         setFormData({
-          title: data.data.title,
+          title: normalizeBilingual(data.data.title),
           slug: data.data.slug,
-          description: data.data.description,
+          description: normalizeBilingual(data.data.description),
           categoryId: data.data.categoryId,
           image: data.data.image,
           thumbnails: data.data.thumbnails || [],
           projects: data.data.projects || [],
           status: data.data.status,
-          order: data.data.order,
+          order: data.data.order || 1,
         });
       } else {
         alert("Program not found");
@@ -159,13 +170,13 @@ export default function EditProgram() {
       .trim();
   };
 
-  const handleTitleChange = (title: string) => {
+  const handleTitleChange = (title: { en: string; am: string }) => {
     setFormData((prev) => ({
       ...prev,
       title,
       slug:
-        prev.slug === generateSlug(prev.title)
-          ? generateSlug(title)
+        prev.slug === generateSlug(prev.title.en)
+          ? generateSlug(title.en)
           : prev.slug,
     }));
   };
@@ -345,7 +356,7 @@ export default function EditProgram() {
         <div className="flex items-center space-x-3">
           <button
             onClick={handleSave}
-            disabled={saving}
+            disabled={saving || !formData.title.en.trim()}
             className="flex items-center space-x-2 px-4 py-2 bg-primary-green text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
           >
             <Save className="w-4 h-4" />
@@ -366,15 +377,15 @@ export default function EditProgram() {
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Program Title *
-                </label>
-                <input
-                  type="text"
+                <BilingualField
+                  label="Program Title"
                   value={formData.title}
-                  onChange={(e) => handleTitleChange(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green"
-                  placeholder="Enter program title"
+                  onChange={handleTitleChange}
+                  type="text"
+                  placeholder={{
+                    en: "Enter program title in English",
+                    am: "የፕሮግራም ርዕስ በአማርኛ ያስገቡ",
+                  }}
                 />
               </div>
 
@@ -463,17 +474,21 @@ export default function EditProgram() {
             <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
               Description
             </h2>
-            <textarea
+            <BilingualField
+              label="Program Description"
               value={formData.description}
-              onChange={(e) =>
+              onChange={(value) =>
                 setFormData((prev) => ({
                   ...prev,
-                  description: e.target.value,
+                  description: value,
                 }))
               }
+              type="textarea"
               rows={8}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green resize-none"
-              placeholder="Describe the program in detail..."
+              placeholder={{
+                en: "Describe the program in detail in English...",
+                am: "ፕሮግራሙን በዝርዝር በአማርኛ ይግለጹ...",
+              }}
             />
           </div>
 
@@ -880,7 +895,9 @@ export default function EditProgram() {
                   Category:
                 </span>
                 <p className="text-gray-600 dark:text-gray-400">
-                  {program.categoryLabel}
+                  {typeof program.categoryLabel === "string"
+                    ? program.categoryLabel
+                    : program.categoryLabel?.en || program.categoryLabel?.am || ""}
                 </p>
               </div>
             </div>

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ArrowLeft, Save } from "lucide-react";
 import { getBilingualText } from "~/lib/i18n/utils";
 import { useTranslation } from "~/lib/i18n/hooks";
+import BilingualField from "~/app/admin/components/BilingualField";
 
 interface GalleryCategory {
   _id: string;
@@ -26,8 +27,8 @@ interface GalleryItem {
     width: number;
     height: number;
   };
-  alt?: string;
-  caption?: string;
+  alt?: string | { en: string; am: string };
+  caption?: string | { en: string; am: string };
   customClass?: string;
   category: {
     _id: string;
@@ -48,8 +49,8 @@ export default function EditGalleryItemPage() {
 
   const [formData, setFormData] = useState({
     originalName: "",
-    alt: "",
-    caption: "",
+    alt: { en: "", am: "" } as string | { en: string; am: string },
+    caption: { en: "", am: "" } as string | { en: string; am: string },
     customClass: "",
     category: "",
   });
@@ -80,10 +81,19 @@ export default function EditGalleryItemPage() {
 
       if (data.success) {
         setItem(data.data);
+        // Normalize alt and caption to bilingual format
+        const normalizeBilingual = (value: string | { en: string; am: string } | undefined) => {
+          if (!value) return { en: "", am: "" };
+          if (typeof value === "object" && "en" in value) {
+            return value;
+          }
+          return { en: value as string, am: "" };
+        };
+        
         setFormData({
           originalName: data.data.originalName,
-          alt: data.data.alt || "",
-          caption: data.data.caption || "",
+          alt: normalizeBilingual(data.data.alt),
+          caption: normalizeBilingual(data.data.caption),
           customClass: data.data.customClass || "",
           category: data.data.category._id,
         });
@@ -186,7 +196,9 @@ export default function EditGalleryItemPage() {
             {item.type === "image" ? (
               <img
                 src={item.url}
-                alt={item.alt || item.originalName}
+                alt={typeof item.alt === "object" && item.alt !== null && "en" in item.alt 
+                  ? item.alt.en 
+                  : (item.alt as string) || item.originalName}
                 className="w-full h-full object-contain"
               />
             ) : (
@@ -276,35 +288,32 @@ export default function EditGalleryItemPage() {
             </select>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Alt Text
-            </label>
-            <input
-              type="text"
-              value={formData.alt}
-              onChange={(e) =>
-                setFormData({ ...formData, alt: e.target.value })
-              }
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green"
-              placeholder="Descriptive text for accessibility"
-            />
-          </div>
+          <BilingualField
+            label="Alt Text"
+            value={formData.alt}
+            onChange={(value) =>
+              setFormData({ ...formData, alt: value })
+            }
+            type="text"
+            placeholder={{
+              en: "Descriptive text for accessibility",
+              am: "ለመዳረሻ ገላጭ ጽሑፍ",
+            }}
+          />
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Caption
-            </label>
-            <textarea
-              value={formData.caption}
-              onChange={(e) =>
-                setFormData({ ...formData, caption: e.target.value })
-              }
-              rows={3}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green"
-              placeholder="Optional caption for this image"
-            />
-          </div>
+          <BilingualField
+            label="Caption"
+            value={formData.caption}
+            onChange={(value) =>
+              setFormData({ ...formData, caption: value })
+            }
+            type="textarea"
+            rows={3}
+            placeholder={{
+              en: "Optional caption for this image",
+              am: "ለዚህ ምስል አማራጭ መግለጫ",
+            }}
+          />
 
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
