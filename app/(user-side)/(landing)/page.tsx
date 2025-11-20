@@ -2,7 +2,6 @@
 
 import HeroSection from "~/components/sections/hero-section";
 import AboutSection from "~/components/sections/about-section";
-import ServicesSection from "~/components/sections/services-section";
 import StatisticsSection from "~/components/sections/statistics-section";
 import ProgramAreasSection from "~/components/sections/program-areas-section";
 import AchievementsSection from "~/components/sections/achievements-section";
@@ -34,7 +33,6 @@ export default function Home() {
       <HeroSection />
       <AboutSection />
       <StatisticsSection />
-      <ServicesSection />
       <ProgramAreasSection />
       <PartnersCertificationsSection />
       <AchievementsSection />
