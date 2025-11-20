@@ -161,25 +161,25 @@ export default function ProgramAreasSection() {
                 }}
               />
 
-            {/* Action Button */}
-            {program.link && (
-              <Link
-                href={program.link}
-                className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-primary-orange hover:bg-[#db7f0c] active:scale-95 transition-all duration-300 shadow-lg hover:shadow-xl self-start"
-                aria-label={`Learn more about ${cleanTitle}`}
-              >
-                <Leaf
-                  size={20}
-                  strokeWidth={3}
-                  className="text-black/85"
-                />
-              </Link>
-            )}
+              {/* Action Button */}
+              {program.link && (
+                <Link
+                  href={program.link}
+                  className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-primary-orange hover:bg-[#db7f0c] active:scale-95 transition-all duration-300 shadow-lg hover:shadow-xl self-start"
+                  aria-label={`Learn more about ${cleanTitle}`}
+                >
+                  <Leaf
+                    size={20}
+                    strokeWidth={3}
+                    className="text-black/85"
+                  />
+                </Link>
+              )}
+            </div>
           </div>
         </div>
-      </div>
-    );
-  });
+      );
+    });
 
   return (
     <div className="w-full py-4 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
