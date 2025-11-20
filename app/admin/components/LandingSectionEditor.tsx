@@ -1043,12 +1043,15 @@ function SectionEditor({
           <div className="space-y-4">
             {(
               (data.programs as Array<{
-                title: string;
+                title: string | { en: string; am: string };
                 image: string;
                 link?: string;
               }>) || [
                 {
-                  title: "Traditional Medical <br /> Consultation",
+                  title: {
+                    en: "Traditional Medical <br /> Consultation",
+                    am: "ባህላዊ የሕክምና <br /> ምክክር",
+                  },
                   image: "",
                   link: "/programs",
                 },
@@ -1064,7 +1067,7 @@ function SectionEditor({
                   </h5>
                   {(
                     (data.programs as Array<{
-                      title: string;
+                      title: string | { en: string; am: string };
                       image: string;
                       link?: string;
                     }>) || []
@@ -1073,7 +1076,7 @@ function SectionEditor({
                       onClick={() => {
                         const newPrograms = [
                           ...((data.programs as Array<{
-                            title: string;
+                            title: string | { en: string; am: string };
                             image: string;
                             link?: string;
                           }>) || []),
@@ -1088,30 +1091,31 @@ function SectionEditor({
                   )}
                 </div>
                 <div className="space-y-3">
-                  {/* Program Title */}
-                  <div>
-                    <label className={labelClass}>Program Title (HTML allowed, use &lt;br /&gt; for line breaks)</label>
-                    <textarea
-                      value={program.title || ""}
-                      onChange={(e) => {
-                        const newPrograms = [
-                          ...((data.programs as Array<{
-                            title: string;
-                            image: string;
-                            link?: string;
-                          }>) || []),
-                        ];
-                        newPrograms[index] = { ...program, title: e.target.value };
-                        updateField("programs", newPrograms);
-                      }}
-                      className={inputClass}
-                      rows={2}
-                      placeholder="Traditional Medical <br /> Consultation"
-                    />
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                      Use &lt;br /&gt; or &lt;br /&gt; for line breaks
-                    </p>
-                  </div>
+                  {/* Program Title - Bilingual */}
+                  <BilingualField
+                    label="Program Title (HTML allowed, use &lt;br /&gt; for line breaks)"
+                    value={program.title as string | { en: string; am: string } | undefined}
+                    onChange={(value) => {
+                      const newPrograms = [
+                        ...((data.programs as Array<{
+                          title: string | { en: string; am: string };
+                          image: string;
+                          link?: string;
+                        }>) || []),
+                      ];
+                      newPrograms[index] = { ...program, title: value };
+                      updateField("programs", newPrograms);
+                    }}
+                    type="textarea"
+                    rows={2}
+                    placeholder={{
+                      en: "Traditional Medical <br /> Consultation",
+                      am: "ባህላዊ የሕክምና <br /> ምክክር",
+                    }}
+                  />
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                    Use &lt;br /&gt; or &lt;br /&gt; for line breaks in both languages
+                  </p>
                   
                   {/* Program Image */}
                   <div>
@@ -1121,7 +1125,7 @@ function SectionEditor({
                       onChange={(url) => {
                         const newPrograms = [
                           ...((data.programs as Array<{
-                            title: string;
+                            title: string | { en: string; am: string };
                             image: string;
                             link?: string;
                           }>) || []),
@@ -1144,7 +1148,7 @@ function SectionEditor({
                       onChange={(e) => {
                         const newPrograms = [
                           ...((data.programs as Array<{
-                            title: string;
+                            title: string | { en: string; am: string };
                             image: string;
                             link?: string;
                           }>) || []),
@@ -1163,12 +1167,12 @@ function SectionEditor({
               onClick={() => {
                 const newPrograms = [
                   ...((data.programs as Array<{
-                    title: string;
+                    title: string | { en: string; am: string };
                     image: string;
                     link?: string;
                   }>) || []),
                   {
-                    title: "",
+                    title: { en: "", am: "" },
                     image: "",
                     link: "/programs",
                   },
@@ -1692,22 +1696,34 @@ function getDefaultDataForType(type: string): Record<string, unknown> {
       return {
         programs: [
           {
-            title: "Traditional Medical <br /> Consultation",
+            title: {
+              en: "Traditional Medical <br /> Consultation",
+              am: "ባህላዊ የሕክምና <br /> ምክክር",
+            },
             image: "/overview/1.png",
             link: "/programs",
           },
           {
-            title: "Herbal Medicine <br /> Preparation",
+            title: {
+              en: "Herbal Medicine <br /> Preparation",
+              am: "የአመዳድብ ሕክምና <br /> ዝግጅት",
+            },
             image: "/overview/2.png",
             link: "/programs",
           },
           {
-            title: "Detox & Cleansing <br /> Therapy",
+            title: {
+              en: "Detox & Cleansing <br /> Therapy",
+              am: "የመጥለፍት እና ማጽዳት <br /> ሕክምና",
+            },
             image: "/overview/3.png",
             link: "/programs",
           },
           {
-            title: "Traditional Diagnostic <br /> Techniques",
+            title: {
+              en: "Traditional Diagnostic <br /> Techniques",
+              am: "ባህላዊ የመለኪያ <br /> ቴክኒኮች",
+            },
             image: "/overview/4.png",
             link: "/programs",
           },

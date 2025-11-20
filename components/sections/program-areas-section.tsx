@@ -7,28 +7,43 @@ import { useState, useEffect, useRef } from "react";
 import { ProgramAreasSkeleton } from "./landing-page-skeleton";
 import Lenis from "lenis";
 import "lenis/dist/lenis.css";
+import { useTranslation } from "~/lib/i18n/hooks";
+import { getBilingualText } from "~/lib/i18n/utils";
 
 export default function ProgramAreasSection() {
+  const { locale } = useTranslation();
   const [programs, setPrograms] = useState<
-    Array<{ title: string; image: string; link?: string }>
+    Array<{ title: string | { en: string; am: string }; image: string; link?: string }>
   >([
     {
-      title: "Traditional Medical <br /> Consultation",
+      title: {
+        en: "Traditional Medical <br /> Consultation",
+        am: "ባህላዊ የሕክምና <br /> ምክክር",
+      },
       image: "/overview/1.png",
       link: "/programs",
     },
     {
-      title: "Herbal Medicine <br /> Preparation",
+      title: {
+        en: "Herbal Medicine <br /> Preparation",
+        am: "የአመዳድብ ሕክምና <br /> ዝግጅት",
+      },
       image: "/overview/2.png",
       link: "/programs",
     },
     {
-      title: "Detox & Cleansing <br /> Therapy",
+      title: {
+        en: "Detox & Cleansing <br /> Therapy",
+        am: "የመጥለፍት እና ማጽዳት <br /> ሕክምና",
+      },
       image: "/overview/3.png",
       link: "/programs",
     },
     {
-      title: "Traditional Diagnostic <br /> Techniques",
+      title: {
+        en: "Traditional Diagnostic <br /> Techniques",
+        am: "ባህላዊ የመለኪያ <br /> ቴክኒኮች",
+      },
       image: "/overview/4.png",
       link: "/programs",
     },
@@ -73,7 +88,14 @@ export default function ProgramAreasSection() {
             (s: any) => s.type === "ProgramAreasSection"
           );
           if (section?.data?.programs && section.data.programs.length > 0) {
-            setPrograms(section.data.programs);
+            // Normalize programs to ensure bilingual format
+            const normalizedPrograms = section.data.programs.map((p: any) => ({
+              ...p,
+              title: typeof p.title === "string" 
+                ? { en: p.title, am: p.title } 
+                : p.title || { en: "", am: "" },
+            }));
+            setPrograms(normalizedPrograms);
           }
           // If no data in CMS, keep default programs
         }
@@ -98,43 +120,53 @@ export default function ProgramAreasSection() {
   }
 
   // Transform programs into ScrollStack items
-  const stackItems = programs.map((program, index) => ({
-    id: `program-${index}`,
-    content: (
-      <div className="relative w-full h-auto sm:h-[70vh] md:h-[80vh] px-6 md:px-16 lg:px-20 xl:px-28 2xl:px-36">
-        <div className="relative w-full h-[400px] sm:h-full overflow-hidden rounded-2xl shadow-2xl group">
-          {/* Background Image */}
-          <div className="absolute inset-0">
-            <Image
-              src={program.image}
-              alt={program.title.replace(/<br \/>/g, " ")}
-              fill
-              className="object-cover sm:object-cover transition-transform duration-700 group-hover:scale-105"
-              priority={index === 0}
-            />
-            {/* Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
-          </div>
+  const stackItems = programs.map((program, index) => {
+    // Get bilingual title text
+    const titleText = getBilingualText(
+      program.title,
+      locale,
+      typeof program.title === "string" ? program.title : program.title.en || ""
+    );
+    
+    // Clean title for alt text (remove HTML tags)
+    const cleanTitle = titleText.replace(/<br \/>/g, " ").replace(/<br\/>/g, " ");
+    
+    return {
+      id: `program-${index}`,
+      content: (
+        <div className="relative w-full h-auto sm:h-[70vh] md:h-[80vh] px-6 md:px-16 lg:px-20 xl:px-28 2xl:px-36">
+          <div className="relative w-full h-[400px] sm:h-full overflow-hidden rounded-2xl shadow-2xl group">
+            {/* Background Image */}
+            <div className="absolute inset-0">
+              <Image
+                src={program.image}
+                alt={cleanTitle}
+                fill
+                className="object-cover sm:object-cover transition-transform duration-700 group-hover:scale-105"
+                priority={index === 0}
+              />
+              {/* Gradient Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+            </div>
 
-          {/* Content Container */}
-          <div className="relative h-[400px] sm:h-full flex flex-col justify-end p-6 md:p-12 lg:p-16">
-            {/* Title */}
-            <h2
-              className="text-lg sm:text-xl md:text-4xl lg:text-5xl 2xl:text-7xl font-black leading-tight uppercase tracking-tight text-white mb-6 md:mb-8 drop-shadow-lg"
-              dangerouslySetInnerHTML={{
-                __html: program.title,
-              }}
-            />
+            {/* Content Container */}
+            <div className="relative h-[400px] sm:h-full flex flex-col justify-end p-6 md:p-12 lg:p-16">
+              {/* Title */}
+              <h2
+                className={`text-lg sm:text-xl md:text-4xl lg:text-5xl 2xl:text-7xl font-black leading-tight uppercase tracking-tight text-white mb-6 md:mb-8 drop-shadow-lg ${
+                  locale === "am" ? "font-amharic" : ""
+                }`}
+                dangerouslySetInnerHTML={{
+                  __html: titleText,
+                }}
+              />
 
             {/* Action Button */}
             {program.link && (
               <Link
                 href={program.link}
                 className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-primary-orange hover:bg-[#db7f0c] active:scale-95 transition-all duration-300 shadow-lg hover:shadow-xl self-start"
-                aria-label={`Learn more about ${program.title.replace(
-                  /<br \/>/g,
-                  " "
-                )}`}
+                aria-label={`Learn more about ${cleanTitle}`}
               >
                 <Leaf
                   size={20}
@@ -146,8 +178,8 @@ export default function ProgramAreasSection() {
           </div>
         </div>
       </div>
-    ),
-  }));
+    );
+  });
 
   return (
     <div className="w-full py-4 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
