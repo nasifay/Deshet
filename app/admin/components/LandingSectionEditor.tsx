@@ -283,29 +283,29 @@ function SectionEditor({
             🎯 Hero Section Settings
           </h4>
           
-          {/* Title - Simple string (uppercase) */}
-          <div>
-            <label className={labelClass}>Title (Uppercase)</label>
-            <input
-              type="text"
-              value={typeof data.title === "string" ? data.title : (data.title as { en?: string })?.en || ""}
-              onChange={(e) => updateField("title", e.target.value.toUpperCase())}
-              className={inputClass}
-              placeholder="DESHET"
-            />
-          </div>
+          {/* Title - Bilingual (will be displayed in uppercase) */}
+          <BilingualField
+            label="Title (Bilingual - Displayed in Uppercase)"
+            value={data.title as string | { en: string; am: string } | undefined}
+            onChange={(value) => updateField("title", value)}
+            type="text"
+            placeholder={{
+              en: "DESHET",
+              am: "ደሸት",
+            }}
+          />
           
-          {/* Subtitle - Simple string (uppercase) */}
-          <div>
-            <label className={labelClass}>Subtitle (Uppercase)</label>
-            <input
-              type="text"
-              value={typeof data.subtitle === "string" ? data.subtitle : (data.subtitle as { en?: string })?.en || ""}
-              onChange={(e) => updateField("subtitle", e.target.value.toUpperCase())}
-              className={inputClass}
-              placeholder="INDIGENOUS MEDICAL CENTER"
-            />
-          </div>
+          {/* Subtitle - Bilingual (will be displayed in uppercase) */}
+          <BilingualField
+            label="Subtitle (Bilingual - Displayed in Uppercase)"
+            value={data.subtitle as string | { en: string; am: string } | undefined}
+            onChange={(value) => updateField("subtitle", value)}
+            type="text"
+            placeholder={{
+              en: "INDIGENOUS MEDICAL CENTER",
+              am: "የሀገር በቀል ህክምና መስጫ ማዕከል",
+            }}
+          />
 
           {/* Description - Bilingual */}
           <BilingualField
@@ -1500,8 +1500,14 @@ function getDefaultDataForType(type: string): Record<string, unknown> {
   switch (type) {
     case "HeroSection":
       return {
-        title: "DESHET",
-        subtitle: "INDIGENOUS MEDICAL CENTER",
+        title: {
+          en: "DESHET",
+          am: "ደሸት",
+        },
+        subtitle: {
+          en: "INDIGENOUS MEDICAL CENTER",
+          am: "የሀገር በቀል ህክምና መስጫ ማዕከል",
+        },
         description: {
           en: "Premium Ethiopian Indigenous Medical Center delivering herbal, spiritual, and cultural healing",
           am: "የኢትዮጵያ ባህላዊ የሕክምና ማዕከል የአመዳድብ ሕክምና፣ መንፈሳዊ እና ባህላዊ ሕክምና እንሰጣለን",
