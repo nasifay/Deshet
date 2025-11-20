@@ -3,12 +3,33 @@ import { Skeleton } from "~/components/ui/skeleton";
 // Hero Section Skeleton
 export function HeroSkeleton() {
   return (
-    <section className="relative w-full h-auto lg:h-[90vh] flex items-center justify-start overflow-hidden bg-neutral-900">
-      <Skeleton className="absolute inset-0 w-full h-full rounded-none" />
-      <div className="relative z-10 max-sm:py-20 px-6 md:px-16 lg:px-24 max-w-2xl">
-        <Skeleton className="h-12 md:h-16 lg:h-20 w-[400px] max-w-full mb-4" />
-        <Skeleton className="h-12 md:h-16 lg:h-20 w-[300px] max-w-full mb-10" />
-        <Skeleton className="h-12 md:h-14 w-40 md:w-48 rounded-full" />
+    <section className="relative w-full h-[40vh] md:h-[50vh] lg:h-[88vh] overflow-hidden">
+      {/* Three-column skeleton layout matching the hero section */}
+      <div className="flex w-full h-full">
+        {/* Left column */}
+        <div className="relative w-1/3 h-full">
+          <Skeleton className="absolute inset-0 w-full h-full rounded-none" />
+          <div className="absolute inset-0 bg-[#1f532a] opacity-[0.7]"></div>
+        </div>
+        {/* Middle column */}
+        <div className="relative w-1/3 h-full">
+          <Skeleton className="absolute inset-0 w-full h-full rounded-none" />
+          <div className="absolute inset-0 bg-primary-green/70 opacity-[0.7]"></div>
+        </div>
+        {/* Right column */}
+        <div className="relative w-1/3 h-full">
+          <Skeleton className="absolute inset-0 w-full h-full rounded-none" />
+          <div className="absolute inset-0 bg-[#1f532a] opacity-[0.7]"></div>
+        </div>
+      </div>
+
+      {/* Content overlay skeleton */}
+      <div className="absolute inset-0 flex items-center p-8 md:p-16 lg:p-24">
+        <div className="max-w-xl">
+          <Skeleton className="h-12 md:h-16 lg:h-20 xl:h-24 w-[400px] md:w-[500px] lg:w-[600px] max-w-full mb-4 bg-white/20" />
+          <Skeleton className="h-12 md:h-16 lg:h-20 xl:h-24 w-[300px] md:w-[400px] lg:w-[500px] max-w-full mb-10 bg-white/20" />
+          <Skeleton className="h-12 md:h-14 w-40 md:w-48 rounded-full bg-white/20" />
+        </div>
       </div>
     </section>
   );

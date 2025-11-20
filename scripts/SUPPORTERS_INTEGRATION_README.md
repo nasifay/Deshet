@@ -132,3 +132,4 @@ The `PartnersCertificationsSection` component:
 - Logo images should be hosted URLs or paths to public assets
 
 
+

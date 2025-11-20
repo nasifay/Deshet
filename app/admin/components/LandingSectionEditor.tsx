@@ -31,6 +31,7 @@ const LANDING_SECTION_TYPES = [
   { value: "AboutSection", label: "About Section", icon: "ℹ️" },
   { value: "StatisticsSection", label: "Statistics", icon: "📊" },
   { value: "ServicesSection", label: "Services", icon: "🏥" },
+  { value: "ProgramAreasSection", label: "Program Areas", icon: "📋" },
   { value: "PartnersCertificationsSection", label: "Partners & Certifications", icon: "🤝" },
   { value: "AchievementsSection", label: "Achievements", icon: "🏆" },
   { value: "BlogSection", label: "Blog & Updates", icon: "📝" },
@@ -479,29 +480,15 @@ function SectionEditor({
               placeholder="/who-we-are"
             />
           </div>
-          <div>
-            <label className={labelClass}>
-              Carousel Images (comma-separated URLs)
-            </label>
-            <textarea
-              value={((data.images as string[]) || []).join(", ")}
-              onChange={(e) =>
-                updateField(
-                  "images",
-                  e.target.value
-                    .split(",")
-                    .map((s: string) => s.trim())
-                    .filter((s: string) => s)
-                )
-              }
-              rows={3}
-              className={inputClass + " resize-none"}
-              placeholder="/images/about/1.png, /images/about/2.png, ..."
-            />
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-              Enter image URLs separated by commas
-            </p>
-          </div>
+          
+          {/* Carousel Images - Upload Field */}
+          <ImageArrayUploadField
+            label="Carousel Images"
+            value={(data.images as string[]) || []}
+            onChange={(urls) => updateField("images", urls)}
+            placeholder="Upload carousel images"
+            description="Upload multiple images for the carousel. You can reorder or delete images."
+          />
         </div>
       );
 
@@ -1046,6 +1033,156 @@ function SectionEditor({
         </div>
       );
 
+    case "ProgramAreasSection":
+      return (
+        <div className="space-y-4">
+          <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            📋 Program Areas Section Settings
+          </h4>
+          
+          <div className="space-y-4">
+            {(
+              (data.programs as Array<{
+                title: string;
+                image: string;
+                link?: string;
+              }>) || [
+                {
+                  title: "Traditional Medical <br /> Consultation",
+                  image: "",
+                  link: "/programs",
+                },
+              ]
+            ).map((program, index) => (
+              <div
+                key={index}
+                className="p-4 border border-gray-200 dark:border-gray-600 rounded-lg"
+              >
+                <div className="flex items-center justify-between mb-3">
+                  <h5 className="font-medium text-gray-900 dark:text-white">
+                    Program #{index + 1}
+                  </h5>
+                  {(
+                    (data.programs as Array<{
+                      title: string;
+                      image: string;
+                      link?: string;
+                    }>) || []
+                  ).length > 1 && (
+                    <button
+                      onClick={() => {
+                        const newPrograms = [
+                          ...((data.programs as Array<{
+                            title: string;
+                            image: string;
+                            link?: string;
+                          }>) || []),
+                        ];
+                        newPrograms.splice(index, 1);
+                        updateField("programs", newPrograms);
+                      }}
+                      className="text-red-600 hover:text-red-700 text-sm"
+                    >
+                      Remove
+                    </button>
+                  )}
+                </div>
+                <div className="space-y-3">
+                  {/* Program Title */}
+                  <div>
+                    <label className={labelClass}>Program Title (HTML allowed, use &lt;br /&gt; for line breaks)</label>
+                    <textarea
+                      value={program.title || ""}
+                      onChange={(e) => {
+                        const newPrograms = [
+                          ...((data.programs as Array<{
+                            title: string;
+                            image: string;
+                            link?: string;
+                          }>) || []),
+                        ];
+                        newPrograms[index] = { ...program, title: e.target.value };
+                        updateField("programs", newPrograms);
+                      }}
+                      className={inputClass}
+                      rows={2}
+                      placeholder="Traditional Medical <br /> Consultation"
+                    />
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                      Use &lt;br /&gt; or &lt;br /&gt; for line breaks
+                    </p>
+                  </div>
+                  
+                  {/* Program Image */}
+                  <div>
+                    <ImageUploadField
+                      label="Program Image URL"
+                      value={program.image || ""}
+                      onChange={(url) => {
+                        const newPrograms = [
+                          ...((data.programs as Array<{
+                            title: string;
+                            image: string;
+                            link?: string;
+                          }>) || []),
+                        ];
+                        newPrograms[index] = { ...program, image: url };
+                        updateField("programs", newPrograms);
+                      }}
+                    />
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                      Use program/medical related images
+                    </p>
+                  </div>
+                  
+                  {/* Program Link */}
+                  <div>
+                    <label className={labelClass}>Link (optional)</label>
+                    <input
+                      type="text"
+                      value={program.link || ""}
+                      onChange={(e) => {
+                        const newPrograms = [
+                          ...((data.programs as Array<{
+                            title: string;
+                            image: string;
+                            link?: string;
+                          }>) || []),
+                        ];
+                        newPrograms[index] = { ...program, link: e.target.value };
+                        updateField("programs", newPrograms);
+                      }}
+                      className={inputClass}
+                      placeholder="/programs"
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
+            <button
+              onClick={() => {
+                const newPrograms = [
+                  ...((data.programs as Array<{
+                    title: string;
+                    image: string;
+                    link?: string;
+                  }>) || []),
+                  {
+                    title: "",
+                    image: "",
+                    link: "/programs",
+                  },
+                ];
+                updateField("programs", newPrograms);
+              }}
+              className="w-full py-2 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg text-gray-600 dark:text-gray-400 hover:border-primary-green hover:text-primary-green transition-colors"
+            >
+              + Add Program Area
+            </button>
+          </div>
+        </div>
+      );
+
     case "PartnersCertificationsSection":
       return (
         <div className="space-y-4">
@@ -1522,6 +1659,31 @@ function getDefaultDataForType(type: string): Record<string, unknown> {
           en: "BLOG & UPDATES",
           am: "ብሎግ እና ዝማኔዎች",
         },
+      };
+    case "ProgramAreasSection":
+      return {
+        programs: [
+          {
+            title: "Traditional Medical <br /> Consultation",
+            image: "/overview/1.png",
+            link: "/programs",
+          },
+          {
+            title: "Herbal Medicine <br /> Preparation",
+            image: "/overview/2.png",
+            link: "/programs",
+          },
+          {
+            title: "Detox & Cleansing <br /> Therapy",
+            image: "/overview/3.png",
+            link: "/programs",
+          },
+          {
+            title: "Traditional Diagnostic <br /> Techniques",
+            image: "/overview/4.png",
+            link: "/programs",
+          },
+        ],
       };
     default:
       return {};

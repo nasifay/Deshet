@@ -1,5 +1,5 @@
 "use client";
-import { ArrowUpRight } from "lucide-react";
+import { Leaf } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import ScrollStack from "~/components/ui/ScrollStack";
@@ -129,7 +129,7 @@ export default function ProgramAreasSection() {
                   " "
                 )}`}
               >
-                <ArrowUpRight
+                <Leaf
                   size={20}
                   strokeWidth={3}
                   className="text-black/85"

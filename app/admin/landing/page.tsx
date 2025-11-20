@@ -208,6 +208,35 @@ export default function LandingPageAdmin() {
         order: 2,
       },
       {
+        id: "program-areas-section",
+        type: "ProgramAreasSection",
+        data: {
+          programs: [
+            {
+              title: "Traditional Medical <br /> Consultation",
+              image: "/overview/1.png",
+              link: "/programs",
+            },
+            {
+              title: "Herbal Medicine <br /> Preparation",
+              image: "/overview/2.png",
+              link: "/programs",
+            },
+            {
+              title: "Detox & Cleansing <br /> Therapy",
+              image: "/overview/3.png",
+              link: "/programs",
+            },
+            {
+              title: "Traditional Diagnostic <br /> Techniques",
+              image: "/overview/4.png",
+              link: "/programs",
+            },
+          ],
+        },
+        order: 3,
+      },
+      {
         id: "achievements-section",
         type: "AchievementsSection",
         data: {
@@ -228,7 +257,7 @@ export default function LandingPageAdmin() {
             },
           ],
         },
-        order: 3,
+        order: 4,
       },
       {
         id: "volunteer-banner",
@@ -241,7 +270,7 @@ export default function LandingPageAdmin() {
           ctaLink: "/volunteer",
           backgroundImage: "/images/cta.jpg",
         },
-        order: 4,
+        order: 5,
       },
     ];
 

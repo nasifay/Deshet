@@ -3,10 +3,12 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Plus, Search, Filter, Edit, Trash2, Eye } from 'lucide-react';
+import { useTranslation } from '~/lib/i18n/hooks';
+import { getBilingualText } from '~/lib/i18n/utils';
 
 interface Page {
   _id: string;
-  title: string;
+  title: string | { en: string; am: string };
   slug: string;
   status: 'draft' | 'published' | 'archived';
   author: {
@@ -19,6 +21,7 @@ interface Page {
 }
 
 export default function PagesListPage() {
+  const { t, locale } = useTranslation();
   const [pages, setPages] = useState<Page[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -187,7 +190,7 @@ export default function PagesListPage() {
                       <div className="flex items-center">
                         <div>
                           <div className="text-sm font-medium text-gray-900 dark:text-white">
-                            {pageItem.title}
+                            {getBilingualText(pageItem.title, locale, 'Untitled Page')}
                           </div>
                           <div className="text-sm text-gray-500 dark:text-gray-400">
                             {pageItem.slug}

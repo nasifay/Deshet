@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { FileText, Newspaper, Images, Users, TrendingUp, Calendar, CalendarDays, Package, AlertCircle } from "lucide-react";
+import { FileText, Newspaper, Images, Users, TrendingUp, Calendar, CalendarDays, Package, AlertCircle, Plus, Clock } from "lucide-react";
 import Link from "next/link";
 
 interface DashboardStats {
@@ -16,6 +16,16 @@ interface DashboardStats {
   products: number;
   media: number;
   users: number;
+  myTodayAppointments?: number;
+  myUpcomingAppointments?: number;
+}
+
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  avatar?: string;
 }
 
 export default function AdminDashboard() {
@@ -31,10 +41,26 @@ export default function AdminDashboard() {
     products: 0,
     media: 0,
     users: 0,
+    myTodayAppointments: 0,
+    myUpcomingAppointments: 0,
   });
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
+    // Fetch user session
+    const fetchUser = async () => {
+      try {
+        const response = await fetch("/api/auth/session");
+        if (response.ok) {
+          const data = await response.json();
+          setUser(data.user);
+        }
+      } catch (error) {
+        console.error("Error fetching user:", error);
+      }
+    };
+
     // Fetch dashboard stats
     const fetchStats = async () => {
       try {
@@ -50,16 +76,21 @@ export default function AdminDashboard() {
       }
     };
 
+    fetchUser();
     fetchStats();
   }, []);
 
-  const statCards: Array<{
+  // Filter stat cards based on user role
+  const isNurse = user?.role === "nurse";
+  
+  const allStatCards: Array<{
     title: string;
     value: number;
     icon: React.ReactNode;
     color: string;
     link: string;
     badge?: number;
+    roles?: string[]; // If specified, only show for these roles
   }> = [
     {
       title: "Total Pages",
@@ -67,6 +98,7 @@ export default function AdminDashboard() {
       icon: <FileText className="w-8 h-8" />,
       color: "bg-blue-500",
       link: "/admin/pages",
+      roles: ["admin", "superadmin"],
     },
     {
       title: "Blog Posts",
@@ -74,6 +106,7 @@ export default function AdminDashboard() {
       icon: <Newspaper className="w-8 h-8" />,
       color: "bg-green-500",
       link: "/admin/blog",
+      roles: ["admin", "superadmin"],
     },
     {
       title: "Services",
@@ -81,6 +114,7 @@ export default function AdminDashboard() {
       icon: <TrendingUp className="w-8 h-8" />,
       color: "bg-purple-500",
       link: "/admin/services",
+      roles: ["admin", "superadmin"],
     },
     {
       title: "Bookings",
@@ -104,6 +138,7 @@ export default function AdminDashboard() {
       icon: <Package className="w-8 h-8" />,
       color: "bg-indigo-500",
       link: "/admin/products",
+      roles: ["admin", "superadmin"],
     },
     {
       title: "Media Files",
@@ -111,6 +146,7 @@ export default function AdminDashboard() {
       icon: <Images className="w-8 h-8" />,
       color: "bg-orange-500",
       link: "/admin/media",
+      roles: ["admin", "superadmin"],
     },
     {
       title: "Users",
@@ -118,18 +154,35 @@ export default function AdminDashboard() {
       icon: <Users className="w-8 h-8" />,
       color: "bg-pink-500",
       link: "/admin/users",
+      roles: ["admin", "superadmin"],
     },
   ];
+
+  // Filter cards based on role
+  const statCards = allStatCards.filter((card) => {
+    if (isNurse) {
+      // Nurses only see Bookings and Appointments
+      return !card.roles || card.title === "Bookings" || card.title === "Appointments";
+    }
+    // Admins see all cards
+    return !card.roles || card.roles.includes(user?.role || "");
+  });
 
   return (
     <div className="space-y-6">
       {/* Welcome Section */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
         <h1 className="text-3xl font-black text-gray-900 dark:text-white mb-2">
-          Welcome to Deshet Medical Center Admin Dashboard
+          {isNurse 
+            ? `Welcome back, ${user?.name || "Nurse"}!`
+            : "Welcome to Deshet Medical Center Admin Dashboard"
+          }
         </h1>
         <p className="text-gray-600 dark:text-gray-400">
-          Manage your medical center content, bookings, products, and services from here.
+          {isNurse
+            ? "Manage bookings and appointments for your patients. Stay organized and provide the best care."
+            : "Manage your medical center content, bookings, products, and services from here."
+          }
         </p>
         <div className="mt-4 text-sm text-gray-500 dark:text-gray-400">
           {new Date().toLocaleDateString("en-US", {
@@ -182,8 +235,41 @@ export default function AdminDashboard() {
         ))}
       </div>
 
-      {/* Quick Stats for Appointments */}
-      {!loading && (stats.todayAppointments > 0 || stats.upcomingAppointments > 0) && (
+      {/* Nurse-specific Stats */}
+      {isNurse && !loading && (
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
+            My Appointments
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">My Appointments Today</p>
+                  <p className="text-2xl font-black text-blue-600 dark:text-blue-400">
+                    {stats.myTodayAppointments || 0}
+                  </p>
+                </div>
+                <Clock className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+              </div>
+            </div>
+            <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">My Upcoming Appointments</p>
+                  <p className="text-2xl font-black text-green-600 dark:text-green-400">
+                    {stats.myUpcomingAppointments || 0}
+                  </p>
+                </div>
+                <CalendarDays className="w-8 h-8 text-green-600 dark:text-green-400" />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Quick Stats for Appointments (Admin/All Users) */}
+      {!isNurse && !loading && (stats.todayAppointments > 0 || stats.upcomingAppointments > 0) && (
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
           <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
             Appointment Overview
@@ -216,35 +302,56 @@ export default function AdminDashboard() {
         <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
           Quick Actions
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Link
-            href="/admin/blog/new"
-            className="flex items-center justify-center space-x-2 px-4 py-3 bg-primary-green text-white rounded-lg hover:bg-green-700 transition-colors"
-          >
-            <Newspaper className="w-5 h-5" />
-            <span>New Blog Post</span>
-          </Link>
-          <Link
-            href="/admin/services/new"
-            className="flex items-center justify-center space-x-2 px-4 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
-          >
-            <TrendingUp className="w-5 h-5" />
-            <span>New Service</span>
-          </Link>
-          <Link
-            href="/admin/products/new"
-            className="flex items-center justify-center space-x-2 px-4 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
-          >
-            <Package className="w-5 h-5" />
-            <span>New Product</span>
-          </Link>
-          <Link
-            href="/admin/media"
-            className="flex items-center justify-center space-x-2 px-4 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors"
-          >
-            <Images className="w-5 h-5" />
-            <span>Upload Media</span>
-          </Link>
+        <div className={`grid grid-cols-1 ${isNurse ? 'md:grid-cols-2' : 'md:grid-cols-2 lg:grid-cols-4'} gap-4`}>
+          {isNurse ? (
+            <>
+              <Link
+                href="/admin/appointments/new"
+                className="flex items-center justify-center space-x-2 px-4 py-3 bg-primary-green text-white rounded-lg hover:bg-green-700 transition-colors"
+              >
+                <Plus className="w-5 h-5" />
+                <span>New Appointment</span>
+              </Link>
+              <Link
+                href="/admin/appointments/calendar"
+                className="flex items-center justify-center space-x-2 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                <CalendarDays className="w-5 h-5" />
+                <span>View Calendar</span>
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link
+                href="/admin/blog/new"
+                className="flex items-center justify-center space-x-2 px-4 py-3 bg-primary-green text-white rounded-lg hover:bg-green-700 transition-colors"
+              >
+                <Newspaper className="w-5 h-5" />
+                <span>New Blog Post</span>
+              </Link>
+              <Link
+                href="/admin/services/new"
+                className="flex items-center justify-center space-x-2 px-4 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+              >
+                <TrendingUp className="w-5 h-5" />
+                <span>New Service</span>
+              </Link>
+              <Link
+                href="/admin/products/new"
+                className="flex items-center justify-center space-x-2 px-4 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+              >
+                <Package className="w-5 h-5" />
+                <span>New Product</span>
+              </Link>
+              <Link
+                href="/admin/media"
+                className="flex items-center justify-center space-x-2 px-4 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors"
+              >
+                <Images className="w-5 h-5" />
+                <span>Upload Media</span>
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </div>

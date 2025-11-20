@@ -159,7 +159,7 @@ export default function ServicesSection() {
                   className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-primary-green hover:bg-[#0e6a32] active:scale-95 transition-all duration-300 shadow-lg hover:shadow-xl self-start"
                   aria-label={`Learn more about ${titleText}`}
                 >
-                  <ArrowUpRight
+                  <Leaf
                     size={20}
                     strokeWidth={3}
                     className="text-white"

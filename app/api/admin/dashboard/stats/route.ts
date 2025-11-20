@@ -21,6 +21,10 @@ export async function GET() {
     }
 
     await connectDB();
+    
+    // Get user details for role-based stats
+    const user = await User.findById(session.userId).select('-password');
+    const isNurse = user?.role === 'nurse';
 
     // Fetch all stats in parallel
     const [
@@ -62,6 +66,32 @@ export async function GET() {
       ]),
     ]);
 
+    // For nurses, get their assigned appointments
+    let myTodayAppointments = 0;
+    let myUpcomingAppointments = 0;
+    
+    if (isNurse && user) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const todayEnd = new Date(today);
+      todayEnd.setHours(23, 59, 59, 999);
+      
+      myTodayAppointments = await Appointment.countDocuments({
+        assignedTo: user._id,
+        appointmentDate: {
+          $gte: today,
+          $lt: todayEnd,
+        },
+        status: { $ne: "cancelled" },
+      });
+      
+      myUpcomingAppointments = await Appointment.countDocuments({
+        assignedTo: user._id,
+        appointmentDate: { $gte: new Date() },
+        status: { $in: ["scheduled", "in-progress"] },
+      });
+    }
+
     return NextResponse.json({
       success: true,
       stats: {
@@ -77,6 +107,10 @@ export async function GET() {
         media: mediaCount,
         users: usersCount,
         totalViews: totalViews[0]?.total || 0,
+        ...(isNurse && {
+          myTodayAppointments,
+          myUpcomingAppointments,
+        }),
       },
     });
   } catch (error) {

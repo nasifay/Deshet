@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import { Leaf } from "lucide-react";
 import { useTranslation } from "~/lib/i18n/hooks";
 import { getBilingualText } from "~/lib/i18n/utils";
 import { HeroSkeleton } from "./landing-page-skeleton";
@@ -303,9 +304,10 @@ const Hero = () => {
           >
             <Link
               href={heroData.ctaLink || "/booking"}
-              className="inline-flex items-center justify-center px-6 py-2 md:px-12 md:py-4 rounded-full bg-[#128341] hover:bg-[#0e6a32] transition-all duration-300 font-roboto font-medium text-sm md:text-lg text-white shadow-[0_6px_20px_-5px_rgba(18,131,65,0.4)] hover:shadow-[0_10px_25px_-5px_rgba(18,131,65,0.6)] backdrop-blur-sm"
+              className="inline-flex items-center justify-center gap-2 px-6 py-2 md:px-12 md:py-4 rounded-full bg-[#128341] hover:bg-[#0e6a32] transition-all duration-300 font-roboto font-medium text-sm md:text-lg text-white shadow-[0_6px_20px_-5px_rgba(18,131,65,0.4)] hover:shadow-[0_10px_25px_-5px_rgba(18,131,65,0.6)] backdrop-blur-sm"
             >
               {heroData.ctaText || t("home.hero.cta")}
+              <Leaf className="w-4 h-4 md:w-5 md:h-5" />
             </Link>
           </motion.div>
         </div>
