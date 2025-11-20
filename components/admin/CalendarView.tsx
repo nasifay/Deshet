@@ -427,14 +427,14 @@ function WeeklyView({
   selectedAppointments: Set<string>;
   toggleAppointmentSelection: (appointmentId: string) => void;
 }) {
-  const days = [];
+  const days: Date[] = [];
   for (let i = 0; i < 7; i++) {
     const date = new Date(startDate);
     date.setDate(startDate.getDate() + i);
     days.push(date);
   }
 
-  const timeSlots = [];
+  const timeSlots: string[] = [];
   for (let hour = 8; hour < 18; hour++) {
     timeSlots.push(`${hour.toString().padStart(2, "0")}:00`);
   }
