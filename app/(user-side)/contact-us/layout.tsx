@@ -21,7 +21,7 @@ export default function ContactUsLayout({
   const webPageSchema = generateWebPageSchema({
     name: "Contact Us | Deshet Medical Center",
     description:
-      "Get in touch with Deshet Indigenous Medical Center. Schedule a consultation, ask questions about our traditional medical services, or visit our facility in Addis Ababa, Ethiopia.",
+      "Get in touch with ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል. Schedule a consultation, ask questions about our traditional medical services, or visit our facility in Addis Ababa, Ethiopia.",
     url: `${BASE_URL}/contact-us`,
   });
 

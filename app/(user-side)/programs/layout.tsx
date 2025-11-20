@@ -24,7 +24,7 @@ export default function ProgramsLayout({
   const webPageSchema = generateWebPageSchema({
     name: "Our Services | Traditional Medical Services | Deshet Medical Center",
     description:
-      "Explore Deshet Indigenous Medical Center's comprehensive traditional medical services: Traditional Medical Consultation, Herbal Medicine Preparation, Detox & Cleansing Therapy, Traditional Diagnostic Techniques, and Healing Treatments.",
+      "Explore ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል's comprehensive traditional medical services: Traditional Medical Consultation, Herbal Medicine Preparation, Detox & Cleansing Therapy, Traditional Diagnostic Techniques, and Healing Treatments.",
     url: `${BASE_URL}/programs`,
   });
 

@@ -1,6 +1,6 @@
 /**
  * Seed script for Testimonials
- * Creates sample testimonials for Deshet Indigenous Medical Center
+ * Creates sample testimonials for ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል
  */
 
 import dotenv from "dotenv";
@@ -161,6 +161,7 @@ async function seedTestimonials() {
 
 // Run seed
 seedTestimonials();
+
 
 
 

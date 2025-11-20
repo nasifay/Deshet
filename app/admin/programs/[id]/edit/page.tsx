@@ -52,7 +52,7 @@ export default function EditProgram() {
     title: "",
     slug: "",
     description: "",
-    categoryId: "youth-empowerment",
+    categoryId: "traditional-consultation",
     image: "",
     thumbnails: [] as Array<{
       id: number;
@@ -79,9 +79,11 @@ export default function EditProgram() {
   });
 
   const categories = [
-    { id: "youth-empowerment", label: "Youth Empowerment & Peacebuilding" },
-    { id: "srh-gender", label: "SRH & Gender Development" },
-    { id: "climate-justice", label: "Climate Justice & Livelihoods" },
+    { id: "traditional-consultation", label: "Traditional Medical Consultation" },
+    { id: "herbal-medicine", label: "Herbal Medicine Preparation" },
+    { id: "detox-therapy", label: "Detox & Cleansing Therapy" },
+    { id: "diagnostic-techniques", label: "Traditional Diagnostic Techniques" },
+    { id: "healing-treatments", label: "Healing Treatments" },
   ];
 
   useEffect(() => {

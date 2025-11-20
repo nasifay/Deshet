@@ -20,7 +20,7 @@ export default function BookingLayout({
   const webPageSchema = generateWebPageSchema({
     name: "Book Appointment | Deshet Medical Center",
     description:
-      "Schedule your appointment with Deshet Indigenous Medical Center. Experience traditional Ethiopian medicine with our experienced practitioners. Book your consultation today.",
+      "Schedule your appointment with ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል. Experience traditional Ethiopian medicine with our experienced practitioners. Book your consultation today.",
     url: `${BASE_URL}/booking`,
   });
 

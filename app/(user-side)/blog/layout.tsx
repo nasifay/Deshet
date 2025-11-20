@@ -20,7 +20,7 @@ export default function BlogLayout({
   const webPageSchema = generateWebPageSchema({
     name: "Blog & Updates | Deshet Medical Center",
     description:
-      "Stay informed with our latest articles, health tips, and medical center updates from Deshet Indigenous Medical Center. Discover traditional healing insights and wellness information.",
+      "Stay informed with our latest articles, health tips, and medical center updates from ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል. Discover traditional healing insights and wellness information.",
     url: `${BASE_URL}/blog`,
   });
 

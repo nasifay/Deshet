@@ -1,6 +1,6 @@
 /**
  * Seed script for Blog Posts
- * Creates sample blog posts for Deshet Indigenous Medical Center
+ * Creates sample blog posts for ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል
  */
 
 import dotenv from "dotenv";
@@ -62,7 +62,7 @@ async function seedBlog() {
           am: "የኢትዮጵያ ባህላዊ ሕክምና እና የሙሉ ሰውነት የሕክምና አቀራረብን ያስሱ።",
         },
         content: {
-          en: "<p>Traditional Ethiopian medicine has been practiced for thousands of years, combining herbal remedies, spiritual healing, and cultural practices. At Deshet Indigenous Medical Center, we honor these ancient traditions while providing modern healthcare services.</p><p>Our practitioners are trained in traditional diagnostic techniques and herbal medicine preparation, ensuring that patients receive authentic and effective treatments.</p>",
+          en: "<p>Traditional Ethiopian medicine has been practiced for thousands of years, combining herbal remedies, spiritual healing, and cultural practices. At ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል, we honor these ancient traditions while providing modern healthcare services.</p><p>Our practitioners are trained in traditional diagnostic techniques and herbal medicine preparation, ensuring that patients receive authentic and effective treatments.</p>",
           am: "<p>የኢትዮጵያ ባህላዊ ሕክምና ለሺህ ዓመታት የተግባራዊ የሆነ ሲሆን የአመዳድብ መድሃኒቶች፣ መንፈሳዊ ሕክምና እና ባህላዊ ልምዶችን ያጣምራል። በደሸት ባህላዊ የሕክምና ማዕከል እነዚህን ጥንታዊ ባህሎች እያከበርን ዘመናዊ የጤና አገልግሎቶችን እንሰጣለን።</p><p>የእኛ ሐኪሞች በባህላዊ የመመርመር ዘዴዎች እና የአመዳድብ ሕክምና አዘገጃጀት የተሰለጠኑ ሲሆኑ ታካሚዎች እውነተኛ እና ውጤታማ ሕክምና እንዲያገኙ ያረጋግጣሉ።</p>",
         },
         featuredImage:
@@ -173,6 +173,7 @@ async function seedBlog() {
 
 // Run seed
 seedBlog();
+
 
 
 

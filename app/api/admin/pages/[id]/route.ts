@@ -24,10 +24,19 @@ export async function GET(
       return NextResponse.json({ success: false, error: 'Page not found' }, { status: 404 });
     }
 
-    return NextResponse.json({
-      success: true,
-      data: page,
-    });
+    return NextResponse.json(
+      {
+        success: true,
+        data: page,
+      },
+      {
+        headers: {
+          'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0',
+        },
+      }
+    );
   } catch (error) {
     console.error('Error fetching page:', error);
     return NextResponse.json({ success: false, error: 'Internal server error' }, { status: 500 });

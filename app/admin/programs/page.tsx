@@ -117,12 +117,18 @@ export default function ProgramsListPage() {
             className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green"
           >
             <option value="">All Categories</option>
-            <option value="youth-empowerment">
-              Youth Empowerment & Peacebuilding
+            <option value="traditional-consultation">
+              Traditional Medical Consultation
             </option>
-            <option value="srh-gender">SRH & Gender Development</option>
-            <option value="climate-justice">
-              Climate Justice & Livelihoods
+            <option value="herbal-medicine">Herbal Medicine Preparation</option>
+            <option value="detox-therapy">
+              Detox & Cleansing Therapy
+            </option>
+            <option value="diagnostic-techniques">
+              Traditional Diagnostic Techniques
+            </option>
+            <option value="healing-treatments">
+              Healing Treatments
             </option>
           </select>
         </div>

@@ -81,7 +81,7 @@ async function seedWhoWeArePage() {
         type: "AboutTSDSection",
         data: {
           description: {
-            en: "Deshet Indigenous Medical Center was founded to preserve, elevate, and modernize Ethiopia's ancient healing traditions. Our work is rooted in centuries of herbal knowledge, cultural wisdom, and natural therapeutic practices — presented today with modern professionalism, safety standards, and compassionate care.\n\nWe believe healing is more than treating symptoms; it is the restoration of balance between body, mind, and spirit. Our approach blends ancestral methods with contemporary understanding to deliver holistic, effective, and natural wellness solutions.",
+            en: "ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል was founded to preserve, elevate, and modernize Ethiopia's ancient healing traditions. Our work is rooted in centuries of herbal knowledge, cultural wisdom, and natural therapeutic practices — presented today with modern professionalism, safety standards, and compassionate care.\n\nWe believe healing is more than treating symptoms; it is the restoration of balance between body, mind, and spirit. Our approach blends ancestral methods with contemporary understanding to deliver holistic, effective, and natural wellness solutions.",
             am: "የDeshet ባህላዊ ሕክምና ማዕከል መቋቋሙ የተነሳው ዘመናዊ የጤና ፍላጎቶችን ሳናሳልፍ፣ ከትውልድ ወደ ትውልድ የተተላለፈውን የኢትዮጵያ ባህላዊ ሕክምና ብርሃን ለመጠበቅ፣ ለመደገፍ እና በሙያዊነት ለማቀረብ ነው።\n\nእኛ ለሰውነት፣ ለአእምሮ እና ለመንፈስ መዛመቻ ማቋቋም እንደ እውነተኛ ሕክምና እናምናለን።",
           },
           frontImageSrc: placeholderImages.heroContent,
@@ -113,7 +113,7 @@ async function seedWhoWeArePage() {
             am: "ታሪካችን",
           },
           content: {
-            en: "The Deshet practice originates from a family lineage known for traditional healing, herbal knowledge, and cultural medical wisdom passed down through generations.\n\nOver the years, this knowledge evolved, expanded, and strengthened — becoming a trusted healing system used by individuals and families throughout Ethiopia.\n\nThrough careful preservation and professional refinement, Deshet Indigenous Medical Center now provides this cultural heritage in a modern, accessible form designed for today's health needs.",
+            en: "The Deshet practice originates from a family lineage known for traditional healing, herbal knowledge, and cultural medical wisdom passed down through generations.\n\nOver the years, this knowledge evolved, expanded, and strengthened — becoming a trusted healing system used by individuals and families throughout Ethiopia.\n\nThrough careful preservation and professional refinement, ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል now provides this cultural heritage in a modern, accessible form designed for today's health needs.",
             am: "የDeshet ሕክምና ሥርዓት የተጀመረው ከባህላዊ ሕክምናን በአመታት ተሞልቶ በቤተሰብ ትውልድ የተሰጠ ውርስ መሠረት ነው።\n\nእዚህ የተሰበሰበው እውቀት በዘመናዊ ጥንካሬ ተጨምሮ፣ በኢትዮጵያ ውስጥ ለህዝብ የታመነና የተፈተነ መፍትሔ ሆኖ ተሸምቷል።\n\nዛሬ ይህ ውርስ በሙያዊ እቅድ፣ በዘመናዊ ተዘጋጅታ እና በተፈጥሯዊ ንፅህና የተማረ መልኩ ለተለያዩ የጤና ፍላጎቶች እንዲሰራ ተቀድቷል።",
           },
           image: placeholderImages.heroContent,
@@ -299,7 +299,7 @@ async function seedWhoWeArePage() {
         am: "ስለእኛ - ደሸት የሕክምና ማዕከል",
       };
       whoWeArePage.content = {
-        en: "About Deshet Indigenous Medical Center",
+        en: "About ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል",
         am: "ስለ ደሸት ባህላዊ ሕክምና ማዕከል",
       };
       await whoWeArePage.save();
@@ -313,7 +313,7 @@ async function seedWhoWeArePage() {
         },
         slug: "who-we-are",
         content: {
-          en: "About Deshet Indigenous Medical Center",
+          en: "About ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል",
           am: "ስለ ደሸት ባህላዊ ሕክምና ማዕከል",
         },
         status: "published",
@@ -337,6 +337,7 @@ async function seedWhoWeArePage() {
 
 // Run seed
 seedWhoWeArePage();
+
 
 
 

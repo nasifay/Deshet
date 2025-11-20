@@ -1,6 +1,6 @@
 # Supporters Integration Guide
 
-This guide explains how to manage supporters for the Deshet Indigenous Medical Center website.
+This guide explains how to manage supporters for the ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል website.
 
 ## Overview
 
@@ -130,6 +130,7 @@ The `PartnersCertificationsSection` component:
 - Supporters are displayed in the order specified by the `order` field
 - Only active supporters (`isActive: true`) are shown on the frontend
 - Logo images should be hosted URLs or paths to public assets
+
 
 
 

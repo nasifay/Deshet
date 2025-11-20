@@ -16,7 +16,7 @@ export function AboutHeroSection({
   subtitle = "Working hand in hand with communities for a brighter future.",
   mainImage = "https://i.imgur.com/u0bHpvy.png",
   contentImage = "https://i.imgur.com/7D7ERa6.png",
-  content = "Deshet Indigenous Medical Center is a premier traditional medicine facility dedicated to preserving and promoting Ethiopian indigenous healing practices. We provide comprehensive traditional medical consultation, herbal medicine preparation, detox therapy, and healing treatments rooted in centuries-old wisdom.",
+  content = "ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል is a premier traditional medicine facility dedicated to preserving and promoting Ethiopian indigenous healing practices. We provide comprehensive traditional medical consultation, herbal medicine preparation, detox therapy, and healing treatments rooted in centuries-old wisdom.",
 }: AboutHeroSectionProps) {
   const { locale } = useTranslation();
   // A subtle leaf pattern that matches the reference image background
@@ -63,9 +63,9 @@ export function AboutHeroSection({
         className="relative w-full bg-[#1B5E20] py-20 lg:py-28"
         style={{ backgroundImage: leafPattern }}
       >
-        <div className="relative z-10 w-full   flex flex-col lg:flex-row items-center gap-12 lg:gap-16 px-6 sm:px-8 md:px-16 2xl:px-20">
+        <div className="relative z-10 w-full   flex flex-col lg:flex-row items-start gap-12 lg:gap-16 px-6 sm:px-8 md:px-16 2xl:px-20">
           {/* Left: Text Block */}
-          <div className="w-full lg:w-3/5">
+          <div className="w-full lg:w-3/5 flex items-start">
             <p
               className={`description text-white ${
                 locale === "am" ? "font-amharic" : ""
@@ -76,12 +76,12 @@ export function AboutHeroSection({
           </div>
 
           {/* Right: Image Block */}
-          <div className=" w-full lg:w-2/5 flex justify-center lg:justify-end ">
-            <div className="w-full lg:max-w-md h-auto md:aspect-[4/3] rounded-2xl shadow-2xl overflow-hidden">
+          <div className=" w-full lg:w-2/5 flex justify-center lg:justify-end items-start">
+            <div className="w-full lg:max-w-md h-auto rounded-2xl shadow-2xl overflow-hidden">
               <img
                 src={contentImage}
                 alt="Team meeting in a conference room"
-                className="w-full h-full object-cover"
+                className="w-full h-auto object-contain"
               />
             </div>
           </div>

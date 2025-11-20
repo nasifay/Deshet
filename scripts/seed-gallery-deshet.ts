@@ -1,6 +1,6 @@
 /**
  * Seed script for Gallery
- * Creates gallery categories and items for Deshet Indigenous Medical Center
+ * Creates gallery categories and items for ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል
  */
 
 import dotenv from "dotenv";

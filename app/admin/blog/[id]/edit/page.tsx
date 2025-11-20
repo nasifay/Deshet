@@ -72,6 +72,8 @@ export default function EditBlogPage() {
     formState: { errors },
   } = useForm<BlogFormData>({
     resolver: zodResolver(blogSchema),
+    mode: "onSubmit",
+    shouldFocusError: true,
   });
 
   // Fetch existing post data
@@ -85,29 +87,35 @@ export default function EditBlogPage() {
           const post = data.data;
           
           // Handle bilingual fields
+          let titleValue: { en: string; am: string };
           if (typeof post.title === "object" && post.title !== null) {
-            setTitle({
+            titleValue = {
               en: post.title.en || "",
               am: post.title.am || "",
-            });
+            };
           } else {
-            setTitle({
+            titleValue = {
               en: post.title || "",
               am: "",
-            });
+            };
           }
+          setTitle(titleValue);
+          setValue("title", titleValue);
           
+          let excerptValue: { en: string; am: string };
           if (typeof post.excerpt === "object" && post.excerpt !== null) {
-            setExcerpt({
+            excerptValue = {
               en: post.excerpt.en || "",
               am: post.excerpt.am || "",
-            });
+            };
           } else {
-            setExcerpt({
+            excerptValue = {
               en: post.excerpt || "",
               am: "",
-            });
+            };
           }
+          setExcerpt(excerptValue);
+          setValue("excerpt", excerptValue);
           
           if (typeof post.content === "object" && post.content !== null) {
             setContent({
@@ -311,12 +319,20 @@ export default function EditBlogPage() {
           <BilingualField
             label="Title"
             value={title}
-            onChange={setTitle}
+            onChange={(value) => {
+              setTitle(value);
+              setValue("title", value);
+            }}
             placeholder={{
               en: "Enter post title in English",
               am: "የጽሁፉን ርዕስ በአማርኛ ያስገቡ",
             }}
           />
+          {errors.title && (
+            <p className="mt-1 text-sm text-red-600">
+              {typeof errors.title.message === 'string' ? errors.title.message : 'Title is required'}
+            </p>
+          )}
 
           {/* Slug */}
           <div>
@@ -342,7 +358,10 @@ export default function EditBlogPage() {
           <BilingualField
             label="Excerpt"
             value={excerpt}
-            onChange={setExcerpt}
+            onChange={(value) => {
+              setExcerpt(value);
+              setValue("excerpt", value);
+            }}
             type="textarea"
             rows={3}
             placeholder={{
@@ -350,6 +369,11 @@ export default function EditBlogPage() {
               am: "የጽሁፉን አጭር መግለጫ በአማርኛ",
             }}
           />
+          {errors.excerpt && (
+            <p className="mt-1 text-sm text-red-600">
+              {typeof errors.excerpt.message === 'string' ? errors.excerpt.message : 'Excerpt is required'}
+            </p>
+          )}
 
           {/* Content - Bilingual */}
           <div>
@@ -546,7 +570,7 @@ export default function EditBlogPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className=" cursor-pointer flex items-center space-x-2 px-6 py-2 bg-primary-green text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-[0.5] disabled:cursor-not-allowed"
+            className="cursor-pointer flex items-center space-x-2 px-6 py-2 bg-primary-green text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-[0.5] disabled:cursor-not-allowed"
           >
             <Save className="w-4 h-4" />
             <span>{isLoading ? "Saving..." : "Save Changes"}</span>

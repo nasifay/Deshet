@@ -78,7 +78,7 @@ function LoginForm() {
             <h1 className="text-3xl font-black text-gray-800 mb-2">
               Admin Login
             </h1>
-            <p className="text-gray-600">Deshet Indigenous Medical Center</p>
+            <p className="text-gray-600">ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል</p>
           </div>
 
           {/* Error Message */}

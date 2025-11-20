@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Save, Eye } from "lucide-react";
+import { ArrowLeft, Save, Eye, RefreshCw } from "lucide-react";
 import TabbedSectionEditor from "~/app/admin/components/TabbedSectionEditor";
 import BilingualField from "~/app/admin/components/BilingualField";
 
@@ -62,12 +62,18 @@ export default function EditPage() {
     if (pageId) {
       fetchPage();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageId]);
 
   const fetchPage = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`/api/admin/pages/${pageId}`);
+      const response = await fetch(`/api/admin/pages/${pageId}?t=${Date.now()}`, {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache',
+        },
+      });
       const data = await response.json();
 
       if (data.success) {
@@ -134,7 +140,8 @@ export default function EditPage() {
 
       if (data.success) {
         alert("Page saved successfully!");
-        router.push("/admin/pages");
+        // Refresh the page data after saving
+        await fetchPage();
       } else {
         alert(data.error || "Failed to save page");
       }
@@ -230,6 +237,15 @@ export default function EditPage() {
           </div>
         </div>
         <div className="flex items-center space-x-2">
+          <button
+            onClick={() => fetchPage()}
+            disabled={loading}
+            className="flex items-center space-x-2 px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors disabled:opacity-[0.5] text-sm"
+            title="Refresh page data"
+          >
+            <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+            <span>Refresh</span>
+          </button>
           <button
             onClick={handleSave}
             disabled={saving}

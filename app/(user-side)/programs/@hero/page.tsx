@@ -23,7 +23,7 @@ export default function ProgramsHero() {
         {/* Background Image */}
         <Image
           src="/programs/hero.png"
-          alt={t("pages.programs.heroImageAlt")}
+          alt={t("pages.programs.heroImageAlt") || "Traditional Medicine Services"}
           fill
           className="object-cover"
           priority

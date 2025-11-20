@@ -241,11 +241,32 @@ export default function ProgramsListSection() {
         activeTab={activeTab}
       />
       <div className="mt-8 px-6 md:px-20 xl:px-24 2xl:px-40">
-        {displayPrograms
-          .filter((program) => program.categoryId === activeTab)
-          .map((program) => (
-            <ProgramItem key={program._id || program.title} program={program} />
-          ))}
+        {displayPrograms.filter((program) => program.categoryId === activeTab)
+          .length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-20 px-6">
+            <div className="text-center max-w-2xl">
+              <h3 className="font-roboto font-bold text-2xl md:text-3xl text-gray-800 mb-4">
+                {t("pages.programs.noServices") || "No Services Available"}
+              </h3>
+              <p className="font-roboto font-light text-base md:text-lg text-gray-600 mb-8">
+                {t("pages.programs.noServicesDescription") ||
+                  "We're working on adding more services. Please check back soon or contact us for more information."}
+              </p>
+              <a
+                href="/contact-us"
+                className="inline-flex items-center justify-center px-6 py-3 bg-primary-green text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
+              >
+                {t("contact.title") || "Contact Us"}
+              </a>
+            </div>
+          </div>
+        ) : (
+          displayPrograms
+            .filter((program) => program.categoryId === activeTab)
+            .map((program) => (
+              <ProgramItem key={program._id || program.title} program={program} />
+            ))
+        )}
       </div>
     </div>
   );

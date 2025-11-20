@@ -45,7 +45,7 @@ export function generateNewsMetadata({
     excerpt ||
     (content
       ? content.replace(/<[^>]*>/g, "").substring(0, 155) + "..."
-      : "Read the latest articles and updates from Deshet Indigenous Medical Center.");
+      : "Read the latest articles and updates from ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል.");
 
   // Create optimized title (under 60 chars)
   const shortTitle = title.length > 50 ? title.substring(0, 50) + "..." : title;

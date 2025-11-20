@@ -1,5 +1,5 @@
 /**
- * Seed Landing Page for Deshet Indigenous Medical Center
+ * Seed Landing Page for ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል
  * Creates bilingual landing page content (English and Amharic)
  */
 
@@ -66,9 +66,9 @@ async function seedLandingPage() {
       author: adminUser._id,
       seo: {
         metaTitle:
-          "Deshet Indigenous Medical Center | Premium Ethiopian Traditional Medicine",
+          "ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል | Premium Ethiopian Traditional Medicine",
         metaDescription:
-          "Deshet Indigenous Medical Center delivers premium Ethiopian traditional medicine, herbal healing, spiritual therapy, and cultural healing services in Addis Ababa, Ethiopia.",
+          "ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል delivers premium Ethiopian traditional medicine, herbal healing, spiritual therapy, and cultural healing services in Addis Ababa, Ethiopia.",
         keywords: [
           "Deshet Medical Center",
           "Ethiopian traditional medicine",
@@ -130,7 +130,7 @@ async function seedLandingPage() {
               am: "ስለ ደሸት",
             },
             description: {
-              en: "Deshet Indigenous Medical Center is a premium Ethiopian traditional medical facility dedicated to preserving and promoting indigenous healing practices. We combine ancient wisdom with modern understanding to provide comprehensive traditional medical services including herbal medicine preparation, traditional diagnostic techniques, detox therapy, and spiritual healing. Our experienced practitioners have deep knowledge of Ethiopian traditional medicine and are committed to delivering authentic, culturally-rooted healing experiences.",
+              en: "ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል is a premium Ethiopian traditional medical facility dedicated to preserving and promoting indigenous healing practices. We combine ancient wisdom with modern understanding to provide comprehensive traditional medical services including herbal medicine preparation, traditional diagnostic techniques, detox therapy, and spiritual healing. Our experienced practitioners have deep knowledge of Ethiopian traditional medicine and are committed to delivering authentic, culturally-rooted healing experiences.",
               am: "ደሸት ባህላዊ የሕክምና ማዕከል የኢትዮጵያ ባህላዊ ሕክምናን ማስቀጠል እና ማበረታታት የሚገዛ የሕክምና ተቋም ነው። የጥንት ጥበብን ከዘመናዊ ግንዛቤ ጋር በማዋሃድ የአመዳድብ ሕክምና አዘገጃጀት፣ ባህላዊ የመመርመር ዘዴዎች፣ የሰውነት ማጽዳት ሕክምና እና መንፈሳዊ ሕክምና ጨምሮ ሁሉንም የባህላዊ ሕክምና አገልግሎቶችን እንሰጣለን።",
             },
             ctaText: {

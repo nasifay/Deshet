@@ -207,13 +207,18 @@ export default function ContactUs() {
                 </div>
 
                 <div className="flex flex-col text-primary-green gap-4 mt-2 font-roboto font-normal text-lg md:text-[24px] leading-[1.01] tracking-[0px] capitalize">
-                  <div className="flex items-center gap-3">
-                    <Phone className="w-6 h-6" />
-                    <span>+251 XXX XXX XXX</span>
+                  <div className="flex flex-col gap-2">
+                    <div className="flex items-center gap-3">
+                      <Phone className="w-6 h-6" />
+                      <span>+251 902474828</span>
+                    </div>
+                    <div className="flex items-center gap-3 ml-9">
+                      <span>+251 91 147 1783</span>
+                    </div>
                   </div>
                   <div className="flex items-center gap-2">
                     <Mail className="w-6 h-6" />
-                    <span>info@deshetmed.com</span>
+                    <span>yohansshefraw@gmail.com</span>
                   </div>
                 </div>
 

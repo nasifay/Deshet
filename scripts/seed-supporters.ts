@@ -12,7 +12,7 @@ const MONGODB_URI =
 import Supporter from "../lib/db/models/Supporter";
 
 /**
- * Deshet Indigenous Medical Center - Supporters Seed Data
+ * ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል - Supporters Seed Data
  * These supporters will appear in the "CERTIFICATIONS & RECOGNITIONS" section
  */
 const defaultSupporters = [

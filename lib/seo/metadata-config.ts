@@ -10,11 +10,11 @@ export const BASE_URL =
 
 // Default organization info
 export const ORGANIZATION = {
-  name: "Deshet Indigenous Medical Center",
+  name: "ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል",
   shortName: "Deshet",
   description:
     "Premium Ethiopian Indigenous Medical Center delivering herbal, spiritual, and cultural healing",
-  email: "info@deshetmed.com",
+  email: "yohansshefraw@gmail.com",
   phone: "+251 XXX XXX XXX",
   address: {
     streetAddress: "Addis Ababa",
@@ -64,7 +64,7 @@ export const DEFAULT_KEYWORDS = [
 export const PAGE_METADATA: Record<string, Metadata> = {
   // Home / Landing Page
   home: {
-    title: "Deshet Indigenous Medical Center | Premium Traditional Healing in Ethiopia",
+    title: "ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል | Premium Traditional Healing in Ethiopia",
     description:
       "Premium Ethiopian Indigenous Medical Center delivering herbal, spiritual, and cultural healing. Experience traditional medicine, herbal remedies, and holistic wellness in Addis Ababa.",
     keywords: [
@@ -76,7 +76,7 @@ export const PAGE_METADATA: Record<string, Metadata> = {
       "indigenous healthcare services",
     ],
     openGraph: {
-      title: "Deshet Indigenous Medical Center | Premium Traditional Healing",
+      title: "ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል | Premium Traditional Healing",
       description:
         "Premium Ethiopian Indigenous Medical Center delivering herbal, spiritual, and cultural healing. Experience traditional medicine and holistic wellness.",
       url: BASE_URL,
@@ -86,7 +86,7 @@ export const PAGE_METADATA: Record<string, Metadata> = {
           url: DEFAULT_OG_IMAGE,
           width: 1200,
           height: 630,
-          alt: "Deshet Indigenous Medical Center - Premium Traditional Healing",
+          alt: "ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል - Premium Traditional Healing",
         },
       ],
       locale: "en_US",
@@ -94,7 +94,7 @@ export const PAGE_METADATA: Record<string, Metadata> = {
     },
     twitter: {
       card: "summary_large_image",
-      title: "Deshet Indigenous Medical Center | Premium Traditional Healing",
+      title: "ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል | Premium Traditional Healing",
       description:
         "Premium Ethiopian Indigenous Medical Center delivering herbal, spiritual, and cultural healing. Experience traditional medicine and holistic wellness.",
       images: [DEFAULT_TWITTER_IMAGE],
@@ -107,7 +107,7 @@ export const PAGE_METADATA: Record<string, Metadata> = {
 
   // About / Who We Are Page
   "who-we-are": {
-    title: "About Us | Who We Are | Deshet Indigenous Medical Center",
+    title: "About Us | Who We Are | ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል",
     description:
       "Learn about Deshet's mission, vision, core values, and our commitment to preserving and delivering Ethiopian indigenous medicine. Discover our practitioners and healing philosophy.",
     keywords: [
@@ -121,7 +121,7 @@ export const PAGE_METADATA: Record<string, Metadata> = {
       "traditional medicine practitioners",
     ],
     openGraph: {
-      title: "About Us | Who We Are | Deshet Indigenous Medical Center",
+      title: "About Us | Who We Are | ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል",
       description:
         "Learn about Deshet's mission, vision, core values, and our commitment to preserving and delivering Ethiopian indigenous medicine.",
       url: `${BASE_URL}/who-we-are`,
@@ -139,7 +139,7 @@ export const PAGE_METADATA: Record<string, Metadata> = {
     },
     twitter: {
       card: "summary_large_image",
-      title: "About Us | Who We Are | Deshet Indigenous Medical Center",
+      title: "About Us | Who We Are | ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል",
       description:
         "Learn about Deshet's mission, vision, and our commitment to preserving and delivering Ethiopian indigenous medicine.",
       images: [`${BASE_URL}/images/about.jpg`],
@@ -195,9 +195,9 @@ export const PAGE_METADATA: Record<string, Metadata> = {
 
   // Blog Page
   blog: {
-    title: "Blog | Latest Updates | Deshet Indigenous Medical Center",
+    title: "Blog | Latest Updates | ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል",
     description:
-      "Stay informed with the latest articles, health tips, traditional medicine insights, and updates from Deshet Indigenous Medical Center. Discover healing wisdom and wellness guidance.",
+      "Stay informed with the latest articles, health tips, traditional medicine insights, and updates from ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል. Discover healing wisdom and wellness guidance.",
     keywords: [
       ...DEFAULT_KEYWORDS,
       "Deshet blog",
@@ -209,7 +209,7 @@ export const PAGE_METADATA: Record<string, Metadata> = {
       "medical updates",
     ],
     openGraph: {
-      title: "Blog | Latest Updates | Deshet Indigenous Medical Center",
+      title: "Blog | Latest Updates | ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል",
       description:
         "Stay informed with our latest articles, health tips, and traditional medicine insights.",
       url: `${BASE_URL}/blog`,
@@ -227,7 +227,7 @@ export const PAGE_METADATA: Record<string, Metadata> = {
     },
     twitter: {
       card: "summary_large_image",
-      title: "Blog | Deshet Indigenous Medical Center",
+      title: "Blog | ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል",
       description:
         "Stay informed with our latest articles, health tips, and traditional medicine insights.",
       images: [`${BASE_URL}/images/news.jpg`],
@@ -239,7 +239,7 @@ export const PAGE_METADATA: Record<string, Metadata> = {
 
   // Gallery Page
   gallery: {
-    title: "Gallery | Visual Journey of Healing | Deshet Indigenous Medical Center",
+    title: "Gallery | Visual Journey of Healing | ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል",
     description:
       "Explore our photo gallery showcasing our medical center, healing practices, herbal preparations, and the traditional medicine journey. A visual story of wellness, healing, and cultural medicine.",
     keywords: [
@@ -283,7 +283,7 @@ export const PAGE_METADATA: Record<string, Metadata> = {
 
   // History Page
   history: {
-    title: "Our History | Journey of Healing | Deshet Indigenous Medical Center",
+    title: "Our History | Journey of Healing | ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል",
     description:
       "Trace Deshet's journey from establishment to today. Explore our milestones, growth, and unwavering commitment to preserving and delivering Ethiopian indigenous medicine since inception.",
     keywords: [
@@ -326,9 +326,9 @@ export const PAGE_METADATA: Record<string, Metadata> = {
 
   // Booking Page
   booking: {
-    title: "Book Appointment | Schedule Your Visit | Deshet Indigenous Medical Center",
+    title: "Book Appointment | Schedule Your Visit | ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል",
     description:
-      "Book your appointment at Deshet Indigenous Medical Center. Schedule a consultation for traditional medical services, herbal medicine, or healing treatments. Experience premium indigenous healthcare.",
+      "Book your appointment at ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል. Schedule a consultation for traditional medical services, herbal medicine, or healing treatments. Experience premium indigenous healthcare.",
     keywords: [
       ...DEFAULT_KEYWORDS,
       "book appointment",
@@ -370,9 +370,9 @@ export const PAGE_METADATA: Record<string, Metadata> = {
 
   // Contact Us Page
   "contact-us": {
-    title: "Contact Us | Get in Touch | Deshet Indigenous Medical Center",
+    title: "Contact Us | Get in Touch | ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል",
     description:
-      "Get in touch with Deshet Indigenous Medical Center. Contact us for appointments, inquiries about our services, or to learn more about traditional medicine. We're here to help you on your healing journey.",
+      "Get in touch with ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል. Contact us for appointments, inquiries about our services, or to learn more about traditional medicine. We're here to help you on your healing journey.",
     keywords: [
       ...DEFAULT_KEYWORDS,
       "contact Deshet",
@@ -387,7 +387,7 @@ export const PAGE_METADATA: Record<string, Metadata> = {
     openGraph: {
       title: "Contact Us | Get in Touch",
       description:
-        "Get in touch with Deshet Indigenous Medical Center. Contact us for appointments, inquiries, or to learn more about traditional medicine.",
+        "Get in touch with ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል. Contact us for appointments, inquiries, or to learn more about traditional medicine.",
       url: `${BASE_URL}/contact-us`,
       siteName: ORGANIZATION.name,
       images: [
@@ -404,7 +404,7 @@ export const PAGE_METADATA: Record<string, Metadata> = {
     twitter: {
       card: "summary_large_image",
       title: "Contact Us | Get in Touch",
-      description: "Get in touch with Deshet Indigenous Medical Center for appointments and inquiries.",
+      description: "Get in touch with ደሸት የሀገር በቀል ህክምና መስጫ ማዕከል for appointments and inquiries.",
       images: [DEFAULT_OG_IMAGE],
     },
     alternates: {
