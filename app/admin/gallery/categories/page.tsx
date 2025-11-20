@@ -11,12 +11,14 @@ import {
   ChevronUp,
   ChevronDown,
 } from "lucide-react";
+import { getBilingualText } from "~/lib/i18n/utils";
+import { useTranslation } from "~/lib/i18n/hooks";
 
 interface GalleryCategory {
   _id: string;
-  name: string;
+  name: string | { en: string; am: string };
   slug: string;
-  description?: string;
+  description?: string | { en: string; am: string };
   color?: string;
   icon?: string;
   order: number;
@@ -31,6 +33,7 @@ interface GalleryCategory {
 }
 
 export default function GalleryCategoriesPage() {
+  const { locale } = useTranslation();
   const [categories, setCategories] = useState<GalleryCategory[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -62,8 +65,9 @@ export default function GalleryCategoriesPage() {
     }
   };
 
-  const handleDelete = async (id: string, name: string) => {
-    if (!confirm(`Are you sure you want to delete the category "${name}"?`))
+  const handleDelete = async (id: string, name: string | { en: string; am: string }) => {
+    const nameText = getBilingualText(name, locale, "this category");
+    if (!confirm(`Are you sure you want to delete the category "${nameText}"?`))
       return;
 
     try {
@@ -277,11 +281,11 @@ export default function GalleryCategoriesPage() {
                         )}
                         <div>
                           <div className="text-sm font-medium text-gray-900 dark:text-white">
-                            {category.name}
+                            {getBilingualText(category.name, locale, category.slug)}
                           </div>
                           {category.description && (
                             <div className="text-sm text-gray-500 dark:text-gray-400">
-                              {category.description}
+                              {getBilingualText(category.description, locale, "")}
                             </div>
                           )}
                         </div>
@@ -320,7 +324,7 @@ export default function GalleryCategoriesPage() {
                         </Link>
                         <button
                           onClick={() =>
-                            handleDelete(category._id, category.name)
+                            handleDelete(category._id, category.name as string | { en: string; am: string })
                           }
                           className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
                           title="Delete"
