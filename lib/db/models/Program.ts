@@ -2,11 +2,11 @@ import mongoose, { Schema, Document, Model } from 'mongoose';
 
 export interface IProgram extends Document {
   _id: mongoose.Types.ObjectId;
-  title: string;
+  title: string | { en: string; am: string };
   slug: string;
   categoryId: string;
-  categoryLabel: string;
-  description: string;
+  categoryLabel: string | { en: string; am: string };
+  description: string | { en: string; am: string };
   image: string;
   thumbnails: Array<{
     id: number;
@@ -38,9 +38,8 @@ export interface IProgram extends Document {
 const ProgramSchema: Schema<IProgram> = new Schema(
   {
     title: {
-      type: String,
+      type: Schema.Types.Mixed,
       required: [true, 'Title is required'],
-      trim: true,
     },
     slug: {
       type: String,
@@ -55,12 +54,11 @@ const ProgramSchema: Schema<IProgram> = new Schema(
       trim: true,
     },
     categoryLabel: {
-      type: String,
+      type: Schema.Types.Mixed,
       required: [true, 'Category label is required'],
-      trim: true,
     },
     description: {
-      type: String,
+      type: Schema.Types.Mixed,
       required: [true, 'Description is required'],
     },
     image: {

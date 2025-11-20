@@ -18,6 +18,7 @@
     "seed:programs": "tsx scripts/seed-programs.ts",
     "seed:programs:enhanced": "tsx scripts/seed-programs-enhanced.ts",
     "seed:programs:complete": "tsx scripts/seed-programs-complete.ts",
+    "seed:services": "tsx scripts/seed-services-deshet.ts",
     "seed:gallery": "tsx scripts/seed-gallery.ts",
     "seed:gallery:enhanced": "tsx scripts/seed-gallery-enhanced.ts",
     "verify:gallery": "tsx scripts/verify-gallery-seed.ts",

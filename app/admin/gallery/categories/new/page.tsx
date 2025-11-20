@@ -5,14 +5,15 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Save } from "lucide-react";
 import ImageUploadField from "~/app/admin/components/ImageUploadField";
+import BilingualField from "~/app/admin/components/BilingualField";
 
 export default function NewCategoryPage() {
   const router = useRouter();
   const [saving, setSaving] = useState(false);
   const [formData, setFormData] = useState({
-    name: "",
+    name: { en: "", am: "" } as { en: string; am: string },
     slug: "",
-    description: "",
+    description: { en: "", am: "" } as { en: string; am: string },
     color: "#128341",
     icon: "🖼️",
     order: 0,
@@ -28,14 +29,6 @@ export default function NewCategoryPage() {
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/(^-|-$)/g, "");
-  };
-
-  const handleNameChange = (name: string) => {
-    setFormData({
-      ...formData,
-      name,
-      slug: generateSlug(name),
-    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -99,17 +92,21 @@ export default function NewCategoryPage() {
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Category Name *
-              </label>
-              <input
-                type="text"
+            <div className="md:col-span-2">
+              <BilingualField
+                label="Category Name"
                 value={formData.name}
-                onChange={(e) => handleNameChange(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green"
-                placeholder="e.g., Events, Training, GESI"
-                required
+                onChange={(value) => {
+                  setFormData({
+                    ...formData,
+                    name: value,
+                    slug: generateSlug(value.en),
+                  });
+                }}
+                placeholder={{
+                  en: "e.g., Traditional Medicine",
+                  am: "ለምሳሌ: ባህላዊ ሕክምና",
+                }}
               />
             </div>
 
@@ -124,27 +121,28 @@ export default function NewCategoryPage() {
                   setFormData({ ...formData, slug: e.target.value })
                 }
                 className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green font-mono"
-                placeholder="e.g., events, training, gesi"
+                placeholder="e.g., traditional-medicine"
                 required
               />
               <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                URL-friendly identifier (auto-generated from name)
+                URL-friendly identifier (auto-generated from English name)
               </p>
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Description
-            </label>
-            <textarea
+            <BilingualField
+              label="Description"
               value={formData.description}
-              onChange={(e) =>
-                setFormData({ ...formData, description: e.target.value })
+              onChange={(value) =>
+                setFormData({ ...formData, description: value })
               }
+              type="textarea"
               rows={3}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green"
-              placeholder="Optional description of this category"
+              placeholder={{
+                en: "Optional description of this category",
+                am: "የዚህ ምድብ ምርጫ መግለጫ",
+              }}
             />
           </div>
         </div>

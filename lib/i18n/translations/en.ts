@@ -208,6 +208,8 @@ export const en = {
       heroDescription: 'Experience the healing power of traditional Ethiopian medicine. Our comprehensive services combine ancient wisdom with modern care to provide holistic health solutions. From personalized consultations to herbal medicine preparation, we offer a complete range of traditional medical services designed to restore balance and wellness.',
       serviceDetails: 'Service Details',
       heroImageAlt: 'Traditional medical services',
+      noServices: 'No Services Available',
+      noServicesDescription: "We're working on adding more services. Please check back soon or contact us for more information.",
     },
     blog: {
       title: 'ዜና እና አዳዲስ መረጃዎች',

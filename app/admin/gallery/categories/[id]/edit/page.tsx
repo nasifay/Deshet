@@ -5,6 +5,7 @@ import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Save } from "lucide-react";
 import ImageUploadField from "~/app/admin/components/ImageUploadField";
+import BilingualField from "~/app/admin/components/BilingualField";
 
 export default function EditCategoryPage() {
   const router = useRouter();
@@ -14,9 +15,9 @@ export default function EditCategoryPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [formData, setFormData] = useState({
-    name: "",
+    name: { en: "", am: "" } as string | { en: string; am: string },
     slug: "",
-    description: "",
+    description: { en: "", am: "" } as string | { en: string; am: string },
     color: "#128341",
     icon: "🖼️",
     order: 0,
@@ -38,10 +39,17 @@ export default function EditCategoryPage() {
       const data = await response.json();
 
       if (data.success) {
+        // Normalize name and description to bilingual format
+        const normalizeBilingual = (value: string | { en: string; am: string } | undefined) => {
+          if (!value) return { en: "", am: "" };
+          if (typeof value === "string") return { en: value, am: "" };
+          return value;
+        };
+
         setFormData({
-          name: data.data.name,
+          name: normalizeBilingual(data.data.name),
           slug: data.data.slug,
-          description: data.data.description || "",
+          description: normalizeBilingual(data.data.description),
           color: data.data.color || "#128341",
           icon: data.data.icon || "🖼️",
           order: data.data.order || 0,
@@ -135,18 +143,25 @@ export default function EditCategoryPage() {
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Category Name *
-              </label>
-              <input
-                type="text"
+            <div className="md:col-span-2">
+              <BilingualField
+                label="Category Name"
                 value={formData.name}
-                onChange={(e) =>
-                  setFormData({ ...formData, name: e.target.value })
-                }
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green"
-                required
+                onChange={(value) => {
+                  setFormData({ ...formData, name: value });
+                  // Auto-generate slug from English name if slug is empty
+                  if (!formData.slug && value.en) {
+                    const slug = value.en
+                      .toLowerCase()
+                      .replace(/[^a-z0-9]+/g, "-")
+                      .replace(/(^-|-$)/g, "");
+                    setFormData((prev) => ({ ...prev, slug }));
+                  }
+                }}
+                placeholder={{
+                  en: "e.g., Traditional Medicine",
+                  am: "ለምሳሌ: ባህላዊ ሕክምና",
+                }}
               />
             </div>
 
@@ -163,20 +178,25 @@ export default function EditCategoryPage() {
                 className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green font-mono"
                 required
               />
+              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                URL-friendly identifier (auto-generated from English name)
+              </p>
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Description
-            </label>
-            <textarea
+            <BilingualField
+              label="Description"
               value={formData.description}
-              onChange={(e) =>
-                setFormData({ ...formData, description: e.target.value })
+              onChange={(value) =>
+                setFormData({ ...formData, description: value })
               }
+              type="textarea"
               rows={3}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-green"
+              placeholder={{
+                en: "Optional description of this category",
+                am: "የዚህ ምድብ ምርጫ መግለጫ",
+              }}
             />
           </div>
         </div>

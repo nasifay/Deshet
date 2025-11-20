@@ -498,6 +498,28 @@ function SectionEditor({
           <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
             📊 Statistics Settings
           </h4>
+
+          {/* Visibility Toggle */}
+          <div className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800">
+            <div className="flex flex-col">
+              <label className="text-sm font-semibold text-gray-900 dark:text-white mb-1">
+                Show on Public Site
+              </label>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                Toggle to show or hide this section on the public website
+              </p>
+            </div>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                checked={(data.isVisible as boolean) !== false}
+                onChange={(e) => updateField("isVisible", e.target.checked)}
+                className="sr-only peer"
+              />
+              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-green/20 dark:peer-focus:ring-primary-green/30 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary-green"></div>
+            </label>
+          </div>
+
           <div className="space-y-4">
             {(
               (data.stats as Array<{ number: string; label: string }>) || [

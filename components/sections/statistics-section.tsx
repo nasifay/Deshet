@@ -26,6 +26,7 @@ interface StatsSectionProps {
 export default function StatisticsSection() {
   const { t, locale } = useTranslation();
   const [stats, setStats] = useState<StatsSectionProps["stats"]>();
+  const [isVisible, setIsVisible] = useState(true);
   const [loading, setLoading] = useState(true);
 
   // Fetch data
@@ -47,15 +48,26 @@ export default function StatisticsSection() {
           const section = landingResult.data?.sections?.find(
             (s: any) => s.type === "StatisticsSection"
           );
+          
+          // Check visibility - if explicitly set to false, don't render
+          if (section?.data?.isVisible === false) {
+            setIsVisible(false);
+            setLoading(false);
+            return;
+          }
+          
           if (section?.data?.stats) {
             setStats(section.data.stats);
+            setIsVisible(section.data.isVisible !== false);
           } else if (settingsResult.success && settingsResult.data?.stats) {
             // Fallback to site settings
             setStats(settingsResult.data.stats);
+            setIsVisible(true);
           }
         } else if (settingsResult.success && settingsResult.data?.stats) {
           // Fallback to site settings
           setStats(settingsResult.data.stats);
+          setIsVisible(true);
         }
       } catch (error) {
         console.error("Error fetching statistics data:", error);
@@ -69,6 +81,11 @@ export default function StatisticsSection() {
 
   if (loading) {
     return <StatisticsSkeleton />;
+  }
+
+  // Don't render if visibility is explicitly set to false
+  if (isVisible === false) {
+    return null;
   }
 
   // Handle dynamic stats array from landing page CMS

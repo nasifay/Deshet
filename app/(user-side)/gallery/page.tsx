@@ -24,10 +24,11 @@ interface GalleryItem {
 
 interface GalleryCategory {
   _id: string;
-  name: string;
+  name: string | { en: string; am: string };
   slug: string;
   color?: string;
   icon?: string;
+  featuredImage?: string;
 }
 
 // Placeholder medical/traditional medicine images
@@ -290,7 +291,7 @@ export default function GalleryPage() {
                 {getBilingualText(
                   category.name as string | { en: string; am: string } | undefined,
                   locale,
-                  category.name
+                  category.slug
                 )}
               </button>
             ))}

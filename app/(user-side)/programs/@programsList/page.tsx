@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "~/lib/i18n/hooks";
+import { getBilingualText } from "~/lib/i18n/utils";
 
 interface Thumbnail {
   id: number;
@@ -20,16 +21,16 @@ interface Project {
 
 interface Program {
   _id?: string;
-  title: string;
+  title: string | { en: string; am: string };
   categoryId: string;
-  description: string;
+  description: string | { en: string; am: string };
   image: string;
   thumbnails: Thumbnail[];
   projects?: Project[];
 }
 
 export default function ProgramsListSection() {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const [activeTab, setActiveTab] = useState("traditional-consultation");
   const [programsList, setProgramsList] = useState<Program[]>([]);
   const [loading, setLoading] = useState(true);
@@ -273,7 +274,7 @@ export default function ProgramsListSection() {
 }
 
 const ProgramItem: React.FC<{ program: Program }> = ({ program }) => {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   // If program has projects, display program header first, then each project
   if (program.projects && program.projects.length > 0) {
     return (
@@ -291,17 +292,25 @@ const ProgramItem: React.FC<{ program: Program }> = ({ program }) => {
               id={`${program.categoryId}-program-title`}
               className="font-roboto font-black text-primary-green text-lg md:text-2xl lg:text-5xl xl:text-6xl  leading-[101%] tracking-[0] uppercase w-full mb-4"
             >
-              <span className="">{program.title.split("(")[0].trim()} </span>
-              {program.title.includes("(") && (
-                <span className="text-primary-orange">
-                  ({program.title.split("(")[1]?.replace(")", "")})
-                </span>
-              )}
+              {(() => {
+                const titleText = getBilingualText(program.title, locale, "");
+                const titleParts = titleText.split("(");
+                return (
+                  <>
+                    <span className="">{titleParts[0].trim()} </span>
+                    {titleParts.length > 1 && (
+                      <span className="text-primary-orange">
+                        ({titleParts[1]?.replace(")", "")})
+                      </span>
+                    )}
+                  </>
+                );
+              })()}
             </h2>
 
             {/* Program Description */}
             <p className="font-roboto font-light text-sm md:text-base lg:text-lg xl:text-[24px] leading-[1.26] tracking-[0.8px] text-justify capitalize text-[#333333] mb-16">
-              {program.description}
+              {getBilingualText(program.description, locale, "")}
             </p>
 
             {/* Program Main Image */}
@@ -429,17 +438,25 @@ const ProgramItem: React.FC<{ program: Program }> = ({ program }) => {
           id={`${program.categoryId}-title`}
           className="font-roboto font-black text-primary-green text-lg md:text-2xl lg:text-5xl xl:text-6xl  leading-[101%] tracking-[0] uppercase w-full mb-4"
         >
-          <span className="">{program.title.split("(")[0].trim()} </span>
-          {program.title.includes("(") && (
-            <span className="text-primary-orange">
-              ({program.title.split("(")[1]?.replace(")", "")})
-            </span>
-          )}
+          {(() => {
+            const titleText = getBilingualText(program.title, locale, "");
+            const titleParts = titleText.split("(");
+            return (
+              <>
+                <span className="">{titleParts[0].trim()} </span>
+                {titleParts.length > 1 && (
+                  <span className="text-primary-orange">
+                    ({titleParts[1]?.replace(")", "")})
+                  </span>
+                )}
+              </>
+            );
+          })()}
         </h2>
 
         {/* Description */}
         <p className="font-roboto font-light text-sm md:text-base lg:text-lg xl:text-[24px] leading-[1.26] tracking-[0.8px] text-justify capitalize text-[#333333] mb-16">
-          {program.description}
+          {getBilingualText(program.description, locale, "")}
         </p>
 
         {/* Main Image */}
