@@ -3,19 +3,22 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Plus, Search, Edit, Trash2, FolderKanban } from "lucide-react";
+import { useTranslation } from "~/lib/i18n/hooks";
+import { getBilingualText } from "~/lib/i18n/utils";
 
 interface Service {
   _id: string;
-  title: string;
+  title: string | { en: string; am: string };
   slug: string;
   categoryId: string;
-  categoryLabel: string;
+  categoryLabel: string | { en: string; am: string };
   status: "draft" | "published" | "archived";
   order: number;
   createdAt: string;
 }
 
 export default function ServicesListPage() {
+  const { locale } = useTranslation();
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
   const [categoryFilter, setCategoryFilter] = useState("");
@@ -31,7 +34,8 @@ export default function ServicesListPage() {
         ...(categoryFilter && { categoryId: categoryFilter }),
       });
 
-      const response = await fetch(`/api/admin/services?${params}`);
+      // Use programs API since Services and Programs use the same model
+      const response = await fetch(`/api/admin/programs?${params}`);
       const data = await response.json();
 
       if (data.success) {
@@ -48,7 +52,8 @@ export default function ServicesListPage() {
     if (!confirm("Are you sure you want to delete this service?")) return;
 
     try {
-      const response = await fetch(`/api/admin/services/${id}`, {
+      // Use programs API since Services and Programs use the same model
+      const response = await fetch(`/api/admin/programs/${id}`, {
         method: "DELETE",
       });
       const data = await response.json();
@@ -77,10 +82,15 @@ export default function ServicesListPage() {
   // Group services by category
   const groupedServices = services.reduce(
     (acc: Record<string, typeof services>, service) => {
-      if (!acc[service.categoryLabel]) {
-        acc[service.categoryLabel] = [];
+      const categoryLabel = getBilingualText(
+        service.categoryLabel,
+        locale,
+        typeof service.categoryLabel === "string" ? service.categoryLabel : service.categoryLabel.en || ""
+      );
+      if (!acc[categoryLabel]) {
+        acc[categoryLabel] = [];
       }
-      acc[service.categoryLabel].push(service);
+      acc[categoryLabel].push(service);
       return acc;
     },
     {}
@@ -99,7 +109,7 @@ export default function ServicesListPage() {
           </p>
         </div>
         <Link
-          href="/admin/services/new"
+          href="/admin/programs/new"
           className="flex items-center space-x-2 px-4 py-2 bg-primary-green text-white rounded-lg hover:bg-green-700 transition-colors"
         >
           <Plus className="w-5 h-5" />
@@ -145,7 +155,7 @@ export default function ServicesListPage() {
               No services found
             </p>
             <Link
-              href="/admin/services/new"
+              href="/admin/programs/new"
               className="inline-block mt-4 text-primary-green hover:underline"
             >
               Create your first service
@@ -191,7 +201,11 @@ export default function ServicesListPage() {
                       >
                         <td className="px-6 py-4">
                           <div className="text-sm font-medium text-gray-900 dark:text-white">
-                            {service.title}
+                            {getBilingualText(
+                              service.title,
+                              locale,
+                              typeof service.title === "string" ? service.title : service.title.en || ""
+                            )}
                           </div>
                           <div className="text-sm text-gray-500 dark:text-gray-400">
                             {service.slug}
@@ -215,7 +229,7 @@ export default function ServicesListPage() {
                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                           <div className="flex items-center justify-end space-x-2">
                             <Link
-                              href={`/admin/services/${service._id}/edit`}
+                              href={`/admin/programs/${service._id}/edit`}
                               className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
                               title="Edit"
                             >

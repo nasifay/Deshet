@@ -25,7 +25,6 @@ import {
   Quote,
   Calendar,
   CalendarDays,
-  Package,
   Bell,
 } from "lucide-react";
 
@@ -125,11 +124,6 @@ export default function Sidebar({
       url: "/admin/appointments",
       icon: <CalendarDays className="w-5 h-5" />,
       // Available to all roles including nurse
-    },
-    {
-      title: "Products",
-      url: "/admin/products",
-      icon: <Package className="w-5 h-5" />,
     },
     {
       title: "Gallery",
