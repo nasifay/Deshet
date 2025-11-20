@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useTranslation } from "~/lib/i18n/hooks";
 import { getBilingualText } from "~/lib/i18n/utils";
+import { HeroSkeleton } from "./landing-page-skeleton";
 
 interface HeroSectionProps {
   title?: string;
@@ -224,17 +225,21 @@ const Hero = () => {
     },
   ];
 
+  if (loading) {
+    return <HeroSkeleton />;
+  }
+
   return (
     <section className="relative w-full h-[40vh] md:h-[50vh] lg:h-[88vh] overflow-hidden">
       {/* Conditionally render landscape image or three-column layout */}
       {showLandscape && heroData.landscapeImage ? (
         // Full-width landscape image
-        <div className="relative w-full h-full">
+        <div className="relative w-full h-full bg-gray-100">
           <Image
             src={heroData.landscapeImage}
             alt="Hero landscape image"
             fill
-            style={{ objectFit: "cover" }}
+            style={{ objectFit: "contain" }}
             priority
             sizes="100vw"
             className="transition-opacity duration-1000 ease-in-out"
@@ -248,14 +253,14 @@ const Hero = () => {
           {sectionData.map((section, index) => {
             const currentImage = section.images[section.currentIndex];
             return (
-              <div key={section.layout} className="relative w-1/3 h-full">
+              <div key={section.layout} className="relative w-1/3 h-full bg-gray-100">
                 {/* The Image component with the current, transitioning image */}
                 {currentImage && (
                   <Image
                     src={currentImage}
                     alt={`Deshet Medical Center - ${section.layout} section`}
                     fill
-                    style={{ objectFit: "cover" }}
+                    style={{ objectFit: "contain" }}
                     priority={index === 0}
                     sizes="(max-width: 768px) 33vw, 33vw"
                     className="transition-opacity duration-1000 ease-in-out" // Fade transition: 1s duration
